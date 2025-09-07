@@ -85,7 +85,7 @@ export default function TitledPage({
                             {item.label}
                           </BreadcrumbPage>
                         ) : (
-                          <BreadcrumbLink href={item.href} className="flex items-center gap-1">
+                          <BreadcrumbLink href="#" className="flex items-center gap-1">
                             {item.icon}
                             {item.label}
                           </BreadcrumbLink>
