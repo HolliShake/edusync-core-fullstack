@@ -97,7 +97,7 @@ export default function Modal({
     <Dialog open={controller.isOpen} onOpenChange={controller.closeFn} modal>
       <DialogContent
         className={cn(
-          'p-0 overflow-hidden flex flex-col rounded-xl bg-background w-full',
+          'p-0 overflow-hidden flex flex-col !rounded-3xl bg-background w-full',
           'transition-all duration-300 ease-out',
           'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
           sizeClasses,

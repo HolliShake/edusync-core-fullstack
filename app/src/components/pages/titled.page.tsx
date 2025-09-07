@@ -61,13 +61,15 @@ export default function TitledPage({
   return (
     <section className="space-y-4">
       <div className="flex flex-row flex-wrap w-full items-center justify-between">
-        <div className="space-y-1">
+        <div className="space-y-3">
           <Button variant="outline" onClick={() => navigate(-1)} className="!shadow-0">
             <ArrowLeftIcon className="w-4 h-4" />
             Back
           </Button>
-          <h2 className="text-lg font-medium">{title}</h2>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <div>
+            <h2 className="text-lg font-medium">{title}</h2>
+            <p className="text-sm text-muted-foreground">{description}</p>
+          </div>
         </div>
         {computedBreadcrumb && computedBreadcrumb.length > 0 && (
           <Card className="rounded-md">
