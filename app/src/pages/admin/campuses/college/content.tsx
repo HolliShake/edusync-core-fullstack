@@ -1,6 +1,8 @@
 import AcademicProgramModal from '@/components/campus/academic-program.modal';
 import { useConfirm } from '@/components/confirm.provider';
+import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
+import Table, { type TableColumn } from '@/components/custom/table.component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +16,7 @@ import {
   BuildingIcon,
   CalendarIcon,
   EditIcon,
+  EllipsisIcon,
   GraduationCapIcon,
   PlusIcon,
   TrashIcon,
@@ -25,7 +28,7 @@ import { toast } from 'sonner';
 
 export default function AdminCollegeDetailContent(): React.ReactNode {
   const college = useCollegeContext();
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
   const [rows] = useState(10);
   const {
     data: academicPrograms,
@@ -241,101 +244,90 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
         </div>
 
         {isLoading ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <Card key={index} className="border-0 shadow-md">
-                <CardHeader className="pb-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-10 w-10 rounded-lg" />
-                      <div className="space-y-2">
-                        <Skeleton className="h-5 w-32" />
-                        <Skeleton className="h-4 w-24" />
-                      </div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Skeleton className="h-8 w-8 rounded-md" />
-                      <Skeleton className="h-8 w-8 rounded-md" />
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-3/4" />
-                </CardContent>
-              </Card>
+          <div className="grid gap-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
             ))}
           </div>
         ) : academicProgramItems.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {academicProgramItems.map((program: AcademicProgram) => (
-              <Card
-                key={program.id}
-                className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-white to-gray-50/50 group dark:from-zinc-900 dark:to-zinc-800/50"
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start gap-3 flex-1">
-                      <div className="p-2.5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl group-hover:from-primary/30 group-hover:to-primary/20 transition-colors">
-                        <GraduationCapIcon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <CardTitle className="text-lg font-semibold text-foreground leading-tight mb-1">
-                          {program.program_name}
-                        </CardTitle>
-                        <div className="space-y-1">
-                          {program.short_name && (
-                            <Badge
-                              variant="secondary"
-                              className="text-xs px-2 py-0.5 bg-primary/10 text-primary border-primary/20"
-                            >
-                              {program.short_name}
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                        onClick={() => handleEdit(program)}
-                      >
-                        <EditIcon className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 hover:bg-red-50 hover:text-red-600 transition-colors"
-                        onClick={() => confirm.confirm(async () => await handleDelete(program))}
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-2">
-                    {program.year_first_implemented && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <CalendarIcon className="h-4 w-4" />
-                        <span>
-                          Established: {new Date(program.year_first_implemented).getFullYear()}
-                        </span>
-                      </div>
-                    )}
-                    {program.program_type && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <BookOpenIcon className="h-4 w-4" />
-                        <span>Type: {program.program_type.name}</span>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Table<AcademicProgram>
+            columns={
+              [
+                {
+                  key: 'program_name',
+                  title: 'Program Name',
+                  className: 'font-medium',
+                },
+                {
+                  key: 'short_name',
+                  title: 'Short Name',
+                  render: (value) =>
+                    value ? (
+                      <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                        {String(value)}
+                      </Badge>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    ),
+                },
+                {
+                  key: 'program_type.name',
+                  title: 'Type',
+                },
+                {
+                  key: 'year_first_implemented',
+                  title: 'Established',
+                  render: (value) =>
+                    value ? (
+                      new Date(String(value)).getFullYear()
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    ),
+                  align: 'center',
+                },
+                {
+                  key: '__actions__',
+                  title: 'Actions',
+                  render: (_v, row) => (
+                    <Menu
+                      items={[
+                        {
+                          label: 'Edit',
+                          icon: <EditIcon className="w-4 h-4" />,
+                          variant: 'default',
+                          onClick: () => handleEdit(row),
+                        },
+                        {
+                          label: 'Delete',
+                          icon: <TrashIcon className="w-4 h-4" />,
+                          variant: 'destructive',
+                          onClick: () => confirm.confirm(async () => await handleDelete(row)),
+                        },
+                      ]}
+                      trigger={
+                        <Button variant="outline" size="icon">
+                          <EllipsisIcon className="w-4 h-4" />
+                        </Button>
+                      }
+                    />
+                  ),
+                  align: 'center',
+                },
+              ] as Array<TableColumn<AcademicProgram>>
+            }
+            rows={academicProgramItems}
+            onClickRow={(row) => handleEdit(row)}
+            pagination={{
+              current_page: academicPrograms?.data?.current_page,
+              last_page: academicPrograms?.data?.last_page,
+              per_page: academicPrograms?.data?.per_page,
+              total: academicPrograms?.data?.total,
+              from: academicPrograms?.data?.from ?? 0,
+              to: academicPrograms?.data?.to ?? 0,
+            }}
+            onPageChange={(p) => setPage(p)}
+            showPagination
+          />
         ) : (
           <Card className="border-2 border-dashed border-gray-200 bg-gray-50/50 dark:border-zinc-800 dark:bg-zinc-900/50">
             <CardContent className="flex flex-col items-center justify-center py-20">
