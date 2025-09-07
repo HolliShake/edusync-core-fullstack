@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Model\Campus;
-use App\Repository\CampusRepository;
+use App\interface\IService\ICampusService;
+use App\interface\IRepo\ICampusRepo;
 
 class CampusService extends GenericService implements ICampusService
 {
-    public function __construct(CampusRepository $campusRepository)
+    public function __construct(ICampusRepo $campusRepository)
     {
         parent::__construct($campusRepository);
     }

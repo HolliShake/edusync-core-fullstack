@@ -2,14 +2,14 @@
 
 namespace App\Repo;
 
-use App\Interface\IRepo\ICampusRepo;
-use App\Model\Campus;
+use App\interface\IRepo\ICampusRepo;
+use App\Models\Campus;
 
 class CampusRepo extends GenericRepo implements ICampusRepo
 {
-    public function __construct(Campus $campus)
+    public function __construct()
     {
-        parent::__construct($campus);
+        parent::__construct(Campus::class);
     }
 
     /**

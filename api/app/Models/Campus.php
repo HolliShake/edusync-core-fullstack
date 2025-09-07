@@ -10,10 +10,15 @@ use OpenApi\Attributes as OA;
     title: "Campus",
     type: "object",
     required: [
-        // Override required
+        "name",
+        "short_name",
+        "address"
     ],
     properties: [
-        // Override fillables
+        new OA\Property(property: "id", type: "integer"),
+        new OA\Property(property: "name", type: "string"),
+        new OA\Property(property: "short_name", type: "string"),
+        new OA\Property(property: "address", type: "string"),
     ]
 )]
 
@@ -78,5 +83,11 @@ use OpenApi\Attributes as OA;
 
 class Campus extends Model
 {
-    //
+    protected $table = 'campus';
+
+    protected $fillable = [
+        'name',
+        'short_name',
+        'address'
+    ];
 }

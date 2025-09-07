@@ -4,10 +4,45 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Edusync</title>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Edusync - Student Learning Management System" />
+    <meta
+      property="og:description"
+      content="A comprehensive full-stack student Learning Management System built with Laravel API and React TypeScript frontend."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/vite.svg" />
+    <meta property="og:site_name" content="Edusync" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Edusync - Student Learning Management System" />
+    <meta
+      name="twitter:description"
+      content="A comprehensive full-stack student Learning Management System built with Laravel API and React TypeScript frontend."
+    />
+    <meta name="twitter:image" content="/vite.svg" />
+
+    <!-- Additional Meta Tags -->
+    <meta
+      name="description"
+      content="Edusync is a modern student Learning Management System that provides course management, student enrollment, assignment tracking, grade management, and modern UI with dark/light themes."
+    />
+    <meta
+      name="keywords"
+      content="LMS, learning management system, student portal, Laravel, React, TypeScript, education, course management"
+    />
+    <meta name="author" content="Edusync Team" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      const theme = localStorage.getItem('vite-ui-theme') || 'light';
+      document.documentElement.classList.add(theme);
+      document.body.classList.add(theme);
+    </script>
   </body>
 </html>

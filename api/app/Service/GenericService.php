@@ -1,11 +1,12 @@
 <?php
 
-namespace App\service;
+namespace App\Service;
 
-use App\interface\iservice\IGenericService;
-use App\interface\irepo\IGenericRepo;
+use App\interface\IService\IGenericService;
+use App\interface\IRepo\IGenericRepo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class GenericService implements IGenericService
 {
@@ -18,15 +19,16 @@ abstract class GenericService implements IGenericService
 
     /**
      * Get all records with optional filters
-     * @param array $filters Optional filters to apply
      * @param bool $paginate Whether to paginate the results
-     * @return Collection Collection of models
+     * @param int $page The page number
+     * @param int $rows The number of rows per page
+     * @return Collection|LengthAwarePaginator Collection of models
      */
-    public function getAll(array $filters = [], bool $paginate = false): Collection
+    public function getAll(bool $paginate = false, int $page = 1, int $rows = 10): Collection|LengthAwarePaginator
     {
-        return $this->repository->getAll($filters, $paginate);
+        return $this->repository->getAll($paginate, $page, $rows);
     }
-    
+
     /**
      * Get a record by ID with optional relations
      * @param int|string $id The ID of the record
@@ -37,7 +39,7 @@ abstract class GenericService implements IGenericService
     {
         return $this->repository->getById($id, $relations);
     }
-    
+
     /**
      * Create a new record
      * @param array $data Data for creating the record
@@ -47,15 +49,15 @@ abstract class GenericService implements IGenericService
     {
         // Apply any business logic before creation
         $data = $this->beforeCreate($data);
-        
+
         $model = $this->repository->create($data);
-        
+
         // Apply any business logic after creation
         $this->afterCreate($model, $data);
-        
+
         return $model;
     }
-    
+
     /**
      * Update a record by ID
      * @param int|string $id The ID of the record to update
@@ -67,15 +69,15 @@ abstract class GenericService implements IGenericService
     {
         // Apply any business logic before update
         $data = $this->beforeUpdate($id, $data);
-        
+
         $model = $this->repository->update($id, $data, $relations);
-        
+
         // Apply any business logic after update
         $this->afterUpdate($model, $data);
-        
+
         return $model;
     }
-    
+
     /**
      * Delete a record by ID
      * @param int|string $id The ID of the record to delete
@@ -86,14 +88,14 @@ abstract class GenericService implements IGenericService
     {
         // Apply any business logic before deletion
         $this->beforeDelete($id);
-        
+
         $result = $this->repository->delete($id, $relations);
-        
+
         // Apply any business logic after deletion
         if ($result) {
             $this->afterDelete($id);
         }
-        
+
         return $result;
     }
 

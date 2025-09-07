@@ -1,13 +1,13 @@
 # Development stage
-FROM oven/bun:1-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json bun.lockb* ./
+COPY package*.json ./
 
 # Install dependencies
-RUN bun install
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # Start development server
-CMD ["bun", "run", "dev"]
+CMD ["npm", "run", "dev"]

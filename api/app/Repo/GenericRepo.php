@@ -2,10 +2,10 @@
 
 namespace App\Repo;
 
-use App\interface\irepo\IGenericRepo;
+use App\interface\IRepo\IGenericRepo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 
 abstract class GenericRepo implements IGenericRepo
@@ -19,33 +19,27 @@ abstract class GenericRepo implements IGenericRepo
 
     /**
      * Get all records with optional filters
-     * @param array $filters Optional filters to apply
      * @param bool $paginate Whether to paginate the results
-     * @return Collection Collection of models
+     * @param int $page The page number
+     * @param int $rows The number of rows per page
+     * @return Collection|LengthAwarePaginator Collection of models
      */
-    public function getAll(array $filters = [], bool $paginate = false): Collection
+    public function getAll(bool $paginate = false, int $page = 1, int $rows = 10): Collection|LengthAwarePaginator
     {
         $query = QueryBuilder::for($this->model)
             ->allowedFilters($this->getAllowedFilters())
             ->allowedSorts($this->getAllowedSorts())
             ->allowedIncludes($this->getAllowedIncludes());
-        
+
         // Apply additional filters if provided
-        foreach ($filters as $field => $value) {
-            if (is_array($value)) {
-                $query->whereIn($field, $value);
-            } else {
-                $query->where($field, $value);
-            }
-        }
 
         if (!$paginate) {
             return $query->get();
         }
 
-        return $query->paginate();
+        return $query->paginate($rows, ['*'], "Page {$page}", $page);
     }
-    
+
     /**
      * Get a record by ID with optional relations
      * @param int|string $id The ID of the record
@@ -56,14 +50,14 @@ abstract class GenericRepo implements IGenericRepo
     {
         $query = QueryBuilder::for($this->model)
             ->allowedIncludes($this->getAllowedIncludes());
-        
+
         if (!empty($relations)) {
             $query->with($relations);
         }
-        
+
         return $query->findOrFail($id);
     }
-    
+
     /**
      * Create a new record
      * @param array $data Data for creating the record
@@ -71,9 +65,9 @@ abstract class GenericRepo implements IGenericRepo
      */
     public function create(array $data): Model
     {
-        return $this->model->create($data);
+        return $this->model::create($data);
     }
-    
+
     /**
      * Update a record by ID
      * @param int|string $id The ID of the record to update
@@ -87,7 +81,7 @@ abstract class GenericRepo implements IGenericRepo
         $model->update($data);
         return $model->fresh($relations);
     }
-    
+
     /**
      * Delete a record by ID
      * @param int|string $id The ID of the record to delete

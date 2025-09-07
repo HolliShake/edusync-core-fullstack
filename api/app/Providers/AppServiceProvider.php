@@ -2,10 +2,22 @@
 
 namespace App\Providers;
 
+use App\interface\IRepo\IBuildingRepo;
 use App\Repo\CampusRepo;
-use App\Interface\IRepo\ICampusRepo;
+use App\interface\IRepo\ICampusRepo;
+use App\interface\IRepo\ICollegeRepo;
+use App\interface\IRepo\IRoomRepo;
+use App\interface\IService\IBuildingService;
 use App\Service\CampusService;
-use App\Interface\IService\ICampusService;
+use App\interface\IService\ICampusService;
+use App\interface\IService\ICollegeService;
+use App\interface\IService\IRoomService;
+use App\Repo\BuildingRepo;
+use App\Repo\CollegeRepo;
+use App\Repo\RoomRepo;
+use App\Service\BuildingService;
+use App\Service\CollegeService;
+use App\Service\RoomService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,8 +29,14 @@ class AppServiceProvider extends ServiceProvider
     {
         // Repo
         $this->app->bind(ICampusRepo::class, CampusRepo::class);
+        $this->app->bind(IBuildingRepo::class, BuildingRepo::class);
+        $this->app->bind(ICollegeRepo::class, CollegeRepo::class);
+        $this->app->bind(IRoomRepo::class, RoomRepo::class);
         // Service
         $this->app->bind(ICampusService::class, CampusService::class);
+        $this->app->bind(IBuildingService::class, BuildingService::class);
+        $this->app->bind(ICollegeService::class, CollegeService::class);
+        $this->app->bind(IRoomService::class, RoomService::class);
     }
 
     /**

@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Repo;
+
+use App\interface\IRepo\IBuildingRepo;
+use App\Models\Building;
+use Spatie\QueryBuilder\AllowedFilter;
+
+class BuildingRepo extends GenericRepo implements IBuildingRepo
+{
+    public function __construct()
+    {
+        parent::__construct(Building::class);
+    }
+
+    /**
+     * Define allowed filters for the query builder
+     * @return array
+     */
+    protected function getAllowedFilters(): array
+    {
+        return [
+            // Add campus-specific filters here
+            // Example: AllowedFilter::exact('status'),
+            // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('campus_id'),
+        ];
+    }
+
+    /**
+     * Define allowed sorts for the query builder
+     * @return array
+     */
+    protected function getAllowedSorts(): array
+    {
+        return [
+            'created_at',
+            'updated_at',
+            'name',
+            // Add other campus-specific sortable fields
+        ];
+    }
+
+    /**
+     * Define allowed includes for the query builder
+     * @return array
+     */
+    protected function getAllowedIncludes(): array
+    {
+        return [
+            // Add campus-specific relationships here
+            // Example: 'departments', 'buildings', 'students'
+        ];
+    }
+}

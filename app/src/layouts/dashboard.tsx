@@ -1,6 +1,6 @@
 import Header from '@/components/navigation/header';
 import AppSideBar from '@/components/navigation/sidebar';
-import Provider from '@/components/provider';
+import Providers from '@/components/providers';
 import type React from 'react';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <Provider>
+    <Providers>
       <div className="flex h-screen w-screen">
         {/* Mobile overlay */}
         {isSidebarOpen && (
@@ -34,6 +34,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
           <main className="flex-1 overflow-y-auto p-10 bg-background">{children}</main>
         </div>
       </div>
-    </Provider>
+    </Providers>
   );
 }

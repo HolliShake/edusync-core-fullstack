@@ -2,7 +2,7 @@
 
 namespace App\interface\IRepo;
 
-use App\interface\irepo\IGenericRepo;
+use App\interface\IRepo\IGenericRepo;
 
 interface ICampusRepo extends IGenericRepo
 {

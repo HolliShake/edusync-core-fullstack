@@ -9,17 +9,8 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./app:/app:cached # cached improves macOS/Windows perf
       - /app/node_modules # exclude node_modules from host mount
-      - /app/dist # exclude Vite build output
-      - /app/.vite # exclude Vite cache
-      - /app/.cache # exclude various cache directories
-      - /app/coverage # exclude test coverage reports
-      - /app/.nyc_output # exclude NYC coverage output
-      - /app/.eslintcache # exclude ESLint cache
-      - /app/.turbo # exclude Turbo cache
-      - /app/.yarn/cache # exclude Yarn cache
-      - /app/.pnpm-store # exclude PNPM store
+      - ./app:/app:cached # cached improves macOS/Windows perf
     environment:
       - REACT_APP_API_URL=http://backend:8000 # use service name, not localhost
     depends_on:
@@ -34,29 +25,30 @@ services:
       - '8000:8000'
     volumes:
       - ./api:/var/www/html:cached
-      - ./api/storage:/var/www/html/storage
       - ./api/public:/var/www/html/public
       - laravel_storage:/var/www/html/storage
+      - /var/www/html/bootstrap/cache
+      - /var/www/html/vendor
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_DATABASE=cpanel
-      - DB_USERNAME=cpanel
+      - DB_DATABASE=edusync
+      - DB_USERNAME=edusync
       - DB_PASSWORD=password
     depends_on:
       - mysql
 
   # MySQL Database
   mysql:
-    container_name: cpanel-mysql
+    container_name: edusync-mysql
     image: mysql:8.0
     ports:
       - '3306:3306'
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=cpanel
-      - MYSQL_USER=cpanel
+      - MYSQL_DATABASE=edusync
+      - MYSQL_USER=edusync
       - MYSQL_PASSWORD=password
     command: >
       --innodb-buffer-pool-size=512M
@@ -66,6 +58,19 @@ services:
       --innodb-flush-log-at-trx-commit=2
     volumes:
       - mysql_data:/var/lib/mysql
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8080:80'
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:
