@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AcademicProgramController;
+use App\Http\Controllers\ProgramTypeController;
 use App\Http\Controllers\BuildingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,4 +52,22 @@ Route::controller(RoomController::class)->group(function() {
     Route::post('/Room/create', 'store');
     Route::put('/Room/update/{id}', 'update');
     Route::delete('/Room/delete/{id}', 'destroy');
+});
+
+
+Route::controller(AcademicProgramController::class)->group(function() {
+    Route::get('/AcademicProgram', 'index');
+    Route::get('/AcademicProgram/{id}', 'show');
+    Route::post('/AcademicProgram/create', 'store');
+    Route::put('/AcademicProgram/update/{id}', 'update');
+    Route::delete('/AcademicProgram/delete/{id}', 'destroy');
+});
+
+
+Route::controller(ProgramTypeController::class)->group(function() {
+    Route::get('/ProgramType', 'index');
+    Route::get('/ProgramType/{id}', 'show');
+    Route::post('/ProgramType/create', 'store');
+    Route::put('/ProgramType/update/{id}', 'update');
+    Route::delete('/ProgramType/delete/{id}', 'destroy');
 });

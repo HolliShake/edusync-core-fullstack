@@ -54,12 +54,13 @@ export default function CampusModal({ controller, onSubmit }: CampusModalProps) 
           id: controller.data.id,
           data,
         });
+        toast.success('Campus updated successfully');
       } else {
         await createCampus({
           data,
         });
+        toast.success('Campus created successfully');
       }
-      toast.success('Campus created successfully');
       controller.closeFn();
       onSubmit(data);
     } catch (error) {

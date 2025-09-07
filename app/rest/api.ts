@@ -25,39 +25,427 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AcademicProgram,
   Building,
   Campus,
   College,
+  CreateAcademicProgramResponse200,
   CreateBuildingResponse200,
   CreateCampusResponse200,
   CreateCollegeResponse200,
+  CreateProgramTypeResponse200,
   CreateRoomResponse200,
+  DeleteAcademicProgramResponse200,
   DeleteBuildingResponse200,
   DeleteCampusResponse200,
   DeleteCollegeResponse200,
+  DeleteProgramTypeResponse200,
   DeleteRoomResponse200,
+  GetAcademicProgramPaginatedParams,
+  GetAcademicProgramResponse200,
   GetBuildingPaginatedParams,
   GetBuildingResponse200,
   GetCampusPaginatedParams,
   GetCampusResponse200,
   GetCollegePaginatedParams,
   GetCollegeResponse200,
+  GetProgramTypePaginatedParams,
+  GetProgramTypeResponse200,
   GetRoomPaginatedParams,
   GetRoomResponse200,
   InternalServerErrorResponse,
+  PaginatedAcademicProgramResponse200,
   PaginatedBuildingResponse200,
   PaginatedCampusResponse200,
   PaginatedCollegeResponse200,
+  PaginatedProgramTypeResponse200,
   PaginatedRoomResponse200,
+  ProgramType,
   Room,
+  UpdateAcademicProgramResponse200,
   UpdateBuildingResponse200,
   UpdateCampusResponse200,
   UpdateCollegeResponse200,
+  UpdateProgramTypeResponse200,
   UpdateRoomResponse200,
   ValidationErrorResponse
 } from './models';
 
 import { fetchData } from './axios';
+/**
+ * Retrieve a paginated list of AcademicProgram with optional search
+ * @summary Get paginated list of AcademicProgram
+ */
+export const getAcademicProgramPaginated = (
+    params?: GetAcademicProgramPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedAcademicProgramResponse200>(
+      {url: `/api/AcademicProgram`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicProgramPaginatedQueryKey = (params?: GetAcademicProgramPaginatedParams,) => {
+    return [`/api/AcademicProgram`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAcademicProgramPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicProgramPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicProgramPaginated>>> = ({ signal }) => getAcademicProgramPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicProgramPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicProgramPaginated>>>
+export type GetAcademicProgramPaginatedQueryError = unknown
+
+
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+ params: undefined |  GetAcademicProgramPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+ params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+ params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of AcademicProgram
+ */
+
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+ params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicProgramPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a AcademicProgram by its ID
+ * @summary Get a specific AcademicProgram
+ */
+export const getAcademicProgramById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetAcademicProgramResponse200>(
+      {url: `/api/AcademicProgram/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicProgramByIdQueryKey = (id?: number,) => {
+    return [`/api/AcademicProgram/${id}`] as const;
+    }
+
+    
+export const getGetAcademicProgramByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicProgramByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicProgramById>>> = ({ signal }) => getAcademicProgramById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicProgramByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicProgramById>>>
+export type GetAcademicProgramByIdQueryError = null
+
+
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific AcademicProgram
+ */
+
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicProgramByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new AcademicProgram with the provided details
+ * @summary Create a new AcademicProgram
+ */
+export const createAcademicProgram = (
+    academicProgram: AcademicProgram,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateAcademicProgramResponse200>(
+      {url: `/api/AcademicProgram/create`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: academicProgram, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAcademicProgramMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgram>>, TError,{data: AcademicProgram}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgram>>, TError,{data: AcademicProgram}, TContext> => {
+
+const mutationKey = ['createAcademicProgram'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAcademicProgram>>, {data: AcademicProgram}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAcademicProgram(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAcademicProgramMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicProgram>>>
+    export type CreateAcademicProgramMutationBody = AcademicProgram
+    export type CreateAcademicProgramMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new AcademicProgram
+ */
+export const useCreateAcademicProgram = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgram>>, TError,{data: AcademicProgram}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAcademicProgram>>,
+        TError,
+        {data: AcademicProgram},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAcademicProgramMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Update an existing AcademicProgram with the provided details
+ * @summary Update a AcademicProgram
+ */
+export const updateAcademicProgram = (
+    id: number,
+    academicProgram: AcademicProgram,
+ ) => {
+      
+      
+      return fetchData<UpdateAcademicProgramResponse200>(
+      {url: `/api/AcademicProgram/update/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: academicProgram
+    },
+      );
+    }
+  
+
+
+export const getUpdateAcademicProgramMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgram>>, TError,{id: number;data: AcademicProgram}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgram>>, TError,{id: number;data: AcademicProgram}, TContext> => {
+
+const mutationKey = ['updateAcademicProgram'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAcademicProgram>>, {id: number;data: AcademicProgram}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAcademicProgram(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAcademicProgramMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicProgram>>>
+    export type UpdateAcademicProgramMutationBody = AcademicProgram
+    export type UpdateAcademicProgramMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a AcademicProgram
+ */
+export const useUpdateAcademicProgram = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgram>>, TError,{id: number;data: AcademicProgram}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAcademicProgram>>,
+        TError,
+        {id: number;data: AcademicProgram},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAcademicProgramMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a AcademicProgram by its ID
+ * @summary Delete a AcademicProgram
+ */
+export const deleteAcademicProgram = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteAcademicProgramResponse200>(
+      {url: `/api/AcademicProgram/delete/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteAcademicProgramMutationOptions = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgram>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgram>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteAcademicProgram'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAcademicProgram>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAcademicProgram(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAcademicProgramMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicProgram>>>
+    
+    export type DeleteAcademicProgramMutationError = null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a AcademicProgram
+ */
+export const useDeleteAcademicProgram = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgram>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAcademicProgram>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAcademicProgramMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
 /**
  * Retrieve a paginated list of Building with optional search
  * @summary Get paginated list of Building
@@ -1176,6 +1564,380 @@ export const useDeleteCollege = <TError = null | InternalServerErrorResponse,
       > => {
 
       const mutationOptions = getDeleteCollegeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of ProgramType with optional search
+ * @summary Get paginated list of ProgramType
+ */
+export const getProgramTypePaginated = (
+    params?: GetProgramTypePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedProgramTypeResponse200>(
+      {url: `/api/ProgramType`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetProgramTypePaginatedQueryKey = (params?: GetProgramTypePaginatedParams,) => {
+    return [`/api/ProgramType`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetProgramTypePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProgramTypePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramTypePaginated>>> = ({ signal }) => getProgramTypePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProgramTypePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramTypePaginated>>>
+export type GetProgramTypePaginatedQueryError = unknown
+
+
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+ params: undefined |  GetProgramTypePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProgramTypePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getProgramTypePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+ params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProgramTypePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getProgramTypePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+ params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of ProgramType
+ */
+
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+ params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProgramTypePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a ProgramType by its ID
+ * @summary Get a specific ProgramType
+ */
+export const getProgramTypeById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetProgramTypeResponse200>(
+      {url: `/api/ProgramType/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetProgramTypeByIdQueryKey = (id?: number,) => {
+    return [`/api/ProgramType/${id}`] as const;
+    }
+
+    
+export const getGetProgramTypeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProgramTypeByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramTypeById>>> = ({ signal }) => getProgramTypeById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProgramTypeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramTypeById>>>
+export type GetProgramTypeByIdQueryError = null
+
+
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProgramTypeById>>,
+          TError,
+          Awaited<ReturnType<typeof getProgramTypeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProgramTypeById>>,
+          TError,
+          Awaited<ReturnType<typeof getProgramTypeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific ProgramType
+ */
+
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProgramTypeByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new ProgramType with the provided details
+ * @summary Create a new ProgramType
+ */
+export const createProgramType = (
+    programType: ProgramType,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateProgramTypeResponse200>(
+      {url: `/api/ProgramType/create`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: programType, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateProgramTypeMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgramType>>, TError,{data: ProgramType}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createProgramType>>, TError,{data: ProgramType}, TContext> => {
+
+const mutationKey = ['createProgramType'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createProgramType>>, {data: ProgramType}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createProgramType(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateProgramTypeMutationResult = NonNullable<Awaited<ReturnType<typeof createProgramType>>>
+    export type CreateProgramTypeMutationBody = ProgramType
+    export type CreateProgramTypeMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new ProgramType
+ */
+export const useCreateProgramType = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgramType>>, TError,{data: ProgramType}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createProgramType>>,
+        TError,
+        {data: ProgramType},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateProgramTypeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Update an existing ProgramType with the provided details
+ * @summary Update a ProgramType
+ */
+export const updateProgramType = (
+    id: number,
+    programType: ProgramType,
+ ) => {
+      
+      
+      return fetchData<UpdateProgramTypeResponse200>(
+      {url: `/api/ProgramType/update/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: programType
+    },
+      );
+    }
+  
+
+
+export const getUpdateProgramTypeMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProgramType>>, TError,{id: number;data: ProgramType}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateProgramType>>, TError,{id: number;data: ProgramType}, TContext> => {
+
+const mutationKey = ['updateProgramType'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateProgramType>>, {id: number;data: ProgramType}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateProgramType(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateProgramTypeMutationResult = NonNullable<Awaited<ReturnType<typeof updateProgramType>>>
+    export type UpdateProgramTypeMutationBody = ProgramType
+    export type UpdateProgramTypeMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a ProgramType
+ */
+export const useUpdateProgramType = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProgramType>>, TError,{id: number;data: ProgramType}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateProgramType>>,
+        TError,
+        {id: number;data: ProgramType},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateProgramTypeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a ProgramType by its ID
+ * @summary Delete a ProgramType
+ */
+export const deleteProgramType = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteProgramTypeResponse200>(
+      {url: `/api/ProgramType/delete/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteProgramTypeMutationOptions = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProgramType>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteProgramType>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteProgramType'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProgramType>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteProgramType(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteProgramTypeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProgramType>>>
+    
+    export type DeleteProgramTypeMutationError = null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a ProgramType
+ */
+export const useDeleteProgramType = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProgramType>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteProgramType>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteProgramTypeMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

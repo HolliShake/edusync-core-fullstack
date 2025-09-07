@@ -1,5 +1,5 @@
+import RoomModal from '@/components/campus/room-modal.component';
 import { useModal } from '@/components/custom/modal.component';
-import RoomModal from '@/components/custom/room-modal.component';
 import {
   Accordion,
   AccordionContent,

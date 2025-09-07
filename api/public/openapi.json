@@ -12,6 +12,274 @@
         }
     ],
     "paths": {
+        "\/api\/AcademicProgram": {
+            "get": {
+                "tags": [
+                    "AcademicProgram"
+                ],
+                "summary": "Get paginated list of AcademicProgram",
+                "description": "Retrieve a paginated list of AcademicProgram with optional search",
+                "operationId": "getAcademicProgramPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[college_id]",
+                        "in": "query",
+                        "description": "Filter by college ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Include program type",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedAcademicProgramResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicProgram\/{id}": {
+            "get": {
+                "tags": [
+                    "AcademicProgram"
+                ],
+                "summary": "Get a specific AcademicProgram",
+                "description": "Retrieve a AcademicProgram by its ID",
+                "operationId": "getAcademicProgramById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetAcademicProgramResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicProgram not found"
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicProgram\/create": {
+            "post": {
+                "tags": [
+                    "AcademicProgram"
+                ],
+                "summary": "Create a new AcademicProgram",
+                "description": " Create a new AcademicProgram with the provided details",
+                "operationId": "createAcademicProgram",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AcademicProgram"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicProgram created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateAcademicProgramResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicProgram\/update\/{id}": {
+            "put": {
+                "tags": [
+                    "AcademicProgram"
+                ],
+                "summary": "Update a AcademicProgram",
+                "description": "Update an existing AcademicProgram with the provided details",
+                "operationId": "updateAcademicProgram",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AcademicProgram"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicProgram updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateAcademicProgramResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicProgram not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicProgram\/delete\/{id}": {
+            "delete": {
+                "tags": [
+                    "AcademicProgram"
+                ],
+                "summary": "Delete a AcademicProgram",
+                "description": "Delete a AcademicProgram by its ID",
+                "operationId": "deleteAcademicProgram",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "AcademicProgram deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteAcademicProgramResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicProgram not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/Building": {
             "get": {
                 "tags": [
@@ -780,6 +1048,266 @@
                 }
             }
         },
+        "\/api\/ProgramType": {
+            "get": {
+                "tags": [
+                    "ProgramType"
+                ],
+                "summary": "Get paginated list of ProgramType",
+                "description": "Retrieve a paginated list of ProgramType with optional search",
+                "operationId": "getProgramTypePaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedProgramTypeResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/ProgramType\/{id}": {
+            "get": {
+                "tags": [
+                    "ProgramType"
+                ],
+                "summary": "Get a specific ProgramType",
+                "description": "Retrieve a ProgramType by its ID",
+                "operationId": "getProgramTypeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetProgramTypeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ProgramType not found"
+                    }
+                }
+            }
+        },
+        "\/api\/ProgramType\/create": {
+            "post": {
+                "tags": [
+                    "ProgramType"
+                ],
+                "summary": "Create a new ProgramType",
+                "description": " Create a new ProgramType with the provided details",
+                "operationId": "createProgramType",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ProgramType"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ProgramType created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateProgramTypeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/ProgramType\/update\/{id}": {
+            "put": {
+                "tags": [
+                    "ProgramType"
+                ],
+                "summary": "Update a ProgramType",
+                "description": "Update an existing ProgramType with the provided details",
+                "operationId": "updateProgramType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ProgramType"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ProgramType updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateProgramTypeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ProgramType not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/ProgramType\/delete\/{id}": {
+            "delete": {
+                "tags": [
+                    "ProgramType"
+                ],
+                "summary": "Delete a ProgramType",
+                "description": "Delete a ProgramType by its ID",
+                "operationId": "deleteProgramType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "ProgramType deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteProgramTypeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ProgramType not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/Room": {
             "get": {
                 "tags": [
@@ -1206,6 +1734,146 @@
                 },
                 "type": "object"
             },
+            "AcademicProgram": {
+                "title": "AcademicProgram",
+                "required": [
+                    "program_name",
+                    "short_name",
+                    "year_first_implemented",
+                    "college_id",
+                    "program_type_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "program_name": {
+                        "type": "string",
+                        "example": "Bachelor of Science in Computer Science"
+                    },
+                    "short_name": {
+                        "type": "string",
+                        "example": "BSCS"
+                    },
+                    "year_first_implemented": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2020-01-01"
+                    },
+                    "college_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "program_type_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-07T10:30:14.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-07T10:30:14.000000Z"
+                    },
+                    "program_type": {
+                        "$ref": "#\/components\/schemas\/ProgramType"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAcademicProgram": {
+                "title": "PaginatedAcademicProgram",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AcademicProgram"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAcademicProgramResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedAcademicProgram"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAcademicProgramResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicProgram"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAcademicProgramResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicProgram"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAcademicProgramResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicProgram"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteAcademicProgramResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "Building": {
                 "title": "Building",
                 "required": [
@@ -1570,6 +2238,122 @@
                 },
                 "type": "object"
             },
+            "ProgramType": {
+                "title": "ProgramType",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-07T10:27:56.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-07T10:27:56.000000Z"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example Program Type"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedProgramType": {
+                "title": "PaginatedProgramType",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/ProgramType"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedProgramTypeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedProgramType"
+                    }
+                },
+                "type": "object"
+            },
+            "GetProgramTypeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/ProgramType"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateProgramTypeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/ProgramType"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateProgramTypeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/ProgramType"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteProgramTypeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "Room": {
                 "title": "Room",
                 "required": [],
@@ -1811,6 +2595,10 @@
     },
     "tags": [
         {
+            "name": "AcademicProgram",
+            "description": "AcademicProgram"
+        },
+        {
             "name": "Building",
             "description": "Building"
         },
@@ -1821,6 +2609,10 @@
         {
             "name": "College",
             "description": "College"
+        },
+        {
+            "name": "ProgramType",
+            "description": "ProgramType"
         },
         {
             "name": "Room",

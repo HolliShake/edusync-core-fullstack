@@ -6,10 +6,12 @@ import Table, { type TableColumn } from '@/components/custom/table.component';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCampusContext } from '@/context/campus.context';
+import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteCollege, useGetCollegePaginated } from '@rest/api';
 import { DeleteIcon, EditIcon, EllipsisIcon, GraduationCapIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 export default function AdminCollegeTab(): React.ReactNode {
@@ -19,6 +21,7 @@ export default function AdminCollegeTab(): React.ReactNode {
   const campus = useCampusContext();
   const controller = useModal<any>();
   const confirm = useConfirm();
+  const navigate = useNavigate();
 
   const {
     data: collegesPaginated,
@@ -188,6 +191,11 @@ export default function AdminCollegeTab(): React.ReactNode {
             </p>
           </div>
         }
+        onClickRow={(row) => {
+          const campusId = encryptIdForUrl(campus?.id as number);
+          const collegeId = encryptIdForUrl(row.id as number);
+          navigate(`/admin/campuses/${campusId}/colleges/${collegeId}`);
+        }}
       />
 
       <CollegeModal

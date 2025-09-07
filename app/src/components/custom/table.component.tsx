@@ -316,7 +316,8 @@ export default function Table<RowType extends Record<string, any>>({
               rows.map((row, rowIndex) => (
                 <TableRow
                   key={getRowKey(row, rowIndex)}
-                  className={`
+                  className={` 
+                    !cursor-pointer
                     ${getRowClassName(row, rowIndex)}
                   `}
                   onClick={() => onClickRow?.(row, rowIndex)}

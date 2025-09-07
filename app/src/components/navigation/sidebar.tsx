@@ -77,7 +77,12 @@ export default function SideBar({
           isCollapsed ? 'lg:justify-center lg:px-2 px-6 justify-between' : 'justify-between px-6'
         )}
       >
-        <div className={cn('flex items-center gap-3', isCollapsed && 'lg:hidden')}>
+        <div
+          className={cn(
+            'flex items-center gap-3 transition-all duration-300 ease-in-out',
+            isCollapsed && 'lg:max-w-0 lg:opacity-0 lg:overflow-hidden lg:px-0 lg:m-0 lg:gap-0'
+          )}
+        >
           <div className="transition-all duration-300">
             <h2 className="text-xl font-bold text-sidebar-foreground tracking-tight">EduPortal</h2>
             <p className="text-xs font-medium text-sidebar-accent-foreground tracking-wide">
@@ -92,7 +97,7 @@ export default function SideBar({
             variant="ghost"
             size="icon"
             className={cn(
-              'hidden lg:flex rounded-lg bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80 transition-all duration-200',
+              'shadow-sm hidden lg:flex rounded-lg bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80 transition-all duration-200',
               isCollapsed ? 'w-9 h-9' : 'w-8 h-8'
             )}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -158,8 +163,8 @@ export default function SideBar({
 
                   <div
                     className={cn(
-                      'flex-1 min-w-0 transition-all duration-300',
-                      isCollapsed && 'lg:hidden'
+                      'flex-1 min-w-0 transition-all duration-300 ease-in-out',
+                      isCollapsed && 'lg:max-w-0 lg:opacity-0 lg:overflow-hidden lg:px-0 lg:m-0'
                     )}
                   >
                     <span
@@ -271,15 +276,18 @@ export default function SideBar({
         })}
       </nav>
 
-      {/* Footer - only show when not collapsed */}
-      {!isCollapsed && (
-        <div className="p-4 bg-card border-t border-border">
-          <div className="text-xs text-muted-foreground text-center">
-            <p className="font-medium text-foreground">GeoCars Platform</p>
-            <p className="text-[10px] mt-1 opacity-70">v1.0.0</p>
-          </div>
+      {/* Footer - smoothly animate visibility when collapsing */}
+      <div
+        className={cn(
+          'bg-card border-t border-border overflow-hidden transition-all duration-300 ease-in-out',
+          isCollapsed ? 'max-h-0 opacity-0 p-0' : 'max-h-24 opacity-100 p-4'
+        )}
+      >
+        <div className="text-xs text-muted-foreground text-center">
+          <p className="font-medium text-foreground">GeoCars Platform</p>
+          <p className="text-[10px] mt-1 opacity-70">v1.0.0</p>
         </div>
-      )}
+      </div>
     </aside>
   );
 }

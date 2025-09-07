@@ -24,7 +24,7 @@ abstract class GenericService implements IGenericService
      * @param int $rows The number of rows per page
      * @return Collection|LengthAwarePaginator Collection of models
      */
-    public function getAll(bool $paginate = false, int $page = 1, int $rows = 10): Collection|LengthAwarePaginator
+    public function getAll(bool $paginate = true, int $page = 1, int $rows = 10): Collection|LengthAwarePaginator
     {
         return $this->repository->getAll($paginate, $page, $rows);
     }
