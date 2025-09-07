@@ -284,7 +284,7 @@ export default function SideBar({
         )}
       >
         <div className="text-xs text-muted-foreground text-center">
-          <p className="font-medium text-foreground">GeoCars Platform</p>
+          <p className="font-medium text-foreground">EduPortal Platform</p>
           <p className="text-[10px] mt-1 opacity-70">v1.0.0</p>
         </div>
       </div>
