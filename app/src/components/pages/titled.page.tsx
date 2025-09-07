@@ -73,7 +73,7 @@ export default function TitledPage({
         </div>
         {computedBreadcrumb && computedBreadcrumb.length > 0 && (
           <Card className="rounded-md">
-            <CardContent className="p-2">
+            <CardContent className="py-2 px-4">
               <Breadcrumb>
                 <BreadcrumbList>
                   {computedBreadcrumb.map((item, index) => (

@@ -63,7 +63,7 @@ export default function Menu({
             }}
             disabled={item.disabled}
             className={cn(
-              'flex items-center gap-2 cursor-pointer select-none font-medium text-sm',
+              'flex items-center gap-2 cursor-pointer select-none antialiased font-semibold text-base',
               getVariantClasses(item.variant)
             )}
           >

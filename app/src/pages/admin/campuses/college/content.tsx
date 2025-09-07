@@ -123,12 +123,16 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
           <div className="flex items-center gap-3">
             <Badge
               variant="secondary"
-              className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1"
+              className="bg-emerald-50 text-emerald-700 border-emerald-200 px-3 py-1 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800"
             >
               <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse" />
               Active College
             </Badge>
-            <Button variant="outline" size="sm" className="hover:bg-primary/5">
+            <Button
+              variant="outline"
+              size="sm"
+              className="hover:bg-primary/5 dark:hover:bg-primary/20"
+            >
               <EditIcon className="h-4 w-4 mr-2" />
               Edit College
             </Button>
@@ -138,63 +142,73 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
 
       {/* Enhanced Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-lg transition-all duration-200">
+        <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-lg transition-all duration-200 dark:from-blue-900 dark:to-blue-800/50">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium text-blue-700">Total Buildings</p>
-                <p className="text-3xl font-bold text-blue-900">-</p>
-                <p className="text-xs text-blue-600">Coming soon</p>
+                <p className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                  Total Buildings
+                </p>
+                <p className="text-3xl font-bold text-blue-900 dark:text-blue-200">-</p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">Coming soon</p>
               </div>
-              <div className="p-3 bg-blue-200/50 rounded-xl">
-                <BuildingIcon className="h-8 w-8 text-blue-700" />
+              <div className="p-3 bg-blue-200/50 rounded-xl dark:bg-blue-900/30">
+                <BuildingIcon className="h-8 w-8 text-blue-700 dark:text-blue-300" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-md bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-lg transition-all duration-200">
+        <Card className="border-0 shadow-md bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-lg transition-all duration-200 dark:from-purple-900 dark:to-purple-800/50">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium text-purple-700">Total Students</p>
-                <p className="text-3xl font-bold text-purple-900">-</p>
-                <p className="text-xs text-purple-600">Coming soon</p>
+                <p className="text-sm font-medium text-purple-700 dark:text-purple-300">
+                  Total Students
+                </p>
+                <p className="text-3xl font-bold text-purple-900 dark:text-purple-200">-</p>
+                <p className="text-xs text-purple-600 dark:text-purple-400">Coming soon</p>
               </div>
-              <div className="p-3 bg-purple-200/50 rounded-xl">
-                <UsersIcon className="h-8 w-8 text-purple-700" />
+              <div className="p-3 bg-purple-200/50 rounded-xl dark:bg-purple-900/30">
+                <UsersIcon className="h-8 w-8 text-purple-700 dark:text-purple-300" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-md bg-gradient-to-br from-green-50 to-green-100/50 hover:shadow-lg transition-all duration-200">
+        <Card className="border-0 shadow-md bg-gradient-to-br from-green-50 to-green-100/50 hover:shadow-lg transition-all duration-200 dark:from-green-900 dark:to-green-800/50">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium text-green-700">Active Programs</p>
-                <p className="text-3xl font-bold text-green-900">{academicProgramItems.length}</p>
-                <p className="text-xs text-green-600">
+                <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                  Active Programs
+                </p>
+                <p className="text-3xl font-bold text-green-900 dark:text-green-200">
+                  {academicProgramItems.length}
+                </p>
+                <p className="text-xs text-green-600 dark:text-green-400">
                   {academicProgramItems.length === 1 ? 'program' : 'programs'} available
                 </p>
               </div>
-              <div className="p-3 bg-green-200/50 rounded-xl">
-                <BookOpenIcon className="h-8 w-8 text-green-700" />
+              <div className="p-3 bg-green-200/50 rounded-xl dark:bg-green-900/30">
+                <BookOpenIcon className="h-8 w-8 text-green-700 dark:text-green-300" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-md bg-gradient-to-br from-orange-50 to-orange-100/50 hover:shadow-lg transition-all duration-200">
+        <Card className="border-0 shadow-md bg-gradient-to-br from-orange-50 to-orange-100/50 hover:shadow-lg transition-all duration-200 dark:from-orange-900 dark:to-orange-800/50">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium text-orange-700">Established</p>
-                <p className="text-3xl font-bold text-orange-900">-</p>
-                <p className="text-xs text-orange-600">Coming soon</p>
+                <p className="text-sm font-medium text-orange-700 dark:text-orange-300">
+                  Established
+                </p>
+                <p className="text-3xl font-bold text-orange-900 dark:text-orange-200">-</p>
+                <p className="text-xs text-orange-600 dark:text-orange-400">Coming soon</p>
               </div>
-              <div className="p-3 bg-orange-200/50 rounded-xl">
-                <CalendarIcon className="h-8 w-8 text-orange-700" />
+              <div className="p-3 bg-orange-200/50 rounded-xl dark:bg-orange-900/30">
+                <CalendarIcon className="h-8 w-8 text-orange-700 dark:text-orange-300" />
               </div>
             </div>
           </CardContent>
@@ -257,7 +271,7 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
             {academicProgramItems.map((program: AcademicProgram) => (
               <Card
                 key={program.id}
-                className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-white to-gray-50/50 group"
+                className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-white to-gray-50/50 group dark:from-zinc-900 dark:to-zinc-800/50"
               >
                 <CardHeader className="pb-4">
                   <div className="flex justify-between items-start">
@@ -323,15 +337,15 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
             ))}
           </div>
         ) : (
-          <Card className="border-2 border-dashed border-gray-200 bg-gray-50/50">
+          <Card className="border-2 border-dashed border-gray-200 bg-gray-50/50 dark:border-zinc-800 dark:bg-zinc-900/50">
             <CardContent className="flex flex-col items-center justify-center py-20">
-              <div className="p-6 bg-gradient-to-br from-gray-100 to-gray-200/50 rounded-full mb-6">
-                <GraduationCapIcon className="h-12 w-12 text-gray-400" />
+              <div className="p-6 bg-gradient-to-br from-gray-100 to-gray-200/50 rounded-full mb-6 dark:from-zinc-800 dark:to-zinc-800/50">
+                <GraduationCapIcon className="h-12 w-12 text-gray-400 dark:text-zinc-500" />
               </div>
-              <CardTitle className="text-xl mb-3 text-gray-700">
+              <CardTitle className="text-xl mb-3 text-gray-700 dark:text-zinc-200">
                 No academic programs found
               </CardTitle>
-              <CardDescription className="text-center max-w-md mb-8 text-gray-500 leading-relaxed">
+              <CardDescription className="text-center max-w-md mb-8 text-gray-500 leading-relaxed dark:text-zinc-400">
                 This college doesn't have any academic programs yet. Create your first program to
                 get started with managing academic offerings.
               </CardDescription>
