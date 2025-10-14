@@ -2,30 +2,42 @@
 
 namespace App\Providers;
 
-use App\interface\IRepo\IAcademicProgramRepo;
-use App\interface\IRepo\IBuildingRepo;
+use App\Interface\IRepo\IAcademicProgramRepo;
+use App\Interface\IRepo\IBuildingRepo;
 use App\Repo\AcademicProgramRepo;
 use App\Repo\CampusRepo;
-use App\interface\IRepo\ICampusRepo;
-use App\interface\IRepo\ICollegeRepo;
-use App\interface\IRepo\IProgramTypeRepo;
-use App\interface\IRepo\IRoomRepo;
-use App\interface\IService\IAcademicProgramService;
-use App\interface\IService\IBuildingService;
+use App\Interface\IRepo\ICampusRepo;
+use App\Interface\IRepo\ICollegeRepo;
+use App\Interface\IRepo\ICourseRepo;
+use App\Interface\IRepo\ICurriculumRepo;
+use App\Interface\IRepo\IProgramTypeRepo;
+use App\Interface\IRepo\IRoomRepo;
+use App\Interface\IRepo\ISchoolYearRepo;
+use App\Interface\IService\IAcademicProgramService;
+use App\Interface\IService\IBuildingService;
 use App\Service\AcademicProgramService;
 use App\Service\CampusService;
-use App\interface\IService\ICampusService;
-use App\interface\IService\ICollegeService;
-use App\interface\IService\IProgramTypeService;
-use App\interface\IService\IRoomService;
+use App\Interface\IService\ICampusService;
+use App\Interface\IService\ICollegeService;
+use App\Interface\IService\ICourseService;
+use App\Interface\IService\ICurriculumService;
+use App\Interface\IService\IProgramTypeService;
+use App\Interface\IService\IRoomService;
+use App\Interface\IService\ISchoolYearService;
 use App\Repo\BuildingRepo;
 use App\Repo\CollegeRepo;
+use App\Repo\CourseRepo;
+use App\Repo\CurriculumRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RoomRepo;
+use App\Repo\SchoolYearRepo;
 use App\Service\BuildingService;
 use App\Service\CollegeService;
+use App\Service\CourseService;
+use App\Service\CurriculumService;
 use App\Service\ProgramTypeService;
 use App\Service\RoomService;
+use App\Service\SchoolYearService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IBuildingRepo::class, BuildingRepo::class);
         $this->app->bind(ICollegeRepo::class, CollegeRepo::class);
         $this->app->bind(IRoomRepo::class, RoomRepo::class);
+        $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
+        $this->app->bind(ICurriculumRepo::class, CurriculumRepo::class);
+        $this->app->bind(ICourseRepo::class, CourseRepo::class);
+        $this->app->bind(ISchoolYearRepo::class, SchoolYearRepo::class);
         // Service
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
         $this->app->bind(IProgramTypeService::class, ProgramTypeService::class);
@@ -49,6 +65,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IBuildingService::class, BuildingService::class);
         $this->app->bind(ICollegeService::class, CollegeService::class);
         $this->app->bind(IRoomService::class, RoomService::class);
+        $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
+        $this->app->bind(ICurriculumService::class, CurriculumService::class);
+        $this->app->bind(ICourseService::class, CourseService::class);
+        $this->app->bind(ISchoolYearService::class, SchoolYearService::class);
     }
 
     /**

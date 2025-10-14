@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SchoolYearController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -70,4 +73,29 @@ Route::controller(ProgramTypeController::class)->group(function() {
     Route::post('/ProgramType/create', 'store');
     Route::put('/ProgramType/update/{id}', 'update');
     Route::delete('/ProgramType/delete/{id}', 'destroy');
+});
+
+Route::controller(CurriculumController::class)->group(function() {
+    Route::get('/Curriculum', 'index');
+    Route::get('/Curriculum/{id}', 'show');
+    Route::post('/Curriculum', 'store');
+    Route::put('/Curriculum/{id}', 'update');
+    Route::delete('/Curriculum/{id}', 'destroy');
+});
+
+Route::controller(CourseController::class)->group(function() {
+    Route::get('/Course', 'index');
+    Route::get('/Course/{id}', 'show');
+    Route::post('/Course', 'store');
+    Route::put('/Course/{id}', 'update');
+    Route::delete('/Course/{id}', 'destroy');
+});
+
+
+Route::controller(SchoolYearController::class)->group(function() {
+    Route::get('/SchoolYear', 'index');
+    Route::get('/SchoolYear/{id}', 'show');
+    Route::post('/SchoolYear', 'store');
+    Route::put('/SchoolYear/{id}', 'update');
+    Route::delete('/SchoolYear/{id}', 'destroy');
 });

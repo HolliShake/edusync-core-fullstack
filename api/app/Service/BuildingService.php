@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\interface\IService\IBuildingService;
-use App\interface\IRepo\IBuildingRepo;
+use App\Interface\IService\IBuildingService;
+use App\Interface\IRepo\IBuildingRepo;
 
 class BuildingService extends GenericService implements IBuildingService
 {

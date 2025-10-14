@@ -1,4 +1,5 @@
 import RoomModal from '@/components/campus/room-modal.component';
+import { useConfirm } from '@/components/confirm.provider';
 import { useModal } from '@/components/custom/modal.component';
 import {
   Accordion,
@@ -27,6 +28,7 @@ export default function AdminBuildingDetailContent(): React.ReactNode {
 
   const roomModal = useModal<Room>();
   const { mutateAsync: deleteRoom } = useDeleteRoom();
+  const confirm = useConfirm();
 
   const { data: rooms, refetch: refetchRooms } = useGetRoomPaginated(
     {
@@ -90,15 +92,19 @@ export default function AdminBuildingDetailContent(): React.ReactNode {
   };
 
   const handleDeleteRoom = async (room: Room) => {
-    if (!room.id) return;
+    confirm.confirm(async () => {
+      if (!room.id) return;
 
-    try {
-      await deleteRoom({ id: room.id });
-      toast.success('Room deleted successfully');
-      refetchRooms();
-    } catch (error) {
-      toast.error('Failed to delete room');
-    }
+      try {
+        await deleteRoom({ id: room.id });
+        toast.success('Room deleted successfully');
+        refetchRooms();
+      } catch (error) {
+        toast.error('Failed to delete room');
+        // eslint-disable-next-line no-console
+        console.error('Delete error:', error);
+      }
+    });
   };
 
   if (isLoading) {

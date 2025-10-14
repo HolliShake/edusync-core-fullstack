@@ -2,10 +2,19 @@ import AdminBuilding from '@/pages/admin/campuses/building/page';
 import AdminCampusDetail from '@/pages/admin/campuses/campus/page';
 import AdminCollege from '@/pages/admin/campuses/college/page';
 import AdminCampus from '@/pages/admin/campuses/page';
+import AdminCourses from '@/pages/admin/courses/page';
 import AdminDashboard from '@/pages/admin/dashboard';
 import AdminProgramTypes from '@/pages/admin/program-types/page';
+import AdminSchoolYear from '@/pages/admin/school-year/page';
 import type { Route } from '@/types/types';
-import { BuildingIcon, GraduationCapIcon, LayoutDashboardIcon, SchoolIcon } from 'lucide-react';
+import {
+  BookIcon,
+  BuildingIcon,
+  CalendarIcon,
+  GraduationCapIcon,
+  LayoutDashboardIcon,
+  SchoolIcon,
+} from 'lucide-react';
 
 const ADMIN: Route[] = [
   {
@@ -15,6 +24,15 @@ const ADMIN: Route[] = [
     component: <AdminDashboard />,
     icon: <LayoutDashboardIcon className="h-4 w-4" />,
     layout: 'dashboard',
+  },
+  {
+    key: 'admin.school-year',
+    title: 'School Year',
+    path: '/admin/school-year',
+    component: <AdminSchoolYear />,
+    icon: <CalendarIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
   },
   {
     key: 'admin.campuses',
@@ -35,6 +53,16 @@ const ADMIN: Route[] = [
     layout: 'dashboard',
     sidebar: false,
   },
+  // Building/:id
+  {
+    key: 'admin.building',
+    title: 'Building',
+    path: '/admin/campuses/:campusId/buildings/:buildingId',
+    component: <AdminBuilding />,
+    icon: <BuildingIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
+  },
   // College/:id
   {
     key: 'admin.college',
@@ -45,15 +73,15 @@ const ADMIN: Route[] = [
     layout: 'dashboard',
     sidebar: false,
   },
-  // Building/:id
+  // Courses
   {
-    key: 'admin.building',
-    title: 'Building',
-    path: '/admin/campuses/:campusId/buildings/:buildingId',
-    component: <AdminBuilding />,
-    icon: <BuildingIcon className="h-4 w-4" />,
+    key: 'admin.course',
+    title: 'Course',
+    path: '/admin/courses',
+    component: <AdminCourses />,
+    icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
-    sidebar: false,
+    sidebar: true,
   },
   {
     key: 'admin.program-type',

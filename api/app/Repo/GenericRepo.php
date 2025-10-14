@@ -2,7 +2,7 @@
 
 namespace App\Repo;
 
-use App\interface\IRepo\IGenericRepo;
+use App\Interface\IRepo\IGenericRepo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;

@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\interface\IService\IAcademicProgramService;
-use App\interface\IRepo\IAcademicProgramRepo;
+use App\Interface\IService\IAcademicProgramService;
+use App\Interface\IRepo\IAcademicProgramRepo;
 use App\Service\GenericService;
 
 class AcademicProgramService extends GenericService implements IAcademicProgramService

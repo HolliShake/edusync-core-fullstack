@@ -2,7 +2,7 @@
 
 namespace App\Repo;
 
-use App\interface\IRepo\IProgramTypeRepo;
+use App\Interface\IRepo\IProgramTypeRepo;
 use App\Models\ProgramType;
 use Spatie\QueryBuilder\AllowedFilter;
 

@@ -25,6 +25,7 @@ import {
 import type React from 'react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import CurriculumSheet, { useCurriculumSheetState } from './curriculum.sheet';
 
 export default function AdminCollegeDetailContent(): React.ReactNode {
   const college = useCollegeContext();
@@ -54,6 +55,7 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
   );
 
   const controller = useModal<AcademicProgram>();
+  const sheet = useCurriculumSheetState();
   const { mutateAsync: deleteAcademicProgram } = useDeleteAcademicProgram();
   const confirm = useConfirm();
 
@@ -70,6 +72,10 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
 
   const handleEdit = (program: AcademicProgram) => {
     controller.openFn(program);
+  };
+
+  const handleView = (program: AcademicProgram) => {
+    sheet.openSheet(program);
   };
 
   if (!college) {
@@ -316,7 +322,7 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
               ] as Array<TableColumn<AcademicProgram>>
             }
             rows={academicProgramItems}
-            onClickRow={(row) => handleEdit(row)}
+            onClickRow={(row) => handleView(row)}
             pagination={{
               current_page: academicPrograms?.data?.current_page,
               last_page: academicPrograms?.data?.last_page,
@@ -360,6 +366,8 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
             refetch();
           }}
         />
+
+        <CurriculumSheet controller={sheet} />
       </div>
     </div>
   );

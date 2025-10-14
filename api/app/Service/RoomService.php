@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\interface\IService\IRoomService;
-use App\interface\IRepo\IRoomRepo;
+use App\Interface\IService\IRoomService;
+use App\Interface\IRepo\IRoomRepo;
 
 class RoomService extends GenericService implements IRoomService
 {

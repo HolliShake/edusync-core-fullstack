@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\interface\IService\IProgramTypeService;
-use App\interface\IRepo\IProgramTypeRepo;
+use App\Interface\IService\IProgramTypeService;
+use App\Interface\IRepo\IProgramTypeRepo;
 
 class ProgramTypeService extends GenericService implements IProgramTypeService
 {

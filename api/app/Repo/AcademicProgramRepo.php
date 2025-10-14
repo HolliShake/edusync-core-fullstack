@@ -2,7 +2,7 @@
 
 namespace App\Repo;
 
-use App\interface\IRepo\IAcademicProgramRepo;
+use App\Interface\IRepo\IAcademicProgramRepo;
 use App\Models\AcademicProgram;
 use App\Repo\GenericRepo;
 use Spatie\QueryBuilder\AllowedFilter;

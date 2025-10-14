@@ -2,7 +2,7 @@
 
 namespace App\Repo;
 
-use App\interface\IRepo\ICollegeRepo;
+use App\Interface\IRepo\ICollegeRepo;
 use App\Models\College;
 use Spatie\QueryBuilder\AllowedFilter;
 

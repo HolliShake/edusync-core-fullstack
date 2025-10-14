@@ -2,7 +2,7 @@
 
 namespace App\Repo;
 
-use App\interface\IRepo\IRoomRepo;
+use App\Interface\IRepo\IRoomRepo;
 use App\Models\Room;
 use Spatie\QueryBuilder\AllowedFilter;
 

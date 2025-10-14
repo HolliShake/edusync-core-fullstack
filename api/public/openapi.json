@@ -1048,6 +1048,503 @@
                 }
             }
         },
+        "\/api\/Course": {
+            "get": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Get paginated list of Course",
+                "description": "Retrieve a paginated list of Course with optional search",
+                "operationId": "getCoursePaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedCourseResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Create a new Course",
+                "description": " Create a new Course with the provided details",
+                "operationId": "createCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Course"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateCourseResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Course\/{id}": {
+            "get": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Get a specific Course",
+                "description": "Retrieve a Course by its ID",
+                "operationId": "getCourseById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetCourseResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Update a Course",
+                "description": "Update an existing Course with the provided details",
+                "operationId": "updateCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Course"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateCourseResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Delete a Course",
+                "description": "Delete a Course by its ID",
+                "operationId": "deleteCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Course deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteCourseResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Curriculum": {
+            "get": {
+                "tags": [
+                    "Curriculum"
+                ],
+                "summary": "Get paginated list of Curriculum",
+                "description": "Retrieve a paginated list of Curriculum with optional search",
+                "operationId": "getCurriculumPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Filter by academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedCurriculumResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Curriculum"
+                ],
+                "summary": "Create a new Curriculum",
+                "description": " Create a new Curriculum with the provided details",
+                "operationId": "createCurriculum",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Curriculum created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateCurriculumResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Curriculum\/{id}": {
+            "get": {
+                "tags": [
+                    "Curriculum"
+                ],
+                "summary": "Get a specific Curriculum",
+                "description": "Retrieve a Curriculum by its ID",
+                "operationId": "getCurriculumById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetCurriculumResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Curriculum not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Curriculum"
+                ],
+                "summary": "Update a Curriculum",
+                "description": "Update an existing Curriculum with the provided details",
+                "operationId": "updateCurriculum",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Curriculum"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Curriculum updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateCurriculumResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Curriculum not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Curriculum"
+                ],
+                "summary": "Delete a Curriculum",
+                "description": "Delete a Curriculum by its ID",
+                "operationId": "deleteCurriculum",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Curriculum deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteCurriculumResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Curriculum not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/ProgramType": {
             "get": {
                 "tags": [
@@ -1553,6 +2050,271 @@
                     },
                     "404": {
                         "description": "Room not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/SchoolYear": {
+            "get": {
+                "tags": [
+                    "SchoolYear"
+                ],
+                "summary": "Get paginated list of SchoolYear",
+                "description": "Retrieve a paginated list of SchoolYear with optional search",
+                "operationId": "getSchoolYearPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by fields and direction. Example: ?sort=-start_date (descending), ?sort=start_date (ascending). Supports multiple fields: ?sort=-start_date,title",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "start_date",
+                            "example": "-start_date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedSchoolYearResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "SchoolYear"
+                ],
+                "summary": "Create a new SchoolYear",
+                "description": " Create a new SchoolYear with the provided details",
+                "operationId": "createSchoolYear",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/SchoolYear"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SchoolYear created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateSchoolYearResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/SchoolYear\/{id}": {
+            "get": {
+                "tags": [
+                    "SchoolYear"
+                ],
+                "summary": "Get a specific SchoolYear",
+                "description": "Retrieve a SchoolYear by its ID",
+                "operationId": "getSchoolYearById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSchoolYearResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SchoolYear not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "SchoolYear"
+                ],
+                "summary": "Update a SchoolYear",
+                "description": "Update an existing SchoolYear with the provided details",
+                "operationId": "updateSchoolYear",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/SchoolYear"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SchoolYear updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateSchoolYearResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SchoolYear not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "SchoolYear"
+                ],
+                "summary": "Delete a SchoolYear",
+                "description": "Delete a SchoolYear by its ID",
+                "operationId": "deleteSchoolYear",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "SchoolYear deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteSchoolYearResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SchoolYear not found"
                     },
                     "500": {
                         "description": " Internal server error",
@@ -2238,6 +3000,354 @@
                 },
                 "type": "object"
             },
+            "Course": {
+                "title": "Course",
+                "required": [
+                    "course_code",
+                    "course_title",
+                    "course_description",
+                    "with_laboratory",
+                    "is_specialize",
+                    "lecture_units",
+                    "laboratory_units",
+                    "credit_units"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "course_code": {
+                        "type": "string",
+                        "example": "CS101"
+                    },
+                    "course_title": {
+                        "type": "string",
+                        "example": "Introduction to Computer Science"
+                    },
+                    "course_description": {
+                        "type": "string",
+                        "example": "A foundational course covering basic computer science concepts"
+                    },
+                    "with_laboratory": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "is_specialize": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "lecture_units": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 3
+                    },
+                    "laboratory_units": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 0
+                    },
+                    "credit_units": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 3
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedCourse": {
+                "title": "PaginatedCourse",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Course"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedCourseResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedCourse"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCourseResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Course"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCoursesResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Course"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateCourseResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Course"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCourseResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Course"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteCourseResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "Curriculum": {
+                "title": "Curriculum",
+                "required": [
+                    "academic_program_id",
+                    "curriculum_code",
+                    "curriculum_name",
+                    "description",
+                    "effective_year",
+                    "total_units",
+                    "total_hours",
+                    "status",
+                    "approved_date"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "academic_program_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "curriculum_code": {
+                        "type": "string",
+                        "example": "CURR-2024-001"
+                    },
+                    "curriculum_name": {
+                        "type": "string",
+                        "example": "Computer Science Curriculum 2024"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Updated curriculum for Computer Science program",
+                        "nullable": true
+                    },
+                    "effective_year": {
+                        "type": "integer",
+                        "example": 2024
+                    },
+                    "total_units": {
+                        "type": "integer",
+                        "example": 120
+                    },
+                    "total_hours": {
+                        "type": "integer",
+                        "example": 2400
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "inactive",
+                            "archived"
+                        ],
+                        "example": "active"
+                    },
+                    "approved_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-01-15",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedCurriculum": {
+                "title": "PaginatedCurriculum",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Curriculum"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedCurriculumResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedCurriculum"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCurriculumResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Curriculum"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCurriculumsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Curriculum"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateCurriculumResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Curriculum"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCurriculumResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Curriculum"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteCurriculumResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "ProgramType": {
                 "title": "ProgramType",
                 "required": [
@@ -2491,6 +3601,167 @@
                     }
                 },
                 "type": "object"
+            },
+            "SchoolYear": {
+                "title": "SchoolYear",
+                "required": [
+                    "school_year_code",
+                    "name",
+                    "start_date",
+                    "end_date",
+                    "is_active"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "school_year_code": {
+                        "type": "string",
+                        "example": "2024-2025"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "AY 2024-2025"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-06-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-05-31"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "is_locked": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "is_current": {
+                        "type": "boolean",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedSchoolYear": {
+                "title": "PaginatedSchoolYear",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/SchoolYear"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedSchoolYearResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedSchoolYear"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSchoolYearResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSchoolYearsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/SchoolYear"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateSchoolYearResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSchoolYearResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteSchoolYearResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
             }
         },
         "responses": {
@@ -2611,12 +3882,24 @@
             "description": "College"
         },
         {
+            "name": "Course",
+            "description": "Course"
+        },
+        {
+            "name": "Curriculum",
+            "description": "Curriculum"
+        },
+        {
             "name": "ProgramType",
             "description": "ProgramType"
         },
         {
             "name": "Room",
             "description": "Room"
+        },
+        {
+            "name": "SchoolYear",
+            "description": "SchoolYear"
         }
     ]
 }

@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\interface\IService\ICollegeService;
-use App\interface\IRepo\ICollegeRepo;
+use App\Interface\IService\ICollegeService;
+use App\Interface\IRepo\ICollegeRepo;
 
 class CollegeService extends GenericService implements ICollegeService
 {

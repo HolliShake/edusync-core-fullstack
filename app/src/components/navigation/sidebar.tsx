@@ -115,7 +115,7 @@ export default function SideBar({
       {/* Navigation */}
       <nav
         className={cn(
-          'p-4 space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent',
+          'p-4 space-y-2 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent',
           isCollapsed && 'lg:px-2'
         )}
       >
@@ -125,7 +125,7 @@ export default function SideBar({
           const isExpanded = expandedRoutes.has(index) && !isCollapsed;
 
           return (
-            <div key={index} className="space-y-1">
+            <div key={index} className="space-y-2">
               <div className="relative">
                 <Link
                   to={route.path}
@@ -214,7 +214,7 @@ export default function SideBar({
                     isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   )}
                 >
-                  <div className="ml-8 space-y-1 pt-2">
+                  <div className="ml-8 space-y-2 pt-2">
                     {route.children?.map((child: Route, childIndex: number) => {
                       const isChildActive = isActiveRoute(child.path);
 

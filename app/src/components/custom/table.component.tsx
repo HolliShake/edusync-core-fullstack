@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   TableBody,
   TableCell,
@@ -56,6 +57,7 @@ export type TableProps<RowType extends Record<string, any>> = {
   onItemsPerPageChange?: (itemsPerPage: number) => void;
   showPagination?: boolean;
   onClickRow?: (row: RowType, index: number) => void;
+  loading?: boolean;
 };
 
 function normalizeKeyPath(keyPath: string): Array<string | number> {
@@ -101,6 +103,7 @@ export default function Table<RowType extends Record<string, any>>({
   onPageChange,
   showPagination = false,
   onClickRow = undefined,
+  loading = false,
 }: TableProps<RowType>) {
   const getRowKey = React.useCallback(
     (row: RowType, index: number): React.Key => {
@@ -139,6 +142,25 @@ export default function Table<RowType extends Record<string, any>>({
       typeof trClassName === 'function' ? trClassName(row, rowIndex) : trClassName;
 
     return [...baseClasses, customClass].filter(Boolean).join(' ');
+  };
+
+  const renderSkeletonRows = () => {
+    const skeletonRowCount = pagination?.per_page || 10;
+    return Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
+      <TableRow key={`skeleton-row-${rowIndex}`}>
+        {columns.map((col, colIndex) => (
+          <TableCell
+            key={`skeleton-cell-${rowIndex}-${colIndex}`}
+            className={`
+              ${compact ? 'px-3 py-2' : 'px-4 py-3'}
+              ${col.className || ''}
+            `}
+          >
+            <Skeleton className="h-5 w-full" />
+          </TableCell>
+        ))}
+      </TableRow>
+    ));
   };
 
   const renderPagination = () => {
@@ -197,9 +219,13 @@ export default function Table<RowType extends Record<string, any>>({
     return (
       <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-background/50">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>
-            Showing {pagination?.from || 0} to {pagination?.to || 0} of {total} results
-          </span>
+          {loading ? (
+            <Skeleton className="h-5 w-48" />
+          ) : (
+            <span>
+              Showing {pagination?.from || 0} to {pagination?.to || 0} of {total} results
+            </span>
+          )}
         </div>
         <div className="flex items-center">
           <Pagination>
@@ -208,11 +234,15 @@ export default function Table<RowType extends Record<string, any>>({
                 <PaginationPrevious
                   onClick={(e) => {
                     e.preventDefault();
-                    if (currentPage > 1) {
+                    if (currentPage > 1 && !loading) {
                       onPageChange?.(currentPage - 1);
                     }
                   }}
-                  className={currentPage <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  className={
+                    currentPage <= 1 || loading
+                      ? 'pointer-events-none opacity-50'
+                      : 'cursor-pointer'
+                  }
                   href="#"
                 />
               </PaginationItem>
@@ -224,10 +254,16 @@ export default function Table<RowType extends Record<string, any>>({
                     <PaginationLink
                       onClick={(e) => {
                         e.preventDefault();
-                        onPageChange?.(page as number);
+                        if (!loading) {
+                          onPageChange?.(page as number);
+                        }
                       }}
                       isActive={currentPage === page}
-                      className="cursor-pointer"
+                      className={
+                        loading
+                          ? 'pointer-events-none opacity-50 cursor-not-allowed'
+                          : 'cursor-pointer'
+                      }
                       href="#"
                     >
                       {page}
@@ -239,12 +275,14 @@ export default function Table<RowType extends Record<string, any>>({
                 <PaginationNext
                   onClick={(e) => {
                     e.preventDefault();
-                    if (currentPage < totalPages) {
+                    if (currentPage < totalPages && !loading) {
                       onPageChange?.(currentPage + 1);
                     }
                   }}
                   className={
-                    currentPage >= totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'
+                    currentPage >= totalPages || loading
+                      ? 'pointer-events-none opacity-50'
+                      : 'cursor-pointer'
                   }
                   href="#"
                 />
@@ -287,7 +325,9 @@ export default function Table<RowType extends Record<string, any>>({
             </TableRow>
           </TableHeader>
           <TableBody className={tbodyClassName}>
-            {rows.length === 0 ? (
+            {loading ? (
+              renderSkeletonRows()
+            ) : rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-36 text-center">
                   <div className="flex flex-col items-center justify-center gap-2">

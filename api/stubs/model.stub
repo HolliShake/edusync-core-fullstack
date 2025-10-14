@@ -52,6 +52,15 @@ use OpenApi\Attributes as OA;
 )]
 
 #[OA\Schema(
+    schema: "Get{{ class }}Response200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/{{ class }}"))
+    ]
+)]
+
+#[OA\Schema(
     schema: "Create{{ class }}Response200",
     type: "object",
     properties: [

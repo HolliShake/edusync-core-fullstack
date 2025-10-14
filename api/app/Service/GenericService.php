@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\interface\IService\IGenericService;
-use App\interface\IRepo\IGenericRepo;
+use App\Interface\IService\IGenericService;
+use App\Interface\IRepo\IGenericRepo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;

@@ -2,7 +2,7 @@
 
 namespace App\Repo;
 
-use App\interface\IRepo\ICampusRepo;
+use App\Interface\IRepo\ICampusRepo;
 use App\Models\Campus;
 
 class CampusRepo extends GenericRepo implements ICampusRepo
