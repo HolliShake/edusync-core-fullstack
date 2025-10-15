@@ -5,11 +5,13 @@ import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
 import SchoolYearModal from '@/components/school-year/school-year.modal'; // Ensure this path is correct
 import { Button } from '@/components/ui/button';
+import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteSchoolYear, useGetSchoolYearPaginated } from '@rest/api';
 import type { SchoolYear } from '@rest/models/schoolYear';
 import { DeleteIcon, EditIcon, EllipsisIcon, LockIcon, StarIcon, UnlockIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 export default function AdminSchoolYear(): React.ReactNode {
@@ -26,6 +28,7 @@ export default function AdminSchoolYear(): React.ReactNode {
 
   const controller = useModal<SchoolYear>();
   const confirm = useConfirm();
+  const navigate = useNavigate();
 
   const handleDelete = async (row: SchoolYear) => {
     confirm.confirm(async () => {
@@ -170,6 +173,7 @@ export default function AdminSchoolYear(): React.ReactNode {
         pagination={paginationMeta}
         onPageChange={setPage}
         showPagination={true}
+        onClickRow={(row) => navigate(`/admin/school-year/${encryptIdForUrl(row?.id as number)}`)}
       />
       <SchoolYearModal controller={controller} onSubmit={() => refetch()} />
     </TitledPage>

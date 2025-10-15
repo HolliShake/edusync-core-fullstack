@@ -25,11 +25,13 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AcademicCalendar,
   AcademicProgram,
   Building,
   Campus,
   College,
   Course,
+  CreateAcademicCalendarResponse200,
   CreateAcademicProgramResponse200,
   CreateBuildingResponse200,
   CreateCampusResponse200,
@@ -40,6 +42,7 @@ import type {
   CreateRoomResponse200,
   CreateSchoolYearResponse200,
   Curriculum,
+  DeleteAcademicCalendarResponse200,
   DeleteAcademicProgramResponse200,
   DeleteBuildingResponse200,
   DeleteCampusResponse200,
@@ -49,6 +52,8 @@ import type {
   DeleteProgramTypeResponse200,
   DeleteRoomResponse200,
   DeleteSchoolYearResponse200,
+  GetAcademicCalendarPaginatedParams,
+  GetAcademicCalendarResponse200,
   GetAcademicProgramPaginatedParams,
   GetAcademicProgramResponse200,
   GetBuildingPaginatedParams,
@@ -68,6 +73,7 @@ import type {
   GetSchoolYearPaginatedParams,
   GetSchoolYearResponse200,
   InternalServerErrorResponse,
+  PaginatedAcademicCalendarResponse200,
   PaginatedAcademicProgramResponse200,
   PaginatedBuildingResponse200,
   PaginatedCampusResponse200,
@@ -80,6 +86,7 @@ import type {
   ProgramType,
   Room,
   SchoolYear,
+  UpdateAcademicCalendarResponse200,
   UpdateAcademicProgramResponse200,
   UpdateBuildingResponse200,
   UpdateCampusResponse200,
@@ -120,6 +127,380 @@ type NonReadonly<T> = [T] extends [UnionToIntersection<T>] ? {
     : T[P];
 } : DistributeReadOnlyOverUnions<T>;
 
+/**
+ * Retrieve a paginated list of AcademicCalendar with optional search
+ * @summary Get paginated list of AcademicCalendar
+ */
+export const getAcademicCalendarPaginated = (
+    params?: GetAcademicCalendarPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedAcademicCalendarResponse200>(
+      {url: `/api/AcademicCalendar`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicCalendarPaginatedQueryKey = (params?: GetAcademicCalendarPaginatedParams,) => {
+    return [`/api/AcademicCalendar`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAcademicCalendarPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicCalendarPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>> = ({ signal }) => getAcademicCalendarPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicCalendarPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>>
+export type GetAcademicCalendarPaginatedQueryError = unknown
+
+
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+ params: undefined |  GetAcademicCalendarPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicCalendarPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicCalendarPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+ params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicCalendarPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicCalendarPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+ params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of AcademicCalendar
+ */
+
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+ params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicCalendarPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new AcademicCalendar with the provided details
+ * @summary Create a new AcademicCalendar
+ */
+export const createAcademicCalendar = (
+    academicCalendar: NonReadonly<AcademicCalendar>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateAcademicCalendarResponse200>(
+      {url: `/api/AcademicCalendar`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: academicCalendar, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAcademicCalendarMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicCalendar>>, TError,{data: NonReadonly<AcademicCalendar>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAcademicCalendar>>, TError,{data: NonReadonly<AcademicCalendar>}, TContext> => {
+
+const mutationKey = ['createAcademicCalendar'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAcademicCalendar>>, {data: NonReadonly<AcademicCalendar>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAcademicCalendar(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAcademicCalendarMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicCalendar>>>
+    export type CreateAcademicCalendarMutationBody = NonReadonly<AcademicCalendar>
+    export type CreateAcademicCalendarMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new AcademicCalendar
+ */
+export const useCreateAcademicCalendar = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicCalendar>>, TError,{data: NonReadonly<AcademicCalendar>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAcademicCalendar>>,
+        TError,
+        {data: NonReadonly<AcademicCalendar>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAcademicCalendarMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a AcademicCalendar by its ID
+ * @summary Get a specific AcademicCalendar
+ */
+export const getAcademicCalendarById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetAcademicCalendarResponse200>(
+      {url: `/api/AcademicCalendar/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicCalendarByIdQueryKey = (id?: number,) => {
+    return [`/api/AcademicCalendar/${id}`] as const;
+    }
+
+    
+export const getGetAcademicCalendarByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicCalendarByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicCalendarById>>> = ({ signal }) => getAcademicCalendarById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicCalendarByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicCalendarById>>>
+export type GetAcademicCalendarByIdQueryError = null
+
+
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicCalendarById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicCalendarById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicCalendarById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicCalendarById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific AcademicCalendar
+ */
+
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicCalendarByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing AcademicCalendar with the provided details
+ * @summary Update a AcademicCalendar
+ */
+export const updateAcademicCalendar = (
+    id: number,
+    academicCalendar: NonReadonly<AcademicCalendar>,
+ ) => {
+      
+      
+      return fetchData<UpdateAcademicCalendarResponse200>(
+      {url: `/api/AcademicCalendar/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: academicCalendar
+    },
+      );
+    }
+  
+
+
+export const getUpdateAcademicCalendarMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendar>>, TError,{id: number;data: NonReadonly<AcademicCalendar>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendar>>, TError,{id: number;data: NonReadonly<AcademicCalendar>}, TContext> => {
+
+const mutationKey = ['updateAcademicCalendar'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAcademicCalendar>>, {id: number;data: NonReadonly<AcademicCalendar>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAcademicCalendar(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAcademicCalendarMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicCalendar>>>
+    export type UpdateAcademicCalendarMutationBody = NonReadonly<AcademicCalendar>
+    export type UpdateAcademicCalendarMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a AcademicCalendar
+ */
+export const useUpdateAcademicCalendar = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendar>>, TError,{id: number;data: NonReadonly<AcademicCalendar>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAcademicCalendar>>,
+        TError,
+        {id: number;data: NonReadonly<AcademicCalendar>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAcademicCalendarMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a AcademicCalendar by its ID
+ * @summary Delete a AcademicCalendar
+ */
+export const deleteAcademicCalendar = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteAcademicCalendarResponse200>(
+      {url: `/api/AcademicCalendar/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteAcademicCalendarMutationOptions = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicCalendar>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicCalendar>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteAcademicCalendar'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAcademicCalendar>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAcademicCalendar(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAcademicCalendarMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicCalendar>>>
+    
+    export type DeleteAcademicCalendarMutationError = null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a AcademicCalendar
+ */
+export const useDeleteAcademicCalendar = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicCalendar>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAcademicCalendar>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAcademicCalendarMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
 /**
  * Retrieve a paginated list of AcademicProgram with optional search
  * @summary Get paginated list of AcademicProgram

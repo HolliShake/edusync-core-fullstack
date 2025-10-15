@@ -5,6 +5,7 @@ import AdminCampus from '@/pages/admin/campuses/page';
 import AdminCourses from '@/pages/admin/courses/page';
 import AdminDashboard from '@/pages/admin/dashboard';
 import AdminProgramTypes from '@/pages/admin/program-types/page';
+import AdminAcademicCalendarPage from '@/pages/admin/school-year/academic-calendar/page';
 import AdminSchoolYear from '@/pages/admin/school-year/page';
 import type { Route } from '@/types/types';
 import {
@@ -33,6 +34,15 @@ const ADMIN: Route[] = [
     icon: <CalendarIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
+  },
+  {
+    key: 'admin.academic-calendar',
+    title: 'Academic Calendar',
+    path: '/admin/school-year/:schoolYearId',
+    component: <AdminAcademicCalendarPage />,
+    icon: <BookIcon className="h-4 w-4" />, // replaced CalendarIcon with BookIcon for more relevance
+    layout: 'dashboard',
+    sidebar: false,
   },
   {
     key: 'admin.campuses',

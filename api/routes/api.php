@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicCalendarController;
 use App\Http\Controllers\AcademicProgramController;
 use App\Http\Controllers\ProgramTypeController;
 use App\Http\Controllers\BuildingController;
@@ -98,4 +99,13 @@ Route::controller(SchoolYearController::class)->group(function() {
     Route::post('/SchoolYear', 'store');
     Route::put('/SchoolYear/{id}', 'update');
     Route::delete('/SchoolYear/{id}', 'destroy');
+});
+
+
+Route::controller(AcademicCalendarController::class)->group(function() {
+    Route::get('/AcademicCalendar', 'index');
+    Route::get('/AcademicCalendar/{id}', 'show');
+    Route::post('/AcademicCalendar', 'store');
+    Route::put('/AcademicCalendar/{id}', 'update');
+    Route::delete('/AcademicCalendar/{id}', 'destroy');
 });

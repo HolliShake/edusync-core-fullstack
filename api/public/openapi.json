@@ -12,6 +12,268 @@
         }
     ],
     "paths": {
+        "\/api\/AcademicCalendar": {
+            "get": {
+                "tags": [
+                    "AcademicCalendar"
+                ],
+                "summary": "Get paginated list of AcademicCalendar",
+                "description": "Retrieve a paginated list of AcademicCalendar with optional search",
+                "operationId": "getAcademicCalendarPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Comma-separated list of related resources to include in the response",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedAcademicCalendarResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AcademicCalendar"
+                ],
+                "summary": "Create a new AcademicCalendar",
+                "description": " Create a new AcademicCalendar with the provided details",
+                "operationId": "createAcademicCalendar",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AcademicCalendar"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicCalendar created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateAcademicCalendarResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicCalendar\/{id}": {
+            "get": {
+                "tags": [
+                    "AcademicCalendar"
+                ],
+                "summary": "Get a specific AcademicCalendar",
+                "description": "Retrieve a AcademicCalendar by its ID",
+                "operationId": "getAcademicCalendarById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetAcademicCalendarResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicCalendar not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "AcademicCalendar"
+                ],
+                "summary": "Update a AcademicCalendar",
+                "description": "Update an existing AcademicCalendar with the provided details",
+                "operationId": "updateAcademicCalendar",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AcademicCalendar"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicCalendar updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateAcademicCalendarResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicCalendar not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AcademicCalendar"
+                ],
+                "summary": "Delete a AcademicCalendar",
+                "description": "Delete a AcademicCalendar by its ID",
+                "operationId": "deleteAcademicCalendar",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "AcademicCalendar deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteAcademicCalendarResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicCalendar not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/AcademicProgram": {
             "get": {
                 "tags": [
@@ -2496,6 +2758,171 @@
                 },
                 "type": "object"
             },
+            "AcademicCalendar": {
+                "title": "AcademicCalendar",
+                "required": [],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "school_year_id": {
+                        "type": "integer"
+                    },
+                    "event": {
+                        "type": "string",
+                        "enum": [
+                            "REGISTRATION",
+                            "ENROLLMENT",
+                            "ORIENTATION",
+                            "START_OF_CLASSES",
+                            "HOLIDAY",
+                            "UNIVERSITY_EVENT",
+                            "DEADLINE",
+                            "PERIODIC_EXAM",
+                            "END_OF_CLASSES",
+                            "GRADE_SUBMISSION",
+                            "GRADUATION",
+                            "FACULTY_EVALUATION",
+                            "ACADEMIC_TRANSITION",
+                            "OTHER"
+                        ]
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "school_year": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAcademicCalendar": {
+                "title": "PaginatedAcademicCalendar",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AcademicCalendar"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAcademicCalendarResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedAcademicCalendar"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAcademicCalendarResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicCalendar"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAcademicCalendarsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AcademicCalendar"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAcademicCalendarResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicCalendar"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAcademicCalendarResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicCalendar"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteAcademicCalendarResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "AcademicProgram": {
                 "title": "AcademicProgram",
                 "required": [
@@ -3865,6 +4292,10 @@
         }
     },
     "tags": [
+        {
+            "name": "AcademicCalendar",
+            "description": "AcademicCalendar"
+        },
         {
             "name": "AcademicProgram",
             "description": "AcademicProgram"

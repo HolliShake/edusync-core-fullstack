@@ -170,7 +170,7 @@ class SchoolYearController extends Controller
                     })
                     ->exists();
                 if ($overlap) {
-                    return $this->validationError(['date' => ['Date range overlaps with an existing SchoolYear.']]);
+                    return $this->validationError(['start_date' => ['Date range overlaps with an existing SchoolYear.']]);
                 }
             }
 
@@ -269,7 +269,7 @@ class SchoolYearController extends Controller
                     })
                     ->exists();
                 if ($overlap) {
-                    return $this->validationError(['date' => ['Date range overlaps with an existing SchoolYear.']]);
+                    return $this->validationError(['start_date' => ['Date range overlaps with an existing SchoolYear.']]);
                 }
             }
 
