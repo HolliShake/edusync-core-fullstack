@@ -67,25 +67,27 @@ export default function SideBar({
       className={cn(
         'fixed inset-y-0 left-0 z-30 bg-card border-r border-border shadow-sm transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0',
         isCollapsed ? 'translate-x-0' : '-translate-x-full',
-        isCollapsed ? 'lg:w-[80px] w-72' : 'w-72'
+        isCollapsed ? 'lg:w-16 w-64' : 'w-64'
       )}
     >
       {/* Header */}
       <div
         className={cn(
-          'flex items-center h-16 bg-sidebar border-b border-sidebar-border',
-          isCollapsed ? 'lg:justify-center lg:px-2 px-6 justify-between' : 'justify-between px-6'
+          'flex items-center h-[64px] bg-sidebar border-b border-sidebar-border',
+          isCollapsed ? 'lg:justify-center lg:px-2 px-4 justify-between' : 'justify-between px-4'
         )}
       >
         <div
           className={cn(
-            'flex items-center gap-3 transition-all duration-300 ease-in-out',
+            'flex items-center gap-2 transition-all duration-300 ease-in-out',
             isCollapsed && 'lg:max-w-0 lg:opacity-0 lg:overflow-hidden lg:px-0 lg:m-0 lg:gap-0'
           )}
         >
           <div className="transition-all duration-300">
-            <h2 className="text-xl font-bold text-sidebar-foreground tracking-tight">EduPortal</h2>
-            <p className="text-xs font-medium text-sidebar-accent-foreground tracking-wide">
+            <h2 className="text-base font-bold text-sidebar-foreground tracking-tight">
+              EduPortal
+            </h2>
+            <p className="text-[10px] font-medium text-sidebar-accent-foreground tracking-wide">
               Learning Management System
             </p>
           </div>
@@ -98,13 +100,13 @@ export default function SideBar({
             size="icon"
             className={cn(
               'shadow-sm hidden lg:flex rounded-lg bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80 transition-all duration-200',
-              isCollapsed ? 'w-9 h-9' : 'w-8 h-8'
+              isCollapsed ? 'w-7 h-7' : 'w-7 h-7'
             )}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <ChevronLeft
               className={cn(
-                'w-4 h-4 transition-transform duration-200',
+                'w-3.5 h-3.5 transition-transform duration-200',
                 isCollapsed && 'rotate-180'
               )}
             />
@@ -115,8 +117,8 @@ export default function SideBar({
       {/* Navigation */}
       <nav
         className={cn(
-          'p-4 space-y-2 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent',
-          isCollapsed && 'lg:px-2'
+          'p-2 space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent',
+          isCollapsed && 'lg:px-1'
         )}
       >
         {computedRoutes.map((route: Route, index: number) => {
@@ -125,34 +127,34 @@ export default function SideBar({
           const isExpanded = expandedRoutes.has(index) && !isCollapsed;
 
           return (
-            <div key={index} className="space-y-2">
+            <div key={index} className="space-y-1">
               <div className="relative">
                 <Link
                   to={route.path}
                   onClick={(event) => handleRouteClick(route, index, event)}
                   className={cn(
-                    'flex items-center rounded-lg transition-all duration-200 cursor-pointer relative overflow-hidden group',
-                    isCollapsed ? 'lg:px-2 lg:py-3 lg:justify-center px-4 py-3' : 'px-4 py-3',
+                    'flex items-center rounded-md transition-all duration-200 cursor-pointer relative overflow-hidden group',
+                    isCollapsed ? 'lg:px-1.5 lg:py-2 lg:justify-center px-2.5 py-2' : 'px-2.5 py-2',
                     isActive
                       ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm'
                       : 'bg-transparent text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-                    hasChildren && !isCollapsed && 'pr-12'
+                    hasChildren && !isCollapsed && 'pr-8'
                   )}
                   title={isCollapsed ? route.title : undefined}
                 >
                   {route.icon && (
                     <div
                       className={cn(
-                        'flex items-center justify-center w-9 h-9 flex-shrink-0 rounded-lg transition-all duration-200',
-                        isCollapsed ? 'lg:mr-0 mr-3' : 'mr-3',
+                        'flex items-center justify-center w-7 h-7 flex-shrink-0 rounded-md transition-all duration-200',
+                        isCollapsed ? 'lg:mr-0 mr-2' : 'mr-2',
                         isActive
                           ? 'bg-primary-foreground/20 text-primary-foreground shadow-sm'
-                          : 'bg-accent text-accent-foreground group-hover:bg-warning/20 group-hover:text-warning group-hover:shadow-md group-hover:scale-105 group-hover:rotate-3'
+                          : 'bg-accent text-accent-foreground group-hover:bg-warning/20 group-hover:text-warning group-hover:shadow-md group-hover:scale-105'
                       )}
                     >
                       <span
                         className={cn(
-                          'text-current transition-all duration-200',
+                          'text-current transition-all duration-200 text-sm',
                           !isActive && 'group-hover:scale-110'
                         )}
                       >
@@ -169,10 +171,10 @@ export default function SideBar({
                   >
                     <span
                       className={cn(
-                        'block text-sm font-semibold truncate tracking-wide transition-all duration-200',
+                        'block text-xs font-semibold truncate tracking-wide transition-all duration-200',
                         isActive
                           ? 'text-primary-foreground'
-                          : 'text-sidebar-foreground group-hover:text-sidebar-accent-foreground group-hover:font-bold group-hover:tracking-wider'
+                          : 'text-sidebar-foreground group-hover:text-sidebar-accent-foreground group-hover:font-bold'
                       )}
                     >
                       {route.title}
@@ -181,10 +183,10 @@ export default function SideBar({
 
                   {/* Expandable indicator for routes with children */}
                   {hasChildren && !isCollapsed && (
-                    <div className="absolute right-4 flex items-center justify-center w-5 h-5 transition-all duration-200">
+                    <div className="absolute right-2 flex items-center justify-center w-4 h-4 transition-all duration-200">
                       <svg
                         className={cn(
-                          'w-4 h-4 transition-transform duration-200',
+                          'w-3 h-3 transition-transform duration-200',
                           isActive
                             ? 'text-primary-foreground'
                             : 'text-muted-foreground group-hover:text-sidebar-accent-foreground',
@@ -214,7 +216,7 @@ export default function SideBar({
                     isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   )}
                 >
-                  <div className="ml-8 space-y-2 pt-2">
+                  <div className="ml-6 space-y-1 pt-1">
                     {route.children?.map((child: Route, childIndex: number) => {
                       const isChildActive = isActiveRoute(child.path);
 
@@ -223,7 +225,7 @@ export default function SideBar({
                           key={childIndex}
                           to={child.path}
                           className={cn(
-                            'flex items-center p-3 rounded-lg transition-all duration-200 relative overflow-hidden group',
+                            'flex items-center p-2 rounded-md transition-all duration-200 relative overflow-hidden group',
                             isChildActive
                               ? 'bg-primary/10 text-primary'
                               : 'bg-transparent text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
@@ -231,13 +233,13 @@ export default function SideBar({
                         >
                           {/* Active indicator - vertical line */}
                           {isChildActive && (
-                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-full" />
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-full" />
                           )}
 
                           {child.icon && (
                             <div
                               className={cn(
-                                'flex items-center justify-center w-7 h-7 mr-3 flex-shrink-0 rounded-lg transition-all duration-200',
+                                'flex items-center justify-center w-6 h-6 mr-2 flex-shrink-0 rounded-md transition-all duration-200',
                                 isChildActive
                                   ? 'bg-primary/20 text-primary'
                                   : 'bg-accent text-accent-foreground group-hover:bg-success/20 group-hover:text-success group-hover:shadow-sm group-hover:scale-105'
@@ -245,7 +247,7 @@ export default function SideBar({
                             >
                               <span
                                 className={cn(
-                                  'text-current text-sm transition-all duration-200',
+                                  'text-current text-xs transition-all duration-200',
                                   !isChildActive && 'group-hover:scale-110'
                                 )}
                               >
@@ -257,9 +259,8 @@ export default function SideBar({
                           <div className="flex-1 min-w-0">
                             <span
                               className={cn(
-                                'block text-sm font-medium text-sidebar-accent-foreground truncate tracking-wide transition-all duration-200',
-                                !isChildActive &&
-                                  'group-hover:font-semibold group-hover:tracking-wider'
+                                'block text-xs font-medium text-sidebar-accent-foreground truncate tracking-wide transition-all duration-200',
+                                !isChildActive && 'group-hover:font-semibold'
                               )}
                             >
                               {child.title}
@@ -280,12 +281,12 @@ export default function SideBar({
       <div
         className={cn(
           'bg-card border-t border-border overflow-hidden transition-all duration-300 ease-in-out',
-          isCollapsed ? 'max-h-0 opacity-0 p-0' : 'max-h-24 opacity-100 p-4'
+          isCollapsed ? 'max-h-0 opacity-0 p-0' : 'max-h-16 opacity-100 p-3'
         )}
       >
         <div className="text-xs text-muted-foreground text-center">
-          <p className="font-medium text-foreground">EduPortal Platform</p>
-          <p className="text-[10px] mt-1 opacity-70">v1.0.0</p>
+          <p className="font-medium text-foreground text-[11px]">EduPortal Platform</p>
+          <p className="text-[9px] mt-0.5 opacity-70">v1.0.0</p>
         </div>
       </div>
     </aside>

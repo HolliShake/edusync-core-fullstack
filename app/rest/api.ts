@@ -27,12 +27,14 @@ import type {
 import type {
   AcademicCalendar,
   AcademicProgram,
+  AcademicTerm,
   Building,
   Campus,
   College,
   Course,
   CreateAcademicCalendarResponse200,
   CreateAcademicProgramResponse200,
+  CreateAcademicTermResponse200,
   CreateBuildingResponse200,
   CreateCampusResponse200,
   CreateCollegeResponse200,
@@ -44,6 +46,7 @@ import type {
   Curriculum,
   DeleteAcademicCalendarResponse200,
   DeleteAcademicProgramResponse200,
+  DeleteAcademicTermResponse200,
   DeleteBuildingResponse200,
   DeleteCampusResponse200,
   DeleteCollegeResponse200,
@@ -56,6 +59,8 @@ import type {
   GetAcademicCalendarResponse200,
   GetAcademicProgramPaginatedParams,
   GetAcademicProgramResponse200,
+  GetAcademicTermPaginatedParams,
+  GetAcademicTermResponse200,
   GetBuildingPaginatedParams,
   GetBuildingResponse200,
   GetCampusPaginatedParams,
@@ -75,6 +80,7 @@ import type {
   InternalServerErrorResponse,
   PaginatedAcademicCalendarResponse200,
   PaginatedAcademicProgramResponse200,
+  PaginatedAcademicTermResponse200,
   PaginatedBuildingResponse200,
   PaginatedCampusResponse200,
   PaginatedCollegeResponse200,
@@ -88,6 +94,7 @@ import type {
   SchoolYear,
   UpdateAcademicCalendarResponse200,
   UpdateAcademicProgramResponse200,
+  UpdateAcademicTermResponse200,
   UpdateBuildingResponse200,
   UpdateCampusResponse200,
   UpdateCollegeResponse200,
@@ -871,6 +878,380 @@ export const useDeleteAcademicProgram = <TError = null | InternalServerErrorResp
       > => {
 
       const mutationOptions = getDeleteAcademicProgramMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of AcademicTerm with optional search
+ * @summary Get paginated list of AcademicTerm
+ */
+export const getAcademicTermPaginated = (
+    params?: GetAcademicTermPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedAcademicTermResponse200>(
+      {url: `/api/AcademicTerm`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicTermPaginatedQueryKey = (params?: GetAcademicTermPaginatedParams,) => {
+    return [`/api/AcademicTerm`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAcademicTermPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicTermPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicTermPaginated>>> = ({ signal }) => getAcademicTermPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicTermPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicTermPaginated>>>
+export type GetAcademicTermPaginatedQueryError = unknown
+
+
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+ params: undefined |  GetAcademicTermPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicTermPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicTermPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+ params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicTermPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicTermPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+ params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of AcademicTerm
+ */
+
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+ params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicTermPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new AcademicTerm with the provided details
+ * @summary Create a new AcademicTerm
+ */
+export const createAcademicTerm = (
+    academicTerm: NonReadonly<AcademicTerm>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateAcademicTermResponse200>(
+      {url: `/api/AcademicTerm`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: academicTerm, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAcademicTermMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicTerm>>, TError,{data: NonReadonly<AcademicTerm>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAcademicTerm>>, TError,{data: NonReadonly<AcademicTerm>}, TContext> => {
+
+const mutationKey = ['createAcademicTerm'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAcademicTerm>>, {data: NonReadonly<AcademicTerm>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAcademicTerm(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAcademicTermMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicTerm>>>
+    export type CreateAcademicTermMutationBody = NonReadonly<AcademicTerm>
+    export type CreateAcademicTermMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new AcademicTerm
+ */
+export const useCreateAcademicTerm = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicTerm>>, TError,{data: NonReadonly<AcademicTerm>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAcademicTerm>>,
+        TError,
+        {data: NonReadonly<AcademicTerm>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAcademicTermMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a AcademicTerm by its ID
+ * @summary Get a specific AcademicTerm
+ */
+export const getAcademicTermById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetAcademicTermResponse200>(
+      {url: `/api/AcademicTerm/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicTermByIdQueryKey = (id?: number,) => {
+    return [`/api/AcademicTerm/${id}`] as const;
+    }
+
+    
+export const getGetAcademicTermByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicTermByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicTermById>>> = ({ signal }) => getAcademicTermById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicTermByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicTermById>>>
+export type GetAcademicTermByIdQueryError = null
+
+
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicTermById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicTermById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicTermById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicTermById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific AcademicTerm
+ */
+
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicTermByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing AcademicTerm with the provided details
+ * @summary Update a AcademicTerm
+ */
+export const updateAcademicTerm = (
+    id: number,
+    academicTerm: NonReadonly<AcademicTerm>,
+ ) => {
+      
+      
+      return fetchData<UpdateAcademicTermResponse200>(
+      {url: `/api/AcademicTerm/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: academicTerm
+    },
+      );
+    }
+  
+
+
+export const getUpdateAcademicTermMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicTerm>>, TError,{id: number;data: NonReadonly<AcademicTerm>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicTerm>>, TError,{id: number;data: NonReadonly<AcademicTerm>}, TContext> => {
+
+const mutationKey = ['updateAcademicTerm'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAcademicTerm>>, {id: number;data: NonReadonly<AcademicTerm>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAcademicTerm(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAcademicTermMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicTerm>>>
+    export type UpdateAcademicTermMutationBody = NonReadonly<AcademicTerm>
+    export type UpdateAcademicTermMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a AcademicTerm
+ */
+export const useUpdateAcademicTerm = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicTerm>>, TError,{id: number;data: NonReadonly<AcademicTerm>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAcademicTerm>>,
+        TError,
+        {id: number;data: NonReadonly<AcademicTerm>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAcademicTermMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a AcademicTerm by its ID
+ * @summary Delete a AcademicTerm
+ */
+export const deleteAcademicTerm = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteAcademicTermResponse200>(
+      {url: `/api/AcademicTerm/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteAcademicTermMutationOptions = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicTerm>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicTerm>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteAcademicTerm'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAcademicTerm>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAcademicTerm(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAcademicTermMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicTerm>>>
+    
+    export type DeleteAcademicTermMutationError = null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a AcademicTerm
+ */
+export const useDeleteAcademicTerm = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicTerm>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAcademicTerm>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAcademicTermMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

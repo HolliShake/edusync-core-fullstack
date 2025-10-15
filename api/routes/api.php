@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademicCalendarController;
 use App\Http\Controllers\AcademicProgramController;
+use App\Http\Controllers\AcademicTermController;
 use App\Http\Controllers\ProgramTypeController;
 use App\Http\Controllers\BuildingController;
 use Illuminate\Http\Request;
@@ -108,4 +109,13 @@ Route::controller(AcademicCalendarController::class)->group(function() {
     Route::post('/AcademicCalendar', 'store');
     Route::put('/AcademicCalendar/{id}', 'update');
     Route::delete('/AcademicCalendar/{id}', 'destroy');
+});
+
+
+Route::controller(AcademicTermController::class)->group(function() {
+    Route::get('/AcademicTerm', 'index');
+    Route::get('/AcademicTerm/{id}', 'show');
+    Route::post('/AcademicTerm', 'store');
+    Route::put('/AcademicTerm/{id}', 'update');
+    Route::delete('/AcademicTerm/{id}', 'destroy');
 });

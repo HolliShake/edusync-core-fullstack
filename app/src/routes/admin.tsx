@@ -1,10 +1,11 @@
+import AdminAcademicTerm from '@/pages/admin/academic-term/page';
 import AdminBuilding from '@/pages/admin/campuses/building/page';
 import AdminCampusDetail from '@/pages/admin/campuses/campus/page';
 import AdminCollege from '@/pages/admin/campuses/college/page';
 import AdminCampus from '@/pages/admin/campuses/page';
 import AdminCourses from '@/pages/admin/courses/page';
 import AdminDashboard from '@/pages/admin/dashboard';
-import AdminProgramTypes from '@/pages/admin/program-types/page';
+import AdminProgramTypes from '@/pages/admin/program-type/page';
 import AdminAcademicCalendarPage from '@/pages/admin/school-year/academic-calendar/page';
 import AdminSchoolYear from '@/pages/admin/school-year/page';
 import type { Route } from '@/types/types';
@@ -12,6 +13,7 @@ import {
   BookIcon,
   BuildingIcon,
   CalendarIcon,
+  ClockIcon,
   GraduationCapIcon,
   LayoutDashboardIcon,
   SchoolIcon,
@@ -40,9 +42,18 @@ const ADMIN: Route[] = [
     title: 'Academic Calendar',
     path: '/admin/school-year/:schoolYearId',
     component: <AdminAcademicCalendarPage />,
-    icon: <BookIcon className="h-4 w-4" />, // replaced CalendarIcon with BookIcon for more relevance
+    icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
+  },
+  {
+    key: 'admin.academic-term',
+    title: 'Academic Term',
+    path: '/admin/academic-term',
+    component: <AdminAcademicTerm />,
+    icon: <ClockIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
   },
   {
     key: 'admin.campuses',
@@ -83,6 +94,15 @@ const ADMIN: Route[] = [
     layout: 'dashboard',
     sidebar: false,
   },
+  {
+    key: 'admin.program-type',
+    title: 'Program Type',
+    path: '/admin/program-type',
+    component: <AdminProgramTypes />,
+    icon: <GraduationCapIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+  },
   // Courses
   {
     key: 'admin.course',
@@ -90,15 +110,6 @@ const ADMIN: Route[] = [
     path: '/admin/courses',
     component: <AdminCourses />,
     icon: <BookIcon className="h-4 w-4" />,
-    layout: 'dashboard',
-    sidebar: true,
-  },
-  {
-    key: 'admin.program-type',
-    title: 'Program Type',
-    path: '/admin/program-type',
-    component: <AdminProgramTypes />,
-    icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
   },

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Interface\IRepo\IAcademicCalendarRepo;
 use App\Interface\IRepo\IAcademicProgramRepo;
+use App\Interface\IRepo\IAcademicTermRepo;
 use App\Interface\IRepo\IBuildingRepo;
 use App\Repo\AcademicProgramRepo;
 use App\Repo\CampusRepo;
@@ -16,6 +17,7 @@ use App\Interface\IRepo\IRoomRepo;
 use App\Interface\IRepo\ISchoolYearRepo;
 use App\Interface\IService\IAcademicCalendarService;
 use App\Interface\IService\IAcademicProgramService;
+use App\Interface\IService\IAcademicTermService;
 use App\Interface\IService\IBuildingService;
 use App\Service\AcademicProgramService;
 use App\Service\CampusService;
@@ -27,6 +29,7 @@ use App\Interface\IService\IProgramTypeService;
 use App\Interface\IService\IRoomService;
 use App\Interface\IService\ISchoolYearService;
 use App\Repo\AcademicCalendarRepo;
+use App\Repo\AcademicTermRepo;
 use App\Repo\BuildingRepo;
 use App\Repo\CollegeRepo;
 use App\Repo\CourseRepo;
@@ -35,6 +38,7 @@ use App\Repo\ProgramTypeRepo;
 use App\Repo\RoomRepo;
 use App\Repo\SchoolYearRepo;
 use App\Service\AcademicCalendarService;
+use App\Service\AcademicTermService;
 use App\Service\BuildingService;
 use App\Service\CollegeService;
 use App\Service\CourseService;
@@ -63,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICourseRepo::class, CourseRepo::class);
         $this->app->bind(ISchoolYearRepo::class, SchoolYearRepo::class);
         $this->app->bind(IAcademicCalendarRepo::class, AcademicCalendarRepo::class);
+        $this->app->bind(IAcademicTermRepo::class, AcademicTermRepo::class);
         // Service
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
         $this->app->bind(IProgramTypeService::class, ProgramTypeService::class);
@@ -75,6 +80,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICourseService::class, CourseService::class);
         $this->app->bind(ISchoolYearService::class, SchoolYearService::class);
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
+        $this->app->bind(IAcademicTermService::class, AcademicTermService::class);
     }
 
     /**

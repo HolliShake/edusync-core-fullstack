@@ -542,6 +542,250 @@
                 }
             }
         },
+        "\/api\/AcademicTerm": {
+            "get": {
+                "tags": [
+                    "AcademicTerm"
+                ],
+                "summary": "Get paginated list of AcademicTerm",
+                "description": "Retrieve a paginated list of AcademicTerm with optional search",
+                "operationId": "getAcademicTermPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedAcademicTermResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AcademicTerm"
+                ],
+                "summary": "Create a new AcademicTerm",
+                "description": " Create a new AcademicTerm with the provided details",
+                "operationId": "createAcademicTerm",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AcademicTerm"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicTerm created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateAcademicTermResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicTerm\/{id}": {
+            "get": {
+                "tags": [
+                    "AcademicTerm"
+                ],
+                "summary": "Get a specific AcademicTerm",
+                "description": "Retrieve a AcademicTerm by its ID",
+                "operationId": "getAcademicTermById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetAcademicTermResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicTerm not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "AcademicTerm"
+                ],
+                "summary": "Update a AcademicTerm",
+                "description": "Update an existing AcademicTerm with the provided details",
+                "operationId": "updateAcademicTerm",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AcademicTerm"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicTerm updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateAcademicTermResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicTerm not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AcademicTerm"
+                ],
+                "summary": "Delete a AcademicTerm",
+                "description": "Delete a AcademicTerm by its ID",
+                "operationId": "deleteAcademicTerm",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "AcademicTerm deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteAcademicTermResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AcademicTerm not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/Building": {
             "get": {
                 "tags": [
@@ -3063,6 +3307,141 @@
                 },
                 "type": "object"
             },
+            "AcademicTerm": {
+                "title": "AcademicTerm",
+                "required": [
+                    "name",
+                    "description",
+                    "number_of_terms"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "number_of_terms": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAcademicTerm": {
+                "title": "PaginatedAcademicTerm",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AcademicTerm"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAcademicTermResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedAcademicTerm"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAcademicTermResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicTerm"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAcademicTermsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AcademicTerm"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAcademicTermResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicTerm"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAcademicTermResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AcademicTerm"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteAcademicTermResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "Building": {
                 "title": "Building",
                 "required": [
@@ -4299,6 +4678,10 @@
         {
             "name": "AcademicProgram",
             "description": "AcademicProgram"
+        },
+        {
+            "name": "AcademicTerm",
+            "description": "AcademicTerm"
         },
         {
             "name": "Building",

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enum\CalendarEventEnum;
 use App\Service\AcademicCalendarService;
+use App\Service\SchoolYearService;
+use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +16,7 @@ use OpenApi\Attributes as OA;
 )]
 class AcademicCalendarController extends Controller
 {
-    public function __construct(protected AcademicCalendarService $service) {
+    public function __construct(protected AcademicCalendarService $service, protected SchoolYearService $schoolYearService) {
     }
 
     /**
@@ -156,6 +158,30 @@ class AcademicCalendarController extends Controller
 
             $validated = $validator->validated();
 
+            $school_year = $this->schoolYearService->getById($validated['school_year_id']);
+
+            if (!$school_year) {
+                return $this->notFound('School year not found');
+            }
+
+            // Validate that start_date and end_date are within school year boundaries
+            $start_date = new DateTime($validated['start_date']);
+            $end_date = new DateTime($validated['end_date']);
+            $school_year_start = new DateTime($school_year->start_date);
+            $school_year_end = new DateTime($school_year->end_date);
+
+            if ($start_date < $school_year_start || $start_date > $school_year_end) {
+                return $this->validationError([
+                    'start_date' => ['Start date must be within the school year period']
+                ]);
+            }
+
+            if ($end_date < $school_year_start || $end_date > $school_year_end) {
+                return $this->validationError([
+                    'end_date' => ['End date must be within the school year period']
+                ]);
+            }
+
             return $this->ok($this->service->create($validated));
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
@@ -218,6 +244,30 @@ class AcademicCalendarController extends Controller
             }
 
             $validated = $validator->validated();
+
+            $school_year = $this->schoolYearService->getById($validated['school_year_id']);
+
+            if (!$school_year) {
+                return $this->notFound('School year not found');
+            }
+
+            // Validate that start_date and end_date are within school year boundaries
+            $start_date = new DateTime($validated['start_date']);
+            $end_date = new DateTime($validated['end_date']);
+            $school_year_start = new DateTime($school_year->start_date);
+            $school_year_end = new DateTime($school_year->end_date);
+
+            if ($start_date < $school_year_start || $start_date > $school_year_end) {
+                return $this->validationError([
+                    'start_date' => ['Start date must be within the school year period']
+                ]);
+            }
+
+            if ($end_date < $school_year_start || $end_date > $school_year_end) {
+                return $this->validationError([
+                    'end_date' => ['End date must be within the school year period']
+                ]);
+            }
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
