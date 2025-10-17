@@ -1,25 +1,12 @@
 import { useConfirm } from '@/components/confirm.provider';
 import { useModal } from '@/components/custom/modal.component';
+import CustomSelect from '@/components/custom/select.component';
 import TitledPage from '@/components/pages/titled.page';
 import ProgramTypeModal from '@/components/program-types/program-type.modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDeleteProgramType, useGetProgramTypePaginated } from '@rest/api';
 import type { ProgramType } from '@rest/models';
@@ -87,33 +74,35 @@ export default function AdminProgramTypes(): React.ReactNode {
     }
   };
 
+  const sortOptions = [
+    { label: 'Name (A–Z)', value: 'name-asc' },
+    { label: 'Name (Z–A)', value: 'name-desc' },
+    { label: 'ID (Low → High)', value: 'id-asc' },
+    { label: 'ID (High → Low)', value: 'id-desc' },
+  ];
+
   if (isLoading) {
     return (
       <TitledPage title="Program Types" description="Manage your program types">
         <div className="flex justify-between items-center mb-6">
           <Skeleton className="h-10 w-40" />
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Card key={index}>
-              <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
-                  <Skeleton className="h-6 w-32" />
-                  <div className="flex space-x-2">
-                    <Skeleton className="h-8 w-8" />
-                    <Skeleton className="h-8 w-8" />
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Card key={index} className="p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <Skeleton className="h-9 w-9 rounded-lg flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <Skeleton className="h-5 w-32 mb-1" />
+                    <Skeleton className="h-3 w-16" />
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Skeleton className="h-4 w-24" />
-              </CardContent>
-              <CardFooter className="pt-0">
-                <div className="flex gap-2">
-                  <Skeleton className="h-8 w-16" />
-                  <Skeleton className="h-8 w-16" />
+                <div className="flex gap-1 flex-shrink-0">
+                  <Skeleton className="h-7 w-7 rounded" />
+                  <Skeleton className="h-7 w-7 rounded" />
                 </div>
-              </CardFooter>
+              </div>
             </Card>
           ))}
         </div>
@@ -142,17 +131,12 @@ export default function AdminProgramTypes(): React.ReactNode {
               />
             </div>
             <div className="min-w-[180px]">
-              <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sort" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name-asc">Name (A–Z)</SelectItem>
-                  <SelectItem value="name-desc">Name (Z–A)</SelectItem>
-                  <SelectItem value="id-asc">ID (Low → High)</SelectItem>
-                  <SelectItem value="id-desc">ID (High → Low)</SelectItem>
-                </SelectContent>
-              </Select>
+              <CustomSelect
+                options={sortOptions}
+                value={sort}
+                onChange={(v) => setSort(v as typeof sort)}
+                placeholder="Sort"
+              />
             </div>
             <Button onClick={() => controller.openFn()} className="whitespace-nowrap">
               <PlusIcon className="h-4 w-4 mr-2" />
@@ -162,7 +146,7 @@ export default function AdminProgramTypes(): React.ReactNode {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {visibleItems.map((programType: ProgramType) => (
           <Card
             key={programType.id}
@@ -175,55 +159,49 @@ export default function AdminProgramTypes(): React.ReactNode {
                 controller.openFn(programType);
               }
             }}
-            className="group cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.01] border-l-4 border-l-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="group cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.02] border-l-4 border-l-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/30 p-4"
           >
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <GraduationCapIcon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg font-semibold group-hover:text-primary">
-                      {programType.name}
-                    </CardTitle>
-                  </div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="p-2 bg-primary/10 rounded-lg flex-shrink-0">
+                  <GraduationCapIcon className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm group-hover:text-primary transition-colors truncate">
+                    {programType.name}
+                  </h3>
+                  <Badge variant="outline" className="text-xs mt-1">
+                    ID: {programType.id}
+                  </Badge>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline">ID: {programType.id}</Badge>
-              </div>
-            </CardContent>
-            <CardFooter className="pt-0">
-              <div className="ml-auto flex gap-2">
+              <div className="flex gap-1 flex-shrink-0">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 hover:bg-blue-50 hover:text-blue-600"
+                  className="h-7 w-7 hover:bg-blue-50 hover:text-blue-600"
                   onClick={(e) => {
                     e.stopPropagation();
                     controller.openFn(programType);
                   }}
                   aria-label="Edit program type"
                 >
-                  <EditIcon className="h-4 w-4" />
+                  <EditIcon className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 hover:bg-red-50 hover:text-red-600"
+                  className="h-7 w-7 hover:bg-red-50 hover:text-red-600"
                   onClick={(e) => {
                     e.stopPropagation();
                     confirm.confirm(async () => await handleDelete(programType));
                   }}
                   aria-label="Delete program type"
                 >
-                  <TrashIcon className="h-4 w-4" />
+                  <TrashIcon className="h-3.5 w-3.5" />
                 </Button>
               </div>
-            </CardFooter>
+            </div>
           </Card>
         ))}
       </div>

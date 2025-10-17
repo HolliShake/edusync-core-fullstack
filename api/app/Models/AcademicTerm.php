@@ -13,15 +13,18 @@ use OpenApi\Attributes as OA;
         // Override required
         'name',
         'description',
+        'suffix',
         'number_of_terms',
     ],
     properties: [
         // Override fillables
-        new OA\Property(property: "name", type: "string"),
-        new OA\Property(property: "description", type: "string", nullable: true),
-        new OA\Property(property: "number_of_terms", type: "integer"),
-        new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
-        new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
+        new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "name", type: "string", example: "Term 1"),
+        new OA\Property(property: "description", type: "string", nullable: true, example: "Description of Term 1"),
+        new OA\Property(property: "suffix", type: "string", example: "Semester"),
+        new OA\Property(property: "number_of_terms", type: "integer", example: 1),
+        new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z", readOnly: true),
+        new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z", readOnly: true),
     ]
 )]
 
@@ -102,6 +105,7 @@ class AcademicTerm extends Model
     protected $fillable = [
         'name',
         'description',
+        'suffix',
         'number_of_terms',
     ];
 

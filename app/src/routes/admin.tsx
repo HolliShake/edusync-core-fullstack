@@ -2,6 +2,7 @@ import AdminAcademicTerm from '@/pages/admin/academic-term/page';
 import AdminBuilding from '@/pages/admin/campuses/building/page';
 import AdminCampusDetail from '@/pages/admin/campuses/campus/page';
 import AdminCollege from '@/pages/admin/campuses/college/page';
+import AdminCurriculum from '@/pages/admin/campuses/curriculum/page';
 import AdminCampus from '@/pages/admin/campuses/page';
 import AdminCourses from '@/pages/admin/courses/page';
 import AdminDashboard from '@/pages/admin/dashboard';
@@ -91,6 +92,16 @@ const ADMIN: Route[] = [
     path: '/admin/campuses/:campusId/colleges/:collegeId',
     component: <AdminCollege />,
     icon: <GraduationCapIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
+  },
+  // Curriculum/:id
+  {
+    key: 'admin.curriculum',
+    title: 'Curriculum',
+    path: '/admin/campuses/:campusId/colleges/:collegeId/curriculum/:curriculumId',
+    component: <AdminCurriculum />,
+    icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
   },

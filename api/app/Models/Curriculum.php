@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enum\CurriculumStateEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -12,6 +13,7 @@ use OpenApi\Attributes as OA;
     type: "object",
     required: [
         'academic_program_id',
+        'academic_term_id',
         'curriculum_code',
         'curriculum_name',
         'description',
@@ -25,6 +27,7 @@ use OpenApi\Attributes as OA;
         // Override fillables
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "academic_program_id", type: "integer", example: 1),
+        new OA\Property(property: "academic_term_id", type: "integer", example: 1),
         new OA\Property(property: "curriculum_code", type: "string", example: "CURR-2024-001"),
         new OA\Property(property: "curriculum_name", type: "string", example: "Computer Science Curriculum 2024"),
         new OA\Property(property: "description", type: "string", nullable: true, example: "Updated curriculum for Computer Science program"),
@@ -34,7 +37,10 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "status", type: "string", enum: ['active', 'inactive', 'archived'], example: 'active'),
         new OA\Property(property: "approved_date", type: "string", format: "date", nullable: true, example: "2024-01-15"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z"),
-        new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z")
+        new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z"),
+        // Relationships
+        new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
+        new OA\Property(property: "academic_term", ref: "#/components/schemas/AcademicTerm"),
     ]
 )]
 
@@ -114,6 +120,7 @@ class Curriculum extends Model
 
     protected $fillable = [
         'academic_program_id',
+        'academic_term_id',
         'curriculum_code',
         'curriculum_name',
         'description',
@@ -123,4 +130,39 @@ class Curriculum extends Model
         'status',
         'approved_date',
     ];
+
+    protected $appends = [
+        'academic_program',
+        'academic_term',
+    ];
+
+    public function getAcademicProgramAttribute()
+    {
+        return $this->academicProgram()->first();
+    }
+
+    public function getAcademicTermAttribute()
+    {
+        return $this->academicTerm()->first();
+    }
+    
+    /**
+     * Get the academic program that owns the curriculum.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function academicProgram(): BelongsTo
+    {
+        return $this->belongsTo(AcademicProgram::class, 'academic_program_id');
+    }
+
+    /**
+     * Get the academic term that owns the curriculum.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function academicTerm(): BelongsTo
+    {
+        return $this->belongsTo(AcademicTerm::class, 'academic_term_id');
+    }
 }

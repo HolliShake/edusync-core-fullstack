@@ -19,6 +19,10 @@ return new class extends Migration
             $table->foreignId('academic_program_id')
                 ->constrained('academic_program')
                 ->onDelete('cascade');
+            // Fk
+            $table->foreignId('academic_term_id')
+                ->constrained('academic_term')
+                ->onDelete('cascade');
             //
             $table->string('curriculum_code')->unique();
             $table->string('curriculum_name');

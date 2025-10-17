@@ -7,9 +7,11 @@
  */
 
 export interface AcademicTerm {
+  id?: number;
   name: string;
   /** @nullable */
   description: string | null;
+  suffix: string;
   number_of_terms: number;
   readonly created_at?: string;
   readonly updated_at?: string;

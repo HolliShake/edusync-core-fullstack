@@ -135,6 +135,7 @@ class CurriculumController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'academic_program_id' => 'required|exists:academic_program,id',
+                'academic_term_id' => 'required|exists:academic_term,id',
                 'curriculum_code' => 'required|string|unique:curriculum,curriculum_code',
                 'curriculum_name' => 'required|string|max:255',
                 'description' => 'nullable|string',
@@ -201,6 +202,7 @@ class CurriculumController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'academic_term_id' => 'required|integer|exists:academic_term,id',
                 'curriculum_code' => 'required|string|max:255|unique:curriculum,curriculum_code,' . $id,
                 'curriculum_name' => 'required|string|max:255',
                 'description' => 'nullable|string',

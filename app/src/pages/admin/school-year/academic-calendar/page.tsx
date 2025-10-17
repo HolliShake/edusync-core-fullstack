@@ -6,6 +6,7 @@ import AcademicCalendarModal from '@/components/school-year/academic-calendar.mo
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CalendarEventEnum } from '@/enums/calendar-event-enum';
 import { decryptId } from '@/lib/hash';
 import { cn } from '@/lib/utils';
 import {
@@ -35,88 +36,88 @@ import { toast } from 'sonner';
 
 // Event type configurations with colors and icons
 const EVENT_CONFIG: Record<
-  string,
+  CalendarEventEnum,
   { color: string; bgColor: string; icon: React.ReactNode; label: string }
 > = {
-  REGISTRATION: {
+  [CalendarEventEnum.REGISTRATION]: {
     color: 'text-blue-600 dark:text-blue-400',
     bgColor: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800',
     icon: <EditIcon className="h-4 w-4" />,
     label: 'Registration',
   },
-  ENROLLMENT: {
+  [CalendarEventEnum.ENROLLMENT]: {
     color: 'text-purple-600 dark:text-purple-400',
     bgColor: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800',
     icon: <BookOpenIcon className="h-4 w-4" />,
     label: 'Enrollment',
   },
-  ORIENTATION: {
+  [CalendarEventEnum.ORIENTATION]: {
     color: 'text-cyan-600 dark:text-cyan-400',
     bgColor: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800',
     icon: <GraduationCapIcon className="h-4 w-4" />,
     label: 'Orientation',
   },
-  START_OF_CLASSES: {
+  [CalendarEventEnum.START_OF_CLASSES]: {
     color: 'text-green-600 dark:text-green-400',
     bgColor: 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800',
     icon: <CalendarIcon className="h-4 w-4" />,
     label: 'Start of Classes',
   },
-  HOLIDAY: {
+  [CalendarEventEnum.HOLIDAY]: {
     color: 'text-amber-600 dark:text-amber-400',
     bgColor: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800',
     icon: <StarIcon className="h-4 w-4" />,
     label: 'Holiday',
   },
-  UNIVERSITY_EVENT: {
+  [CalendarEventEnum.UNIVERSITY_EVENT]: {
     color: 'text-indigo-600 dark:text-indigo-400',
     bgColor: 'bg-indigo-50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800',
     icon: <TrophyIcon className="h-4 w-4" />,
     label: 'University Event',
   },
-  DEADLINE: {
+  [CalendarEventEnum.DEADLINE]: {
     color: 'text-red-600 dark:text-red-400',
     bgColor: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800',
     icon: <BellIcon className="h-4 w-4" />,
     label: 'Deadline',
   },
-  PERIODIC_EXAM: {
+  [CalendarEventEnum.PERIODIC_EXAM]: {
     color: 'text-orange-600 dark:text-orange-400',
     bgColor: 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800',
     icon: <BookOpenIcon className="h-4 w-4" />,
     label: 'Periodic Exam',
   },
-  END_OF_CLASSES: {
+  [CalendarEventEnum.END_OF_CLASSES]: {
     color: 'text-rose-600 dark:text-rose-400',
     bgColor: 'bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800',
     icon: <CalendarIcon className="h-4 w-4" />,
     label: 'End of Classes',
   },
-  GRADE_SUBMISSION: {
+  [CalendarEventEnum.GRADE_SUBMISSION]: {
     color: 'text-teal-600 dark:text-teal-400',
     bgColor: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200 dark:border-teal-800',
     icon: <EditIcon className="h-4 w-4" />,
     label: 'Grade Submission',
   },
-  GRADUATION: {
+  [CalendarEventEnum.GRADUATION]: {
     color: 'text-violet-600 dark:text-violet-400',
     bgColor: 'bg-violet-50 dark:bg-violet-950/30 border-violet-200 dark:border-violet-800',
     icon: <GraduationCapIcon className="h-4 w-4" />,
     label: 'Graduation',
   },
-  FACULTY_EVALUATION: {
+  [CalendarEventEnum.FACULTY_EVALUATION]: {
     color: 'text-pink-600 dark:text-pink-400',
     bgColor: 'bg-pink-50 dark:bg-pink-950/30 border-pink-200 dark:border-pink-800',
     icon: <EditIcon className="h-4 w-4" />,
     label: 'Faculty Evaluation',
   },
-  ACADEMIC_TRANSITION: {
+  [CalendarEventEnum.ACADEMIC_TRANSITION]: {
     color: 'text-emerald-600 dark:text-emerald-400',
     bgColor: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800',
     icon: <CalendarIcon className="h-4 w-4" />,
     label: 'Academic Transition',
   },
-  OTHER: {
+  [CalendarEventEnum.OTHER]: {
     color: 'text-gray-600 dark:text-gray-400',
     bgColor: 'bg-gray-50 dark:bg-gray-950/30 border-gray-200 dark:border-gray-800',
     icon: <CalendarIcon className="h-4 w-4" />,
@@ -205,7 +206,8 @@ function CalendarEventCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
-  const config = EVENT_CONFIG[event.event] || EVENT_CONFIG.OTHER;
+  const config =
+    EVENT_CONFIG[event.event as CalendarEventEnum] || EVENT_CONFIG[CalendarEventEnum.OTHER];
   const startDate = event.start_date ? new Date(event.start_date) : null;
   const endDate = event.end_date ? new Date(event.end_date) : null;
 
@@ -346,9 +348,11 @@ export default function AdminAcademicCalendarPage(): React.ReactNode {
 
   // Get unique event types from data
   const eventTypes = useMemo(() => {
-    const types = new Set<string>();
+    const types = new Set<CalendarEventEnum>();
     allEvents.forEach((event: any) => {
-      if (event.event) types.add(event.event);
+      if (event.event && Object.values(CalendarEventEnum).includes(event.event)) {
+        types.add(event.event as CalendarEventEnum);
+      }
     });
     return Array.from(types);
   }, [allEvents]);
@@ -362,7 +366,7 @@ export default function AdminAcademicCalendarPage(): React.ReactNode {
         icon: <CalendarIcon className="h-4 w-4" />,
       },
       ...eventTypes.map((type) => {
-        const config = EVENT_CONFIG[type] || EVENT_CONFIG.OTHER;
+        const config = EVENT_CONFIG[type] || EVENT_CONFIG[CalendarEventEnum.OTHER];
         return {
           value: type,
           label: config.label,
@@ -440,7 +444,7 @@ export default function AdminAcademicCalendarPage(): React.ReactNode {
           <Select
             options={filterOptions}
             value={selectedFilter}
-            onChange={setSelectedFilter}
+            onValueChange={(val) => setSelectedFilter(val as CalendarEventEnum)}
             placeholder="Select event type"
           />
         </div>
@@ -464,7 +468,7 @@ export default function AdminAcademicCalendarPage(): React.ReactNode {
           <p className="mt-2 text-sm text-muted-foreground">
             {selectedFilter === 'ALL'
               ? 'Get started by adding your first calendar entry.'
-              : `No ${EVENT_CONFIG[selectedFilter]?.label || selectedFilter} events found.`}
+              : `No ${EVENT_CONFIG[selectedFilter as CalendarEventEnum]?.label || selectedFilter} events found.`}
           </p>
           <Button className="mt-4 gap-2" onClick={() => controller.openFn()}>
             <PlusIcon className="h-4 w-4" />
@@ -489,7 +493,7 @@ export default function AdminAcademicCalendarPage(): React.ReactNode {
         <div className="mt-6 text-center text-sm text-muted-foreground">
           Showing {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''}
           {selectedFilter !== 'ALL' &&
-            ` (${EVENT_CONFIG[selectedFilter]?.label || selectedFilter})`}
+            ` (${EVENT_CONFIG[selectedFilter as CalendarEventEnum]?.label || selectedFilter})`}
         </div>
       )}
 

@@ -32,6 +32,7 @@
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -78,6 +79,7 @@ body {
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -98,12 +100,12 @@ body {
 
 /* Custom gradient for bg-primary */
 .bg-primary {
-  @apply bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-700 text-white shadow-lg shadow-purple-500/25 scale-100 hover:scale-105;
+  @apply bg-primary text-primary-foreground;
 }
 
 /* Active tab gradient styling */
 [data-state='active'][data-slot='tabs-trigger'] {
-  @apply bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-700 text-white shadow-lg shadow-purple-500/25 outline-0 border-0;
+  @apply bg-primary text-primary-foreground;
 }
 
 .dark {
@@ -122,6 +124,7 @@ body {
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);

@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\AcademicTermService;
+use App\Service\CurriculumDetailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/AcademicTerm"
+    path: "/CurriculumDetail"
 )]
-class AcademicTermController extends Controller
+class CurriculumDetailController extends Controller
 {
-    public function __construct(protected AcademicTermService $service) {
+    public function __construct(protected CurriculumDetailService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/AcademicTerm",
-        summary: "Get paginated list of AcademicTerm",
-        tags: ["AcademicTerm"],
-        description: "Retrieve a paginated list of AcademicTerm with optional search",
-        operationId:"getAcademicTermPaginated",
+        path: "/api/CurriculumDetail",
+        summary: "Get paginated list of CurriculumDetail",
+        tags: ["CurriculumDetail"],
+        description: "Retrieve a paginated list of CurriculumDetail with optional search",
+        operationId:"getCurriculumDetailPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -50,25 +50,25 @@ class AcademicTermController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAcademicTermResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedCurriculumDetailResponse200")
     )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
         $page = $request->query("page", 0);
         $rows = $request->query("rows", 10);
-        return $this->ok($this->service->getAll(true, $page, $rows));
+        return $this->ok($this->service->getAll(false, $page, $rows));
     }
 
     /**
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/AcademicTerm/{id}",
-        summary: "Get a specific AcademicTerm",
-        tags: ["AcademicTerm"],
-        description: "Retrieve a AcademicTerm by its ID",
-        operationId: "getAcademicTermById",
+        path: "/api/CurriculumDetail/{id}",
+        summary: "Get a specific CurriculumDetail",
+        tags: ["CurriculumDetail"],
+        description: "Retrieve a CurriculumDetail by its ID",
+        operationId: "getCurriculumDetailById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -79,18 +79,18 @@ class AcademicTermController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetAcademicTermResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetCurriculumDetailResponse200")
     )]
     #[OA\Response(
         response: 404,
-        description: "AcademicTerm not found"
+        description: "CurriculumDetail not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('AcademicTerm not found');
+            return $this->notFound('CurriculumDetail not found');
         }
     }
 
@@ -98,20 +98,20 @@ class AcademicTermController extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/AcademicTerm",
-        summary: "Create a new AcademicTerm",
-        tags: ["AcademicTerm"],
-        description:" Create a new AcademicTerm with the provided details",
-        operationId: "createAcademicTerm",
+        path: "/api/CurriculumDetail",
+        summary: "Create a new CurriculumDetail",
+        tags: ["CurriculumDetail"],
+        description:" Create a new CurriculumDetail with the provided details",
+        operationId: "createCurriculumDetail",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/AcademicTerm")
+        content: new OA\JsonContent(ref: "#/components/schemas/CurriculumDetail")
     )]
     #[OA\Response(
         response: 200,
-        description: "AcademicTerm created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateAcademicTermResponse200")
+        description: "CurriculumDetail created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateCurriculumDetailResponse200")
     )]
     #[OA\Response(
         response: 422,
@@ -127,10 +127,7 @@ class AcademicTermController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'suffix' => 'required|string|max:255',
-                'number_of_terms' => 'required|integer|min:1',
+
             ]);
 
             if ($validator->fails()) {
@@ -149,11 +146,11 @@ class AcademicTermController extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/AcademicTerm/{id}",
-        summary: "Update a AcademicTerm",
-        tags: ["AcademicTerm"],
-        description: "Update an existing AcademicTerm with the provided details",
-        operationId: "updateAcademicTerm",
+        path: "/api/CurriculumDetail/{id}",
+        summary: "Update a CurriculumDetail",
+        tags: ["CurriculumDetail"],
+        description: "Update an existing CurriculumDetail with the provided details",
+        operationId: "updateCurriculumDetail",
     )]
     #[OA\Parameter(
         name: "id",
@@ -163,16 +160,16 @@ class AcademicTermController extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/AcademicTerm")
+        content: new OA\JsonContent(ref: "#/components/schemas/CurriculumDetail")
     )]
     #[OA\Response(
         response: 200,
-        description: "AcademicTerm updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAcademicTermResponse200")
+        description: "CurriculumDetail updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateCurriculumDetailResponse200")
     )]
     #[OA\Response(
         response: 404,
-        description: "AcademicTerm not found"
+        description: "CurriculumDetail not found"
     )]
     #[OA\Response(
         response: 422,
@@ -188,10 +185,7 @@ class AcademicTermController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'suffix' => 'required|string|max:255',
-                'number_of_terms' => 'required|integer|min:1',
+
             ]);
 
             if ($validator->fails()) {
@@ -202,7 +196,7 @@ class AcademicTermController extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('AcademicTerm not found');
+            return $this->notFound('CurriculumDetail not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -212,11 +206,11 @@ class AcademicTermController extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/AcademicTerm/{id}",
-        summary: "Delete a AcademicTerm",
-        tags: ["AcademicTerm"],
-        description: "Delete a AcademicTerm by its ID",
-        operationId: "deleteAcademicTerm",
+        path: "/api/CurriculumDetail/{id}",
+        summary: "Delete a CurriculumDetail",
+        tags: ["CurriculumDetail"],
+        description: "Delete a CurriculumDetail by its ID",
+        operationId: "deleteCurriculumDetail",
     )]
     #[OA\Parameter(
         name: "id",
@@ -226,12 +220,12 @@ class AcademicTermController extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "AcademicTerm deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAcademicTermResponse200")
+        description: "CurriculumDetail deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteCurriculumDetailResponse200")
     )]
     #[OA\Response(
         response: 404,
-        description: "AcademicTerm not found"
+        description: "CurriculumDetail not found"
     )]
     #[OA\Response(
         response: 500,
@@ -244,7 +238,7 @@ class AcademicTermController extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('AcademicTerm not found');
+            return $this->notFound('CurriculumDetail not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

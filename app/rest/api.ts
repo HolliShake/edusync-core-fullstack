@@ -39,11 +39,13 @@ import type {
   CreateCampusResponse200,
   CreateCollegeResponse200,
   CreateCourseResponse200,
+  CreateCurriculumDetailResponse200,
   CreateCurriculumResponse200,
   CreateProgramTypeResponse200,
   CreateRoomResponse200,
   CreateSchoolYearResponse200,
   Curriculum,
+  CurriculumDetail,
   DeleteAcademicCalendarResponse200,
   DeleteAcademicProgramResponse200,
   DeleteAcademicTermResponse200,
@@ -51,6 +53,7 @@ import type {
   DeleteCampusResponse200,
   DeleteCollegeResponse200,
   DeleteCourseResponse200,
+  DeleteCurriculumDetailResponse200,
   DeleteCurriculumResponse200,
   DeleteProgramTypeResponse200,
   DeleteRoomResponse200,
@@ -69,6 +72,8 @@ import type {
   GetCollegeResponse200,
   GetCoursePaginatedParams,
   GetCourseResponse200,
+  GetCurriculumDetailPaginatedParams,
+  GetCurriculumDetailResponse200,
   GetCurriculumPaginatedParams,
   GetCurriculumResponse200,
   GetProgramTypePaginatedParams,
@@ -85,6 +90,7 @@ import type {
   PaginatedCampusResponse200,
   PaginatedCollegeResponse200,
   PaginatedCourseResponse200,
+  PaginatedCurriculumDetailResponse200,
   PaginatedCurriculumResponse200,
   PaginatedProgramTypeResponse200,
   PaginatedRoomResponse200,
@@ -99,6 +105,7 @@ import type {
   UpdateCampusResponse200,
   UpdateCollegeResponse200,
   UpdateCourseResponse200,
+  UpdateCurriculumDetailResponse200,
   UpdateCurriculumResponse200,
   UpdateProgramTypeResponse200,
   UpdateRoomResponse200,
@@ -3122,6 +3129,380 @@ export const useDeleteCurriculum = <TError = null | InternalServerErrorResponse,
       > => {
 
       const mutationOptions = getDeleteCurriculumMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of CurriculumDetail with optional search
+ * @summary Get paginated list of CurriculumDetail
+ */
+export const getCurriculumDetailPaginated = (
+    params?: GetCurriculumDetailPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedCurriculumDetailResponse200>(
+      {url: `/api/CurriculumDetail`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetCurriculumDetailPaginatedQueryKey = (params?: GetCurriculumDetailPaginatedParams,) => {
+    return [`/api/CurriculumDetail`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetCurriculumDetailPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurriculumDetailPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>> = ({ signal }) => getCurriculumDetailPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurriculumDetailPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>>
+export type GetCurriculumDetailPaginatedQueryError = unknown
+
+
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+ params: undefined |  GetCurriculumDetailPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurriculumDetailPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getCurriculumDetailPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+ params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurriculumDetailPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getCurriculumDetailPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+ params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of CurriculumDetail
+ */
+
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+ params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurriculumDetailPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new CurriculumDetail with the provided details
+ * @summary Create a new CurriculumDetail
+ */
+export const createCurriculumDetail = (
+    curriculumDetail: NonReadonly<CurriculumDetail>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateCurriculumDetailResponse200>(
+      {url: `/api/CurriculumDetail`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: curriculumDetail, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateCurriculumDetailMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculumDetail>>, TError,{data: NonReadonly<CurriculumDetail>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCurriculumDetail>>, TError,{data: NonReadonly<CurriculumDetail>}, TContext> => {
+
+const mutationKey = ['createCurriculumDetail'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCurriculumDetail>>, {data: NonReadonly<CurriculumDetail>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCurriculumDetail(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof createCurriculumDetail>>>
+    export type CreateCurriculumDetailMutationBody = NonReadonly<CurriculumDetail>
+    export type CreateCurriculumDetailMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new CurriculumDetail
+ */
+export const useCreateCurriculumDetail = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculumDetail>>, TError,{data: NonReadonly<CurriculumDetail>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createCurriculumDetail>>,
+        TError,
+        {data: NonReadonly<CurriculumDetail>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateCurriculumDetailMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a CurriculumDetail by its ID
+ * @summary Get a specific CurriculumDetail
+ */
+export const getCurriculumDetailById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetCurriculumDetailResponse200>(
+      {url: `/api/CurriculumDetail/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetCurriculumDetailByIdQueryKey = (id?: number,) => {
+    return [`/api/CurriculumDetail/${id}`] as const;
+    }
+
+    
+export const getGetCurriculumDetailByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurriculumDetailByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurriculumDetailById>>> = ({ signal }) => getCurriculumDetailById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCurriculumDetailByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCurriculumDetailById>>>
+export type GetCurriculumDetailByIdQueryError = null
+
+
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurriculumDetailById>>,
+          TError,
+          Awaited<ReturnType<typeof getCurriculumDetailById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurriculumDetailById>>,
+          TError,
+          Awaited<ReturnType<typeof getCurriculumDetailById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific CurriculumDetail
+ */
+
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCurriculumDetailByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing CurriculumDetail with the provided details
+ * @summary Update a CurriculumDetail
+ */
+export const updateCurriculumDetail = (
+    id: number,
+    curriculumDetail: NonReadonly<CurriculumDetail>,
+ ) => {
+      
+      
+      return fetchData<UpdateCurriculumDetailResponse200>(
+      {url: `/api/CurriculumDetail/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: curriculumDetail
+    },
+      );
+    }
+  
+
+
+export const getUpdateCurriculumDetailMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculumDetail>>, TError,{id: number;data: NonReadonly<CurriculumDetail>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculumDetail>>, TError,{id: number;data: NonReadonly<CurriculumDetail>}, TContext> => {
+
+const mutationKey = ['updateCurriculumDetail'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCurriculumDetail>>, {id: number;data: NonReadonly<CurriculumDetail>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateCurriculumDetail(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof updateCurriculumDetail>>>
+    export type UpdateCurriculumDetailMutationBody = NonReadonly<CurriculumDetail>
+    export type UpdateCurriculumDetailMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a CurriculumDetail
+ */
+export const useUpdateCurriculumDetail = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculumDetail>>, TError,{id: number;data: NonReadonly<CurriculumDetail>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCurriculumDetail>>,
+        TError,
+        {id: number;data: NonReadonly<CurriculumDetail>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateCurriculumDetailMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a CurriculumDetail by its ID
+ * @summary Delete a CurriculumDetail
+ */
+export const deleteCurriculumDetail = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteCurriculumDetailResponse200>(
+      {url: `/api/CurriculumDetail/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteCurriculumDetailMutationOptions = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculumDetail>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculumDetail>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteCurriculumDetail'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCurriculumDetail>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteCurriculumDetail(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCurriculumDetail>>>
+    
+    export type DeleteCurriculumDetailMutationError = null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a CurriculumDetail
+ */
+export const useDeleteCurriculumDetail = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculumDetail>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteCurriculumDetail>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteCurriculumDetailMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

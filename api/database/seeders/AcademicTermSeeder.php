@@ -11,11 +11,13 @@ class AcademicTermSeeder extends Seeder
     {
         $academicTerms = [
             [
+                'id' => 1,
                 'name' => 'Semestral',
                 'description' => 'Academic year divided into two semesters',
                 'number_of_terms' => 2,
             ],
             [
+                'id' => 2,
                 'name' => 'Quarterly',
                 'description' => 'Academic year divided into four quarters',
                 'number_of_terms' => 4,

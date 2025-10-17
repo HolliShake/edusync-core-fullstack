@@ -2051,6 +2051,250 @@
                 }
             }
         },
+        "\/api\/CurriculumDetail": {
+            "get": {
+                "tags": [
+                    "CurriculumDetail"
+                ],
+                "summary": "Get paginated list of CurriculumDetail",
+                "description": "Retrieve a paginated list of CurriculumDetail with optional search",
+                "operationId": "getCurriculumDetailPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedCurriculumDetailResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CurriculumDetail"
+                ],
+                "summary": "Create a new CurriculumDetail",
+                "description": " Create a new CurriculumDetail with the provided details",
+                "operationId": "createCurriculumDetail",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/CurriculumDetail"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "CurriculumDetail created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateCurriculumDetailResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/CurriculumDetail\/{id}": {
+            "get": {
+                "tags": [
+                    "CurriculumDetail"
+                ],
+                "summary": "Get a specific CurriculumDetail",
+                "description": "Retrieve a CurriculumDetail by its ID",
+                "operationId": "getCurriculumDetailById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetCurriculumDetailResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "CurriculumDetail not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CurriculumDetail"
+                ],
+                "summary": "Update a CurriculumDetail",
+                "description": "Update an existing CurriculumDetail with the provided details",
+                "operationId": "updateCurriculumDetail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/CurriculumDetail"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "CurriculumDetail updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateCurriculumDetailResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "CurriculumDetail not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CurriculumDetail"
+                ],
+                "summary": "Delete a CurriculumDetail",
+                "description": "Delete a CurriculumDetail by its ID",
+                "operationId": "deleteCurriculumDetail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "CurriculumDetail deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteCurriculumDetailResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "CurriculumDetail not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/ProgramType": {
             "get": {
                 "tags": [
@@ -3312,28 +3556,42 @@
                 "required": [
                     "name",
                     "description",
+                    "suffix",
                     "number_of_terms"
                 ],
                 "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "Term 1"
                     },
                     "description": {
                         "type": "string",
+                        "example": "Description of Term 1",
                         "nullable": true
                     },
+                    "suffix": {
+                        "type": "string",
+                        "example": "Semester"
+                    },
                     "number_of_terms": {
-                        "type": "integer"
+                        "type": "integer",
+                        "example": 1
                     },
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "readOnly": true
+                        "readOnly": true,
+                        "example": "2024-01-01T12:00:00Z"
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "readOnly": true
+                        "readOnly": true,
+                        "example": "2024-01-01T12:00:00Z"
                     }
                 },
                 "type": "object"
@@ -3979,6 +4237,7 @@
                 "title": "Curriculum",
                 "required": [
                     "academic_program_id",
+                    "academic_term_id",
                     "curriculum_code",
                     "curriculum_name",
                     "description",
@@ -3994,6 +4253,10 @@
                         "example": 1
                     },
                     "academic_program_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "academic_term_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -4046,6 +4309,12 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2024-01-01T12:00:00Z"
+                    },
+                    "academic_program": {
+                        "$ref": "#\/components\/schemas\/AcademicProgram"
+                    },
+                    "academic_term": {
+                        "$ref": "#\/components\/schemas\/AcademicTerm"
                     }
                 },
                 "type": "object"
@@ -4146,6 +4415,218 @@
                 "type": "object"
             },
             "DeleteCurriculumResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "CurriculumDetail": {
+                "title": "CurriculumDetail",
+                "required": [
+                    "curriculum_id",
+                    "course_id",
+                    "year_order",
+                    "term_order",
+                    "term_alias",
+                    "is_include_gwa"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "curriculum_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "course_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "year_order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "term_order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "term_alias": {
+                        "type": "string",
+                        "example": "1st Semester"
+                    },
+                    "is_include_gwa": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "curriculum": {
+                        "$ref": "#\/components\/schemas\/Curriculum"
+                    },
+                    "course": {
+                        "$ref": "#\/components\/schemas\/Course"
+                    },
+                    "year_label": {
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "1st Year"
+                    },
+                    "term_label": {
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "1st Term"
+                    }
+                },
+                "type": "object"
+            },
+            "MultipleCurriculumDetail": {
+                "title": "CurriculumDetail",
+                "required": [
+                    "curriculum_id",
+                    "year_order",
+                    "term_order",
+                    "term_alias",
+                    "is_include_gwa",
+                    "courses"
+                ],
+                "properties": {
+                    "curriculum_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "year_order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "term_order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "term_alias": {
+                        "type": "string",
+                        "example": "1st Semester"
+                    },
+                    "is_include_gwa": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "courses": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedCurriculumDetail": {
+                "title": "PaginatedCurriculumDetail",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/CurriculumDetail"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedCurriculumDetailResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedCurriculumDetail"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCurriculumDetailResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/CurriculumDetail"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCurriculumDetailsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/CurriculumDetail"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateCurriculumDetailResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/CurriculumDetail"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCurriculumDetailResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/CurriculumDetail"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteCurriculumDetailResponse200": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -4272,7 +4753,15 @@
             },
             "Room": {
                 "title": "Room",
-                "required": [],
+                "required": [
+                    "name",
+                    "short_name",
+                    "building_id",
+                    "floor",
+                    "room_code",
+                    "is_lab",
+                    "room_capacity"
+                ],
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -4702,6 +5191,10 @@
         {
             "name": "Curriculum",
             "description": "Curriculum"
+        },
+        {
+            "name": "CurriculumDetail",
+            "description": "CurriculumDetail"
         },
         {
             "name": "ProgramType",

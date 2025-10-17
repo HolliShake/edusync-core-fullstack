@@ -12,6 +12,7 @@ use App\Http\Controllers\CampusController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CurriculumController;
+use App\Http\Controllers\CurriculumDetailController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SchoolYearController;
 
@@ -118,4 +119,13 @@ Route::controller(AcademicTermController::class)->group(function() {
     Route::post('/AcademicTerm', 'store');
     Route::put('/AcademicTerm/{id}', 'update');
     Route::delete('/AcademicTerm/{id}', 'destroy');
+});
+
+
+Route::controller(CurriculumDetailController::class)->group(function() {
+    Route::get('/CurriculumDetail', 'index');
+    Route::get('/CurriculumDetail/{id}', 'show');
+    Route::post('/CurriculumDetail', 'store');
+    Route::put('/CurriculumDetail/{id}', 'update');
+    Route::delete('/CurriculumDetail/{id}', 'destroy');
 });

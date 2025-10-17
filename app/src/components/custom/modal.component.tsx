@@ -106,6 +106,7 @@ export default function Modal({
         )}
         onPointerDownOutside={handlePointerDownOutside}
         onEscapeKeyDown={handleEscapeKeyDown}
+        aria-describedby={undefined}
       >
         {title && (
           <div className="px-6 py-4">

@@ -8,13 +8,13 @@
 
 export interface Room {
   id?: number;
-  name?: string;
-  short_name?: string;
-  building_id?: number;
-  floor?: number;
-  room_code?: string;
-  is_lab?: boolean;
-  room_capacity?: number;
+  name: string;
+  short_name: string;
+  building_id: number;
+  floor: number;
+  room_code: string;
+  is_lab: boolean;
+  room_capacity: number;
   created_at?: string;
   updated_at?: string;
 }

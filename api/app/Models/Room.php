@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -11,6 +12,13 @@ use OpenApi\Attributes as OA;
     type: "object",
     required: [
         // Override required
+        'name',
+        'short_name',
+        'building_id',
+        'floor',
+        'room_code',
+        'is_lab',
+        'room_capacity'
     ],
     properties: [
         new OA\Property(property: "id", type: "integer", example: 1),
@@ -108,8 +116,10 @@ class Room extends Model
 
     /**
      * Get the building that owns the room.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function building()
+    public function building(): BelongsTo
     {
         return $this->belongsTo(Building::class);
     }
