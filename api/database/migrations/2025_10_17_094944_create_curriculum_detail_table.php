@@ -26,6 +26,9 @@ return new class extends Migration
             $table->integer('year_order')->default(0);
             $table->integer('term_order')->default(0); 
             $table->string('term_alias');
+            $table->boolean('is_include_gwa')->default(false);
+
+            $table->unique(['curriculum_id', 'course_id']);
         });
     }
 

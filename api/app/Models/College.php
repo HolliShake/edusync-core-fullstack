@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -99,8 +100,10 @@ class College extends Model
 
     /**
      * Get the campus that owns the college.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function campus()
+    public function campus(): BelongsTo
     {
         return $this->belongsTo(Campus::class, 'campus_id');
     }

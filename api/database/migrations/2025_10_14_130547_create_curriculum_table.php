@@ -32,7 +32,6 @@ return new class extends Migration
             $table->integer('total_hours')->default(0);
             $table->enum('status', array_column(CurriculumStateEnum::cases(), 'value'))->default(CurriculumStateEnum::ACTIVE->value);
             $table->date('approved_date')->nullable();
-            $table->string('approved_by')->nullable();
         });
     }
 

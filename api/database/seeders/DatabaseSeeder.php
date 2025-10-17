@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use Database\Seeders\AcademicTermSeeder;
 use Database\Seeders\ProgramTypeSeeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\CourseSeeder;
+use Database\Seeders\CampusSeeder;
+use Database\Seeders\CollegeSeeder;
+use Database\Seeders\AcademicProgramSeeder;
+use Database\Seeders\CurriculumSeeder;
+use Database\Seeders\CurriculumDetailSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +25,12 @@ class DatabaseSeeder extends Seeder
             AcademicTermSeeder::class,
             UserSeeder::class,
             ProgramTypeSeeder::class,
+            CourseSeeder::class,
+            CampusSeeder::class,
+            CollegeSeeder::class,
+            AcademicProgramSeeder::class,
+            CurriculumSeeder::class,
+            CurriculumDetailSeeder::class
         ]);
     }
 }

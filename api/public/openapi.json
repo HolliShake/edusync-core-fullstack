@@ -1591,6 +1591,15 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[course_code]",
+                        "in": "query",
+                        "description": "Filter by course code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -1844,6 +1853,16 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Paginate the results",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
                     }
                 ],
                 "responses": {
@@ -2088,6 +2107,25 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[curriculum_id]",
+                        "in": "query",
+                        "description": "Filter by curriculum ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Paginate the results",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
                     }
                 ],
                 "responses": {
@@ -2284,6 +2322,58 @@
                     },
                     "500": {
                         "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/CurriculumDetail\/multiple": {
+            "post": {
+                "tags": [
+                    "CurriculumDetail"
+                ],
+                "summary": "Create multiple CurriculumDetail",
+                "description": "Create multiple CurriculumDetail with the provided details",
+                "operationId": "createMultipleCurriculumDetail",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/MultipleCurriculumDetail"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "CurriculumDetail created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetCurriculumDetailsResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -3065,6 +3155,250 @@
                     },
                     "404": {
                         "description": "SchoolYear not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Section": {
+            "get": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Get paginated list of Section",
+                "description": "Retrieve a paginated list of Section with optional search",
+                "operationId": "getSectionPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedSectionResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Create a new Section",
+                "description": " Create a new Section with the provided details",
+                "operationId": "createSection",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Section"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Section created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateSectionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Section\/{id}": {
+            "get": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Get a specific Section",
+                "description": "Retrieve a Section by its ID",
+                "operationId": "getSectionById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSectionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Section not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Update a Section",
+                "description": "Update an existing Section with the provided details",
+                "operationId": "updateSection",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Section"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Section updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateSectionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Section not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Delete a Section",
+                "description": "Delete a Section by its ID",
+                "operationId": "deleteSection",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Section deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteSectionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Section not found"
                     },
                     "500": {
                         "description": " Internal server error",
@@ -4358,7 +4692,17 @@
                         "example": true
                     },
                     "data": {
-                        "$ref": "#\/components\/schemas\/PaginatedCurriculum"
+                        "oneOf": [
+                            {
+                                "$ref": "#\/components\/schemas\/PaginatedCurriculum"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#\/components\/schemas\/Curriculum"
+                                }
+                            }
+                        ]
                     }
                 },
                 "type": "object"
@@ -4570,7 +4914,17 @@
                         "example": true
                     },
                     "data": {
-                        "$ref": "#\/components\/schemas\/PaginatedCurriculumDetail"
+                        "oneOf": [
+                            {
+                                "$ref": "#\/components\/schemas\/PaginatedCurriculumDetail"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#\/components\/schemas\/CurriculumDetail"
+                                }
+                            }
+                        ]
                     }
                 },
                 "type": "object"
@@ -5057,6 +5411,150 @@
                     }
                 },
                 "type": "object"
+            },
+            "Section": {
+                "title": "Section",
+                "required": [
+                    "curriculum_detail_id",
+                    "school_year_id",
+                    "section_ref",
+                    "section_name",
+                    "min_students",
+                    "max_students",
+                    "is_posted"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "curriculum_detail_id": {
+                        "type": "integer"
+                    },
+                    "school_year_id": {
+                        "type": "integer"
+                    },
+                    "section_ref": {
+                        "type": "string"
+                    },
+                    "section_name": {
+                        "type": "string"
+                    },
+                    "min_students": {
+                        "type": "integer"
+                    },
+                    "max_students": {
+                        "type": "integer"
+                    },
+                    "is_posted": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedSection": {
+                "title": "PaginatedSection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Section"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedSectionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedSection"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSectionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Section"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSectionsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Section"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateSectionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Section"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSectionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Section"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteSectionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
             }
         },
         "responses": {
@@ -5207,6 +5705,10 @@
         {
             "name": "SchoolYear",
             "description": "SchoolYear"
+        },
+        {
+            "name": "Section",
+            "description": "Section"
         }
     ]
 }

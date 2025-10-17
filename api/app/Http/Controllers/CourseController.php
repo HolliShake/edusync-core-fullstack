@@ -48,6 +48,13 @@ class CourseController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[course_code]",
+        in: "query",
+        description: "Filter by course code",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

@@ -44,6 +44,7 @@ import type {
   CreateProgramTypeResponse200,
   CreateRoomResponse200,
   CreateSchoolYearResponse200,
+  CreateSectionResponse200,
   Curriculum,
   CurriculumDetail,
   DeleteAcademicCalendarResponse200,
@@ -58,6 +59,7 @@ import type {
   DeleteProgramTypeResponse200,
   DeleteRoomResponse200,
   DeleteSchoolYearResponse200,
+  DeleteSectionResponse200,
   GetAcademicCalendarPaginatedParams,
   GetAcademicCalendarResponse200,
   GetAcademicProgramPaginatedParams,
@@ -74,6 +76,7 @@ import type {
   GetCourseResponse200,
   GetCurriculumDetailPaginatedParams,
   GetCurriculumDetailResponse200,
+  GetCurriculumDetailsResponse200,
   GetCurriculumPaginatedParams,
   GetCurriculumResponse200,
   GetProgramTypePaginatedParams,
@@ -82,7 +85,10 @@ import type {
   GetRoomResponse200,
   GetSchoolYearPaginatedParams,
   GetSchoolYearResponse200,
+  GetSectionPaginatedParams,
+  GetSectionResponse200,
   InternalServerErrorResponse,
+  MultipleCurriculumDetail,
   PaginatedAcademicCalendarResponse200,
   PaginatedAcademicProgramResponse200,
   PaginatedAcademicTermResponse200,
@@ -95,9 +101,11 @@ import type {
   PaginatedProgramTypeResponse200,
   PaginatedRoomResponse200,
   PaginatedSchoolYearResponse200,
+  PaginatedSectionResponse200,
   ProgramType,
   Room,
   SchoolYear,
+  Section,
   UpdateAcademicCalendarResponse200,
   UpdateAcademicProgramResponse200,
   UpdateAcademicTermResponse200,
@@ -110,6 +118,7 @@ import type {
   UpdateProgramTypeResponse200,
   UpdateRoomResponse200,
   UpdateSchoolYearResponse200,
+  UpdateSectionResponse200,
   ValidationErrorResponse
 } from './models';
 
@@ -3508,6 +3517,72 @@ export const useDeleteCurriculumDetail = <TError = null | InternalServerErrorRes
     }
     
 /**
+ * Create multiple CurriculumDetail with the provided details
+ * @summary Create multiple CurriculumDetail
+ */
+export const createMultipleCurriculumDetail = (
+    multipleCurriculumDetail: MultipleCurriculumDetail,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetCurriculumDetailsResponse200>(
+      {url: `/api/CurriculumDetail/multiple`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: multipleCurriculumDetail, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateMultipleCurriculumDetailMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, TError,{data: MultipleCurriculumDetail}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, TError,{data: MultipleCurriculumDetail}, TContext> => {
+
+const mutationKey = ['createMultipleCurriculumDetail'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, {data: MultipleCurriculumDetail}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createMultipleCurriculumDetail(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateMultipleCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>>
+    export type CreateMultipleCurriculumDetailMutationBody = MultipleCurriculumDetail
+    export type CreateMultipleCurriculumDetailMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create multiple CurriculumDetail
+ */
+export const useCreateMultipleCurriculumDetail = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, TError,{data: MultipleCurriculumDetail}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createMultipleCurriculumDetail>>,
+        TError,
+        {data: MultipleCurriculumDetail},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateMultipleCurriculumDetailMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of ProgramType with optional search
  * @summary Get paginated list of ProgramType
  */
@@ -4625,6 +4700,380 @@ export const useDeleteSchoolYear = <TError = null | InternalServerErrorResponse,
       > => {
 
       const mutationOptions = getDeleteSchoolYearMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of Section with optional search
+ * @summary Get paginated list of Section
+ */
+export const getSectionPaginated = (
+    params?: GetSectionPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedSectionResponse200>(
+      {url: `/api/Section`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetSectionPaginatedQueryKey = (params?: GetSectionPaginatedParams,) => {
+    return [`/api/Section`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSectionPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSectionPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSectionPaginated>>> = ({ signal }) => getSectionPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSectionPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionPaginated>>>
+export type GetSectionPaginatedQueryError = unknown
+
+
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+ params: undefined |  GetSectionPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+ params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+ params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of Section
+ */
+
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+ params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSectionPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new Section with the provided details
+ * @summary Create a new Section
+ */
+export const createSection = (
+    section: Section,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateSectionResponse200>(
+      {url: `/api/Section`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: section, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateSectionMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: Section}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: Section}, TContext> => {
+
+const mutationKey = ['createSection'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSection>>, {data: Section}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSection(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSectionMutationResult = NonNullable<Awaited<ReturnType<typeof createSection>>>
+    export type CreateSectionMutationBody = Section
+    export type CreateSectionMutationError = ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Section
+ */
+export const useCreateSection = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: Section}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createSection>>,
+        TError,
+        {data: Section},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateSectionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a Section by its ID
+ * @summary Get a specific Section
+ */
+export const getSectionById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSectionResponse200>(
+      {url: `/api/Section/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetSectionByIdQueryKey = (id?: number,) => {
+    return [`/api/Section/${id}`] as const;
+    }
+
+    
+export const getGetSectionByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSectionByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSectionById>>> = ({ signal }) => getSectionById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSectionByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionById>>>
+export type GetSectionByIdQueryError = null
+
+
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionById>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionById>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific Section
+ */
+
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSectionByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing Section with the provided details
+ * @summary Update a Section
+ */
+export const updateSection = (
+    id: number,
+    section: Section,
+ ) => {
+      
+      
+      return fetchData<UpdateSectionResponse200>(
+      {url: `/api/Section/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: section
+    },
+      );
+    }
+  
+
+
+export const getUpdateSectionMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: Section}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: Section}, TContext> => {
+
+const mutationKey = ['updateSection'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSection>>, {id: number;data: Section}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateSection(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSectionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSection>>>
+    export type UpdateSectionMutationBody = Section
+    export type UpdateSectionMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a Section
+ */
+export const useUpdateSection = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: Section}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateSection>>,
+        TError,
+        {id: number;data: Section},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSectionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a Section by its ID
+ * @summary Delete a Section
+ */
+export const deleteSection = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteSectionResponse200>(
+      {url: `/api/Section/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteSectionMutationOptions = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSection>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSection>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteSection'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSection>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteSection(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSectionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSection>>>
+    
+    export type DeleteSectionMutationError = null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a Section
+ */
+export const useDeleteSection = <TError = null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSection>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSection>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSectionMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

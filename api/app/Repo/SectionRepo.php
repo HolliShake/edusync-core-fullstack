@@ -2,15 +2,14 @@
 
 namespace App\Repo;
 
-use App\Interface\IRepo\ICurriculumDetailRepo;
-use App\Models\CurriculumDetail;
-use Spatie\QueryBuilder\AllowedFilter;
+use App\Interface\IRepo\ISectionRepo;
+use App\Models\Section;
 
-class CurriculumDetailRepo extends GenericRepo implements ICurriculumDetailRepo
+class SectionRepo extends GenericRepo implements ISectionRepo
 {
     public function __construct()
     {
-        parent::__construct(CurriculumDetail::class);
+        parent::__construct(Section::class);
     }
 
     /**
@@ -23,7 +22,6 @@ class CurriculumDetailRepo extends GenericRepo implements ICurriculumDetailRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
-            AllowedFilter::exact('curriculum_id'),
         ];
     }
 

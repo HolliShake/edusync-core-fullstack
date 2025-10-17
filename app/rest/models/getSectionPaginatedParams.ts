@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetCurriculumPaginatedParams = {
+export type GetSectionPaginatedParams = {
 /**
  * Search term
  */
@@ -19,12 +19,4 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
-/**
- * Filter by academic program ID
- */
-'filter[academic_program_id]'?: number;
-/**
- * Paginate the results
- */
-paginate?: boolean;
 };

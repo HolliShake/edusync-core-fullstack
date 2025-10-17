@@ -1,8 +1,12 @@
+import CurriculumDetailModal from '@/components/curriclum-detail/curriculum-detail.modal';
+import { useModal } from '@/components/custom/modal.component';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCurriculumContext } from '@/context/curriculum.context';
 import { useGetCurriculumDetailPaginated } from '@rest/api';
+import type { Curriculum, GetCurriculumDetailsResponse200 } from '@rest/models';
 import {
   BookOpen,
   Calendar,
@@ -11,10 +15,11 @@ import {
   FileText,
   GraduationCap,
   Hash,
+  Plus,
 } from 'lucide-react';
 import type React from 'react';
 import { useMemo } from 'react';
-import CurriculumTable from './table';
+import CurriculumTable, { type ScheduleGenerationData } from './table';
 
 const STATUS_COLORS = {
   active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
@@ -25,17 +30,38 @@ const STATUS_COLORS = {
 export default function CurriculumContent(): React.ReactNode {
   const curriculum = useCurriculumContext();
   const isLoading = useMemo(() => !curriculum, [curriculum]);
+  const curriculumDetailModal = useModal<Curriculum>();
 
-  const { data: curriculumDetailsResponse, isLoading: isCurriculumDetailsLoading } =
-    useGetCurriculumDetailPaginated({
+  const {
+    data: curriculumDetailsResponse,
+    isLoading: isCurriculumDetailsLoading,
+    refetch,
+  } = useGetCurriculumDetailPaginated(
+    {
+      'filter[curriculum_id]': curriculum?.id,
+      paginate: false,
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
-    });
+    },
+    {
+      query: {
+        enabled: !!curriculum?.id,
+      },
+    }
+  );
 
   const curriculumDetails = useMemo(
-    () => curriculumDetailsResponse?.data?.data ?? [],
+    () => (curriculumDetailsResponse as GetCurriculumDetailsResponse200)?.data ?? [],
     [curriculumDetailsResponse]
   );
+
+  const handleCurriculumDetailSubmit = () => {
+    refetch();
+  };
+
+  const handleGenerateSchedule = (data: ScheduleGenerationData) => {
+    console.log(data);
+  };
 
   if (isLoading) {
     return (
@@ -102,11 +128,17 @@ export default function CurriculumContent(): React.ReactNode {
                 </div>
               </div>
             </div>
-            <Badge
-              className={`${statusColor} px-4 py-2 text-sm font-semibold hover:${statusColor}`}
-            >
-              {curriculum.status?.charAt(0).toUpperCase() + curriculum.status?.slice(1)}
-            </Badge>
+            <div className="flex items-center gap-3">
+              <Badge
+                className={`${statusColor} px-4 py-2 text-sm font-semibold hover:${statusColor}`}
+              >
+                {curriculum.status?.charAt(0).toUpperCase() + curriculum.status?.slice(1)}
+              </Badge>
+              <Button onClick={() => curriculumDetailModal.openFn(curriculum)} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add Detail
+              </Button>
+            </div>
           </div>
 
           {curriculum.description && (
@@ -203,6 +235,13 @@ export default function CurriculumContent(): React.ReactNode {
       <CurriculumTable
         curriculumDetails={curriculumDetails}
         isLoading={isCurriculumDetailsLoading}
+        onGenerateSchedule={handleGenerateSchedule}
+      />
+
+      {/* Curriculum Detail Modal */}
+      <CurriculumDetailModal
+        controller={curriculumDetailModal}
+        onSubmit={handleCurriculumDetailSubmit}
       />
     </div>
   );

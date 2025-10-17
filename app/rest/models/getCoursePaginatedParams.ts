@@ -19,4 +19,8 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
+/**
+ * Filter by course code
+ */
+'filter[course_code]'?: string;
 };

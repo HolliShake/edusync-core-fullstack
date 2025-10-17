@@ -19,4 +19,12 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
+/**
+ * Filter by curriculum ID
+ */
+'filter[curriculum_id]'?: number;
+/**
+ * Paginate the results
+ */
+paginate?: boolean;
 };

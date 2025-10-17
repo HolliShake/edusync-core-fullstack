@@ -33,6 +33,13 @@ interface IGenericRepo
     public function create(array $data): Model;
 
     /**
+     * Create multiple records
+     * @param array $data Data for creating the records
+     * @return array The created models
+     */
+    public function createMultiple(array $data): array;
+
+    /**
      * Update a record by ID
      * @param int|string $id The ID of the record to update
      * @param array $data Data for updating the record

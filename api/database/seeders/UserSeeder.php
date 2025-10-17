@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Enum\UserRoleEnum;
 
 class UserSeeder extends Seeder
 {
@@ -13,10 +15,12 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'id' => 1,
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
+                'name' => 'Philipp Andrew Roa Redondo',
+                'email' => 'philippandrewroaredondo@gmail.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('password'),
+                'password' => Hash::make('test@password'),
+                'remember_token' => Str::random(10),
+                'role' => UserRoleEnum::ADMIN,
             ],
         ];
 

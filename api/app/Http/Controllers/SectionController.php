@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\CurriculumService;
+use App\Service\SectionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/Curriculum"
+    path: "/Section"
 )]
-class CurriculumController extends Controller
+class SectionController extends Controller
 {
-    public function __construct(protected CurriculumService $service) {
+    public function __construct(protected SectionService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/Curriculum",
-        summary: "Get paginated list of Curriculum",
-        tags: ["Curriculum"],
-        description: "Retrieve a paginated list of Curriculum with optional search",
-        operationId:"getCurriculumPaginated",
+        path: "/api/Section",
+        summary: "Get paginated list of Section",
+        tags: ["Section"],
+        description: "Retrieve a paginated list of Section with optional search",
+        operationId:"getSectionPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -47,43 +47,28 @@ class CurriculumController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
-    #[OA\Parameter(
-        name: "filter[academic_program_id]",
-        in: "query",
-        description: "Filter by academic program ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
-    #[OA\Parameter(
-        name: "paginate",
-        in: "query",
-        description: "Paginate the results",
-        required: false,
-        schema: new OA\Schema(type: "boolean", default: true)
-    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedCurriculumResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedSectionResponse200")
     )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
         $page = $request->query("page", 0);
         $rows = $request->query("rows", 10);
-        $paginate = filter_var($request->query("paginate", true), FILTER_VALIDATE_BOOLEAN);
-        return $this->ok($this->service->getAll($paginate, $page, $rows));
+        return $this->ok($this->service->getAll(true, $page, $rows));
     }
 
     /**
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/Curriculum/{id}",
-        summary: "Get a specific Curriculum",
-        tags: ["Curriculum"],
-        description: "Retrieve a Curriculum by its ID",
-        operationId: "getCurriculumById",
+        path: "/api/Section/{id}",
+        summary: "Get a specific Section",
+        tags: ["Section"],
+        description: "Retrieve a Section by its ID",
+        operationId: "getSectionById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -94,18 +79,18 @@ class CurriculumController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetCurriculumResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetSectionResponse200")
     )]
     #[OA\Response(
         response: 404,
-        description: "Curriculum not found"
+        description: "Section not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Curriculum not found');
+            return $this->notFound('Section not found');
         }
     }
 
@@ -113,20 +98,20 @@ class CurriculumController extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/Curriculum",
-        summary: "Create a new Curriculum",
-        tags: ["Curriculum"],
-        description:" Create a new Curriculum with the provided details",
-        operationId: "createCurriculum",
+        path: "/api/Section",
+        summary: "Create a new Section",
+        tags: ["Section"],
+        description:" Create a new Section with the provided details",
+        operationId: "createSection",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/Curriculum")
+        content: new OA\JsonContent(ref: "#/components/schemas/Section")
     )]
     #[OA\Response(
         response: 200,
-        description: "Curriculum created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateCurriculumResponse200")
+        description: "Section created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateSectionResponse200")
     )]
     #[OA\Response(
         response: 422,
@@ -142,16 +127,7 @@ class CurriculumController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'academic_program_id' => 'required|exists:academic_program,id',
-                'academic_term_id' => 'required|exists:academic_term,id',
-                'curriculum_code' => 'required|string|unique:curriculum,curriculum_code',
-                'curriculum_name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'effective_year' => 'required|integer|min:1900|max:' . (date('Y') + 10),
-                'total_units' => 'nullable|integer|min:0',
-                'total_hours' => 'nullable|integer|min:0',
-                'status' => 'nullable|in:active,inactive,archived',
-                'approved_date' => 'nullable|date|before_or_equal:today'
+
             ]);
 
             if ($validator->fails()) {
@@ -170,11 +146,11 @@ class CurriculumController extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/Curriculum/{id}",
-        summary: "Update a Curriculum",
-        tags: ["Curriculum"],
-        description: "Update an existing Curriculum with the provided details",
-        operationId: "updateCurriculum",
+        path: "/api/Section/{id}",
+        summary: "Update a Section",
+        tags: ["Section"],
+        description: "Update an existing Section with the provided details",
+        operationId: "updateSection",
     )]
     #[OA\Parameter(
         name: "id",
@@ -184,16 +160,16 @@ class CurriculumController extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/Curriculum")
+        content: new OA\JsonContent(ref: "#/components/schemas/Section")
     )]
     #[OA\Response(
         response: 200,
-        description: "Curriculum updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateCurriculumResponse200")
+        description: "Section updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateSectionResponse200")
     )]
     #[OA\Response(
         response: 404,
-        description: "Curriculum not found"
+        description: "Section not found"
     )]
     #[OA\Response(
         response: 422,
@@ -209,16 +185,7 @@ class CurriculumController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'academic_program_id' => 'required|integer|exists:academic_program,id',
-                'academic_term_id' => 'required|integer|exists:academic_term,id',
-                'curriculum_code' => 'required|string|max:255|unique:curriculum,curriculum_code,' . $id,
-                'curriculum_name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'effective_year' => 'required|integer|min:1900|max:' . (date('Y') + 10),
-                'total_units' => 'required|integer|min:0',
-                'total_hours' => 'required|integer|min:0',
-                'status' => 'required|in:active,inactive,archived',
-                'approved_date' => 'nullable|date|before_or_equal:today',
+
             ]);
 
             if ($validator->fails()) {
@@ -229,7 +196,7 @@ class CurriculumController extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Curriculum not found');
+            return $this->notFound('Section not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -239,11 +206,11 @@ class CurriculumController extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/Curriculum/{id}",
-        summary: "Delete a Curriculum",
-        tags: ["Curriculum"],
-        description: "Delete a Curriculum by its ID",
-        operationId: "deleteCurriculum",
+        path: "/api/Section/{id}",
+        summary: "Delete a Section",
+        tags: ["Section"],
+        description: "Delete a Section by its ID",
+        operationId: "deleteSection",
     )]
     #[OA\Parameter(
         name: "id",
@@ -253,12 +220,12 @@ class CurriculumController extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "Curriculum deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteCurriculumResponse200")
+        description: "Section deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteSectionResponse200")
     )]
     #[OA\Response(
         response: 404,
-        description: "Curriculum not found"
+        description: "Section not found"
     )]
     #[OA\Response(
         response: 500,
@@ -271,7 +238,7 @@ class CurriculumController extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Curriculum not found');
+            return $this->notFound('Section not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

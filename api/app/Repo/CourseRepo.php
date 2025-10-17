@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\ICourseRepo;
 use App\Models\Course;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class CourseRepo extends GenericRepo implements ICourseRepo
 {
@@ -22,6 +23,7 @@ class CourseRepo extends GenericRepo implements ICourseRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::partial('course_code')
         ];
     }
 

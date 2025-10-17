@@ -64,7 +64,10 @@ use OpenApi\Attributes as OA;
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedCurriculum")
+        new OA\Property(property: "data", oneOf: [
+            new OA\Schema(ref: "#/components/schemas/PaginatedCurriculum"),
+            new OA\Schema(type: "array", items: new OA\Items(ref: "#/components/schemas/Curriculum"))
+        ])
     ]
 )]
 
@@ -131,16 +134,36 @@ class Curriculum extends Model
         'approved_date',
     ];
 
+    protected $casts = [
+        'academic_program_id' => 'integer',
+        'academic_term_id' => 'integer',
+        'total_units' => 'integer',
+        'total_hours' => 'integer',
+        'status' => 'string',
+        'approved_date' => 'date',
+        'effective_year' => 'integer',
+    ];
+
     protected $appends = [
         'academic_program',
         'academic_term',
     ];
 
+    /**
+     * Get the academic program that owns the curriculum.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function getAcademicProgramAttribute()
     {
         return $this->academicProgram()->first();
     }
 
+    /**
+     * Get the academic term that owns the curriculum.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function getAcademicTermAttribute()
     {
         return $this->academicTerm()->first();

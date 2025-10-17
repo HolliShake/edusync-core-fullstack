@@ -47,6 +47,20 @@ class CurriculumDetailController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[curriculum_id]",
+        in: "query",
+        description: "Filter by curriculum ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "paginate",
+        in: "query",
+        description: "Paginate the results",
+        required: false,
+        schema: new OA\Schema(type: "boolean", default: true)
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
@@ -57,7 +71,8 @@ class CurriculumDetailController extends Controller
         $srch = $request->query("search", '');
         $page = $request->query("page", 0);
         $rows = $request->query("rows", 10);
-        return $this->ok($this->service->getAll(false, $page, $rows));
+        $paginate = filter_var($request->query("paginate", true), FILTER_VALIDATE_BOOLEAN);
+        return $this->ok($this->service->getAll($paginate, $page, $rows));
     }
 
     /**
@@ -142,6 +157,59 @@ class CurriculumDetailController extends Controller
         }
     }
 
+    /**
+     * Create multiple CurriculumDetail.
+     */
+    #[OA\Post(
+        path: "/api/CurriculumDetail/multiple",
+        summary: "Create multiple CurriculumDetail",
+        tags: ["CurriculumDetail"],
+        description: "Create multiple CurriculumDetail with the provided details",
+        operationId: "createMultipleCurriculumDetail",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/MultipleCurriculumDetail")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "CurriculumDetail created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetCurriculumDetailsResponse200")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function createMultiple(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'curriculum_id' => 'required|exists:curriculum,id',
+                'year_order' => 'required|integer|min:1',
+                'term_order' => 'required|integer|min:1',
+                'term_alias' => 'required|string|max:255',
+                'is_include_gwa' => 'required|boolean',
+                'courses' => 'required|array|min:1',
+                'courses.*' => 'required|integer|exists:course,id',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->createMultiple($validated));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
     /**
      * Update the specified resource in storage.
      */

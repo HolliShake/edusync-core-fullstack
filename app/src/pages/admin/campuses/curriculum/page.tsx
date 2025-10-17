@@ -4,7 +4,7 @@ import { decryptId } from '@/lib/hash';
 import { useGetCurriculumById } from '@rest/api';
 import type React from 'react';
 import { useParams } from 'react-router';
-import CurriculumContent from './conent';
+import CurriculumContent from './content';
 
 export default function AdminCurriculum(): React.ReactNode {
   const { curriculumId } = useParams();

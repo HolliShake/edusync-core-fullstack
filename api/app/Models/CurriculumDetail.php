@@ -83,7 +83,10 @@ use OpenApi\Attributes as OA;
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedCurriculumDetail")
+        new OA\Property(property: "data", oneOf: [
+            new OA\Schema(ref: "#/components/schemas/PaginatedCurriculumDetail"),
+            new OA\Schema(type: "array", items: new OA\Items(ref: "#/components/schemas/CurriculumDetail"))
+        ])
     ]
 )]
 
@@ -146,6 +149,12 @@ class CurriculumDetail extends Model
         'is_include_gwa',
     ];
 
+    protected $casts = [
+        'year_order' => 'integer',
+        'term_order' => 'integer',
+        'is_include_gwa' => 'boolean',
+    ];
+
     protected $appends = [
         'year_label',
         'term_label',
@@ -167,7 +176,7 @@ class CurriculumDetail extends Model
         } elseif ($number % 10 === 3 && $number !== 13) {
             $suffix = 'rd';
         }
-        return $number . $suffix;
+        return $number . $suffix.' Year';
     }
 
     /**
@@ -177,7 +186,7 @@ class CurriculumDetail extends Model
      */
     public function getTermLabelAttribute(): string {
         $prefix = '';
-        return $this->term_alias;
+        $label = $this->curriculum()->with('academicTerm')->first()->term_alias ?? $this->curriculum()->with('academicTerm')->first()->academicTerm->suffix;
         $number = $this->term_order;
         $suffix = 'th';
         if ($number % 10 === 1 && $number !== 11) {
@@ -187,7 +196,7 @@ class CurriculumDetail extends Model
         } elseif ($number % 10 === 3 && $number !== 13) {
             $suffix = 'rd';
         }
-        return $number . $suffix;
+        return $number . $suffix . ' ' . $label;
     }
 
     /**

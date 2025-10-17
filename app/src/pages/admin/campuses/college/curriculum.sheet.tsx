@@ -234,6 +234,9 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
   const { data: listOfCurriculumsResponse, refetch } = useGetCurriculumPaginated(
     {
       'filter[academic_program_id]': academicProgram?.id,
+      paginate: false,
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
     },
     {
       query: {

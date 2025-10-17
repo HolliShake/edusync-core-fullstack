@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "Section",
+    title: "Section",
+    type: "object",
+    required: [
+        // Override required
+        'curriculum_detail_id',
+        'school_year_id',
+        'section_ref',
+        'section_name',
+        'min_students',
+        'max_students',
+        'is_posted',
+    ],
+    properties: [
+        // Override fillables
+        new OA\Property(property: "id", type: "integer", readOnly: true),
+        new OA\Property(property: "curriculum_detail_id", type: "integer"),
+        new OA\Property(property: "school_year_id", type: "integer"),
+        new OA\Property(property: "section_ref", type: "string"),
+        new OA\Property(property: "section_name", type: "string"),
+        new OA\Property(property: "min_students", type: "integer"),
+        new OA\Property(property: "max_students", type: "integer"),
+        new OA\Property(property: "is_posted", type: "boolean"),
+    ]
+)]
+
+#[OA\Schema(
+    schema: "PaginatedSection",
+    title:"PaginatedSection",
+    type: "object",
+    properties: [
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/Section")),
+        new OA\Property(property: "current_page", type: "integer"),
+        new OA\Property(property: "last_page", type: "integer"),
+        new OA\Property(property: "per_page", type: "integer"),
+        new OA\Property(property: "total", type: "integer"),
+        new OA\Property(property: "from", type: "integer", nullable: true),
+        new OA\Property(property: "to", type: "integer", nullable: true),
+    ]
+)]
+
+#[OA\Schema(
+    schema: "PaginatedSectionResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedSection")
+    ]
+)]
+
+#[OA\Schema(
+    schema: "GetSectionResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", ref: "#/components/schemas/Section")
+    ]
+)]
+
+#[OA\Schema(
+    schema: "GetSectionsResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/Section"))
+    ]
+)]
+
+#[OA\Schema(
+    schema: "CreateSectionResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", ref: "#/components/schemas/Section")
+    ]
+)]
+
+#[OA\Schema(
+    schema: "UpdateSectionResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", ref: "#/components/schemas/Section")
+    ]
+)]
+
+#[OA\Schema(
+    schema: "DeleteSectionResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true)
+    ]
+)]
+
+class Section extends Model
+{
+    protected $table = 'section';
+
+    public $timestamps = true;
+
+    protected $fillable = [
+        'curriculum_detail_id',
+        'school_year_id',
+        'section_ref',
+        'section_name',
+        'min_students',
+        'max_students',
+        'is_posted',
+    ];
+}

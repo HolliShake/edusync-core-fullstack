@@ -14,6 +14,7 @@ use App\Interface\IRepo\IProgramTypeRepo;
 use App\Interface\IRepo\IRoomRepo;
 use App\Interface\IRepo\ISchoolYearRepo;
 use App\Interface\IRepo\ICurriculumDetailRepo;
+use App\Interface\IRepo\ISectionRepo;
 use App\Interface\IService\IAcademicCalendarService;
 use App\Interface\IService\IAcademicProgramService;
 use App\Interface\IService\IAcademicTermService;
@@ -26,6 +27,7 @@ use App\Interface\IService\IProgramTypeService;
 use App\Interface\IService\IRoomService;
 use App\Interface\IService\ISchoolYearService;
 use App\Interface\IService\ICurriculumDetailService;
+use App\Interface\IService\ISectionService;
 use App\Repo\AcademicCalendarRepo;
 use App\Repo\AcademicProgramRepo;
 use App\Repo\AcademicTermRepo;
@@ -35,6 +37,7 @@ use App\Repo\CollegeRepo;
 use App\Repo\CourseRepo;
 use App\Repo\CurriculumRepo;
 use App\Repo\CurriculumDetailRepo;
+use App\Repo\SectionRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RoomRepo;
 use App\Repo\SchoolYearRepo;
@@ -50,6 +53,7 @@ use App\Service\CurriculumService;
 use App\Service\ProgramTypeService;
 use App\Service\RoomService;
 use App\Service\SchoolYearService;
+use App\Service\SectionService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -73,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAcademicCalendarRepo::class, AcademicCalendarRepo::class);
         $this->app->bind(IAcademicTermRepo::class, AcademicTermRepo::class);
         $this->app->bind(ICurriculumDetailRepo::class, CurriculumDetailRepo::class);
+        $this->app->bind(ISectionRepo::class, SectionRepo::class);
         // Service
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
         $this->app->bind(IProgramTypeService::class, ProgramTypeService::class);
@@ -87,6 +92,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicTermService::class, AcademicTermService::class);
         $this->app->bind(ICurriculumDetailService::class, CurriculumDetailService::class);
+        $this->app->bind(ISectionService::class, SectionService::class);
     }
 
     /**
