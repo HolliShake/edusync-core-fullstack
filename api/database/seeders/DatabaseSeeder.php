@@ -11,6 +11,8 @@ use Database\Seeders\CollegeSeeder;
 use Database\Seeders\AcademicProgramSeeder;
 use Database\Seeders\CurriculumSeeder;
 use Database\Seeders\CurriculumDetailSeeder;
+use Database\Seeders\SchoolYearSeeder;
+use Database\Seeders\AcademicCalendarSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -30,7 +32,9 @@ class DatabaseSeeder extends Seeder
             CollegeSeeder::class,
             AcademicProgramSeeder::class,
             CurriculumSeeder::class,
-            CurriculumDetailSeeder::class
+            CurriculumDetailSeeder::class,
+            SchoolYearSeeder::class,
+            AcademicCalendarSeeder::class
         ]);
     }
 }

@@ -15,12 +15,12 @@ enum CalendarEventEnum: string
     case HOLIDAY              = 'HOLIDAY';
     case UNIVERSITY_EVENT     = 'UNIVERSITY_EVENT';
     case DEADLINE             = 'DEADLINE';
-    case PERIODIC_EXAM        = 'PERIODIC_EXAM';
+    case PERIODIC_EXAM        = 'PERIODIC_EXAM'; // Example: Midterm exam, Final exam
     case END_OF_CLASSES       = 'END_OF_CLASSES';
     case GRADE_SUBMISSION     = 'GRADE_SUBMISSION';
     case GRADUATION           = 'GRADUATION';
     case FACULTY_EVALUATION   = 'FACULTY_EVALUATION';
-    case ACADEMIC_TRANSITION  = 'ACADEMIC_TRANSITION';
+    case ACADEMIC_TRANSITION  = 'ACADEMIC_TRANSITION'; // Example: Change from first sem to Second sem
     case OTHER                = 'OTHER';
 }
 
