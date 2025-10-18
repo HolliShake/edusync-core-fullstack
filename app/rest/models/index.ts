@@ -81,6 +81,7 @@ export * from './deleteUserCompanyResponse200';
 export * from './deleteUserRequirementResponse200';
 export * from './deleteUserResponse200';
 export * from './forbiddenResponse';
+export * from './generateSection';
 export * from './getAcademicCalendarPaginatedParams';
 export * from './getAcademicCalendarResponse200';
 export * from './getAcademicCalendarsResponse200';

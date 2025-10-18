@@ -103,9 +103,7 @@ export default function AdminCampus(): React.ReactNode {
   return (
     <TitledPage title="Campuses" description="Manage your campuses">
       <div className="flex w-full">
-        <Button className="ms-auto" onClick={() => controller.openFn()}>
-          Add Campus
-        </Button>
+        <Button onClick={() => controller.openFn()}>Add Campus</Button>
       </div>
       <Table
         columns={columns}

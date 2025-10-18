@@ -56,7 +56,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
           <Header setIsSidebarOpen={handleSidebarToggle} />
 
           {/* Main content area */}
-          <main className="flex-1 overflow-y-auto p-10 bg-background">{children}</main>
+          <main className="flex-1 overflow-auto p-10 bg-background">{children}</main>
         </div>
       </div>
     </Providers>

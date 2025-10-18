@@ -6,4 +6,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface Section { [key: string]: unknown }
+export interface Section {
+  readonly id?: number;
+  curriculum_detail_id: number;
+  school_year_id: number;
+  section_ref: string;
+  section_name: string;
+  min_students: number;
+  max_students: number;
+  is_posted: boolean;
+}

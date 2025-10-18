@@ -5,9 +5,16 @@ namespace App\Interface\IRepo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 interface IGenericRepo
 {
+    /**
+     * Get a query builder for the model
+     * @return Builder
+     */
+    public function query(): Builder;
+
     /**
      * Get all records with optional filters
      * @param bool $paginate Whether to paginate the results

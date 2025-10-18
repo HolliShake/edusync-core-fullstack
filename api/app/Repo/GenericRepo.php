@@ -6,6 +6,7 @@ use App\Interface\IRepo\IGenericRepo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
 
 abstract class GenericRepo implements IGenericRepo
@@ -15,6 +16,15 @@ abstract class GenericRepo implements IGenericRepo
     public function __construct($model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * Get a query builder for the model
+     * @return Builder
+     */
+    public function query(): Builder
+    {
+        return $this->model::query();
     }
 
     /**
@@ -73,7 +83,7 @@ abstract class GenericRepo implements IGenericRepo
      * @param array $data Data for creating the records
      * @return array The created models
      */
-    public function createMultiple(array $data): array 
+    public function createMultiple(array $data): array
     {
         return collect($data)->map(fn($item) => $this->model::create($item))->toArray();
     }

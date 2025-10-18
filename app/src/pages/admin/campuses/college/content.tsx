@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCollegeContext } from '@/context/college.content';
+import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteAcademicProgram, useGetAcademicProgramPaginated } from '@rest/api';
 import type { AcademicProgram } from '@rest/models';
 import {
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import CurriculumSheet, { useCurriculumSheetState } from './curriculum.sheet';
 
@@ -58,6 +60,7 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
   const sheet = useCurriculumSheetState();
   const { mutateAsync: deleteAcademicProgram } = useDeleteAcademicProgram();
   const confirm = useConfirm();
+  const navigate = useNavigate();
 
   const handleDelete = async (program: AcademicProgram) => {
     try {
@@ -75,6 +78,7 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
   };
 
   const handleView = (program: AcademicProgram) => {
+    navigate(`?curriculum=${encryptIdForUrl(program.id as number)}`);
     sheet.openSheet(program);
   };
 

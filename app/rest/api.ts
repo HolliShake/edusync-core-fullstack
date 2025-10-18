@@ -60,6 +60,7 @@ import type {
   DeleteRoomResponse200,
   DeleteSchoolYearResponse200,
   DeleteSectionResponse200,
+  GenerateSection,
   GetAcademicCalendarPaginatedParams,
   GetAcademicCalendarResponse200,
   GetAcademicProgramPaginatedParams,
@@ -87,6 +88,7 @@ import type {
   GetSchoolYearResponse200,
   GetSectionPaginatedParams,
   GetSectionResponse200,
+  GetSectionsResponse200,
   InternalServerErrorResponse,
   MultipleCurriculumDetail,
   PaginatedAcademicCalendarResponse200,
@@ -4799,7 +4801,7 @@ export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSect
  * @summary Create a new Section
  */
 export const createSection = (
-    section: Section,
+    section: NonReadonly<Section>,
  signal?: AbortSignal
 ) => {
       
@@ -4815,8 +4817,8 @@ export const createSection = (
 
 
 export const getCreateSectionMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: Section}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: Section}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: NonReadonly<Section>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: NonReadonly<Section>}, TContext> => {
 
 const mutationKey = ['createSection'];
 const {mutation: mutationOptions} = options ?
@@ -4828,7 +4830,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSection>>, {data: Section}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSection>>, {data: NonReadonly<Section>}> = (props) => {
           const {data} = props ?? {};
 
           return  createSection(data,)
@@ -4840,18 +4842,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateSectionMutationResult = NonNullable<Awaited<ReturnType<typeof createSection>>>
-    export type CreateSectionMutationBody = Section
+    export type CreateSectionMutationBody = NonReadonly<Section>
     export type CreateSectionMutationError = ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Section
  */
 export const useCreateSection = <TError = ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: Section}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: NonReadonly<Section>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createSection>>,
         TError,
-        {data: Section},
+        {data: NonReadonly<Section>},
         TContext
       > => {
 
@@ -4955,7 +4957,7 @@ export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionBy
  */
 export const updateSection = (
     id: number,
-    section: Section,
+    section: NonReadonly<Section>,
  ) => {
       
       
@@ -4970,8 +4972,8 @@ export const updateSection = (
 
 
 export const getUpdateSectionMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: Section}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: Section}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: NonReadonly<Section>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: NonReadonly<Section>}, TContext> => {
 
 const mutationKey = ['updateSection'];
 const {mutation: mutationOptions} = options ?
@@ -4983,7 +4985,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSection>>, {id: number;data: Section}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSection>>, {id: number;data: NonReadonly<Section>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateSection(id,data,)
@@ -4995,18 +4997,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateSectionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSection>>>
-    export type UpdateSectionMutationBody = Section
+    export type UpdateSectionMutationBody = NonReadonly<Section>
     export type UpdateSectionMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Section
  */
 export const useUpdateSection = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: Section}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: NonReadonly<Section>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateSection>>,
         TError,
-        {id: number;data: Section},
+        {id: number;data: NonReadonly<Section>},
         TContext
       > => {
 
@@ -5074,6 +5076,72 @@ export const useDeleteSection = <TError = null | InternalServerErrorResponse,
       > => {
 
       const mutationOptions = getDeleteSectionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Generate sections for a curriculum and year
+ * @summary Generate sections for a curriculum and year
+ */
+export const generateSections = (
+    generateSection: GenerateSection,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSectionsResponse200>(
+      {url: `/api/Section/generate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: generateSection, signal
+    },
+      );
+    }
+  
+
+
+export const getGenerateSectionsMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateSections>>, TError,{data: GenerateSection}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof generateSections>>, TError,{data: GenerateSection}, TContext> => {
+
+const mutationKey = ['generateSections'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generateSections>>, {data: GenerateSection}> = (props) => {
+          const {data} = props ?? {};
+
+          return  generateSections(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GenerateSectionsMutationResult = NonNullable<Awaited<ReturnType<typeof generateSections>>>
+    export type GenerateSectionsMutationBody = GenerateSection
+    export type GenerateSectionsMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Generate sections for a curriculum and year
+ */
+export const useGenerateSections = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateSections>>, TError,{data: GenerateSection}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof generateSections>>,
+        TError,
+        {data: GenerateSection},
+        TContext
+      > => {
+
+      const mutationOptions = getGenerateSectionsMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

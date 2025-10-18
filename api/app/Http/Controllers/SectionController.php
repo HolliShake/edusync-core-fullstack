@@ -142,6 +142,60 @@ class SectionController extends Controller
         }
     }
 
+    #[OA\Post(
+        path: "/api/Section/generate",
+        summary: "Generate sections for a curriculum and year",
+        tags: ["Section"],
+        description: "Generate sections for a curriculum and year",
+        operationId: "generateSections",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/GenerateSection")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Sections generated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetSectionsResponse200")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Curriculum not found"
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function generate(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'curriculum_id'     => 'required|integer|exists:curriculum,id',
+                'year_order'        => 'required|integer|min:1',
+                'term_order'        => 'required|integer|min:1',
+                'auto_post'         => 'boolean',
+                'number_of_section' => 'required|integer|min:1',
+                'school_year_id'    => 'required|integer|exists:school_year,id',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->generate($validated));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */

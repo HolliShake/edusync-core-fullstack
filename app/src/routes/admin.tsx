@@ -75,21 +75,21 @@ const ADMIN: Route[] = [
     layout: 'dashboard',
     sidebar: false,
   },
-  // Building/:id
+  // Building/:id/rooms
   {
     key: 'admin.building',
     title: 'Building',
-    path: '/admin/campuses/:campusId/buildings/:buildingId',
+    path: '/admin/campuses/:campusId/buildings/:buildingId/rooms',
     component: <AdminBuilding />,
     icon: <BuildingIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
   },
-  // College/:id
+  // College/:id/programs
   {
     key: 'admin.college',
     title: 'College',
-    path: '/admin/campuses/:campusId/colleges/:collegeId',
+    path: '/admin/campuses/:campusId/colleges/:collegeId/programs',
     component: <AdminCollege />,
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -99,7 +99,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.curriculum',
     title: 'Curriculum',
-    path: '/admin/campuses/:campusId/colleges/:collegeId/curriculum/:curriculumId',
+    path: '/admin/campuses/:campusId/colleges/:collegeId/programs/:programId/curriculum/:curriculumId',
     component: <AdminCurriculum />,
     icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',

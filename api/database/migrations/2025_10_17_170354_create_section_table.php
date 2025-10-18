@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('curriculum_detail_id')
                 ->constrained('curriculum_detail')
                 ->onDelete('cascade');
+            // FK
             $table->foreignId('school_year_id')
                 ->constrained('school_year')
                 ->onDelete('cascade');
@@ -28,6 +29,8 @@ return new class extends Migration
             $table->integer('max_students');
             $table->boolean('is_posted')
                 ->default(false);
+
+            $table->unique(['curriculum_detail_id', 'school_year_id', 'section_name']);
         });
     }
 

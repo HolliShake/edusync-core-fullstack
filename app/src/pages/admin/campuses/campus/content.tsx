@@ -6,6 +6,7 @@ import { useCampusContext } from '@/context/campus.context';
 import { Building2, Hash, MapPin, School } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import AdminBuildingTab from './building.tab';
 import AdminCollegeTab from './college.tab';
 
@@ -13,6 +14,7 @@ export default function AdminCampusDetailContent(): React.ReactNode {
   const campus = useCampusContext();
   const isLoading = useMemo(() => !campus, [campus]);
   const [activeTab, setActiveTab] = useState('colleges');
+  const navigate = useNavigate();
 
   const tabs = useMemo(
     () => [
@@ -32,6 +34,7 @@ export default function AdminCampusDetailContent(): React.ReactNode {
 
   const handleTabChange = (value: string): void => {
     localStorage.setItem(window.location.href + '_campus_tab', value);
+    navigate(`?campus_tab=${value}`);
     setActiveTab(value);
   };
 

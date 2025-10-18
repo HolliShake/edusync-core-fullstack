@@ -33,6 +33,20 @@ use OpenApi\Attributes as OA;
 )]
 
 #[OA\Schema(
+    schema: "GenerateSection",
+    title: "GenerateSection",
+    type: "object",
+    properties: [
+        new OA\Property(property: "curriculum_id", type: "integer"),
+        new OA\Property(property: "year_order", type: "integer"),
+        new OA\Property(property: "term_order", type: "integer"),
+        new OA\Property(property: "auto_post", type: "boolean", default: false),
+        new OA\Property(property: "number_of_section", type: "integer"),
+        new OA\Property(property: "school_year_id", type: "integer"),
+    ]
+)]
+
+#[OA\Schema(
     schema: "PaginatedSection",
     title:"PaginatedSection",
     type: "object",

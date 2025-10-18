@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCurriculumContext } from '@/context/curriculum.context';
-import { useGetCurriculumDetailPaginated } from '@rest/api';
+import { useGenerateSections, useGetCurriculumDetailPaginated } from '@rest/api';
 import type { Curriculum, GetCurriculumDetailsResponse200 } from '@rest/models';
 import {
   BookOpen,
@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import type React from 'react';
 import { useMemo } from 'react';
+import { toast } from 'sonner';
 import CurriculumTable, { type ScheduleGenerationData } from './table';
 
 const STATUS_COLORS = {
@@ -31,6 +32,8 @@ export default function CurriculumContent(): React.ReactNode {
   const curriculum = useCurriculumContext();
   const isLoading = useMemo(() => !curriculum, [curriculum]);
   const curriculumDetailModal = useModal<Curriculum>();
+
+  const { mutateAsync: generateSection } = useGenerateSections();
 
   const {
     data: curriculumDetailsResponse,
@@ -59,8 +62,23 @@ export default function CurriculumContent(): React.ReactNode {
     refetch();
   };
 
-  const handleGenerateSchedule = (data: ScheduleGenerationData) => {
-    console.log(data);
+  const handleGenerateSchedule = async (data: ScheduleGenerationData) => {
+    try {
+      await generateSection({
+        data: {
+          curriculum_id: curriculum?.id,
+          year_order: data.year,
+          term_order: data.term,
+          auto_post: data.autoPost,
+          number_of_section: data.numberOfSchedules,
+          school_year_id: data.schoolYearId,
+        },
+      });
+      toast.success('Sections generated successfully');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to generate sections');
+    }
   };
 
   if (isLoading) {

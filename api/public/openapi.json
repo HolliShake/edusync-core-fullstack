@@ -3412,6 +3412,61 @@
                     }
                 }
             }
+        },
+        "\/api\/Section\/generate": {
+            "post": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Generate sections for a curriculum and year",
+                "description": "Generate sections for a curriculum and year",
+                "operationId": "generateSections",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/GenerateSection"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sections generated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSectionsResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Curriculum not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -5448,6 +5503,31 @@
                     },
                     "is_posted": {
                         "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "GenerateSection": {
+                "title": "GenerateSection",
+                "properties": {
+                    "curriculum_id": {
+                        "type": "integer"
+                    },
+                    "year_order": {
+                        "type": "integer"
+                    },
+                    "term_order": {
+                        "type": "integer"
+                    },
+                    "auto_post": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "number_of_section": {
+                        "type": "integer"
+                    },
+                    "school_year_id": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"

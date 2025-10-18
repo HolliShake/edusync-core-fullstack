@@ -127,6 +127,7 @@ Route::controller(SectionController::class)->group(function() {
     Route::get('/Section', 'index');
     Route::get('/Section/{id}', 'show');
     Route::post('/Section', 'store');
+    Route::post('/Section/generate', 'generate');
     Route::put('/Section/{id}', 'update');
     Route::delete('/Section/{id}', 'destroy');
 });
