@@ -46,20 +46,18 @@ class SectionService extends GenericService implements ISectionService
 
         $curriculum_details = $this->curriculumDetailRepository->query()
             ->with('course')
-            ->whereHas('curriculum', function ($query) use ($curriculum_id) {
-                $query->where('id', $curriculum_id);
-            })
             ->where('curriculum_id', $curriculum_id)
             ->where('year_order', $year_order)
             ->where('term_order', $term_order)
             ->get()
             ->toArray();
 
-        // Get the highest existing section suffix for this curriculum and year
+        // Get the highest existing section suffix for this curriculum, year, term, and school year
         $existingSections = $this->repository->query()
             ->join('curriculum_detail', 'section.curriculum_detail_id', '=', 'curriculum_detail.id')
             ->where('curriculum_detail.curriculum_id', $curriculum_id)
             ->where('curriculum_detail.year_order', $year_order)
+            ->where('curriculum_detail.term_order', $term_order)
             ->where('section.school_year_id', $school_year_id)
             ->orderBy('section.section_name', 'desc')
             ->pluck('section.section_name')
@@ -71,7 +69,7 @@ class SectionService extends GenericService implements ISectionService
 
         if (!empty($existingSections)) {
             $lastSection = $existingSections[0];
-            // Extract suffix from last section name (e.g., "CS_1_sectionB2" -> "B2")
+            // Extract suffix from last section name (e.g., "CS_section_1B2" -> "B2")
             if (preg_match('/_section_\d+([A-Z])(\d*)$/', $lastSection, $matches)) {
                 $lastLetter = $matches[1];
                 $lastNumber = $matches[2] !== '' ? (int)$matches[2] : 1;
@@ -108,7 +106,7 @@ class SectionService extends GenericService implements ISectionService
 
                 $rand = Str::random(8);
 
-                array_push($sections, [
+                $sections[] = [
                     'curriculum_detail_id' => $curriculum_detail['id'],
                     'school_year_id' => $school_year_id,
                     'section_ref'    => $rand,
@@ -116,7 +114,7 @@ class SectionService extends GenericService implements ISectionService
                     'min_students'   => 20,
                     'max_students'   => 40,
                     'is_posted'      => $auto_post,
-                ]);
+                ];
             }
 
             // Increment suffix for next section

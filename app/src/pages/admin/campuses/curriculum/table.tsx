@@ -52,6 +52,7 @@ export default function CurriculumTable({
   const [autoPost, setAutoPost] = useState<{ [key: string]: boolean }>({});
 
   const { data: listOfSchoolYearsResponse } = useGetSchoolYearPaginated({
+    sort: '-start_date',
     page: 1,
     rows: Number.MAX_SAFE_INTEGER,
   });

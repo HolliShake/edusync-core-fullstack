@@ -21,7 +21,9 @@ return new class extends Migration
             // end_date
             $table->date('end_date');
             // school_year_id
-            $table->foreignId('school_year_id')->constrained('school_year');
+            $table->foreignId('school_year_id')
+                ->constrained('school_year')
+                ->onDelete('cascade');
         });
     }
 

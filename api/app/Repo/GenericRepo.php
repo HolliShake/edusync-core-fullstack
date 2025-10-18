@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 abstract class GenericRepo implements IGenericRepo
@@ -85,7 +86,9 @@ abstract class GenericRepo implements IGenericRepo
      */
     public function createMultiple(array $data): array
     {
-        return collect($data)->map(fn($item) => $this->model::create($item))->toArray();
+        return DB::transaction(function () use ($data) {
+            return collect($data)->map(fn($item) => $this->model::create($item))->toArray();
+        });
     }
 
     /**
