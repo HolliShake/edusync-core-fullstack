@@ -5,9 +5,9 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginatedCurriculumDetailResponse200Data } from './paginatedCurriculumDetailResponse200Data';
+import type { PaginatedCurriculumDetail } from './paginatedCurriculumDetail';
 
 export interface PaginatedCurriculumDetailResponse200 {
   success?: boolean;
-  data?: PaginatedCurriculumDetailResponse200Data;
+  data?: PaginatedCurriculumDetail;
 }

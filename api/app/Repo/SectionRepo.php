@@ -4,6 +4,8 @@ namespace App\Repo;
 
 use App\Interface\IRepo\ISectionRepo;
 use App\Models\Section;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 
 class SectionRepo extends GenericRepo implements ISectionRepo
 {
@@ -22,6 +24,8 @@ class SectionRepo extends GenericRepo implements ISectionRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('curriculumDetail.curriculum_id'),
+            AllowedFilter::exact('school_year_id'),
         ];
     }
 
@@ -32,8 +36,8 @@ class SectionRepo extends GenericRepo implements ISectionRepo
     protected function getAllowedSorts(): array
     {
         return [
-            'created_at',
-            'updated_at',
+            // 'created_at',
+            // 'updated_at',
             // Add other campus-specific sortable fields
         ];
     }
@@ -46,7 +50,9 @@ class SectionRepo extends GenericRepo implements ISectionRepo
     {
         return [
             // Add campus-specific relationships here
-            // Example: 'departments', 'buildings', 'students'
+            // Example: 'departments', 'buildings', 'students',
+            AllowedInclude::relationship('curriculumDetail'),
+            AllowedInclude::relationship('schoolYear'),
         ];
     }
 }

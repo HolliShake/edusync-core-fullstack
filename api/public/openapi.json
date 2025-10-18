@@ -3206,6 +3206,34 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[curriculumDetail.curriculum_id]",
+                        "in": "query",
+                        "description": "Filter by curriculum ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Paginate the results",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
                     }
                 ],
                 "responses": {
@@ -4747,17 +4775,7 @@
                         "example": true
                     },
                     "data": {
-                        "oneOf": [
-                            {
-                                "$ref": "#\/components\/schemas\/PaginatedCurriculum"
-                            },
-                            {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#\/components\/schemas\/Curriculum"
-                                }
-                            }
-                        ]
+                        "$ref": "#\/components\/schemas\/PaginatedCurriculum"
                     }
                 },
                 "type": "object"
@@ -4969,17 +4987,7 @@
                         "example": true
                     },
                     "data": {
-                        "oneOf": [
-                            {
-                                "$ref": "#\/components\/schemas\/PaginatedCurriculumDetail"
-                            },
-                            {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#\/components\/schemas\/CurriculumDetail"
-                                }
-                            }
-                        ]
+                        "$ref": "#\/components\/schemas\/PaginatedCurriculumDetail"
                     }
                 },
                 "type": "object"
@@ -5503,6 +5511,12 @@
                     },
                     "is_posted": {
                         "type": "boolean"
+                    },
+                    "curriculum_detail": {
+                        "$ref": "#\/components\/schemas\/CurriculumDetail"
+                    },
+                    "school_year": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
                     }
                 },
                 "type": "object"

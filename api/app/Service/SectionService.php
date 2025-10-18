@@ -91,6 +91,12 @@ class SectionService extends GenericService implements ISectionService
             $sectionSuffix = $suffix . ($number > 1 ? $number : '');
             $sectionName = $curriculum['curriculum_code']  . '_section_' . $year_order . $sectionSuffix;
 
+            $code = Str::random(8);
+
+            while ($this->repository->query()->where('section_code', $code)->exists()) {
+                $code = Str::random(8);
+            }
+
             foreach ($curriculum_details as $curriculum_detail) {
                 // Check if section already exists for this curriculum_detail and school_year
                 $existingSection = $this->repository->query()
@@ -109,7 +115,8 @@ class SectionService extends GenericService implements ISectionService
                 $sections[] = [
                     'curriculum_detail_id' => $curriculum_detail['id'],
                     'school_year_id' => $school_year_id,
-                    'section_ref'    => $rand,
+                    'section_ref'    => strtoupper($rand),
+                    'section_code'   => strtoupper($code),
                     'section_name'   => $sectionName,
                     'min_students'   => 20,
                     'max_students'   => 40,

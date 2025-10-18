@@ -47,6 +47,27 @@ class SectionController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[curriculumDetail.curriculum_id]",
+        in: "query",
+        description: "Filter by curriculum ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "Filter by school year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "paginate",
+        in: "query",
+        description: "Paginate the results",
+        required: false,
+        schema: new OA\Schema(type: "boolean", default: true)
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
@@ -57,7 +78,9 @@ class SectionController extends Controller
         $srch = $request->query("search", '');
         $page = $request->query("page", 0);
         $rows = $request->query("rows", 10);
-        return $this->ok($this->service->getAll(true, $page, $rows));
+        $paginate = filter_var($request->query('paginate', true), FILTER_VALIDATE_BOOLEAN);
+
+        return $this->ok($this->service->getAll($paginate, $page, $rows));
     }
 
     /**

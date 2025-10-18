@@ -5,6 +5,8 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { CurriculumDetail } from './curriculumDetail';
+import type { SchoolYear } from './schoolYear';
 
 export interface Section {
   readonly id?: number;
@@ -15,4 +17,6 @@ export interface Section {
   min_students: number;
   max_students: number;
   is_posted: boolean;
+  curriculum_detail?: CurriculumDetail;
+  school_year?: SchoolYear;
 }

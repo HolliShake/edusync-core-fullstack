@@ -64,10 +64,7 @@ use OpenApi\Attributes as OA;
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", oneOf: [
-            new OA\Schema(ref: "#/components/schemas/PaginatedCurriculum"),
-            new OA\Schema(type: "array", items: new OA\Items(ref: "#/components/schemas/Curriculum"))
-        ])
+        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedCurriculum")
     ]
 )]
 
@@ -151,7 +148,7 @@ class Curriculum extends Model
 
     /**
      * Get the academic program that owns the curriculum.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function getAcademicProgramAttribute()
@@ -161,17 +158,17 @@ class Curriculum extends Model
 
     /**
      * Get the academic term that owns the curriculum.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function getAcademicTermAttribute()
     {
         return $this->academicTerm()->first();
     }
-    
+
     /**
      * Get the academic program that owns the curriculum.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function academicProgram(): BelongsTo
@@ -181,7 +178,7 @@ class Curriculum extends Model
 
     /**
      * Get the academic term that owns the curriculum.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function academicTerm(): BelongsTo

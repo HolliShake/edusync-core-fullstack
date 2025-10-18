@@ -106,7 +106,7 @@ export default function AdminSchoolYear(): React.ReactNode {
       },
       {
         key: 'is_locked',
-        title: 'Locked',
+        title: 'AVAILABILITY',
         dataIndex: 'is_locked',
         render: (_value, row) => {
           // is_locked is always boolean!

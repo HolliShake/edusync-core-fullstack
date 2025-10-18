@@ -9,14 +9,18 @@ import AdminDashboard from '@/pages/admin/dashboard';
 import AdminProgramTypes from '@/pages/admin/program-type/page';
 import AdminAcademicCalendarPage from '@/pages/admin/school-year/academic-calendar/page';
 import AdminSchoolYear from '@/pages/admin/school-year/page';
+import AdminSections from '@/pages/admin/sections/page';
 import type { Route } from '@/types/types';
 import {
   BookIcon,
+  BookOpenIcon,
   BuildingIcon,
   CalendarIcon,
   ClockIcon,
+  FolderIcon,
   GraduationCapIcon,
   LayoutDashboardIcon,
+  LibraryIcon,
   SchoolIcon,
 } from 'lucide-react';
 
@@ -43,7 +47,7 @@ const ADMIN: Route[] = [
     title: 'Academic Calendar',
     path: '/admin/school-year/:schoolYearId',
     component: <AdminAcademicCalendarPage />,
-    icon: <BookIcon className="h-4 w-4" />,
+    icon: <BookOpenIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
   },
@@ -101,7 +105,7 @@ const ADMIN: Route[] = [
     title: 'Curriculum',
     path: '/admin/campuses/:campusId/colleges/:collegeId/programs/:programId/curriculum/:curriculumId',
     component: <AdminCurriculum />,
-    icon: <BookIcon className="h-4 w-4" />,
+    icon: <LibraryIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
   },
@@ -121,6 +125,16 @@ const ADMIN: Route[] = [
     path: '/admin/courses',
     component: <AdminCourses />,
     icon: <BookIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+  },
+  // Sections
+  {
+    key: 'admin.section',
+    title: 'Section',
+    path: '/admin/sections',
+    component: <AdminSections />,
+    icon: <FolderIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
   },

@@ -24,6 +24,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             // Field
             $table->string('section_ref')->unique();
+            $table->string('section_code'); // unique per section
             $table->string('section_name');
             $table->integer('min_students');
             $table->integer('max_students');

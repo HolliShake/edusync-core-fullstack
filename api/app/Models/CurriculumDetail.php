@@ -83,10 +83,7 @@ use OpenApi\Attributes as OA;
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", oneOf: [
-            new OA\Schema(ref: "#/components/schemas/PaginatedCurriculumDetail"),
-            new OA\Schema(type: "array", items: new OA\Items(ref: "#/components/schemas/CurriculumDetail"))
-        ])
+        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedCurriculumDetail")
     ]
 )]
 
@@ -163,7 +160,7 @@ class CurriculumDetail extends Model
 
     /**
      * Get the year label.
-     * 
+     *
      * @return string
      */
     public function getYearLabelAttribute(): string {
@@ -181,7 +178,7 @@ class CurriculumDetail extends Model
 
     /**
      * Get the term label.
-     * 
+     *
      * @return string
      */
     public function getTermLabelAttribute(): string {
@@ -201,7 +198,7 @@ class CurriculumDetail extends Model
 
     /**
      * Get the course that owns the curriculum detail.
-     * 
+     *
      * @return Course
      */
     public function getCourseAttribute(): Course {
@@ -210,7 +207,7 @@ class CurriculumDetail extends Model
 
     /**
      * Get the curriculum that owns the curriculum detail.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function curriculum(): BelongsTo
@@ -220,7 +217,7 @@ class CurriculumDetail extends Model
 
     /**
      * Get the course that owns the curriculum detail.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function course(): BelongsTo

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -14,6 +15,7 @@ use OpenApi\Attributes as OA;
         'curriculum_detail_id',
         'school_year_id',
         'section_ref',
+        'section_code',
         'section_name',
         'min_students',
         'max_students',
@@ -25,10 +27,14 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "curriculum_detail_id", type: "integer"),
         new OA\Property(property: "school_year_id", type: "integer"),
         new OA\Property(property: "section_ref", type: "string"),
+        new OA\Property(property: "section_code", type: "string"),
         new OA\Property(property: "section_name", type: "string"),
         new OA\Property(property: "min_students", type: "integer"),
         new OA\Property(property: "max_students", type: "integer"),
         new OA\Property(property: "is_posted", type: "boolean"),
+        // relationships
+        new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
     ]
 )]
 
@@ -124,9 +130,54 @@ class Section extends Model
         'curriculum_detail_id',
         'school_year_id',
         'section_ref',
+        'section_code',
         'section_name',
         'min_students',
         'max_students',
         'is_posted',
     ];
+
+    protected $appends = [
+        'curriculum_detail',
+    ];
+
+    /**
+     * Get the curriculum detail that owns the section.
+     *
+     * @return CurriculumDetail
+     */
+    public function getCurriculumDetailAttribute(): CurriculumDetail
+    {
+        return $this->curriculumDetail()->first();
+    }
+
+    /**
+     * Get the school year that owns the section.
+     *
+     * @return SchoolYear
+     */
+    public function getSchoolYearAttribute(): SchoolYear
+    {
+        return $this->schoolYear()->first();
+    }
+
+    /**
+     * Get the curriculum detail that owns the section.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function curriculumDetail(): BelongsTo
+    {
+        return $this->belongsTo(CurriculumDetail::class, 'curriculum_detail_id');
+    }
+
+    /**
+     * Get the school year that owns the section.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function schoolYear(): BelongsTo
+    {
+        return $this->belongsTo(SchoolYear::class, 'school_year_id');
+    }
 }

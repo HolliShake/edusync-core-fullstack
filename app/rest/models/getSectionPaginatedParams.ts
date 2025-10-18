@@ -19,4 +19,16 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
+/**
+ * Filter by curriculum ID
+ */
+'filter[curriculumDetail.curriculum_id]'?: number;
+/**
+ * Filter by school year ID
+ */
+'filter[school_year_id]'?: number;
+/**
+ * Paginate the results
+ */
+paginate?: boolean;
 };
