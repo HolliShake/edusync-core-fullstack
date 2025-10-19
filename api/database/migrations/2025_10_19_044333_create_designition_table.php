@@ -22,6 +22,8 @@ return new class extends Migration
                 $table->boolean('is_active')->default(true);
                 // Polymorphic
                 $table->morphs('designitionable'); // academic_program, college
+                // Unique
+                $table->unique(['user_id', 'designitionable_id', 'designitionable_type']);
             });
     }
 

@@ -6,17 +6,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AcademicCalendarController;
 use App\Http\Controllers\AcademicProgramController;
 use App\Http\Controllers\AcademicTermController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\CurriculumDetailController;
+use App\Http\Controllers\DesignitionController;
 use App\Http\Controllers\ProgramTypeController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -26,6 +29,13 @@ Route::get('/user', function (Request $request) {
 Route::get('/greet', function () {
     return 'Hello World';
 });
+
+Route::controller(AuthController::class)->group(function() {
+    Route::post('/Auth/login', 'login');
+    Route::middleware(['auth:sanctum'])->post('/Auth/logout', 'logout');
+    Route::middleware(['auth:sanctum'])->get('/Auth/session', 'session');
+});
+
 
 Route::controller(AcademicCalendarController::class)->group(function() {
     Route::get('/AcademicCalendar', 'index');
@@ -140,4 +150,23 @@ Route::controller(RequirementController::class)->group(function() {
     Route::post('/Requirement', 'store');
     Route::put('/Requirement/{id}', 'update');
     Route::delete('/Requirement/{id}', 'destroy');
+});
+
+Route::controller(UserController::class)->group(function() {
+    Route::get('/User', 'index');
+    Route::get('/User/{id}', 'show');
+    Route::post('/User', 'store');
+    Route::put('/User/{id}', 'update');
+    Route::delete('/User/{id}', 'destroy');
+});
+
+Route::controller(DesignitionController::class)->group(function() {
+    Route::get('/Designition', 'index');
+    Route::get('/Designition/{id}', 'show');
+    Route::post('/Designition', 'store');
+    Route::post('/Designition/create-program-chair', 'create_program_chair');
+    Route::post('/Designition/create-college-dean', 'create_college_dean');
+    Route::post('/Designition/create-campus-registrar', 'create_campus_registrar');
+    Route::put('/Designition/{id}', 'update');
+    Route::delete('/Designition/{id}', 'destroy');
 });

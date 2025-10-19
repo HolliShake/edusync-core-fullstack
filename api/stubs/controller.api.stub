@@ -53,6 +53,16 @@ class {{ class }} extends Controller
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/Paginated{{ class }}Response200")
     )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
@@ -81,6 +91,16 @@ class {{ class }} extends Controller
         response: 200,
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/Get{{ class }}Response200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -113,6 +133,16 @@ class {{ class }} extends Controller
         response: 200,
         description: "{{ class }} created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/Create{{ class }}Response200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -169,6 +199,16 @@ class {{ class }} extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/Update{{ class }}Response200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "{{ class }} not found"
     )]
@@ -223,6 +263,16 @@ class {{ class }} extends Controller
         response: 204,
         description: "{{ class }} deleted successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/Delete{{ class }}Response200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,

@@ -61,14 +61,24 @@ class SchoolYearController extends Controller
         )
     )]
     #[OA\Response(
-        response: 422,
-        description: "Validation error",
-        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
-    )]
-    #[OA\Response(
         response: 200,
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/PaginatedSchoolYearResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
     )]
     public function index(Request $request)
     {
@@ -98,6 +108,16 @@ class SchoolYearController extends Controller
         response: 200,
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/GetSchoolYearResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -130,6 +150,16 @@ class SchoolYearController extends Controller
         response: 200,
         description: "SchoolYear created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/CreateSchoolYearResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -220,6 +250,16 @@ class SchoolYearController extends Controller
         response: 200,
         description: "SchoolYear updated successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/UpdateSchoolYearResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -318,6 +358,16 @@ class SchoolYearController extends Controller
         response: 204,
         description: "SchoolYear deleted successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/DeleteSchoolYearResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,

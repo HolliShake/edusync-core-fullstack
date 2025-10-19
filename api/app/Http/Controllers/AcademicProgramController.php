@@ -66,6 +66,16 @@ class AcademicProgramController extends Controller
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAcademicProgramResponse200")
     )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
@@ -94,6 +104,16 @@ class AcademicProgramController extends Controller
         response: 200,
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/GetAcademicProgramResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -126,6 +146,16 @@ class AcademicProgramController extends Controller
         response: 200,
         description: "AcademicProgram created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/CreateAcademicProgramResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -186,6 +216,16 @@ class AcademicProgramController extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/UpdateAcademicProgramResponse200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "AcademicProgram not found"
     )]
@@ -244,6 +284,16 @@ class AcademicProgramController extends Controller
         response: 204,
         description: "AcademicProgram deleted successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/DeleteAcademicProgramResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,

@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth.context';
 import { cn } from '@/lib/utils';
 import ROUTES from '@/routes';
 import type { Route } from '@/types/types';
@@ -18,6 +19,7 @@ export default function SideBar({
 }: SideBarProps): React.ReactNode {
   const [expandedRoutes, setExpandedRoutes] = useState<Set<number>>(new Set());
   const location = useLocation();
+  const user = useAuth();
 
   const isActiveRoute = useCallback(
     (routePath: string) => {
@@ -27,8 +29,10 @@ export default function SideBar({
   );
 
   const computedRoutes = useMemo(() => {
-    return ROUTES.filter((route) => route.sidebar === true || route.sidebar === undefined);
-  }, []);
+    return ROUTES.filter((route) => route.sidebar === true || route.sidebar === undefined).filter(
+      (route) => (route.roles ?? []).some((role) => user?.session?.roles?.some((r) => r === role))
+    );
+  }, [user]);
 
   const toggleRouteExpansion = (index: number) => {
     setExpandedRoutes((prev) => {
@@ -134,11 +138,16 @@ export default function SideBar({
                 key={index}
                 className={cn(
                   'px-2.5 py-2 transition-all duration-300 ease-in-out pointer-events-none select-none',
-                  isCollapsed && 'lg:max-w-0 lg:opacity-0 lg:overflow-hidden lg:px-0 lg:py-0'
+                  isCollapsed && 'lg:px-1.5 lg:py-2 lg:flex lg:justify-center'
                 )}
               >
-                <span className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider">
-                  {route.title}
+                <span
+                  className={cn(
+                    'text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider',
+                    isCollapsed && 'lg:text-center'
+                  )}
+                >
+                  {isCollapsed ? route.title.charAt(0) : route.title}
                 </span>
               </div>
             );

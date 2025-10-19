@@ -73,6 +73,16 @@ class SectionController extends Controller
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/PaginatedSectionResponse200")
     )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
@@ -105,6 +115,16 @@ class SectionController extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/GetSectionResponse200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "Section not found"
     )]
@@ -135,6 +155,16 @@ class SectionController extends Controller
         response: 200,
         description: "Section created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/CreateSectionResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -180,6 +210,16 @@ class SectionController extends Controller
         response: 200,
         description: "Sections generated successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/GetSectionsResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -245,6 +285,16 @@ class SectionController extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/UpdateSectionResponse200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "Section not found"
     )]
@@ -301,6 +351,16 @@ class SectionController extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/DeleteSectionResponse200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "Section not found"
     )]
@@ -338,6 +398,16 @@ class SectionController extends Controller
         response: 204,
         description: "Section deleted successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/DeleteSectionResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,

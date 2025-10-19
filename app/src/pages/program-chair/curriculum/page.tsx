@@ -1,24 +1,56 @@
+import { useConfirm } from '@/components/confirm.provider';
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
+import CurriculumModal from '@/components/program-chair-only/curriculum/curriculum.modal';
 import { Button } from '@/components/ui/button';
-import { useGetCurriculumPaginated } from '@rest/api';
+import { useAuth } from '@/context/auth.context';
+import { useDeleteCurriculum, useGetCurriculumPaginated } from '@rest/api';
 import type { Curriculum } from '@rest/models';
 import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function ProgramChairCurriculum(): React.ReactNode {
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
+  const { session } = useAuth();
+  const confirm = useConfirm();
 
-  const { data: curriculums } = useGetCurriculumPaginated({
-    page,
-    rows,
-  });
+  const {
+    data: curriculums,
+    isLoading,
+    refetch,
+  } = useGetCurriculumPaginated(
+    {
+      'filter[academic_program_id]': session?.active_academic_program ?? 0,
+      page,
+      rows,
+    },
+    { query: { enabled: !!session?.active_academic_program } }
+  );
 
   const controller = useModal<Curriculum>();
+  const { mutateAsync: deleteCurriculum } = useDeleteCurriculum();
+
+  const handleModalSubmit = () => {
+    refetch();
+  };
+
+  const handleDelete = async (curriculum: Curriculum) => {
+    confirm.confirm(async () => {
+      try {
+        await deleteCurriculum({ id: curriculum.id ?? 0 });
+        toast.success('Curriculum deleted successfully');
+        refetch();
+      } catch (error) {
+        toast.error('Failed to delete curriculum');
+        console.error('Delete error:', error);
+      }
+    });
+  };
 
   const columns = useMemo<TableColumn<Curriculum>[]>(
     () => [
@@ -67,7 +99,7 @@ export default function ProgramChairCurriculum(): React.ReactNode {
                 icon: <DeleteIcon />,
                 variant: 'destructive',
                 onClick: () => {
-                  console.log('Delete', row);
+                  handleDelete(row);
                 },
               },
             ]}
@@ -97,7 +129,9 @@ export default function ProgramChairCurriculum(): React.ReactNode {
         pagination={paginationMeta}
         onPageChange={setPage}
         showPagination={true}
+        loading={isLoading}
       />
+      <CurriculumModal controller={controller} onSubmit={handleModalSubmit} />
     </TitledPage>
   );
 }

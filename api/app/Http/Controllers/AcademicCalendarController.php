@@ -69,6 +69,16 @@ class AcademicCalendarController extends Controller
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAcademicCalendarResponse200")
     )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
@@ -97,6 +107,16 @@ class AcademicCalendarController extends Controller
         response: 200,
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/GetAcademicCalendarResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -129,6 +149,16 @@ class AcademicCalendarController extends Controller
         response: 200,
         description: "AcademicCalendar created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/CreateAcademicCalendarResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -214,6 +244,16 @@ class AcademicCalendarController extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/UpdateAcademicCalendarResponse200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "AcademicCalendar not found"
     )]
@@ -297,6 +337,16 @@ class AcademicCalendarController extends Controller
         response: 204,
         description: "AcademicCalendar deleted successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/DeleteAcademicCalendarResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,

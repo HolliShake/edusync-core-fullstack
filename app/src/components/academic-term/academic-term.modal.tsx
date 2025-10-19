@@ -55,7 +55,7 @@ export default function AcademicTermModal({ controller, onSubmit }: AcademicTerm
         name: data.name,
         description: data.description ?? null,
         number_of_terms: Number(data.number_of_terms),
-        suffix: '',
+        suffix: data.suffix,
       };
 
       if (isEdit) {
@@ -130,6 +130,12 @@ export default function AcademicTermModal({ controller, onSubmit }: AcademicTerm
           {errors.number_of_terms && (
             <p className="text-sm text-destructive">{errors.number_of_terms.message}</p>
           )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="suffix">Suffix</Label>
+          <Input id="suffix" placeholder="Enter suffix" {...register('suffix')} />
+          {errors.suffix && <p className="text-sm text-destructive">{errors.suffix.message}</p>}
         </div>
 
         <div className="flex justify-end space-x-2 pt-4">

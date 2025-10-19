@@ -66,6 +66,16 @@ class CurriculumDetailController extends Controller
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/PaginatedCurriculumDetailResponse200")
     )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
     public function index(Request $request)
     {
         $srch = $request->query("search", '');
@@ -95,6 +105,16 @@ class CurriculumDetailController extends Controller
         response: 200,
         description: "Successful operation",
         content: new OA\JsonContent(ref: "#/components/schemas/GetCurriculumDetailResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,
@@ -127,6 +147,16 @@ class CurriculumDetailController extends Controller
         response: 200,
         description: "CurriculumDetail created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/CreateCurriculumDetailResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -175,6 +205,16 @@ class CurriculumDetailController extends Controller
         response: 200,
         description: "CurriculumDetail created successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/GetCurriculumDetailsResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -236,6 +276,16 @@ class CurriculumDetailController extends Controller
         content: new OA\JsonContent(ref: "#/components/schemas/UpdateCurriculumDetailResponse200")
     )]
     #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
         response: 404,
         description: "CurriculumDetail not found"
     )]
@@ -290,6 +340,16 @@ class CurriculumDetailController extends Controller
         response: 204,
         description: "CurriculumDetail deleted successfully",
         content: new OA\JsonContent(ref: "#/components/schemas/DeleteCurriculumDetailResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 404,

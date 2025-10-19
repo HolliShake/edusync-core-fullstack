@@ -9,14 +9,32 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { useLogout } from '@rest/api';
 import { LogOut, Menu, Search, User } from 'lucide-react';
 import type React from 'react';
+import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 type HeaderProps = {
   setIsSidebarOpen?: (isOpen: boolean) => void;
 };
 
 export default function Header({ setIsSidebarOpen = undefined }: HeaderProps): React.ReactNode {
+  const navigate = useNavigate();
+
+  const { mutateAsync: logout } = useLogout();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'An error occurred while logging out');
+    } finally {
+      localStorage.removeItem('token');
+      navigate('/auth/login');
+    }
+  };
+
   return (
     <header className="relative min-h-[64px] flex items-center px-6 backdrop-blur-xl border-b border-border bg-sidebar">
       <div className="relative flex items-center justify-between w-full">
@@ -62,7 +80,7 @@ export default function Header({ setIsSidebarOpen = undefined }: HeaderProps): R
                 <span>Profile</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onSelect={handleLogout} onClick={(e) => e.stopPropagation()}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Logout</span>
               </DropdownMenuItem>

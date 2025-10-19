@@ -52,6 +52,11 @@ export default function AdminAcademicTerm(): React.ReactNode {
         dataIndex: 'number_of_terms',
       },
       {
+        key: 'suffix',
+        title: 'Suffix',
+        dataIndex: 'suffix',
+      },
+      {
         key: 'actions',
         title: 'Actions',
         dataIndex: 'actions',

@@ -28,6 +28,7 @@ import type {
   AcademicCalendar,
   AcademicProgram,
   AcademicTerm,
+  AuthCredential,
   Building,
   Campus,
   College,
@@ -41,11 +42,13 @@ import type {
   CreateCourseResponse200,
   CreateCurriculumDetailResponse200,
   CreateCurriculumResponse200,
+  CreateDesignitionResponse200,
   CreateProgramTypeResponse200,
   CreateRequirementResponse200,
   CreateRoomResponse200,
   CreateSchoolYearResponse200,
   CreateSectionResponse200,
+  CreateUserResponse200,
   Curriculum,
   CurriculumDetail,
   DeleteAcademicCalendarResponse200,
@@ -57,11 +60,15 @@ import type {
   DeleteCourseResponse200,
   DeleteCurriculumDetailResponse200,
   DeleteCurriculumResponse200,
+  DeleteDesignitionResponse200,
   DeleteProgramTypeResponse200,
   DeleteRequirementResponse200,
   DeleteRoomResponse200,
   DeleteSchoolYearResponse200,
   DeleteSectionResponse200,
+  DeleteUserResponse200,
+  Designition,
+  ForbiddenResponse,
   GenerateSection,
   GetAcademicCalendarPaginatedParams,
   GetAcademicCalendarResponse200,
@@ -82,6 +89,8 @@ import type {
   GetCurriculumDetailsResponse200,
   GetCurriculumPaginatedParams,
   GetCurriculumResponse200,
+  GetDesignitionPaginatedParams,
+  GetDesignitionResponse200,
   GetProgramTypePaginatedParams,
   GetProgramTypeResponse200,
   GetRequirementPaginatedParams,
@@ -93,7 +102,10 @@ import type {
   GetSectionPaginatedParams,
   GetSectionResponse200,
   GetSectionsResponse200,
+  GetUserPaginatedParams,
+  GetUserResponse200,
   InternalServerErrorResponse,
+  LoginResponse200,
   MultipleCurriculumDetail,
   PaginatedAcademicCalendarResponse200,
   PaginatedAcademicProgramResponse200,
@@ -104,16 +116,22 @@ import type {
   PaginatedCourseResponse200,
   PaginatedCurriculumDetailResponse200,
   PaginatedCurriculumResponse200,
+  PaginatedDesignitionResponse200,
   PaginatedProgramTypeResponse200,
   PaginatedRequirementResponse200,
   PaginatedRoomResponse200,
   PaginatedSchoolYearResponse200,
   PaginatedSectionResponse200,
+  PaginatedUserResponse200,
   ProgramType,
   Requirement,
   Room,
   SchoolYear,
   Section,
+  SessionResponse200,
+  SuccessResponse,
+  UnauthenticatedResponse,
+  UnauthorizedResponse,
   UpdateAcademicCalendarResponse200,
   UpdateAcademicProgramResponse200,
   UpdateAcademicTermResponse200,
@@ -123,11 +141,14 @@ import type {
   UpdateCourseResponse200,
   UpdateCurriculumDetailResponse200,
   UpdateCurriculumResponse200,
+  UpdateDesignitionResponse200,
   UpdateProgramTypeResponse200,
   UpdateRequirementResponse200,
   UpdateRoomResponse200,
   UpdateSchoolYearResponse200,
   UpdateSectionResponse200,
+  UpdateUserResponse200,
+  User,
   ValidationErrorResponse
 } from './models';
 
@@ -182,7 +203,7 @@ export const getGetAcademicCalendarPaginatedQueryKey = (params?: GetAcademicCale
     }
 
     
-export const getGetAcademicCalendarPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
+export const getGetAcademicCalendarPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -201,10 +222,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetAcademicCalendarPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>>
-export type GetAcademicCalendarPaginatedQueryError = unknown
+export type GetAcademicCalendarPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetAcademicCalendarPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicCalendarPaginated>>,
@@ -214,7 +235,7 @@ export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeo
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicCalendarPaginated>>,
@@ -224,7 +245,7 @@ export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeo
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -232,7 +253,7 @@ export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeo
  * @summary Get paginated list of AcademicCalendar
  */
 
-export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = unknown>(
+export function useGetAcademicCalendarPaginated<TData = Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicCalendarPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -269,7 +290,7 @@ export const createAcademicCalendar = (
   
 
 
-export const getCreateAcademicCalendarMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateAcademicCalendarMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicCalendar>>, TError,{data: NonReadonly<AcademicCalendar>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createAcademicCalendar>>, TError,{data: NonReadonly<AcademicCalendar>}, TContext> => {
 
@@ -296,12 +317,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateAcademicCalendarMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicCalendar>>>
     export type CreateAcademicCalendarMutationBody = NonReadonly<AcademicCalendar>
-    export type CreateAcademicCalendarMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateAcademicCalendarMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new AcademicCalendar
  */
-export const useCreateAcademicCalendar = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateAcademicCalendar = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicCalendar>>, TError,{data: NonReadonly<AcademicCalendar>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createAcademicCalendar>>,
@@ -337,7 +358,7 @@ export const getGetAcademicCalendarByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetAcademicCalendarByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
+export const getGetAcademicCalendarByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -356,10 +377,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetAcademicCalendarByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicCalendarById>>>
-export type GetAcademicCalendarByIdQueryError = null
+export type GetAcademicCalendarByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicCalendarById>>,
@@ -369,7 +390,7 @@ export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicCalendarById>>,
@@ -379,7 +400,7 @@ export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -387,7 +408,7 @@ export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof get
  * @summary Get a specific AcademicCalendar
  */
 
-export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = null>(
+export function useGetAcademicCalendarById<TData = Awaited<ReturnType<typeof getAcademicCalendarById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicCalendarById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -424,7 +445,7 @@ export const updateAcademicCalendar = (
   
 
 
-export const getUpdateAcademicCalendarMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateAcademicCalendarMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendar>>, TError,{id: number;data: NonReadonly<AcademicCalendar>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendar>>, TError,{id: number;data: NonReadonly<AcademicCalendar>}, TContext> => {
 
@@ -451,12 +472,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateAcademicCalendarMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicCalendar>>>
     export type UpdateAcademicCalendarMutationBody = NonReadonly<AcademicCalendar>
-    export type UpdateAcademicCalendarMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateAcademicCalendarMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a AcademicCalendar
  */
-export const useUpdateAcademicCalendar = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateAcademicCalendar = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendar>>, TError,{id: number;data: NonReadonly<AcademicCalendar>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateAcademicCalendar>>,
@@ -487,7 +508,7 @@ export const deleteAcademicCalendar = (
   
 
 
-export const getDeleteAcademicCalendarMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteAcademicCalendarMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicCalendar>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicCalendar>>, TError,{id: number}, TContext> => {
 
@@ -514,12 +535,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteAcademicCalendarMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicCalendar>>>
     
-    export type DeleteAcademicCalendarMutationError = null | InternalServerErrorResponse
+    export type DeleteAcademicCalendarMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a AcademicCalendar
  */
-export const useDeleteAcademicCalendar = <TError = null | InternalServerErrorResponse,
+export const useDeleteAcademicCalendar = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicCalendar>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteAcademicCalendar>>,
@@ -556,7 +577,7 @@ export const getGetAcademicProgramPaginatedQueryKey = (params?: GetAcademicProgr
     }
 
     
-export const getGetAcademicProgramPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
+export const getGetAcademicProgramPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -575,10 +596,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetAcademicProgramPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicProgramPaginated>>>
-export type GetAcademicProgramPaginatedQueryError = unknown
+export type GetAcademicProgramPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetAcademicProgramPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicProgramPaginated>>,
@@ -588,7 +609,7 @@ export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicProgramPaginated>>,
@@ -598,7 +619,7 @@ export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -606,7 +627,7 @@ export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof
  * @summary Get paginated list of AcademicProgram
  */
 
-export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = unknown>(
+export function useGetAcademicProgramPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicProgramPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -645,7 +666,7 @@ export const getGetAcademicProgramByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetAcademicProgramByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
+export const getGetAcademicProgramByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -664,10 +685,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetAcademicProgramByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicProgramById>>>
-export type GetAcademicProgramByIdQueryError = null
+export type GetAcademicProgramByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicProgramById>>,
@@ -677,7 +698,7 @@ export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getA
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicProgramById>>,
@@ -687,7 +708,7 @@ export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getA
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -695,7 +716,7 @@ export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getA
  * @summary Get a specific AcademicProgram
  */
 
-export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = null>(
+export function useGetAcademicProgramById<TData = Awaited<ReturnType<typeof getAcademicProgramById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -732,7 +753,7 @@ export const createAcademicProgram = (
   
 
 
-export const getCreateAcademicProgramMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateAcademicProgramMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgram>>, TError,{data: AcademicProgram}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgram>>, TError,{data: AcademicProgram}, TContext> => {
 
@@ -759,12 +780,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateAcademicProgramMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicProgram>>>
     export type CreateAcademicProgramMutationBody = AcademicProgram
-    export type CreateAcademicProgramMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateAcademicProgramMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new AcademicProgram
  */
-export const useCreateAcademicProgram = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateAcademicProgram = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgram>>, TError,{data: AcademicProgram}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createAcademicProgram>>,
@@ -798,7 +819,7 @@ export const updateAcademicProgram = (
   
 
 
-export const getUpdateAcademicProgramMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateAcademicProgramMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgram>>, TError,{id: number;data: AcademicProgram}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgram>>, TError,{id: number;data: AcademicProgram}, TContext> => {
 
@@ -825,12 +846,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateAcademicProgramMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicProgram>>>
     export type UpdateAcademicProgramMutationBody = AcademicProgram
-    export type UpdateAcademicProgramMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateAcademicProgramMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a AcademicProgram
  */
-export const useUpdateAcademicProgram = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateAcademicProgram = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgram>>, TError,{id: number;data: AcademicProgram}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateAcademicProgram>>,
@@ -861,7 +882,7 @@ export const deleteAcademicProgram = (
   
 
 
-export const getDeleteAcademicProgramMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteAcademicProgramMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgram>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgram>>, TError,{id: number}, TContext> => {
 
@@ -888,12 +909,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteAcademicProgramMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicProgram>>>
     
-    export type DeleteAcademicProgramMutationError = null | InternalServerErrorResponse
+    export type DeleteAcademicProgramMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a AcademicProgram
  */
-export const useDeleteAcademicProgram = <TError = null | InternalServerErrorResponse,
+export const useDeleteAcademicProgram = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgram>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteAcademicProgram>>,
@@ -930,7 +951,7 @@ export const getGetAcademicTermPaginatedQueryKey = (params?: GetAcademicTermPagi
     }
 
     
-export const getGetAcademicTermPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
+export const getGetAcademicTermPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -949,10 +970,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetAcademicTermPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicTermPaginated>>>
-export type GetAcademicTermPaginatedQueryError = unknown
+export type GetAcademicTermPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetAcademicTermPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicTermPaginated>>,
@@ -962,7 +983,7 @@ export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof ge
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicTermPaginated>>,
@@ -972,7 +993,7 @@ export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof ge
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -980,7 +1001,7 @@ export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof ge
  * @summary Get paginated list of AcademicTerm
  */
 
-export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = unknown>(
+export function useGetAcademicTermPaginated<TData = Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetAcademicTermPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1017,7 +1038,7 @@ export const createAcademicTerm = (
   
 
 
-export const getCreateAcademicTermMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateAcademicTermMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicTerm>>, TError,{data: NonReadonly<AcademicTerm>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createAcademicTerm>>, TError,{data: NonReadonly<AcademicTerm>}, TContext> => {
 
@@ -1044,12 +1065,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateAcademicTermMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicTerm>>>
     export type CreateAcademicTermMutationBody = NonReadonly<AcademicTerm>
-    export type CreateAcademicTermMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateAcademicTermMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new AcademicTerm
  */
-export const useCreateAcademicTerm = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateAcademicTerm = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicTerm>>, TError,{data: NonReadonly<AcademicTerm>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createAcademicTerm>>,
@@ -1085,7 +1106,7 @@ export const getGetAcademicTermByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetAcademicTermByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
+export const getGetAcademicTermByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1104,10 +1125,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetAcademicTermByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicTermById>>>
-export type GetAcademicTermByIdQueryError = null
+export type GetAcademicTermByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicTermById>>,
@@ -1117,7 +1138,7 @@ export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcad
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAcademicTermById>>,
@@ -1127,7 +1148,7 @@ export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcad
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1135,7 +1156,7 @@ export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcad
  * @summary Get a specific AcademicTerm
  */
 
-export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = null>(
+export function useGetAcademicTermById<TData = Awaited<ReturnType<typeof getAcademicTermById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicTermById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1172,7 +1193,7 @@ export const updateAcademicTerm = (
   
 
 
-export const getUpdateAcademicTermMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateAcademicTermMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicTerm>>, TError,{id: number;data: NonReadonly<AcademicTerm>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicTerm>>, TError,{id: number;data: NonReadonly<AcademicTerm>}, TContext> => {
 
@@ -1199,12 +1220,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateAcademicTermMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicTerm>>>
     export type UpdateAcademicTermMutationBody = NonReadonly<AcademicTerm>
-    export type UpdateAcademicTermMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateAcademicTermMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a AcademicTerm
  */
-export const useUpdateAcademicTerm = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateAcademicTerm = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicTerm>>, TError,{id: number;data: NonReadonly<AcademicTerm>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateAcademicTerm>>,
@@ -1235,7 +1256,7 @@ export const deleteAcademicTerm = (
   
 
 
-export const getDeleteAcademicTermMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteAcademicTermMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicTerm>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicTerm>>, TError,{id: number}, TContext> => {
 
@@ -1262,12 +1283,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteAcademicTermMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicTerm>>>
     
-    export type DeleteAcademicTermMutationError = null | InternalServerErrorResponse
+    export type DeleteAcademicTermMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a AcademicTerm
  */
-export const useDeleteAcademicTerm = <TError = null | InternalServerErrorResponse,
+export const useDeleteAcademicTerm = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicTerm>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteAcademicTerm>>,
@@ -1281,6 +1302,224 @@ export const useDeleteAcademicTerm = <TError = null | InternalServerErrorRespons
       return useMutation(mutationOptions , queryClient);
     }
     
+/**
+ * Login
+ * @summary Login
+ */
+export const login = (
+    authCredential: AuthCredential,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<LoginResponse200>(
+      {url: `/api/Auth/login`, method: 'POST',
+      data: authCredential, signal
+    },
+      );
+    }
+  
+
+
+export const getLoginMutationOptions = <TError = UnauthenticatedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: AuthCredential}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: AuthCredential}, TContext> => {
+
+const mutationKey = ['login'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: AuthCredential}> = (props) => {
+          const {data} = props ?? {};
+
+          return  login(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
+    export type LoginMutationBody = AuthCredential
+    export type LoginMutationError = UnauthenticatedResponse
+
+    /**
+ * @summary Login
+ */
+export const useLogin = <TError = UnauthenticatedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: AuthCredential}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof login>>,
+        TError,
+        {data: AuthCredential},
+        TContext
+      > => {
+
+      const mutationOptions = getLoginMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Logout
+ * @summary Logout
+ */
+export const logout = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<SuccessResponse>(
+      {url: `/api/Auth/logout`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getLogoutMutationOptions = <TError = UnauthenticatedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext> => {
+
+const mutationKey = ['logout'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout>>, void> = () => {
+          
+
+          return  logout()
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LogoutMutationResult = NonNullable<Awaited<ReturnType<typeof logout>>>
+    
+    export type LogoutMutationError = UnauthenticatedResponse
+
+    /**
+ * @summary Logout
+ */
+export const useLogout = <TError = UnauthenticatedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof logout>>,
+        TError,
+        void,
+        TContext
+      > => {
+
+      const mutationOptions = getLogoutMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Get session
+ * @summary Get session
+ */
+export const getSession = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<SessionResponse200>(
+      {url: `/api/Auth/session`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetSessionQueryKey = () => {
+    return [`/api/Auth/session`] as const;
+    }
+
+    
+export const getGetSessionQueryOptions = <TData = Awaited<ReturnType<typeof getSession>>, TError = UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSessionQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+export type GetSessionQueryError = UnauthorizedResponse
+
+
+export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = UnauthorizedResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSession>>,
+          TError,
+          Awaited<ReturnType<typeof getSession>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = UnauthorizedResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSession>>,
+          TError,
+          Awaited<ReturnType<typeof getSession>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = UnauthorizedResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get session
+ */
+
+export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = UnauthorizedResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSessionQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 /**
  * Retrieve a paginated list of Building with optional search
  * @summary Get paginated list of Building
@@ -1304,7 +1543,7 @@ export const getGetBuildingPaginatedQueryKey = (params?: GetBuildingPaginatedPar
     }
 
     
-export const getGetBuildingPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = unknown>(params?: GetBuildingPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingPaginated>>, TError, TData>>, }
+export const getGetBuildingPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetBuildingPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1323,10 +1562,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetBuildingPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getBuildingPaginated>>>
-export type GetBuildingPaginatedQueryError = unknown
+export type GetBuildingPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = unknown>(
+export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetBuildingPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBuildingPaginated>>,
@@ -1336,7 +1575,7 @@ export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBui
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = unknown>(
+export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetBuildingPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBuildingPaginated>>,
@@ -1346,7 +1585,7 @@ export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBui
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = unknown>(
+export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetBuildingPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1354,7 +1593,7 @@ export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBui
  * @summary Get paginated list of Building
  */
 
-export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = unknown>(
+export function useGetBuildingPaginated<TData = Awaited<ReturnType<typeof getBuildingPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetBuildingPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1393,7 +1632,7 @@ export const getGetBuildingByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetBuildingByIdQueryOptions = <TData = Awaited<ReturnType<typeof getBuildingById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingById>>, TError, TData>>, }
+export const getGetBuildingByIdQueryOptions = <TData = Awaited<ReturnType<typeof getBuildingById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1412,10 +1651,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetBuildingByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getBuildingById>>>
-export type GetBuildingByIdQueryError = null
+export type GetBuildingByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = null>(
+export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBuildingById>>,
@@ -1425,7 +1664,7 @@ export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuilding
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = null>(
+export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBuildingById>>,
@@ -1435,7 +1674,7 @@ export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuilding
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = null>(
+export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1443,7 +1682,7 @@ export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuilding
  * @summary Get a specific Building
  */
 
-export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = null>(
+export function useGetBuildingById<TData = Awaited<ReturnType<typeof getBuildingById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBuildingById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1480,7 +1719,7 @@ export const createBuilding = (
   
 
 
-export const getCreateBuildingMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateBuildingMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBuilding>>, TError,{data: Building}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createBuilding>>, TError,{data: Building}, TContext> => {
 
@@ -1507,12 +1746,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateBuildingMutationResult = NonNullable<Awaited<ReturnType<typeof createBuilding>>>
     export type CreateBuildingMutationBody = Building
-    export type CreateBuildingMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateBuildingMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Building
  */
-export const useCreateBuilding = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateBuilding = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createBuilding>>, TError,{data: Building}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createBuilding>>,
@@ -1546,7 +1785,7 @@ export const updateBuilding = (
   
 
 
-export const getUpdateBuildingMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateBuildingMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBuilding>>, TError,{id: number;data: Building}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateBuilding>>, TError,{id: number;data: Building}, TContext> => {
 
@@ -1573,12 +1812,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateBuildingMutationResult = NonNullable<Awaited<ReturnType<typeof updateBuilding>>>
     export type UpdateBuildingMutationBody = Building
-    export type UpdateBuildingMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateBuildingMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Building
  */
-export const useUpdateBuilding = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateBuilding = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateBuilding>>, TError,{id: number;data: Building}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateBuilding>>,
@@ -1609,7 +1848,7 @@ export const deleteBuilding = (
   
 
 
-export const getDeleteBuildingMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteBuildingMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBuilding>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteBuilding>>, TError,{id: number}, TContext> => {
 
@@ -1636,12 +1875,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteBuildingMutationResult = NonNullable<Awaited<ReturnType<typeof deleteBuilding>>>
     
-    export type DeleteBuildingMutationError = null | InternalServerErrorResponse
+    export type DeleteBuildingMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Building
  */
-export const useDeleteBuilding = <TError = null | InternalServerErrorResponse,
+export const useDeleteBuilding = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteBuilding>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteBuilding>>,
@@ -1678,7 +1917,7 @@ export const getGetCampusPaginatedQueryKey = (params?: GetCampusPaginatedParams,
     }
 
     
-export const getGetCampusPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = unknown>(params?: GetCampusPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusPaginated>>, TError, TData>>, }
+export const getGetCampusPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetCampusPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1697,10 +1936,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCampusPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCampusPaginated>>>
-export type GetCampusPaginatedQueryError = unknown
+export type GetCampusPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = unknown>(
+export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetCampusPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCampusPaginated>>,
@@ -1710,7 +1949,7 @@ export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampu
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = unknown>(
+export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCampusPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCampusPaginated>>,
@@ -1720,7 +1959,7 @@ export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampu
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = unknown>(
+export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCampusPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1728,7 +1967,7 @@ export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampu
  * @summary Get paginated list of Campus
  */
 
-export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = unknown>(
+export function useGetCampusPaginated<TData = Awaited<ReturnType<typeof getCampusPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCampusPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1767,7 +2006,7 @@ export const getGetCampusByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetCampusByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCampusById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusById>>, TError, TData>>, }
+export const getGetCampusByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCampusById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -1786,10 +2025,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCampusByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCampusById>>>
-export type GetCampusByIdQueryError = null
+export type GetCampusByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = null>(
+export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCampusById>>,
@@ -1799,7 +2038,7 @@ export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = null>(
+export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCampusById>>,
@@ -1809,7 +2048,7 @@ export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = null>(
+export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -1817,7 +2056,7 @@ export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById
  * @summary Get a specific Campus
  */
 
-export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = null>(
+export function useGetCampusById<TData = Awaited<ReturnType<typeof getCampusById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCampusById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -1854,7 +2093,7 @@ export const createCampus = (
   
 
 
-export const getCreateCampusMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateCampusMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCampus>>, TError,{data: Campus}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createCampus>>, TError,{data: Campus}, TContext> => {
 
@@ -1881,12 +2120,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateCampusMutationResult = NonNullable<Awaited<ReturnType<typeof createCampus>>>
     export type CreateCampusMutationBody = Campus
-    export type CreateCampusMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateCampusMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Campus
  */
-export const useCreateCampus = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateCampus = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCampus>>, TError,{data: Campus}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCampus>>,
@@ -1920,7 +2159,7 @@ export const updateCampus = (
   
 
 
-export const getUpdateCampusMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateCampusMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCampus>>, TError,{id: number;data: Campus}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateCampus>>, TError,{id: number;data: Campus}, TContext> => {
 
@@ -1947,12 +2186,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateCampusMutationResult = NonNullable<Awaited<ReturnType<typeof updateCampus>>>
     export type UpdateCampusMutationBody = Campus
-    export type UpdateCampusMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateCampusMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Campus
  */
-export const useUpdateCampus = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateCampus = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCampus>>, TError,{id: number;data: Campus}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCampus>>,
@@ -1983,7 +2222,7 @@ export const deleteCampus = (
   
 
 
-export const getDeleteCampusMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteCampusMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCampus>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCampus>>, TError,{id: number}, TContext> => {
 
@@ -2010,12 +2249,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteCampusMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCampus>>>
     
-    export type DeleteCampusMutationError = null | InternalServerErrorResponse
+    export type DeleteCampusMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Campus
  */
-export const useDeleteCampus = <TError = null | InternalServerErrorResponse,
+export const useDeleteCampus = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCampus>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCampus>>,
@@ -2052,7 +2291,7 @@ export const getGetCollegePaginatedQueryKey = (params?: GetCollegePaginatedParam
     }
 
     
-export const getGetCollegePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = unknown>(params?: GetCollegePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegePaginated>>, TError, TData>>, }
+export const getGetCollegePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetCollegePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegePaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2071,10 +2310,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCollegePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCollegePaginated>>>
-export type GetCollegePaginatedQueryError = unknown
+export type GetCollegePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = unknown>(
+export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetCollegePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegePaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCollegePaginated>>,
@@ -2084,7 +2323,7 @@ export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getColl
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = unknown>(
+export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCollegePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegePaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCollegePaginated>>,
@@ -2094,7 +2333,7 @@ export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getColl
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = unknown>(
+export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCollegePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegePaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2102,7 +2341,7 @@ export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getColl
  * @summary Get paginated list of College
  */
 
-export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = unknown>(
+export function useGetCollegePaginated<TData = Awaited<ReturnType<typeof getCollegePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCollegePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegePaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2141,7 +2380,7 @@ export const getGetCollegeByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetCollegeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCollegeById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegeById>>, TError, TData>>, }
+export const getGetCollegeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCollegeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegeById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2160,10 +2399,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCollegeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCollegeById>>>
-export type GetCollegeByIdQueryError = null
+export type GetCollegeByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = null>(
+export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegeById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCollegeById>>,
@@ -2173,7 +2412,7 @@ export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeBy
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = null>(
+export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegeById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCollegeById>>,
@@ -2183,7 +2422,7 @@ export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeBy
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = null>(
+export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegeById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2191,7 +2430,7 @@ export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeBy
  * @summary Get a specific College
  */
 
-export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = null>(
+export function useGetCollegeById<TData = Awaited<ReturnType<typeof getCollegeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollegeById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2228,7 +2467,7 @@ export const createCollege = (
   
 
 
-export const getCreateCollegeMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateCollegeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCollege>>, TError,{data: College}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createCollege>>, TError,{data: College}, TContext> => {
 
@@ -2255,12 +2494,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateCollegeMutationResult = NonNullable<Awaited<ReturnType<typeof createCollege>>>
     export type CreateCollegeMutationBody = College
-    export type CreateCollegeMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateCollegeMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new College
  */
-export const useCreateCollege = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateCollege = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCollege>>, TError,{data: College}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCollege>>,
@@ -2294,7 +2533,7 @@ export const updateCollege = (
   
 
 
-export const getUpdateCollegeMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateCollegeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCollege>>, TError,{id: number;data: College}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateCollege>>, TError,{id: number;data: College}, TContext> => {
 
@@ -2321,12 +2560,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateCollegeMutationResult = NonNullable<Awaited<ReturnType<typeof updateCollege>>>
     export type UpdateCollegeMutationBody = College
-    export type UpdateCollegeMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateCollegeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a College
  */
-export const useUpdateCollege = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateCollege = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCollege>>, TError,{id: number;data: College}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCollege>>,
@@ -2357,7 +2596,7 @@ export const deleteCollege = (
   
 
 
-export const getDeleteCollegeMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteCollegeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCollege>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCollege>>, TError,{id: number}, TContext> => {
 
@@ -2384,12 +2623,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteCollegeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCollege>>>
     
-    export type DeleteCollegeMutationError = null | InternalServerErrorResponse
+    export type DeleteCollegeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a College
  */
-export const useDeleteCollege = <TError = null | InternalServerErrorResponse,
+export const useDeleteCollege = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCollege>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCollege>>,
@@ -2426,7 +2665,7 @@ export const getGetCoursePaginatedQueryKey = (params?: GetCoursePaginatedParams,
     }
 
     
-export const getGetCoursePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = unknown>(params?: GetCoursePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePaginated>>, TError, TData>>, }
+export const getGetCoursePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetCoursePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2445,10 +2684,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCoursePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCoursePaginated>>>
-export type GetCoursePaginatedQueryError = unknown
+export type GetCoursePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = unknown>(
+export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetCoursePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCoursePaginated>>,
@@ -2458,7 +2697,7 @@ export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCours
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = unknown>(
+export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCoursePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCoursePaginated>>,
@@ -2468,7 +2707,7 @@ export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCours
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = unknown>(
+export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCoursePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2476,7 +2715,7 @@ export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCours
  * @summary Get paginated list of Course
  */
 
-export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = unknown>(
+export function useGetCoursePaginated<TData = Awaited<ReturnType<typeof getCoursePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCoursePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoursePaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2513,7 +2752,7 @@ export const createCourse = (
   
 
 
-export const getCreateCourseMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateCourseMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCourse>>, TError,{data: Course}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createCourse>>, TError,{data: Course}, TContext> => {
 
@@ -2540,12 +2779,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateCourseMutationResult = NonNullable<Awaited<ReturnType<typeof createCourse>>>
     export type CreateCourseMutationBody = Course
-    export type CreateCourseMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateCourseMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Course
  */
-export const useCreateCourse = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateCourse = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCourse>>, TError,{data: Course}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCourse>>,
@@ -2581,7 +2820,7 @@ export const getGetCourseByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetCourseByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCourseById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseById>>, TError, TData>>, }
+export const getGetCourseByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCourseById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2600,10 +2839,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCourseByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCourseById>>>
-export type GetCourseByIdQueryError = null
+export type GetCourseByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = null>(
+export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCourseById>>,
@@ -2613,7 +2852,7 @@ export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = null>(
+export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCourseById>>,
@@ -2623,7 +2862,7 @@ export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = null>(
+export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2631,7 +2870,7 @@ export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById
  * @summary Get a specific Course
  */
 
-export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = null>(
+export function useGetCourseById<TData = Awaited<ReturnType<typeof getCourseById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2668,7 +2907,7 @@ export const updateCourse = (
   
 
 
-export const getUpdateCourseMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateCourseMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCourse>>, TError,{id: number;data: Course}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateCourse>>, TError,{id: number;data: Course}, TContext> => {
 
@@ -2695,12 +2934,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateCourseMutationResult = NonNullable<Awaited<ReturnType<typeof updateCourse>>>
     export type UpdateCourseMutationBody = Course
-    export type UpdateCourseMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateCourseMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Course
  */
-export const useUpdateCourse = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateCourse = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCourse>>, TError,{id: number;data: Course}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCourse>>,
@@ -2731,7 +2970,7 @@ export const deleteCourse = (
   
 
 
-export const getDeleteCourseMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteCourseMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCourse>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCourse>>, TError,{id: number}, TContext> => {
 
@@ -2758,12 +2997,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteCourseMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCourse>>>
     
-    export type DeleteCourseMutationError = null | InternalServerErrorResponse
+    export type DeleteCourseMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Course
  */
-export const useDeleteCourse = <TError = null | InternalServerErrorResponse,
+export const useDeleteCourse = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCourse>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCourse>>,
@@ -2800,7 +3039,7 @@ export const getGetCurriculumPaginatedQueryKey = (params?: GetCurriculumPaginate
     }
 
     
-export const getGetCurriculumPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = unknown>(params?: GetCurriculumPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumPaginated>>, TError, TData>>, }
+export const getGetCurriculumPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetCurriculumPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2819,10 +3058,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCurriculumPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCurriculumPaginated>>>
-export type GetCurriculumPaginatedQueryError = unknown
+export type GetCurriculumPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = unknown>(
+export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetCurriculumPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumPaginated>>,
@@ -2832,7 +3071,7 @@ export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getC
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = unknown>(
+export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCurriculumPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumPaginated>>,
@@ -2842,7 +3081,7 @@ export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getC
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = unknown>(
+export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCurriculumPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -2850,7 +3089,7 @@ export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getC
  * @summary Get paginated list of Curriculum
  */
 
-export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = unknown>(
+export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getCurriculumPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCurriculumPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -2887,7 +3126,7 @@ export const createCurriculum = (
   
 
 
-export const getCreateCurriculumMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext> => {
 
@@ -2914,12 +3153,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof createCurriculum>>>
     export type CreateCurriculumMutationBody = Curriculum
-    export type CreateCurriculumMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Curriculum
  */
-export const useCreateCurriculum = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCurriculum>>,
@@ -2955,7 +3194,7 @@ export const getGetCurriculumByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetCurriculumByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumById>>, TError, TData>>, }
+export const getGetCurriculumByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -2974,10 +3213,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCurriculumByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCurriculumById>>>
-export type GetCurriculumByIdQueryError = null
+export type GetCurriculumByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = null>(
+export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumById>>,
@@ -2987,7 +3226,7 @@ export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurric
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = null>(
+export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumById>>,
@@ -2997,7 +3236,7 @@ export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurric
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = null>(
+export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3005,7 +3244,7 @@ export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurric
  * @summary Get a specific Curriculum
  */
 
-export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = null>(
+export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurriculumById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3042,7 +3281,7 @@ export const updateCurriculum = (
   
 
 
-export const getUpdateCurriculumMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext> => {
 
@@ -3069,12 +3308,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof updateCurriculum>>>
     export type UpdateCurriculumMutationBody = Curriculum
-    export type UpdateCurriculumMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Curriculum
  */
-export const useUpdateCurriculum = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCurriculum>>,
@@ -3105,7 +3344,7 @@ export const deleteCurriculum = (
   
 
 
-export const getDeleteCurriculumMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculum>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculum>>, TError,{id: number}, TContext> => {
 
@@ -3132,12 +3371,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCurriculum>>>
     
-    export type DeleteCurriculumMutationError = null | InternalServerErrorResponse
+    export type DeleteCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Curriculum
  */
-export const useDeleteCurriculum = <TError = null | InternalServerErrorResponse,
+export const useDeleteCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculum>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCurriculum>>,
@@ -3174,7 +3413,7 @@ export const getGetCurriculumDetailPaginatedQueryKey = (params?: GetCurriculumDe
     }
 
     
-export const getGetCurriculumDetailPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
+export const getGetCurriculumDetailPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -3193,10 +3432,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCurriculumDetailPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>>
-export type GetCurriculumDetailPaginatedQueryError = unknown
+export type GetCurriculumDetailPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetCurriculumDetailPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumDetailPaginated>>,
@@ -3206,7 +3445,7 @@ export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeo
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumDetailPaginated>>,
@@ -3216,7 +3455,7 @@ export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeo
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3224,7 +3463,7 @@ export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeo
  * @summary Get paginated list of CurriculumDetail
  */
 
-export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = unknown>(
+export function useGetCurriculumDetailPaginated<TData = Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetCurriculumDetailPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3261,7 +3500,7 @@ export const createCurriculumDetail = (
   
 
 
-export const getCreateCurriculumDetailMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateCurriculumDetailMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculumDetail>>, TError,{data: NonReadonly<CurriculumDetail>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createCurriculumDetail>>, TError,{data: NonReadonly<CurriculumDetail>}, TContext> => {
 
@@ -3288,12 +3527,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof createCurriculumDetail>>>
     export type CreateCurriculumDetailMutationBody = NonReadonly<CurriculumDetail>
-    export type CreateCurriculumDetailMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateCurriculumDetailMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new CurriculumDetail
  */
-export const useCreateCurriculumDetail = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateCurriculumDetail = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculumDetail>>, TError,{data: NonReadonly<CurriculumDetail>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCurriculumDetail>>,
@@ -3329,7 +3568,7 @@ export const getGetCurriculumDetailByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetCurriculumDetailByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
+export const getGetCurriculumDetailByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -3348,10 +3587,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetCurriculumDetailByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCurriculumDetailById>>>
-export type GetCurriculumDetailByIdQueryError = null
+export type GetCurriculumDetailByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumDetailById>>,
@@ -3361,7 +3600,7 @@ export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCurriculumDetailById>>,
@@ -3371,7 +3610,7 @@ export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3379,7 +3618,7 @@ export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof get
  * @summary Get a specific CurriculumDetail
  */
 
-export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = null>(
+export function useGetCurriculumDetailById<TData = Awaited<ReturnType<typeof getCurriculumDetailById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurriculumDetailById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3416,7 +3655,7 @@ export const updateCurriculumDetail = (
   
 
 
-export const getUpdateCurriculumDetailMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateCurriculumDetailMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculumDetail>>, TError,{id: number;data: NonReadonly<CurriculumDetail>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculumDetail>>, TError,{id: number;data: NonReadonly<CurriculumDetail>}, TContext> => {
 
@@ -3443,12 +3682,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof updateCurriculumDetail>>>
     export type UpdateCurriculumDetailMutationBody = NonReadonly<CurriculumDetail>
-    export type UpdateCurriculumDetailMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateCurriculumDetailMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a CurriculumDetail
  */
-export const useUpdateCurriculumDetail = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateCurriculumDetail = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculumDetail>>, TError,{id: number;data: NonReadonly<CurriculumDetail>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCurriculumDetail>>,
@@ -3479,7 +3718,7 @@ export const deleteCurriculumDetail = (
   
 
 
-export const getDeleteCurriculumDetailMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteCurriculumDetailMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculumDetail>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculumDetail>>, TError,{id: number}, TContext> => {
 
@@ -3506,12 +3745,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCurriculumDetail>>>
     
-    export type DeleteCurriculumDetailMutationError = null | InternalServerErrorResponse
+    export type DeleteCurriculumDetailMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a CurriculumDetail
  */
-export const useDeleteCurriculumDetail = <TError = null | InternalServerErrorResponse,
+export const useDeleteCurriculumDetail = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCurriculumDetail>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCurriculumDetail>>,
@@ -3545,7 +3784,7 @@ export const createMultipleCurriculumDetail = (
   
 
 
-export const getCreateMultipleCurriculumDetailMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateMultipleCurriculumDetailMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, TError,{data: MultipleCurriculumDetail}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, TError,{data: MultipleCurriculumDetail}, TContext> => {
 
@@ -3572,12 +3811,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateMultipleCurriculumDetailMutationResult = NonNullable<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>>
     export type CreateMultipleCurriculumDetailMutationBody = MultipleCurriculumDetail
-    export type CreateMultipleCurriculumDetailMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateMultipleCurriculumDetailMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create multiple CurriculumDetail
  */
-export const useCreateMultipleCurriculumDetail = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateMultipleCurriculumDetail = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMultipleCurriculumDetail>>, TError,{data: MultipleCurriculumDetail}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createMultipleCurriculumDetail>>,
@@ -3587,6 +3826,578 @@ export const useCreateMultipleCurriculumDetail = <TError = ValidationErrorRespon
       > => {
 
       const mutationOptions = getCreateMultipleCurriculumDetailMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of Designition with optional search
+ * @summary Get paginated list of Designition
+ */
+export const getDesignitionPaginated = (
+    params?: GetDesignitionPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedDesignitionResponse200>(
+      {url: `/api/Designition`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetDesignitionPaginatedQueryKey = (params?: GetDesignitionPaginatedParams,) => {
+    return [`/api/Designition`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDesignitionPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getDesignitionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetDesignitionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDesignitionPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDesignitionPaginated>>> = ({ signal }) => getDesignitionPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDesignitionPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDesignitionPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getDesignitionPaginated>>>
+export type GetDesignitionPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetDesignitionPaginated<TData = Awaited<ReturnType<typeof getDesignitionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetDesignitionPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDesignitionPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDesignitionPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDesignitionPaginated<TData = Awaited<ReturnType<typeof getDesignitionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDesignitionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDesignitionPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDesignitionPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDesignitionPaginated<TData = Awaited<ReturnType<typeof getDesignitionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDesignitionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of Designition
+ */
+
+export function useGetDesignitionPaginated<TData = Awaited<ReturnType<typeof getDesignitionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDesignitionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDesignitionPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new Designition with the provided details
+ * @summary Create a new Designition
+ */
+export const createDesignition = (
+    designition: Designition,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDesignitionResponse200>(
+      {url: `/api/Designition`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: designition, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateDesignitionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDesignition>>, TError,{data: Designition}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDesignition>>, TError,{data: Designition}, TContext> => {
+
+const mutationKey = ['createDesignition'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDesignition>>, {data: Designition}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createDesignition(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateDesignitionMutationResult = NonNullable<Awaited<ReturnType<typeof createDesignition>>>
+    export type CreateDesignitionMutationBody = Designition
+    export type CreateDesignitionMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Designition
+ */
+export const useCreateDesignition = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDesignition>>, TError,{data: Designition}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createDesignition>>,
+        TError,
+        {data: Designition},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateDesignitionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a Designition by its ID
+ * @summary Get a specific Designition
+ */
+export const getDesignitionById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetDesignitionResponse200>(
+      {url: `/api/Designition/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetDesignitionByIdQueryKey = (id?: number,) => {
+    return [`/api/Designition/${id}`] as const;
+    }
+
+    
+export const getGetDesignitionByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDesignitionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDesignitionByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDesignitionById>>> = ({ signal }) => getDesignitionById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDesignitionById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDesignitionByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDesignitionById>>>
+export type GetDesignitionByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetDesignitionById<TData = Awaited<ReturnType<typeof getDesignitionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDesignitionById>>,
+          TError,
+          Awaited<ReturnType<typeof getDesignitionById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDesignitionById<TData = Awaited<ReturnType<typeof getDesignitionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDesignitionById>>,
+          TError,
+          Awaited<ReturnType<typeof getDesignitionById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDesignitionById<TData = Awaited<ReturnType<typeof getDesignitionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific Designition
+ */
+
+export function useGetDesignitionById<TData = Awaited<ReturnType<typeof getDesignitionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDesignitionById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDesignitionByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing Designition with the provided details
+ * @summary Update a Designition
+ */
+export const updateDesignition = (
+    id: number,
+    designition: Designition,
+ ) => {
+      
+      
+      return fetchData<UpdateDesignitionResponse200>(
+      {url: `/api/Designition/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: designition
+    },
+      );
+    }
+  
+
+
+export const getUpdateDesignitionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDesignition>>, TError,{id: number;data: Designition}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDesignition>>, TError,{id: number;data: Designition}, TContext> => {
+
+const mutationKey = ['updateDesignition'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDesignition>>, {id: number;data: Designition}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateDesignition(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDesignitionMutationResult = NonNullable<Awaited<ReturnType<typeof updateDesignition>>>
+    export type UpdateDesignitionMutationBody = Designition
+    export type UpdateDesignitionMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a Designition
+ */
+export const useUpdateDesignition = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDesignition>>, TError,{id: number;data: Designition}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateDesignition>>,
+        TError,
+        {id: number;data: Designition},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateDesignitionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a Designition by its ID
+ * @summary Delete a Designition
+ */
+export const deleteDesignition = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteDesignitionResponse200>(
+      {url: `/api/Designition/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteDesignitionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDesignition>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDesignition>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteDesignition'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDesignition>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteDesignition(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteDesignitionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDesignition>>>
+    
+    export type DeleteDesignitionMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a Designition
+ */
+export const useDeleteDesignition = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDesignition>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteDesignition>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteDesignitionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Create a new Program Chair with the provided details
+ * @summary Create a new Program Chair
+ */
+export const createProgramChair = (
+    designition: Designition,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDesignitionResponse200>(
+      {url: `/api/Designition/create-program-chair`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: designition, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateProgramChairMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgramChair>>, TError,{data: Designition}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createProgramChair>>, TError,{data: Designition}, TContext> => {
+
+const mutationKey = ['createProgramChair'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createProgramChair>>, {data: Designition}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createProgramChair(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateProgramChairMutationResult = NonNullable<Awaited<ReturnType<typeof createProgramChair>>>
+    export type CreateProgramChairMutationBody = Designition
+    export type CreateProgramChairMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Program Chair
+ */
+export const useCreateProgramChair = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgramChair>>, TError,{data: Designition}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createProgramChair>>,
+        TError,
+        {data: Designition},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateProgramChairMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Create a new College Dean with the provided details
+ * @summary Create a new College Dean
+ */
+export const createCollegeDean = (
+    designition: Designition,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDesignitionResponse200>(
+      {url: `/api/Designition/create-college-dean`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: designition, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateCollegeDeanMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCollegeDean>>, TError,{data: Designition}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCollegeDean>>, TError,{data: Designition}, TContext> => {
+
+const mutationKey = ['createCollegeDean'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCollegeDean>>, {data: Designition}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCollegeDean(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCollegeDeanMutationResult = NonNullable<Awaited<ReturnType<typeof createCollegeDean>>>
+    export type CreateCollegeDeanMutationBody = Designition
+    export type CreateCollegeDeanMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new College Dean
+ */
+export const useCreateCollegeDean = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCollegeDean>>, TError,{data: Designition}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createCollegeDean>>,
+        TError,
+        {data: Designition},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateCollegeDeanMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Create a new Campus Registrar with the provided details
+ * @summary Create a new Campus Registrar
+ */
+export const createCampusRegistrar = (
+    designition: Designition,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDesignitionResponse200>(
+      {url: `/api/Designition/create-campus-registrar`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: designition, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateCampusRegistrarMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCampusRegistrar>>, TError,{data: Designition}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCampusRegistrar>>, TError,{data: Designition}, TContext> => {
+
+const mutationKey = ['createCampusRegistrar'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCampusRegistrar>>, {data: Designition}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCampusRegistrar(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCampusRegistrarMutationResult = NonNullable<Awaited<ReturnType<typeof createCampusRegistrar>>>
+    export type CreateCampusRegistrarMutationBody = Designition
+    export type CreateCampusRegistrarMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Campus Registrar
+ */
+export const useCreateCampusRegistrar = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCampusRegistrar>>, TError,{data: Designition}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createCampusRegistrar>>,
+        TError,
+        {data: Designition},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateCampusRegistrarMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -3614,7 +4425,7 @@ export const getGetProgramTypePaginatedQueryKey = (params?: GetProgramTypePagina
     }
 
     
-export const getGetProgramTypePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
+export const getGetProgramTypePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -3633,10 +4444,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetProgramTypePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramTypePaginated>>>
-export type GetProgramTypePaginatedQueryError = unknown
+export type GetProgramTypePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetProgramTypePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getProgramTypePaginated>>,
@@ -3646,7 +4457,7 @@ export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getProgramTypePaginated>>,
@@ -3656,7 +4467,7 @@ export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3664,7 +4475,7 @@ export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof get
  * @summary Get paginated list of ProgramType
  */
 
-export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = unknown>(
+export function useGetProgramTypePaginated<TData = Awaited<ReturnType<typeof getProgramTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetProgramTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypePaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3703,7 +4514,7 @@ export const getGetProgramTypeByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetProgramTypeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
+export const getGetProgramTypeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -3722,10 +4533,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetProgramTypeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramTypeById>>>
-export type GetProgramTypeByIdQueryError = null
+export type GetProgramTypeByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getProgramTypeById>>,
@@ -3735,7 +4546,7 @@ export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgr
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getProgramTypeById>>,
@@ -3745,7 +4556,7 @@ export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgr
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -3753,7 +4564,7 @@ export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgr
  * @summary Get a specific ProgramType
  */
 
-export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = null>(
+export function useGetProgramTypeById<TData = Awaited<ReturnType<typeof getProgramTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramTypeById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -3790,7 +4601,7 @@ export const createProgramType = (
   
 
 
-export const getCreateProgramTypeMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateProgramTypeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgramType>>, TError,{data: ProgramType}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createProgramType>>, TError,{data: ProgramType}, TContext> => {
 
@@ -3817,12 +4628,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateProgramTypeMutationResult = NonNullable<Awaited<ReturnType<typeof createProgramType>>>
     export type CreateProgramTypeMutationBody = ProgramType
-    export type CreateProgramTypeMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateProgramTypeMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new ProgramType
  */
-export const useCreateProgramType = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateProgramType = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgramType>>, TError,{data: ProgramType}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createProgramType>>,
@@ -3856,7 +4667,7 @@ export const updateProgramType = (
   
 
 
-export const getUpdateProgramTypeMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateProgramTypeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProgramType>>, TError,{id: number;data: ProgramType}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateProgramType>>, TError,{id: number;data: ProgramType}, TContext> => {
 
@@ -3883,12 +4694,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateProgramTypeMutationResult = NonNullable<Awaited<ReturnType<typeof updateProgramType>>>
     export type UpdateProgramTypeMutationBody = ProgramType
-    export type UpdateProgramTypeMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateProgramTypeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a ProgramType
  */
-export const useUpdateProgramType = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateProgramType = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProgramType>>, TError,{id: number;data: ProgramType}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateProgramType>>,
@@ -3919,7 +4730,7 @@ export const deleteProgramType = (
   
 
 
-export const getDeleteProgramTypeMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteProgramTypeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProgramType>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteProgramType>>, TError,{id: number}, TContext> => {
 
@@ -3946,12 +4757,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteProgramTypeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProgramType>>>
     
-    export type DeleteProgramTypeMutationError = null | InternalServerErrorResponse
+    export type DeleteProgramTypeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a ProgramType
  */
-export const useDeleteProgramType = <TError = null | InternalServerErrorResponse,
+export const useDeleteProgramType = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProgramType>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteProgramType>>,
@@ -3988,7 +4799,7 @@ export const getGetRequirementPaginatedQueryKey = (params?: GetRequirementPagina
     }
 
     
-export const getGetRequirementPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = unknown>(params?: GetRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementPaginated>>, TError, TData>>, }
+export const getGetRequirementPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -4007,10 +4818,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetRequirementPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getRequirementPaginated>>>
-export type GetRequirementPaginatedQueryError = unknown
+export type GetRequirementPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = unknown>(
+export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetRequirementPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRequirementPaginated>>,
@@ -4020,7 +4831,7 @@ export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = unknown>(
+export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRequirementPaginated>>,
@@ -4030,7 +4841,7 @@ export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof get
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = unknown>(
+export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4038,7 +4849,7 @@ export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof get
  * @summary Get paginated list of Requirement
  */
 
-export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = unknown>(
+export function useGetRequirementPaginated<TData = Awaited<ReturnType<typeof getRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4075,7 +4886,7 @@ export const createRequirement = (
   
 
 
-export const getCreateRequirementMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateRequirementMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRequirement>>, TError,{data: NonReadonly<Requirement>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createRequirement>>, TError,{data: NonReadonly<Requirement>}, TContext> => {
 
@@ -4102,12 +4913,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateRequirementMutationResult = NonNullable<Awaited<ReturnType<typeof createRequirement>>>
     export type CreateRequirementMutationBody = NonReadonly<Requirement>
-    export type CreateRequirementMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateRequirementMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Requirement
  */
-export const useCreateRequirement = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateRequirement = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRequirement>>, TError,{data: NonReadonly<Requirement>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createRequirement>>,
@@ -4143,7 +4954,7 @@ export const getGetRequirementByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetRequirementByIdQueryOptions = <TData = Awaited<ReturnType<typeof getRequirementById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementById>>, TError, TData>>, }
+export const getGetRequirementByIdQueryOptions = <TData = Awaited<ReturnType<typeof getRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -4162,10 +4973,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetRequirementByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getRequirementById>>>
-export type GetRequirementByIdQueryError = null
+export type GetRequirementByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = null>(
+export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRequirementById>>,
@@ -4175,7 +4986,7 @@ export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequi
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = null>(
+export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRequirementById>>,
@@ -4185,7 +4996,7 @@ export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequi
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = null>(
+export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4193,7 +5004,7 @@ export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequi
  * @summary Get a specific Requirement
  */
 
-export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = null>(
+export function useGetRequirementById<TData = Awaited<ReturnType<typeof getRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequirementById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4230,7 +5041,7 @@ export const updateRequirement = (
   
 
 
-export const getUpdateRequirementMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateRequirementMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRequirement>>, TError,{id: number;data: NonReadonly<Requirement>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateRequirement>>, TError,{id: number;data: NonReadonly<Requirement>}, TContext> => {
 
@@ -4257,12 +5068,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateRequirementMutationResult = NonNullable<Awaited<ReturnType<typeof updateRequirement>>>
     export type UpdateRequirementMutationBody = NonReadonly<Requirement>
-    export type UpdateRequirementMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateRequirementMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Requirement
  */
-export const useUpdateRequirement = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateRequirement = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRequirement>>, TError,{id: number;data: NonReadonly<Requirement>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateRequirement>>,
@@ -4293,7 +5104,7 @@ export const deleteRequirement = (
   
 
 
-export const getDeleteRequirementMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteRequirementMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRequirement>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteRequirement>>, TError,{id: number}, TContext> => {
 
@@ -4320,12 +5131,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteRequirementMutationResult = NonNullable<Awaited<ReturnType<typeof deleteRequirement>>>
     
-    export type DeleteRequirementMutationError = null | InternalServerErrorResponse
+    export type DeleteRequirementMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Requirement
  */
-export const useDeleteRequirement = <TError = null | InternalServerErrorResponse,
+export const useDeleteRequirement = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRequirement>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteRequirement>>,
@@ -4362,7 +5173,7 @@ export const getGetRoomPaginatedQueryKey = (params?: GetRoomPaginatedParams,) =>
     }
 
     
-export const getGetRoomPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = unknown>(params?: GetRoomPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomPaginated>>, TError, TData>>, }
+export const getGetRoomPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetRoomPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -4381,10 +5192,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetRoomPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getRoomPaginated>>>
-export type GetRoomPaginatedQueryError = unknown
+export type GetRoomPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = unknown>(
+export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetRoomPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRoomPaginated>>,
@@ -4394,7 +5205,7 @@ export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPag
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = unknown>(
+export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetRoomPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRoomPaginated>>,
@@ -4404,7 +5215,7 @@ export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPag
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = unknown>(
+export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetRoomPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4412,7 +5223,7 @@ export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPag
  * @summary Get paginated list of Room
  */
 
-export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = unknown>(
+export function useGetRoomPaginated<TData = Awaited<ReturnType<typeof getRoomPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetRoomPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4451,7 +5262,7 @@ export const getGetRoomByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetRoomByIdQueryOptions = <TData = Awaited<ReturnType<typeof getRoomById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomById>>, TError, TData>>, }
+export const getGetRoomByIdQueryOptions = <TData = Awaited<ReturnType<typeof getRoomById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -4470,10 +5281,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetRoomByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getRoomById>>>
-export type GetRoomByIdQueryError = null
+export type GetRoomByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = null>(
+export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRoomById>>,
@@ -4483,7 +5294,7 @@ export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, 
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = null>(
+export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getRoomById>>,
@@ -4493,7 +5304,7 @@ export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, 
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = null>(
+export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4501,7 +5312,7 @@ export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, 
  * @summary Get a specific Room
  */
 
-export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = null>(
+export function useGetRoomById<TData = Awaited<ReturnType<typeof getRoomById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoomById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4538,7 +5349,7 @@ export const createRoom = (
   
 
 
-export const getCreateRoomMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateRoomMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoom>>, TError,{data: Room}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createRoom>>, TError,{data: Room}, TContext> => {
 
@@ -4565,12 +5376,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateRoomMutationResult = NonNullable<Awaited<ReturnType<typeof createRoom>>>
     export type CreateRoomMutationBody = Room
-    export type CreateRoomMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateRoomMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Room
  */
-export const useCreateRoom = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateRoom = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoom>>, TError,{data: Room}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createRoom>>,
@@ -4604,7 +5415,7 @@ export const updateRoom = (
   
 
 
-export const getUpdateRoomMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateRoomMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRoom>>, TError,{id: number;data: Room}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateRoom>>, TError,{id: number;data: Room}, TContext> => {
 
@@ -4631,12 +5442,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateRoomMutationResult = NonNullable<Awaited<ReturnType<typeof updateRoom>>>
     export type UpdateRoomMutationBody = Room
-    export type UpdateRoomMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateRoomMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Room
  */
-export const useUpdateRoom = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateRoom = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRoom>>, TError,{id: number;data: Room}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateRoom>>,
@@ -4667,7 +5478,7 @@ export const deleteRoom = (
   
 
 
-export const getDeleteRoomMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteRoomMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRoom>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteRoom>>, TError,{id: number}, TContext> => {
 
@@ -4694,12 +5505,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteRoomMutationResult = NonNullable<Awaited<ReturnType<typeof deleteRoom>>>
     
-    export type DeleteRoomMutationError = null | InternalServerErrorResponse
+    export type DeleteRoomMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Room
  */
-export const useDeleteRoom = <TError = null | InternalServerErrorResponse,
+export const useDeleteRoom = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRoom>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteRoom>>,
@@ -4736,7 +5547,7 @@ export const getGetSchoolYearPaginatedQueryKey = (params?: GetSchoolYearPaginate
     }
 
     
-export const getGetSchoolYearPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = ValidationErrorResponse>(params?: GetSchoolYearPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError, TData>>, }
+export const getGetSchoolYearPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse>(params?: GetSchoolYearPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -4755,10 +5566,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetSchoolYearPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getSchoolYearPaginated>>>
-export type GetSchoolYearPaginatedQueryError = ValidationErrorResponse
+export type GetSchoolYearPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse
 
 
-export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = ValidationErrorResponse>(
+export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse>(
  params: undefined |  GetSchoolYearPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSchoolYearPaginated>>,
@@ -4768,7 +5579,7 @@ export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getS
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = ValidationErrorResponse>(
+export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse>(
  params?: GetSchoolYearPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSchoolYearPaginated>>,
@@ -4778,7 +5589,7 @@ export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getS
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = ValidationErrorResponse>(
+export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse>(
  params?: GetSchoolYearPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4786,7 +5597,7 @@ export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getS
  * @summary Get paginated list of SchoolYear
  */
 
-export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = ValidationErrorResponse>(
+export function useGetSchoolYearPaginated<TData = Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse>(
  params?: GetSchoolYearPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4823,7 +5634,7 @@ export const createSchoolYear = (
   
 
 
-export const getCreateSchoolYearMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateSchoolYearMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSchoolYear>>, TError,{data: NonReadonly<SchoolYear>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createSchoolYear>>, TError,{data: NonReadonly<SchoolYear>}, TContext> => {
 
@@ -4850,12 +5661,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateSchoolYearMutationResult = NonNullable<Awaited<ReturnType<typeof createSchoolYear>>>
     export type CreateSchoolYearMutationBody = NonReadonly<SchoolYear>
-    export type CreateSchoolYearMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateSchoolYearMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new SchoolYear
  */
-export const useCreateSchoolYear = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateSchoolYear = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSchoolYear>>, TError,{data: NonReadonly<SchoolYear>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createSchoolYear>>,
@@ -4891,7 +5702,7 @@ export const getGetSchoolYearByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetSchoolYearByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearById>>, TError, TData>>, }
+export const getGetSchoolYearByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -4910,10 +5721,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetSchoolYearByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSchoolYearById>>>
-export type GetSchoolYearByIdQueryError = null
+export type GetSchoolYearByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = null>(
+export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSchoolYearById>>,
@@ -4923,7 +5734,7 @@ export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchool
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = null>(
+export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSchoolYearById>>,
@@ -4933,7 +5744,7 @@ export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchool
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = null>(
+export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -4941,7 +5752,7 @@ export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchool
  * @summary Get a specific SchoolYear
  */
 
-export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = null>(
+export function useGetSchoolYearById<TData = Awaited<ReturnType<typeof getSchoolYearById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSchoolYearById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -4978,7 +5789,7 @@ export const updateSchoolYear = (
   
 
 
-export const getUpdateSchoolYearMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateSchoolYearMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSchoolYear>>, TError,{id: number;data: NonReadonly<SchoolYear>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateSchoolYear>>, TError,{id: number;data: NonReadonly<SchoolYear>}, TContext> => {
 
@@ -5005,12 +5816,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateSchoolYearMutationResult = NonNullable<Awaited<ReturnType<typeof updateSchoolYear>>>
     export type UpdateSchoolYearMutationBody = NonReadonly<SchoolYear>
-    export type UpdateSchoolYearMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateSchoolYearMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a SchoolYear
  */
-export const useUpdateSchoolYear = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateSchoolYear = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSchoolYear>>, TError,{id: number;data: NonReadonly<SchoolYear>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateSchoolYear>>,
@@ -5041,7 +5852,7 @@ export const deleteSchoolYear = (
   
 
 
-export const getDeleteSchoolYearMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteSchoolYearMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSchoolYear>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteSchoolYear>>, TError,{id: number}, TContext> => {
 
@@ -5068,12 +5879,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteSchoolYearMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSchoolYear>>>
     
-    export type DeleteSchoolYearMutationError = null | InternalServerErrorResponse
+    export type DeleteSchoolYearMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a SchoolYear
  */
-export const useDeleteSchoolYear = <TError = null | InternalServerErrorResponse,
+export const useDeleteSchoolYear = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSchoolYear>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteSchoolYear>>,
@@ -5110,7 +5921,7 @@ export const getGetSectionPaginatedQueryKey = (params?: GetSectionPaginatedParam
     }
 
     
-export const getGetSectionPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
+export const getGetSectionPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -5129,10 +5940,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetSectionPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionPaginated>>>
-export type GetSectionPaginatedQueryError = unknown
+export type GetSectionPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
 
 
-export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params: undefined |  GetSectionPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSectionPaginated>>,
@@ -5142,7 +5953,7 @@ export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSect
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSectionPaginated>>,
@@ -5152,7 +5963,7 @@ export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSect
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5160,7 +5971,7 @@ export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSect
  * @summary Get paginated list of Section
  */
 
-export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = unknown>(
+export function useGetSectionPaginated<TData = Awaited<ReturnType<typeof getSectionPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
  params?: GetSectionPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionPaginated>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -5197,7 +6008,7 @@ export const createSection = (
   
 
 
-export const getCreateSectionMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const getCreateSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: NonReadonly<Section>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: NonReadonly<Section>}, TContext> => {
 
@@ -5224,12 +6035,12 @@ const {mutation: mutationOptions} = options ?
 
     export type CreateSectionMutationResult = NonNullable<Awaited<ReturnType<typeof createSection>>>
     export type CreateSectionMutationBody = NonReadonly<Section>
-    export type CreateSectionMutationError = ValidationErrorResponse | InternalServerErrorResponse
+    export type CreateSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Section
  */
-export const useCreateSection = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+export const useCreateSection = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSection>>, TError,{data: NonReadonly<Section>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createSection>>,
@@ -5265,7 +6076,7 @@ export const getGetSectionByIdQueryKey = (id?: number,) => {
     }
 
     
-export const getGetSectionByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
+export const getGetSectionByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSectionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
@@ -5284,10 +6095,10 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetSectionByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionById>>>
-export type GetSectionByIdQueryError = null
+export type GetSectionByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
 
 
-export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSectionById>>,
@@ -5297,7 +6108,7 @@ export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionBy
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSectionById>>,
@@ -5307,7 +6118,7 @@ export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionBy
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -5315,7 +6126,7 @@ export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionBy
  * @summary Get a specific Section
  */
 
-export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = null>(
+export function useGetSectionById<TData = Awaited<ReturnType<typeof getSectionById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
  id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionById>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -5352,7 +6163,7 @@ export const updateSection = (
   
 
 
-export const getUpdateSectionMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getUpdateSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: NonReadonly<Section>}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: NonReadonly<Section>}, TContext> => {
 
@@ -5379,12 +6190,12 @@ const {mutation: mutationOptions} = options ?
 
     export type UpdateSectionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSection>>>
     export type UpdateSectionMutationBody = NonReadonly<Section>
-    export type UpdateSectionMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type UpdateSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Section
  */
-export const useUpdateSection = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useUpdateSection = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSection>>, TError,{id: number;data: NonReadonly<Section>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateSection>>,
@@ -5415,7 +6226,7 @@ export const deleteSection = (
   
 
 
-export const getDeleteSectionMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSection>>, TError,{id: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteSection>>, TError,{id: number}, TContext> => {
 
@@ -5442,12 +6253,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteSectionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSection>>>
     
-    export type DeleteSectionMutationError = null | InternalServerErrorResponse
+    export type DeleteSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Section
  */
-export const useDeleteSection = <TError = null | InternalServerErrorResponse,
+export const useDeleteSection = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSection>>, TError,{id: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteSection>>,
@@ -5481,7 +6292,7 @@ export const generateSections = (
   
 
 
-export const getGenerateSectionsMutationOptions = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const getGenerateSectionsMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateSections>>, TError,{data: GenerateSection}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof generateSections>>, TError,{data: GenerateSection}, TContext> => {
 
@@ -5508,12 +6319,12 @@ const {mutation: mutationOptions} = options ?
 
     export type GenerateSectionsMutationResult = NonNullable<Awaited<ReturnType<typeof generateSections>>>
     export type GenerateSectionsMutationBody = GenerateSection
-    export type GenerateSectionsMutationError = null | ValidationErrorResponse | InternalServerErrorResponse
+    export type GenerateSectionsMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Generate sections for a curriculum and year
  */
-export const useGenerateSections = <TError = null | ValidationErrorResponse | InternalServerErrorResponse,
+export const useGenerateSections = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateSections>>, TError,{data: GenerateSection}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof generateSections>>,
@@ -5544,7 +6355,7 @@ export const deleteSectionBySectionCode = (
   
 
 
-export const getDeleteSectionBySectionCodeMutationOptions = <TError = null | InternalServerErrorResponse,
+export const getDeleteSectionBySectionCodeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSectionBySectionCode>>, TError,{sectionCode: string}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteSectionBySectionCode>>, TError,{sectionCode: string}, TContext> => {
 
@@ -5571,12 +6382,12 @@ const {mutation: mutationOptions} = options ?
 
     export type DeleteSectionBySectionCodeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSectionBySectionCode>>>
     
-    export type DeleteSectionBySectionCodeMutationError = null | InternalServerErrorResponse
+    export type DeleteSectionBySectionCodeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
 
     /**
  * @summary Delete a Section by its section code
  */
-export const useDeleteSectionBySectionCode = <TError = null | InternalServerErrorResponse,
+export const useDeleteSectionBySectionCode = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSectionBySectionCode>>, TError,{sectionCode: string}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteSectionBySectionCode>>,
@@ -5586,6 +6397,380 @@ export const useDeleteSectionBySectionCode = <TError = null | InternalServerErro
       > => {
 
       const mutationOptions = getDeleteSectionBySectionCodeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of User with optional search
+ * @summary Get paginated list of User
+ */
+export const getUserPaginated = (
+    params?: GetUserPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedUserResponse200>(
+      {url: `/api/User`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetUserPaginatedQueryKey = (params?: GetUserPaginatedParams,) => {
+    return [`/api/User`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetUserPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getUserPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetUserPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUserPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPaginated>>> = ({ signal }) => getUserPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getUserPaginated>>>
+export type GetUserPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetUserPaginated<TData = Awaited<ReturnType<typeof getUserPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetUserPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getUserPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPaginated<TData = Awaited<ReturnType<typeof getUserPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetUserPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getUserPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPaginated<TData = Awaited<ReturnType<typeof getUserPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetUserPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of User
+ */
+
+export function useGetUserPaginated<TData = Awaited<ReturnType<typeof getUserPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetUserPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUserPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new User with the provided details
+ * @summary Create a new User
+ */
+export const createUser = (
+    user: NonReadonly<User>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateUserResponse200>(
+      {url: `/api/User`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: user, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateUserMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createUser>>, TError,{data: NonReadonly<User>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createUser>>, TError,{data: NonReadonly<User>}, TContext> => {
+
+const mutationKey = ['createUser'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createUser>>, {data: NonReadonly<User>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createUser(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateUserMutationResult = NonNullable<Awaited<ReturnType<typeof createUser>>>
+    export type CreateUserMutationBody = NonReadonly<User>
+    export type CreateUserMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new User
+ */
+export const useCreateUser = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createUser>>, TError,{data: NonReadonly<User>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createUser>>,
+        TError,
+        {data: NonReadonly<User>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateUserMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a User by its ID
+ * @summary Get a specific User
+ */
+export const getUserById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetUserResponse200>(
+      {url: `/api/User/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetUserByIdQueryKey = (id?: number,) => {
+    return [`/api/User/${id}`] as const;
+    }
+
+    
+export const getGetUserByIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getUserById>>>
+export type GetUserByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserById>>,
+          TError,
+          Awaited<ReturnType<typeof getUserById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserById>>,
+          TError,
+          Awaited<ReturnType<typeof getUserById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific User
+ */
+
+export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUserByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing User with the provided details
+ * @summary Update a User
+ */
+export const updateUser = (
+    id: number,
+    user: NonReadonly<User>,
+ ) => {
+      
+      
+      return fetchData<UpdateUserResponse200>(
+      {url: `/api/User/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: user
+    },
+      );
+    }
+  
+
+
+export const getUpdateUserMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUser>>, TError,{id: number;data: NonReadonly<User>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateUser>>, TError,{id: number;data: NonReadonly<User>}, TContext> => {
+
+const mutationKey = ['updateUser'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUser>>, {id: number;data: NonReadonly<User>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateUser(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateUserMutationResult = NonNullable<Awaited<ReturnType<typeof updateUser>>>
+    export type UpdateUserMutationBody = NonReadonly<User>
+    export type UpdateUserMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a User
+ */
+export const useUpdateUser = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUser>>, TError,{id: number;data: NonReadonly<User>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateUser>>,
+        TError,
+        {id: number;data: NonReadonly<User>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateUserMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a User by its ID
+ * @summary Delete a User
+ */
+export const deleteUser = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteUserResponse200>(
+      {url: `/api/User/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteUserMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUser>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteUser>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteUser'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteUser>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteUser(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteUserMutationResult = NonNullable<Awaited<ReturnType<typeof deleteUser>>>
+    
+    export type DeleteUserMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a User
+ */
+export const useDeleteUser = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUser>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteUser>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteUserMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

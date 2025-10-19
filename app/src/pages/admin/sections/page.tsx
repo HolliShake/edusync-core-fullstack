@@ -122,8 +122,7 @@ export default function AdminSections(): React.ReactNode {
 
   const { mutateAsync: generateScection, isPending: isGeneratingSections } = useGenerateSections();
 
-  const { mutateAsync: deleteSectionBySectionCode, isPending: isDeletingSectionBySectionCode } =
-    useDeleteSectionBySectionCode();
+  const { mutateAsync: deleteSectionBySectionCode } = useDeleteSectionBySectionCode();
 
   // Persist filters to localStorage whenever they change
   useEffect(() => {

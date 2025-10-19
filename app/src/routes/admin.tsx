@@ -12,6 +12,7 @@ import AdminRequirements from '@/pages/admin/requirements/page';
 import AdminAcademicCalendarPage from '@/pages/admin/school-year/academic-calendar/page';
 import AdminSchoolYear from '@/pages/admin/school-year/page';
 import AdminSections from '@/pages/admin/sections/page';
+import AdminUsers from '@/pages/admin/users/page';
 import type { Route } from '@/types/types';
 import {
   BookIcon,
@@ -25,6 +26,7 @@ import {
   LayoutDashboardIcon,
   LibraryIcon,
   SchoolIcon,
+  UserIcon,
 } from 'lucide-react';
 
 const ADMIN: Route[] = [
@@ -168,6 +170,16 @@ const ADMIN: Route[] = [
     path: '/admin/requirements',
     component: <AdminRequirements />,
     icon: <FileIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.ADMIN],
+  },
+  {
+    key: 'admin.users',
+    title: 'Users',
+    path: '/admin/users',
+    component: <AdminUsers />,
+    icon: <UserIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
     roles: [UserRoleEnum.ADMIN],
