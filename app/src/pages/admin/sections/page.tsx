@@ -845,15 +845,12 @@ export default function AdminSections(): React.ReactNode {
                         </span>
                       </Badge>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <div
                       onClick={(e) => handleDeleteBySectionCode(getSectionCode(group.name), e)}
-                      disabled={isDeletingSectionBySectionCode}
-                      className="h-8 w-8 p-0 hover:bg-destructive/10 text-destructive"
+                      className="h-8 w-8 p-0 hover:bg-destructive/10 text-destructive rounded-md flex items-center justify-center cursor-pointer"
                     >
                       <TrashIcon className="h-3.5 w-3.5" />
-                    </Button>
+                    </div>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-5 pb-3 bg-gradient-to-br from-slate-50/50 to-slate-100/50 dark:from-slate-900/50 dark:to-slate-800/50">

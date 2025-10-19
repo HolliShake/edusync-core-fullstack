@@ -122,4 +122,16 @@ class AcademicProgram extends Model
     {
         return $this->belongsTo(ProgramType::class, 'program_type_id');
     }
+
+    /*****************************************************************/
+
+    /**
+     * Get the designation for the academic program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function designationable()
+    {
+        return $this->morphTo();
+    }
 }

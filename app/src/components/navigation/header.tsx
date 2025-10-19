@@ -1,7 +1,15 @@
 import ThemeSwitcher from '@/components/custom/theme-switcher.component';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Menu, Search } from 'lucide-react';
+import { LogOut, Menu, Search, User } from 'lucide-react';
 import type React from 'react';
 
 type HeaderProps = {
@@ -36,6 +44,30 @@ export default function Header({ setIsSidebarOpen = undefined }: HeaderProps): R
         {/* Right section */}
         <div className="flex flex-row items-center gap-2">
           <ThemeSwitcher />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-10 h-10 rounded-lg hover:bg-accent text-foreground/70 hover:text-foreground transition-all duration-300"
+              >
+                <User className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
