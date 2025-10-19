@@ -320,4 +320,43 @@ class SectionController extends Controller
             return $this->internalServerError($e->getMessage());
         }
     }
+
+    #[OA\Delete(
+        path: "/api/Section/code/{section_code}",
+        summary: "Delete a Section by its section code",
+        tags: ["Section"],
+        description: "Delete a Section by its section code",
+        operationId: "deleteSectionBySectionCode",
+    )]
+    #[OA\Parameter(
+        name: "section_code",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "string"),
+    )]
+    #[OA\Response(
+        response: 204,
+        description: "Section deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteSectionResponse200")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Section not found"
+    )]
+    #[OA\Response(
+        response: 500,
+        description:" Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function destroyBySectionCode(string $section_code)
+    {
+        try {
+            $this->service->deleteBySectionCode($section_code);
+            return $this->noContent();
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound('Section not found');
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
 }

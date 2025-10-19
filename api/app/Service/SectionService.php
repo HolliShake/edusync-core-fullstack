@@ -137,4 +137,9 @@ class SectionService extends GenericService implements ISectionService
 
         return $result;
     }
+
+    public function deleteBySectionCode(string $section_code): void
+    {
+        $this->repository->query()->where('section_code', $section_code)->delete();
+    }
 }

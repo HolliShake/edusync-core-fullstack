@@ -5,7 +5,9 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { Requirement } from './requirement';
 
-export interface DeleteRequirementResponse200 {
+export interface GetRequirementsResponse200 {
   success?: boolean;
+  data?: Requirement[];
 }

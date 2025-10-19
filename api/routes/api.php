@@ -13,6 +13,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\CurriculumDetailController;
 use App\Http\Controllers\ProgramTypeController;
+use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SectionController;
@@ -130,4 +131,13 @@ Route::controller(SectionController::class)->group(function() {
     Route::post('/Section/generate', 'generate');
     Route::put('/Section/{id}', 'update');
     Route::delete('/Section/{id}', 'destroy');
+    Route::delete('/Section/code/{section_code}', 'destroyBySectionCode');
+});
+
+Route::controller(RequirementController::class)->group(function() {
+    Route::get('/Requirement', 'index');
+    Route::get('/Requirement/{id}', 'show');
+    Route::post('/Requirement', 'store');
+    Route::put('/Requirement/{id}', 'update');
+    Route::delete('/Requirement/{id}', 'destroy');
 });

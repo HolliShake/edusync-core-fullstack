@@ -15,6 +15,7 @@ use Database\Seeders\SchoolYearSeeder;
 use Database\Seeders\AcademicCalendarSeeder;
 use Database\Seeders\BuildingSeeder;
 use Database\Seeders\RoomSeeder;
+use Database\Seeders\RequirementSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -38,7 +39,8 @@ class DatabaseSeeder extends Seeder
             SchoolYearSeeder::class,
             AcademicCalendarSeeder::class,
             BuildingSeeder::class,
-            RoomSeeder::class
+            RoomSeeder::class,
+            RequirementSeeder::class
         ]);
     }
 }

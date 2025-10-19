@@ -2645,6 +2645,250 @@
                 }
             }
         },
+        "\/api\/Requirement": {
+            "get": {
+                "tags": [
+                    "Requirement"
+                ],
+                "summary": "Get paginated list of Requirement",
+                "description": "Retrieve a paginated list of Requirement with optional search",
+                "operationId": "getRequirementPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedRequirementResponse200"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Requirement"
+                ],
+                "summary": "Create a new Requirement",
+                "description": " Create a new Requirement with the provided details",
+                "operationId": "createRequirement",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Requirement"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Requirement created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateRequirementResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Requirement\/{id}": {
+            "get": {
+                "tags": [
+                    "Requirement"
+                ],
+                "summary": "Get a specific Requirement",
+                "description": "Retrieve a Requirement by its ID",
+                "operationId": "getRequirementById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetRequirementResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Requirement not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Requirement"
+                ],
+                "summary": "Update a Requirement",
+                "description": "Update an existing Requirement with the provided details",
+                "operationId": "updateRequirement",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Requirement"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Requirement updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateRequirementResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Requirement not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Requirement"
+                ],
+                "summary": "Delete a Requirement",
+                "description": "Delete a Requirement by its ID",
+                "operationId": "deleteRequirement",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Requirement deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteRequirementResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Requirement not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/Room": {
             "get": {
                 "tags": [
@@ -3485,6 +3729,51 @@
                     },
                     "500": {
                         "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Section\/code\/{section_code}": {
+            "delete": {
+                "tags": [
+                    "Section"
+                ],
+                "summary": "Delete a Section by its section code",
+                "description": "Delete a Section by its section code",
+                "operationId": "deleteSectionBySectionCode",
+                "parameters": [
+                    {
+                        "name": "section_code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Section deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteSectionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Section not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -5168,6 +5457,162 @@
                 },
                 "type": "object"
             },
+            "Requirement": {
+                "title": "Requirement",
+                "required": [
+                    "requirement_name",
+                    "requirement_type",
+                    "is_mandatory",
+                    "is_active"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "requirement_name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "requirement_type": {
+                        "type": "string",
+                        "enum": [
+                            "admission",
+                            "graduation",
+                            "enrollment",
+                            "scholarship",
+                            "transfer",
+                            "general"
+                        ]
+                    },
+                    "is_mandatory": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedRequirement": {
+                "title": "PaginatedRequirement",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Requirement"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedRequirementResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedRequirement"
+                    }
+                },
+                "type": "object"
+            },
+            "GetRequirementResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Requirement"
+                    }
+                },
+                "type": "object"
+            },
+            "GetRequirementsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Requirement"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateRequirementResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Requirement"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateRequirementResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Requirement"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteRequirementResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "Room": {
                 "title": "Room",
                 "required": [
@@ -5481,6 +5926,7 @@
                     "curriculum_detail_id",
                     "school_year_id",
                     "section_ref",
+                    "section_code",
                     "section_name",
                     "min_students",
                     "max_students",
@@ -5498,6 +5944,9 @@
                         "type": "integer"
                     },
                     "section_ref": {
+                        "type": "string"
+                    },
+                    "section_code": {
                         "type": "string"
                     },
                     "section_name": {
@@ -5791,6 +6240,10 @@
         {
             "name": "ProgramType",
             "description": "ProgramType"
+        },
+        {
+            "name": "Requirement",
+            "description": "Requirement"
         },
         {
             "name": "Room",

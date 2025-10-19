@@ -13,6 +13,7 @@ export interface Section {
   curriculum_detail_id: number;
   school_year_id: number;
   section_ref: string;
+  section_code: string;
   section_name: string;
   min_students: number;
   max_students: number;

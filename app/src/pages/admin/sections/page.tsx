@@ -12,18 +12,21 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  useCreateSection,
   useDeleteSection,
+  useDeleteSectionBySectionCode,
+  useGenerateSections,
   useGetAcademicProgramPaginated,
   useGetCampusPaginated,
   useGetCollegePaginated,
   useGetCurriculumPaginated,
   useGetSchoolYearPaginated,
   useGetSectionPaginated,
-  useUpdateSection,
 } from '@rest/api';
 import type { Section } from '@rest/models/section';
 import {
@@ -112,6 +115,16 @@ export default function AdminSections(): React.ReactNode {
     return 'name-asc';
   });
 
+  const [openPopover, setOpenPopover] = useState<string | null>(null);
+  const [numberOfSchedules, setNumberOfSchedules] = useState<{ [key: string]: string }>({});
+  const [schoolYearId, setSchoolYearId] = useState<{ [key: string]: string }>({});
+  const [autoPost, setAutoPost] = useState<{ [key: string]: boolean }>({});
+
+  const { mutateAsync: generateScection, isPending: isGeneratingSections } = useGenerateSections();
+
+  const { mutateAsync: deleteSectionBySectionCode, isPending: isDeletingSectionBySectionCode } =
+    useDeleteSectionBySectionCode();
+
   // Persist filters to localStorage whenever they change
   useEffect(() => {
     try {
@@ -190,6 +203,13 @@ export default function AdminSections(): React.ReactNode {
   const schoolYears = useMemo(() => schoolYearsResponse?.data?.data ?? [], [schoolYearsResponse]);
 
   const sectionItems = useMemo(() => sectionsResponse?.data?.data ?? [], [sectionsResponse]);
+
+  const schoolYearOptions = useMemo(() => {
+    return schoolYears.map((sy) => ({
+      label: sy.name || '',
+      value: sy.id?.toString() || '',
+    }));
+  }, [schoolYears]);
 
   // Extract unique years and terms from sections
   const availableYears = useMemo(() => {
@@ -357,9 +377,19 @@ export default function AdminSections(): React.ReactNode {
   }, [visibleItems]);
 
   const { mutateAsync: deleteSection } = useDeleteSection();
-  const { mutateAsync: createSection } = useCreateSection();
-  const { mutateAsync: updateSection } = useUpdateSection();
+
   const confirm = useConfirm();
+
+  const getSectionCode = useCallback(
+    (section_name: string) => {
+      return (
+        sectionsResponse?.data?.data?.find(
+          (section: Section) => section.section_name === section_name
+        )?.section_code ?? ''
+      );
+    },
+    [sectionItems]
+  );
 
   const handleDelete = useCallback(
     async (section: Section) => {
@@ -375,6 +405,23 @@ export default function AdminSections(): React.ReactNode {
       });
     },
     [confirm, deleteSection, refetch]
+  );
+
+  const handleDeleteBySectionCode = useCallback(
+    async (sectionCode: string, event: React.MouseEvent) => {
+      event.stopPropagation();
+      confirm.confirm(async () => {
+        try {
+          await deleteSectionBySectionCode({ sectionCode });
+          toast.success('All sections with this code deleted');
+          refetch();
+        } catch (error) {
+          console.error(error);
+          toast.error('Failed to delete sections');
+        }
+      });
+    },
+    [confirm, deleteSectionBySectionCode, refetch]
   );
 
   const handleFilterChange = useCallback((key: keyof typeof filters, value: number) => {
@@ -429,28 +476,78 @@ export default function AdminSections(): React.ReactNode {
   );
 
   const handleAddSection = useCallback(() => {
-    controller.openFn(undefined);
-  }, [controller]);
+    const popoverKey = `${filters.selectedYear}-${filters.selectedTerm}`;
+    setOpenPopover(popoverKey);
+  }, [filters.selectedYear, filters.selectedTerm]);
 
-  const handleSubmitSection = useCallback(
-    async (section: Section) => {
-      try {
-        if (section.id) {
-          await updateSection({ id: section.id, data: section });
-          toast.success('Section updated successfully');
-        } else {
-          await createSection({ data: section });
-          toast.success('Section created successfully');
-        }
-        refetch();
-        controller.closeFn();
-      } catch (error) {
-        console.error(error);
-        toast.error(section.id ? 'Failed to update section' : 'Failed to create section');
+  const handleGenerateSchedule = useCallback(
+    async (year: number, term: number) => {
+      const key = `${year}-${term}`;
+      const numSchedules = parseInt(numberOfSchedules[key] || '1', 10);
+      const selectedSchoolYearId = parseInt(schoolYearId[key] || '0', 10);
+
+      if (isNaN(numSchedules) || numSchedules < 1) {
+        toast.error('Please enter a valid number of schedules');
+        return;
       }
+
+      if (!selectedSchoolYearId || selectedSchoolYearId === 0) {
+        toast.error('Please select a school year');
+        return;
+      }
+
+      // TODO: Implement schedule generation logic
+      try {
+        await generateScection({
+          data: {
+            year_order: year,
+            term_order: year,
+            number_of_section: numSchedules,
+            school_year_id: selectedSchoolYearId,
+            auto_post: autoPost[key] || false,
+            curriculum_id: filters.selectedCurriculum,
+          },
+        });
+        refetch();
+        toast.success('Sections generated successfully');
+      } catch (err) {
+        console.error(err);
+        toast.error('Failed to generate sections');
+      }
+
+      setOpenPopover(null);
+      setNumberOfSchedules((prev) => ({ ...prev, [key]: '' }));
+      setSchoolYearId((prev) => ({ ...prev, [key]: '' }));
+      setAutoPost((prev) => ({ ...prev, [key]: false }));
     },
-    [createSection, updateSection, refetch, controller]
+    [
+      numberOfSchedules,
+      schoolYearId,
+      autoPost,
+      filters.selectedCurriculum,
+      generateScection,
+      refetch,
+    ]
   );
+
+  const handleInputChange = useCallback((year: number, term: number, value: string) => {
+    const key = `${year}-${term}`;
+    setNumberOfSchedules((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  const handleSchoolYearChange = useCallback((year: number, term: number, value: string) => {
+    const key = `${year}-${term}`;
+    setSchoolYearId((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  const handleAutoPostChange = useCallback((year: number, term: number, checked: boolean) => {
+    const key = `${year}-${term}`;
+    setAutoPost((prev) => ({ ...prev, [key]: checked }));
+  }, []);
+
+  const handleSubmitSection = useCallback(async () => {
+    refetch();
+  }, [refetch]);
 
   if (isLoading) {
     return (
@@ -471,6 +568,8 @@ export default function AdminSections(): React.ReactNode {
       </TitledPage>
     );
   }
+
+  const popoverKey = `${filters.selectedYear}-${filters.selectedTerm}`;
 
   return (
     <TitledPage title="Sections" description="Manage your sections">
@@ -599,10 +698,101 @@ export default function AdminSections(): React.ReactNode {
               placeholder="Sort by"
               className="w-[180px] shadow-sm"
             />
-            <Button onClick={handleAddSection} className="whitespace-nowrap shadow-sm">
-              <PlusIcon className="h-4 w-4 mr-2" />
-              Add Section
-            </Button>
+            <Popover
+              open={openPopover === popoverKey}
+              onOpenChange={(open) => setOpenPopover(open ? popoverKey : null)}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  onClick={handleAddSection}
+                  className="whitespace-nowrap shadow-sm"
+                  disabled={!filters.selectedCurriculum || !filters.selectedSchoolYear}
+                >
+                  <PlusIcon className="h-4 w-4 mr-2" />
+                  Add Section
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">Generate Sections</h4>
+                    <p className="text-xs text-muted-foreground">
+                      Configure section generation settings
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`school-year-${popoverKey}`} className="text-xs">
+                      School Year
+                    </Label>
+                    <CustomSelect
+                      value={schoolYearId[popoverKey] || ''}
+                      onValueChange={(value) =>
+                        handleSchoolYearChange(filters.selectedYear, filters.selectedTerm, value)
+                      }
+                      options={schoolYearOptions}
+                      placeholder="Select school year"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`schedules-${popoverKey}`} className="text-xs">
+                      Number of Sections
+                    </Label>
+                    <Input
+                      id={`schedules-${popoverKey}`}
+                      type="number"
+                      min="1"
+                      placeholder="Enter number"
+                      value={numberOfSchedules[popoverKey] || ''}
+                      onChange={(e) =>
+                        handleInputChange(
+                          filters.selectedYear,
+                          filters.selectedTerm,
+                          e.target.value
+                        )
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleGenerateSchedule(filters.selectedYear, filters.selectedTerm);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`auto-post-${popoverKey}`}
+                      checked={autoPost[popoverKey] || false}
+                      onCheckedChange={(checked) =>
+                        handleAutoPostChange(
+                          filters.selectedYear,
+                          filters.selectedTerm,
+                          checked as boolean
+                        )
+                      }
+                    />
+                    <Label
+                      htmlFor={`auto-post-${popoverKey}`}
+                      className="text-xs font-normal cursor-pointer"
+                    >
+                      Auto-post generated sections
+                    </Label>
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button size="sm" variant="outline" onClick={() => setOpenPopover(null)}>
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() =>
+                        handleGenerateSchedule(filters.selectedYear, filters.selectedTerm)
+                      }
+                      disabled={isGeneratingSections}
+                    >
+                      {isGeneratingSections ? 'Generating...' : 'Generate'}
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
@@ -641,18 +831,29 @@ export default function AdminSections(): React.ReactNode {
                 className="border rounded-lg bg-card shadow-sm overflow-hidden"
               >
                 <AccordionTrigger className="px-5 py-3 hover:no-underline hover:bg-accent/50 transition-colors [&[data-state=open]]:bg-gradient-to-br [&[data-state=open]]:from-blue-50 [&[data-state=open]]:to-indigo-100 dark:[&[data-state=open]]:from-blue-900/20 dark:[&[data-state=open]]:to-indigo-900/20">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-base font-semibold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
-                      {group.name}
-                    </h3>
-                    <Badge
-                      variant="secondary"
-                      className="font-medium bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 border-purple-200 dark:border-purple-800"
+                  <div className="flex items-center justify-between w-full pr-2">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-base font-semibold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                        {group.name}
+                      </h3>
+                      <Badge
+                        variant="secondary"
+                        className="font-medium bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 border-purple-200 dark:border-purple-800"
+                      >
+                        <span className="text-purple-700 dark:text-purple-300">
+                          {group.items.length}
+                        </span>
+                      </Badge>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => handleDeleteBySectionCode(getSectionCode(group.name), e)}
+                      disabled={isDeletingSectionBySectionCode}
+                      className="h-8 w-8 p-0 hover:bg-destructive/10 text-destructive"
                     >
-                      <span className="text-purple-700 dark:text-purple-300">
-                        {group.items.length}
-                      </span>
-                    </Badge>
+                      <TrashIcon className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-5 pb-3 bg-gradient-to-br from-slate-50/50 to-slate-100/50 dark:from-slate-900/50 dark:to-slate-800/50">

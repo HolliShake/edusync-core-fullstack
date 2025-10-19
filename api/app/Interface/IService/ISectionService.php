@@ -19,4 +19,12 @@ interface ISectionService extends IGenericService
      * @return array Array of created sections
      */
     public function generate(array $config): array;
+
+    /**
+     * Delete a section by its section code
+     *
+     * @param string $section_code The section code to delete
+     * @return void
+     */
+    public function deleteBySectionCode(string $section_code): void;
 }

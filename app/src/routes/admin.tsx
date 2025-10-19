@@ -7,6 +7,7 @@ import AdminCampus from '@/pages/admin/campuses/page';
 import AdminCourses from '@/pages/admin/courses/page';
 import AdminDashboard from '@/pages/admin/dashboard';
 import AdminProgramTypes from '@/pages/admin/program-type/page';
+import AdminRequirements from '@/pages/admin/requirements/page';
 import AdminAcademicCalendarPage from '@/pages/admin/school-year/academic-calendar/page';
 import AdminSchoolYear from '@/pages/admin/school-year/page';
 import AdminSections from '@/pages/admin/sections/page';
@@ -17,6 +18,7 @@ import {
   BuildingIcon,
   CalendarIcon,
   ClockIcon,
+  FileIcon,
   FolderIcon,
   GraduationCapIcon,
   LayoutDashboardIcon,
@@ -135,6 +137,16 @@ const ADMIN: Route[] = [
     path: '/admin/sections',
     component: <AdminSections />,
     icon: <FolderIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+  },
+  // Requirements
+  {
+    key: 'admin.requirement',
+    title: 'Requirement',
+    path: '/admin/requirements',
+    component: <AdminRequirements />,
+    icon: <FileIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
   },

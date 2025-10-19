@@ -137,6 +137,12 @@ class Section extends Model
         'is_posted',
     ];
 
+    protected $casts = [
+        'is_posted' => 'boolean',
+        'min_students' => 'integer',
+        'max_students' => 'integer',
+    ];
+
     protected $appends = [
         'curriculum_detail',
     ];
