@@ -15,6 +15,7 @@ const academicTermSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().nullable().optional(),
   number_of_terms: z.number().int().min(1, 'Number of terms must be at least 1'),
+  suffix: z.string().min(1, 'Suffix is required'),
 });
 
 type AcademicTermFormData = z.infer<typeof academicTermSchema>;
@@ -37,6 +38,7 @@ export default function AcademicTermModal({ controller, onSubmit }: AcademicTerm
       name: '',
       description: '',
       number_of_terms: 1,
+      suffix: '',
     },
   });
 
@@ -53,6 +55,7 @@ export default function AcademicTermModal({ controller, onSubmit }: AcademicTerm
         name: data.name,
         description: data.description ?? null,
         number_of_terms: Number(data.number_of_terms),
+        suffix: '',
       };
 
       if (isEdit) {
@@ -80,6 +83,7 @@ export default function AcademicTermModal({ controller, onSubmit }: AcademicTerm
         name: '',
         description: '',
         number_of_terms: 1,
+        suffix: '',
       });
     }
     reset({

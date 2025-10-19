@@ -4,10 +4,11 @@ export interface Route {
   title: string;
   path: string;
   key: string;
-  component: React.ReactNode;
+  component?: React.ReactNode;
   icon?: React.ReactNode;
   index?: boolean;
   layout: 'dashboard' | 'default';
   sidebar?: boolean;
   children?: Route[];
+  type?: 'menu' | 'label';
 }

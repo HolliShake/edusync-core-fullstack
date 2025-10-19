@@ -4,7 +4,6 @@ import type { AuthStore } from '@/store/auth.store';
 import useAuthStore from '@/store/auth.store';
 import type React from 'react';
 import { createContext, useContext, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router';
 
 const AuthContext = createContext<AuthStore | undefined>(undefined);
 
@@ -18,8 +17,8 @@ export const useAuth = () => {
 
 export default function AuthProvider({ children }: { children: React.ReactNode }): React.ReactNode {
   const auth = useAuthStore();
-  const location = useLocation();
-  const navigate = useNavigate();
+  // const location = useLocation();
+  // const navigate = useNavigate();
 
   // Load credentials from localStorage on mount
   useEffect(() => {

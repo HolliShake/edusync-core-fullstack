@@ -28,6 +28,13 @@ import {
 
 const ADMIN: Route[] = [
   {
+    key: 'admin.label',
+    title: 'Admin',
+    path: '#',
+    component: <AdminDashboard />,
+    layout: 'default',
+  },
+  {
     key: 'admin.dashboard',
     title: 'Dashboard',
     path: '/admin/dashboard',

@@ -219,7 +219,7 @@ export default function AcademicCalendarModal({
           <CustomSelect
             options={eventSelectOptions}
             value={selectedEvent}
-            onChange={(val: string) =>
+            onValueChange={(val: string) =>
               setValue('event', val as AcademicCalendarFormData['event'], { shouldValidate: true })
             }
             placeholder="Select event type"
@@ -251,7 +251,7 @@ export default function AcademicCalendarModal({
             <CustomSelect
               options={schoolYearOptions}
               value={selectedSchoolYearId}
-              onChange={(val: string) => {
+              onValueChange={(val: string) => {
                 // val could be a number string or undefined
                 if (val === undefined || val === null || val === '') {
                   setValue('school_year_id', undefined as any, {

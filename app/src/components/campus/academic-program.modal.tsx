@@ -176,7 +176,7 @@ export default function AcademicProgramModal({
                 value: String(pt.id),
               }))}
               value={programTypeId ? String(programTypeId) : undefined}
-              onChange={(v) => setValue('program_type_id', Number(v))}
+              onValueChange={(v) => setValue('program_type_id', Number(v))}
               placeholder={isLoadingTypes ? 'Loading...' : 'Select a program type'}
               disabled={isLoadingTypes}
             />
