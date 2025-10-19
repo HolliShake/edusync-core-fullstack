@@ -125,6 +125,24 @@ export default function SideBar({
           const isActive = isActiveRoute(route.path);
           const hasChildren = route.children && route.children.length > 0;
           const isExpanded = expandedRoutes.has(index) && !isCollapsed;
+          const isLabel = route.type === 'label';
+
+          // If it's a label, render it differently
+          if (isLabel) {
+            return (
+              <div
+                key={index}
+                className={cn(
+                  'px-2.5 py-2 transition-all duration-300 ease-in-out pointer-events-none select-none',
+                  isCollapsed && 'lg:max-w-0 lg:opacity-0 lg:overflow-hidden lg:px-0 lg:py-0'
+                )}
+              >
+                <span className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider">
+                  {route.title}
+                </span>
+              </div>
+            );
+          }
 
           return (
             <div key={index} className="space-y-1">

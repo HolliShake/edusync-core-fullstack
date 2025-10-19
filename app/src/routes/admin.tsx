@@ -33,6 +33,7 @@ const ADMIN: Route[] = [
     path: '#',
     component: <AdminDashboard />,
     layout: 'default',
+    type: 'label',
   },
   {
     key: 'admin.dashboard',
