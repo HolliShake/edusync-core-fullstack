@@ -756,4 +756,4 @@ For support, please open an issue on the GitHub repository or contact the develo
 **Version**: 1.0.0  
 **Status**: Active Development
 
-Made with ❤️ by the EduSync Development Team
+Made with ❤️ by HolliShake
