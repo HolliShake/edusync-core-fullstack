@@ -116,6 +116,7 @@ class AuthController extends Controller
 
         // Eager load designitions to avoid N+1 queries
         $designitions = $user->designitions()
+            ->where('is_active', true)
             ->whereIn('designitionable_type', [Campus::class, College::class, AcademicProgram::class])
             ->get()
             ->keyBy('designitionable_type');

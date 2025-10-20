@@ -134,7 +134,7 @@ class SchoolYear extends Model
     {
         // Locked if not active or today is not within the date range
         return $this->is_active === false ||
-            !(now()->between($this->start_date, $this->end_date));
+            (!(now()->between($this->start_date, $this->end_date)) && now()->year < $this->end_date->year);
     }
 
     /**
@@ -145,9 +145,7 @@ class SchoolYear extends Model
     public function getIsCurrentAttribute(): bool
     {
         $current = now();
-        // Get all school years that start after this one ends
-        $newer = self::where('start_date', '>', $this->end_date)->count();
-        // Mark as current only if today is within range and there are no newer school years
-        return $current->between($this->start_date, $this->end_date) && $newer === 0;
+        // Mark as current if today is within range and the school year hasn't ended yet
+        return $current->between($this->start_date, $this->end_date);
     }
 }

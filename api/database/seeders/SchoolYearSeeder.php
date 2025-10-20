@@ -10,6 +10,8 @@ class SchoolYearSeeder extends Seeder
 {
     public function run(): void
     {
+        $currentYear = now()->year;
+        $nextYear    = $currentYear + 1;
         $schoolYears = [
             [
                 'school_year_code' => '2022-2023',
@@ -33,19 +35,12 @@ class SchoolYearSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'school_year_code' => '2025-2026',
-                'name' => 'AY 2025-2026',
-                'start_date' => Carbon::create(2025, 6, 1),
-                'end_date' => Carbon::create(2026, 5, 31),
-                'is_active' => false,
-            ],
-            [
-                'school_year_code' => '2026-2027',
-                'name' => 'AY 2026-2027',
-                'start_date' => Carbon::create(2026, 6, 1),
-                'end_date' => Carbon::create(2027, 5, 31),
-                'is_active' => false,
-            ],
+                'school_year_code' => $currentYear . '-' . $nextYear,
+                'name' => 'AY ' . $currentYear . '-' . $nextYear,
+                'start_date' => Carbon::create($currentYear, 6, 1),
+                'end_date' => Carbon::create($nextYear, 5, 31),
+                'is_active' => true,
+            ]
         ];
 
         foreach ($schoolYears as $schoolYear) {

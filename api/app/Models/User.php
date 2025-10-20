@@ -119,6 +119,7 @@ class User extends Authenticatable
         'name',
         'email',
         'role',
+        'password',
     ];
 
     /**
@@ -161,15 +162,31 @@ class User extends Authenticatable
      */
     public function getRolesAttribute(): array
     {
-        $roles = [$this->role];
-        if (Designition::where('user_id', $this->id)->where('designitionable_type', Campus::class)->exists()) {
+        $roles         = [];
+        $admin         = $this->role === UserRoleEnum::ADMIN->value;
+        $campus_reg    = false;
+        $college_dean  = false;
+        $program_chair = false;
+        $student       = false;
+        /********************* Designitions *********************/
+        if ($admin) {
+            $roles[] = UserRoleEnum::ADMIN->value;
+        }
+        if ($campus_reg = Designition::where('user_id', $this->id)->where('designitionable_type', Campus::class)->exists()) {
             $roles[] = UserRoleEnum::CAMPUS_REGISTRAR->value;
         }
-        if (Designition::where('user_id', $this->id)->where('designitionable_type', College::class)->exists()) {
+        if ($college_dean = Designition::where('user_id', $this->id)->where('designitionable_type', College::class)->exists()) {
             $roles[] = UserRoleEnum::COLLEGE_DEAN->value;
         }
-        if (Designition::where('user_id', $this->id)->where('designitionable_type', AcademicProgram::class)->exists()) {
+        if ($program_chair = Designition::where('user_id', $this->id)->where('designitionable_type', AcademicProgram::class)->exists()) {
             $roles[] = UserRoleEnum::PROGRAM_CHAIR->value;
+        }
+        if ($student = Enrollment::where('user_id', $this->id)->exists()) {
+            $roles[] = UserRoleEnum::STUDENT->value;
+        }
+        // Auto Guest?
+        if (!($admin || $campus_reg || $college_dean || $program_chair || $student)) {
+            $roles[] = UserRoleEnum::GUEST->value;
         }
         return $roles;
     }
@@ -181,6 +198,6 @@ class User extends Authenticatable
      */
     public function designitions(): HasMany
     {
-        return $this->hasMany(Designition::class, 'user_id', 'id');
+        return $this->hasMany(Designition::class);
     }
 }

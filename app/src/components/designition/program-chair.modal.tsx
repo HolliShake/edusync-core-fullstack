@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { renderError } from '@/lib/error';
+import { getError, renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useCreateProgramChair,
@@ -322,7 +322,7 @@ function ProgramChairModalContent({ controller, onSubmit }: ProgramChairModalPro
         onSubmit(data);
       } catch (error) {
         renderError(error, setError);
-        toast.error(`Failed to ${isEdit ? 'update' : 'create'} Program Chair`);
+        toast.error(`Failed to ${isEdit ? 'update' : 'create'} Program Chair ${getError(error)}`);
       }
     },
     [createProgramChair, updateDesignition, controller, onSubmit, setError, isEdit]

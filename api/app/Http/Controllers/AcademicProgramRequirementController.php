@@ -1,0 +1,318 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Service\AcademicProgramRequirementService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use OpenApi\Attributes as OA;
+
+#[OA\PathItem(
+    path: "/AcademicProgramRequirement"
+)]
+class AcademicProgramRequirementController extends Controller
+{
+    public function __construct(protected AcademicProgramRequirementService $service) {
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    #[OA\Get(
+        path: "/api/AcademicProgramRequirement",
+        summary: "Get paginated list of AcademicProgramRequirement",
+        tags: ["AcademicProgramRequirement"],
+        description: "Retrieve a paginated list of AcademicProgramRequirement with optional search",
+        operationId:"getAcademicProgramRequirementPaginated",
+    )]
+    #[OA\Parameter(
+        name: "search",
+        in: "query",
+        description: "Search term",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        in: "query",
+        description: "Page number",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
+        name: "rows",
+        in: "query",
+        description: "Number of items per page",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 10)
+    )]
+    #[OA\Parameter(
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "School year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAcademicProgramRequirementResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    public function index(Request $request)
+    {
+        $srch = $request->query("search", '');
+        $page = $request->query("page", 0);
+        $rows = $request->query("rows", 10);
+        return $this->ok($this->service->getAll(true, $page, $rows));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    #[OA\Get(
+        path: "/api/AcademicProgramRequirement/{id}",
+        summary: "Get a specific AcademicProgramRequirement",
+        tags: ["AcademicProgramRequirement"],
+        description: "Retrieve a AcademicProgramRequirement by its ID",
+        operationId: "getAcademicProgramRequirementById",
+    )]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetAcademicProgramRequirementResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "AcademicProgramRequirement not found"
+    )]
+    public function show($id)
+    {
+        try {
+            return $this->ok($this->service->getById($id));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound('AcademicProgramRequirement not found');
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    #[OA\Post(
+        path: "/api/AcademicProgramRequirement",
+        summary: "Create a new AcademicProgramRequirement",
+        tags: ["AcademicProgramRequirement"],
+        description:" Create a new AcademicProgramRequirement with the provided details",
+        operationId: "createAcademicProgramRequirement",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/AcademicProgramRequirement")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "AcademicProgramRequirement created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateAcademicProgramRequirementResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function store(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'requirement_id' => 'required|integer|exists:requirement,id',
+                'school_year_id' => 'required|integer|exists:school_year,id',
+                'is_mandatory' => 'required|boolean',
+                'is_active' => 'required|boolean',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->create($validated));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    #[OA\Put(
+        path: "/api/AcademicProgramRequirement/{id}",
+        summary: "Update a AcademicProgramRequirement",
+        tags: ["AcademicProgramRequirement"],
+        description: "Update an existing AcademicProgramRequirement with the provided details",
+        operationId: "updateAcademicProgramRequirement",
+    )]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer"),
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/AcademicProgramRequirement")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "AcademicProgramRequirement updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAcademicProgramRequirementResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "AcademicProgramRequirement not found"
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function update(Request $request, $id)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'requirement_id' => 'required|integer|exists:requirement,id',
+                'school_year_id' => 'required|integer|exists:school_year,id',
+                'is_mandatory' => 'required|boolean',
+                'is_active' => 'required|boolean',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->update($id, $validated));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound('AcademicProgramRequirement not found');
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    #[OA\Delete(
+        path: "/api/AcademicProgramRequirement/{id}",
+        summary: "Delete a AcademicProgramRequirement",
+        tags: ["AcademicProgramRequirement"],
+        description: "Delete a AcademicProgramRequirement by its ID",
+        operationId: "deleteAcademicProgramRequirement",
+    )]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(
+        response: 204,
+        description: "AcademicProgramRequirement deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAcademicProgramRequirementResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "AcademicProgramRequirement not found"
+    )]
+    #[OA\Response(
+        response: 500,
+        description:" Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function destroy(string $id)
+    {
+        try {
+            $this->service->delete($id);
+            return $this->noContent();
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound('AcademicProgramRequirement not found');
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+}

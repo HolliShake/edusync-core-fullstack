@@ -20,8 +20,8 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function LoginPage(): React.ReactNode {
   const navigate = useNavigate();
   const { mutateAsync: loginAttempt, isPending: isLoading } = useLogin();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('philippandrewroaredondo@gmail.com');
+  const [password, setPassword] = useState('test@password');
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -207,7 +207,7 @@ export default function LoginPage(): React.ReactNode {
                 <div className="text-sm text-center text-muted-foreground">
                   Don't have an account?{' '}
                   <Link
-                    to="/auth/register"
+                    to="/auth/signup"
                     className="text-primary hover:text-primary/80 hover:underline font-semibold"
                   >
                     Create account

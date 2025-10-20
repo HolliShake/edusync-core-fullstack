@@ -7,13 +7,86 @@ import { ThemeProvider } from './theme.provider';
 import { Toaster } from './ui/sonner';
 
 const captureErrorMessage = (error: any): string => {
-  // Check for Axios/HTTP response errors
+  // Check for Laravel validation errors (422 Unprocessable Entity)
+  if (error?.response?.status === 422 && error?.response?.data?.errors) {
+    const errors = error.response.data.errors;
+    // Get first error message from validation errors object
+    const firstErrorKey = Object.keys(errors)[0];
+    if (firstErrorKey && Array.isArray(errors[firstErrorKey])) {
+      return errors[firstErrorKey][0];
+    }
+    return 'Validation error occurred';
+  }
+
+  // Check for Laravel error response with status and message
+  if (error?.response?.data?.status === 'error' && error?.response?.data?.message) {
+    const message = error.response.data.message;
+    // Extract user-friendly message from SQL errors
+    if (typeof message === 'string' && message.includes('Duplicate entry')) {
+      const match = message.match(/Duplicate entry '([^']+)'/);
+      if (match) {
+        return 'This record already exists. Please check for duplicates.';
+      }
+      return 'Duplicate entry detected. This record already exists.';
+    }
+    // Handle foreign key constraint errors
+    if (typeof message === 'string' && message.includes('foreign key constraint')) {
+      return 'Cannot delete this record because it is being used by other records.';
+    }
+    // Handle unique constraint violations
+    if (typeof message === 'string' && message.includes('Integrity constraint violation')) {
+      return 'This operation violates data integrity rules.';
+    }
+    return message;
+  }
+
+  // Check for Laravel exception messages
+  if (error?.response?.data?.exception) {
+    const exceptionMessage = error.response.data.message || 'Server error occurred';
+    return exceptionMessage;
+  }
+
+  // Check for standard message property
   if (error?.response?.data?.message) {
     return error.response.data.message;
   }
+
+  // Check for error property
   if (error?.response?.data?.error) {
     return error.response.data.error;
   }
+
+  // Check for HTTP status codes with default messages
+  if (error?.response?.status) {
+    switch (error.response.status) {
+      case 400:
+        return 'Bad request - please check your input';
+      case 401:
+        return 'Unauthorized - please log in again';
+      case 403:
+        return 'Forbidden - you do not have permission to perform this action';
+      case 404:
+        return 'Resource not found';
+      case 405:
+        return 'Method not allowed';
+      case 409:
+        return 'Conflict - this resource already exists or is in use';
+      case 429:
+        return 'Too many requests - please try again later';
+      case 500:
+        return 'Internal server error - please try again later';
+      case 502:
+        return 'Bad gateway - server is temporarily unavailable';
+      case 503:
+        return 'Service unavailable - please try again later';
+      case 504:
+        return 'Gateway timeout - request took too long';
+      default:
+        break;
+    }
+  }
+
+  // Check for generic response data
   if (error?.response?.data) {
     return typeof error.response.data === 'string'
       ? error.response.data

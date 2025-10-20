@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -27,6 +29,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-07T10:30:14.000000Z"),
         // Custom
         new OA\Property(property: "program_type", type: "object", ref: "#/components/schemas/ProgramType"),
+        new OA\Property(property: "requirements", type: "array", items: new OA\Items(ref: "#/components/schemas/AcademicProgramRequirement")),
     ]
 )]
 
@@ -108,19 +111,43 @@ class AcademicProgram extends Model
     ];
 
     /**
-     * Get the college that owns the academic program.
+     * Get the requirements for the academic program.
+     *
+     * @return array
      */
-    public function college()
+    public function getRequirementsAttribute(): array
+    {
+        return $this->programRequirements()->get()->toArray();
+    }
+
+    /**
+     * Get the college that owns the academic program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function college(): BelongsTo
     {
         return $this->belongsTo(College::class, 'college_id');
     }
 
     /**
      * Get the program type for the academic program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function programType()
+    public function programType(): BelongsTo
     {
         return $this->belongsTo(ProgramType::class, 'program_type_id');
+    }
+
+    /**
+     * Get the program requirements for the academic program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function programRequirements(): HasMany
+    {
+        return $this->hasMany(AcademicProgramRequirement::class);
     }
 
     /*****************************************************************/

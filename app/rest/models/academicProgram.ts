@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ProgramType } from './programType';
+import type { AcademicProgramRequirement } from './academicProgramRequirement';
 
 export interface AcademicProgram {
   id?: number;
@@ -17,4 +18,5 @@ export interface AcademicProgram {
   created_at?: string;
   updated_at?: string;
   program_type?: ProgramType;
+  requirements?: AcademicProgramRequirement[];
 }

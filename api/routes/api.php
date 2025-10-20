@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AcademicCalendarController;
 use App\Http\Controllers\AcademicProgramController;
+use App\Http\Controllers\AcademicProgramRequirementController;
 use App\Http\Controllers\AcademicTermController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BuildingController;
@@ -169,4 +170,13 @@ Route::controller(DesignitionController::class)->group(function() {
     Route::post('/Designition/create-campus-registrar', 'create_campus_registrar');
     Route::put('/Designition/{id}', 'update');
     Route::delete('/Designition/{id}', 'destroy');
+});
+
+
+Route::controller(AcademicProgramRequirementController::class)->group(function() {
+    Route::get('/AcademicProgramRequirement', 'index');
+    Route::get('/AcademicProgramRequirement/{id}', 'show');
+    Route::post('/AcademicProgramRequirement', 'store');
+    Route::put('/AcademicProgramRequirement/{id}', 'update');
+    Route::delete('/AcademicProgramRequirement/{id}', 'destroy');
 });

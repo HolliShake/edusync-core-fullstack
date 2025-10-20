@@ -167,8 +167,8 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:user,email',
-                'password' => 'nullable|string|min:8',
-                'confirm_password' => 'nullable|string|min:8|same:password',
+                'password' => 'required|string|min:8',
+                'confirm_password' => 'required|string|min:8|same:password',
                 'role' => 'required|string|in:'.implode(',', array_column(UserRoleEnum::cases(), 'value')),
             ]);
 

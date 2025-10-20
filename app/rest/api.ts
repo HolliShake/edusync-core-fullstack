@@ -27,15 +27,21 @@ import type {
 import type {
   AcademicCalendar,
   AcademicProgram,
+  AcademicProgramRequirement,
   AcademicTerm,
+  AdmissionApplication,
+  AdmissionSchedule,
   AuthCredential,
   Building,
   Campus,
   College,
   Course,
   CreateAcademicCalendarResponse200,
+  CreateAcademicProgramRequirementResponse200,
   CreateAcademicProgramResponse200,
   CreateAcademicTermResponse200,
+  CreateAdmissionApplicationResponse200,
+  CreateAdmissionScheduleResponse200,
   CreateBuildingResponse200,
   CreateCampusResponse200,
   CreateCollegeResponse200,
@@ -43,6 +49,8 @@ import type {
   CreateCurriculumDetailResponse200,
   CreateCurriculumResponse200,
   CreateDesignitionResponse200,
+  CreateEnrollmentLogResponse200,
+  CreateEnrollmentResponse200,
   CreateProgramTypeResponse200,
   CreateRequirementResponse200,
   CreateRoomResponse200,
@@ -52,8 +60,11 @@ import type {
   Curriculum,
   CurriculumDetail,
   DeleteAcademicCalendarResponse200,
+  DeleteAcademicProgramRequirementResponse200,
   DeleteAcademicProgramResponse200,
   DeleteAcademicTermResponse200,
+  DeleteAdmissionApplicationResponse200,
+  DeleteAdmissionScheduleResponse200,
   DeleteBuildingResponse200,
   DeleteCampusResponse200,
   DeleteCollegeResponse200,
@@ -61,6 +72,8 @@ import type {
   DeleteCurriculumDetailResponse200,
   DeleteCurriculumResponse200,
   DeleteDesignitionResponse200,
+  DeleteEnrollmentLogResponse200,
+  DeleteEnrollmentResponse200,
   DeleteProgramTypeResponse200,
   DeleteRequirementResponse200,
   DeleteRoomResponse200,
@@ -68,14 +81,22 @@ import type {
   DeleteSectionResponse200,
   DeleteUserResponse200,
   Designition,
+  Enrollment,
+  EnrollmentLog,
   ForbiddenResponse,
   GenerateSection,
   GetAcademicCalendarPaginatedParams,
   GetAcademicCalendarResponse200,
   GetAcademicProgramPaginatedParams,
+  GetAcademicProgramRequirementPaginatedParams,
+  GetAcademicProgramRequirementResponse200,
   GetAcademicProgramResponse200,
   GetAcademicTermPaginatedParams,
   GetAcademicTermResponse200,
+  GetAdmissionApplicationPaginatedParams,
+  GetAdmissionApplicationResponse200,
+  GetAdmissionSchedulePaginatedParams,
+  GetAdmissionScheduleResponse200,
   GetBuildingPaginatedParams,
   GetBuildingResponse200,
   GetCampusPaginatedParams,
@@ -91,6 +112,10 @@ import type {
   GetCurriculumResponse200,
   GetDesignitionPaginatedParams,
   GetDesignitionResponse200,
+  GetEnrollmentLogPaginatedParams,
+  GetEnrollmentLogResponse200,
+  GetEnrollmentPaginatedParams,
+  GetEnrollmentResponse200,
   GetProgramTypePaginatedParams,
   GetProgramTypeResponse200,
   GetRequirementPaginatedParams,
@@ -108,8 +133,11 @@ import type {
   LoginResponse200,
   MultipleCurriculumDetail,
   PaginatedAcademicCalendarResponse200,
+  PaginatedAcademicProgramRequirementResponse200,
   PaginatedAcademicProgramResponse200,
   PaginatedAcademicTermResponse200,
+  PaginatedAdmissionApplicationResponse200,
+  PaginatedAdmissionScheduleResponse200,
   PaginatedBuildingResponse200,
   PaginatedCampusResponse200,
   PaginatedCollegeResponse200,
@@ -117,6 +145,8 @@ import type {
   PaginatedCurriculumDetailResponse200,
   PaginatedCurriculumResponse200,
   PaginatedDesignitionResponse200,
+  PaginatedEnrollmentLogResponse200,
+  PaginatedEnrollmentResponse200,
   PaginatedProgramTypeResponse200,
   PaginatedRequirementResponse200,
   PaginatedRoomResponse200,
@@ -133,8 +163,11 @@ import type {
   UnauthenticatedResponse,
   UnauthorizedResponse,
   UpdateAcademicCalendarResponse200,
+  UpdateAcademicProgramRequirementResponse200,
   UpdateAcademicProgramResponse200,
   UpdateAcademicTermResponse200,
+  UpdateAdmissionApplicationResponse200,
+  UpdateAdmissionScheduleResponse200,
   UpdateBuildingResponse200,
   UpdateCampusResponse200,
   UpdateCollegeResponse200,
@@ -142,6 +175,8 @@ import type {
   UpdateCurriculumDetailResponse200,
   UpdateCurriculumResponse200,
   UpdateDesignitionResponse200,
+  UpdateEnrollmentLogResponse200,
+  UpdateEnrollmentResponse200,
   UpdateProgramTypeResponse200,
   UpdateRequirementResponse200,
   UpdateRoomResponse200,
@@ -929,6 +964,380 @@ export const useDeleteAcademicProgram = <TError = UnauthenticatedResponse | Forb
     }
     
 /**
+ * Retrieve a paginated list of AcademicProgramRequirement with optional search
+ * @summary Get paginated list of AcademicProgramRequirement
+ */
+export const getAcademicProgramRequirementPaginated = (
+    params?: GetAcademicProgramRequirementPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedAcademicProgramRequirementResponse200>(
+      {url: `/api/AcademicProgramRequirement`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicProgramRequirementPaginatedQueryKey = (params?: GetAcademicProgramRequirementPaginatedParams,) => {
+    return [`/api/AcademicProgramRequirement`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAcademicProgramRequirementPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetAcademicProgramRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicProgramRequirementPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>> = ({ signal }) => getAcademicProgramRequirementPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicProgramRequirementPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>>
+export type GetAcademicProgramRequirementPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetAcademicProgramRequirementPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetAcademicProgramRequirementPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramRequirementPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAcademicProgramRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramRequirementPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAcademicProgramRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of AcademicProgramRequirement
+ */
+
+export function useGetAcademicProgramRequirementPaginated<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAcademicProgramRequirementPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicProgramRequirementPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new AcademicProgramRequirement with the provided details
+ * @summary Create a new AcademicProgramRequirement
+ */
+export const createAcademicProgramRequirement = (
+    academicProgramRequirement: NonReadonly<AcademicProgramRequirement>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateAcademicProgramRequirementResponse200>(
+      {url: `/api/AcademicProgramRequirement`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: academicProgramRequirement, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAcademicProgramRequirementMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgramRequirement>>, TError,{data: NonReadonly<AcademicProgramRequirement>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgramRequirement>>, TError,{data: NonReadonly<AcademicProgramRequirement>}, TContext> => {
+
+const mutationKey = ['createAcademicProgramRequirement'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAcademicProgramRequirement>>, {data: NonReadonly<AcademicProgramRequirement>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAcademicProgramRequirement(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAcademicProgramRequirementMutationResult = NonNullable<Awaited<ReturnType<typeof createAcademicProgramRequirement>>>
+    export type CreateAcademicProgramRequirementMutationBody = NonReadonly<AcademicProgramRequirement>
+    export type CreateAcademicProgramRequirementMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new AcademicProgramRequirement
+ */
+export const useCreateAcademicProgramRequirement = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAcademicProgramRequirement>>, TError,{data: NonReadonly<AcademicProgramRequirement>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAcademicProgramRequirement>>,
+        TError,
+        {data: NonReadonly<AcademicProgramRequirement>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAcademicProgramRequirementMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a AcademicProgramRequirement by its ID
+ * @summary Get a specific AcademicProgramRequirement
+ */
+export const getAcademicProgramRequirementById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetAcademicProgramRequirementResponse200>(
+      {url: `/api/AcademicProgramRequirement/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAcademicProgramRequirementByIdQueryKey = (id?: number,) => {
+    return [`/api/AcademicProgramRequirement/${id}`] as const;
+    }
+
+    
+export const getGetAcademicProgramRequirementByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAcademicProgramRequirementByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>> = ({ signal }) => getAcademicProgramRequirementById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAcademicProgramRequirementByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>>
+export type GetAcademicProgramRequirementByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetAcademicProgramRequirementById<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramRequirementById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramRequirementById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramRequirementById<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAcademicProgramRequirementById>>,
+          TError,
+          Awaited<ReturnType<typeof getAcademicProgramRequirementById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAcademicProgramRequirementById<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific AcademicProgramRequirement
+ */
+
+export function useGetAcademicProgramRequirementById<TData = Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAcademicProgramRequirementById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAcademicProgramRequirementByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing AcademicProgramRequirement with the provided details
+ * @summary Update a AcademicProgramRequirement
+ */
+export const updateAcademicProgramRequirement = (
+    id: number,
+    academicProgramRequirement: NonReadonly<AcademicProgramRequirement>,
+ ) => {
+      
+      
+      return fetchData<UpdateAcademicProgramRequirementResponse200>(
+      {url: `/api/AcademicProgramRequirement/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: academicProgramRequirement
+    },
+      );
+    }
+  
+
+
+export const getUpdateAcademicProgramRequirementMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgramRequirement>>, TError,{id: number;data: NonReadonly<AcademicProgramRequirement>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgramRequirement>>, TError,{id: number;data: NonReadonly<AcademicProgramRequirement>}, TContext> => {
+
+const mutationKey = ['updateAcademicProgramRequirement'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAcademicProgramRequirement>>, {id: number;data: NonReadonly<AcademicProgramRequirement>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAcademicProgramRequirement(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAcademicProgramRequirementMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicProgramRequirement>>>
+    export type UpdateAcademicProgramRequirementMutationBody = NonReadonly<AcademicProgramRequirement>
+    export type UpdateAcademicProgramRequirementMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a AcademicProgramRequirement
+ */
+export const useUpdateAcademicProgramRequirement = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicProgramRequirement>>, TError,{id: number;data: NonReadonly<AcademicProgramRequirement>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAcademicProgramRequirement>>,
+        TError,
+        {id: number;data: NonReadonly<AcademicProgramRequirement>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAcademicProgramRequirementMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a AcademicProgramRequirement by its ID
+ * @summary Delete a AcademicProgramRequirement
+ */
+export const deleteAcademicProgramRequirement = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteAcademicProgramRequirementResponse200>(
+      {url: `/api/AcademicProgramRequirement/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteAcademicProgramRequirementMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgramRequirement>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgramRequirement>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteAcademicProgramRequirement'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAcademicProgramRequirement>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAcademicProgramRequirement(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAcademicProgramRequirementMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAcademicProgramRequirement>>>
+    
+    export type DeleteAcademicProgramRequirementMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a AcademicProgramRequirement
+ */
+export const useDeleteAcademicProgramRequirement = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAcademicProgramRequirement>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAcademicProgramRequirement>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAcademicProgramRequirementMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of AcademicTerm with optional search
  * @summary Get paginated list of AcademicTerm
  */
@@ -1298,6 +1707,754 @@ export const useDeleteAcademicTerm = <TError = UnauthenticatedResponse | Forbidd
       > => {
 
       const mutationOptions = getDeleteAcademicTermMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of AdmissionApplication with optional search
+ * @summary Get paginated list of AdmissionApplication
+ */
+export const getAdmissionApplicationPaginated = (
+    params?: GetAdmissionApplicationPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedAdmissionApplicationResponse200>(
+      {url: `/api/AdmissionApplication`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetAdmissionApplicationPaginatedQueryKey = (params?: GetAdmissionApplicationPaginatedParams,) => {
+    return [`/api/AdmissionApplication`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAdmissionApplicationPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetAdmissionApplicationPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdmissionApplicationPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>> = ({ signal }) => getAdmissionApplicationPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdmissionApplicationPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>>
+export type GetAdmissionApplicationPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetAdmissionApplicationPaginated<TData = Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetAdmissionApplicationPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionApplicationPaginated<TData = Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAdmissionApplicationPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionApplicationPaginated<TData = Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAdmissionApplicationPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of AdmissionApplication
+ */
+
+export function useGetAdmissionApplicationPaginated<TData = Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAdmissionApplicationPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdmissionApplicationPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new AdmissionApplication with the provided details
+ * @summary Create a new AdmissionApplication
+ */
+export const createAdmissionApplication = (
+    admissionApplication: AdmissionApplication,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateAdmissionApplicationResponse200>(
+      {url: `/api/AdmissionApplication`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: admissionApplication, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAdmissionApplicationMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: AdmissionApplication}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: AdmissionApplication}, TContext> => {
+
+const mutationKey = ['createAdmissionApplication'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAdmissionApplication>>, {data: AdmissionApplication}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAdmissionApplication(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAdmissionApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof createAdmissionApplication>>>
+    export type CreateAdmissionApplicationMutationBody = AdmissionApplication
+    export type CreateAdmissionApplicationMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new AdmissionApplication
+ */
+export const useCreateAdmissionApplication = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: AdmissionApplication}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAdmissionApplication>>,
+        TError,
+        {data: AdmissionApplication},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAdmissionApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a AdmissionApplication by its ID
+ * @summary Get a specific AdmissionApplication
+ */
+export const getAdmissionApplicationById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetAdmissionApplicationResponse200>(
+      {url: `/api/AdmissionApplication/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAdmissionApplicationByIdQueryKey = (id?: number,) => {
+    return [`/api/AdmissionApplication/${id}`] as const;
+    }
+
+    
+export const getGetAdmissionApplicationByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdmissionApplicationByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdmissionApplicationById>>> = ({ signal }) => getAdmissionApplicationById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdmissionApplicationByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAdmissionApplicationById>>>
+export type GetAdmissionApplicationByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetAdmissionApplicationById<TData = Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionApplicationById>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionApplicationById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionApplicationById<TData = Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionApplicationById>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionApplicationById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionApplicationById<TData = Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific AdmissionApplication
+ */
+
+export function useGetAdmissionApplicationById<TData = Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionApplicationById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdmissionApplicationByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing AdmissionApplication with the provided details
+ * @summary Update a AdmissionApplication
+ */
+export const updateAdmissionApplication = (
+    id: number,
+    admissionApplication: AdmissionApplication,
+ ) => {
+      
+      
+      return fetchData<UpdateAdmissionApplicationResponse200>(
+      {url: `/api/AdmissionApplication/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: admissionApplication
+    },
+      );
+    }
+  
+
+
+export const getUpdateAdmissionApplicationMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: AdmissionApplication}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: AdmissionApplication}, TContext> => {
+
+const mutationKey = ['updateAdmissionApplication'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAdmissionApplication>>, {id: number;data: AdmissionApplication}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAdmissionApplication(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAdmissionApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof updateAdmissionApplication>>>
+    export type UpdateAdmissionApplicationMutationBody = AdmissionApplication
+    export type UpdateAdmissionApplicationMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a AdmissionApplication
+ */
+export const useUpdateAdmissionApplication = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: AdmissionApplication}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAdmissionApplication>>,
+        TError,
+        {id: number;data: AdmissionApplication},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAdmissionApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a AdmissionApplication by its ID
+ * @summary Delete a AdmissionApplication
+ */
+export const deleteAdmissionApplication = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteAdmissionApplicationResponse200>(
+      {url: `/api/AdmissionApplication/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteAdmissionApplicationMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdmissionApplication>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAdmissionApplication>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteAdmissionApplication'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdmissionApplication>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAdmissionApplication(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAdmissionApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdmissionApplication>>>
+    
+    export type DeleteAdmissionApplicationMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a AdmissionApplication
+ */
+export const useDeleteAdmissionApplication = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdmissionApplication>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAdmissionApplication>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAdmissionApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of AdmissionSchedule with optional search
+ * @summary Get paginated list of AdmissionSchedule
+ */
+export const getAdmissionSchedulePaginated = (
+    params?: GetAdmissionSchedulePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedAdmissionScheduleResponse200>(
+      {url: `/api/AdmissionSchedule`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetAdmissionSchedulePaginatedQueryKey = (params?: GetAdmissionSchedulePaginatedParams,) => {
+    return [`/api/AdmissionSchedule`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAdmissionSchedulePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetAdmissionSchedulePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdmissionSchedulePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>> = ({ signal }) => getAdmissionSchedulePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdmissionSchedulePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>>
+export type GetAdmissionSchedulePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetAdmissionSchedulePaginated<TData = Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetAdmissionSchedulePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionSchedulePaginated<TData = Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAdmissionSchedulePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionSchedulePaginated<TData = Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAdmissionSchedulePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of AdmissionSchedule
+ */
+
+export function useGetAdmissionSchedulePaginated<TData = Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetAdmissionSchedulePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionSchedulePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdmissionSchedulePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new AdmissionSchedule with the provided details
+ * @summary Create a new AdmissionSchedule
+ */
+export const createAdmissionSchedule = (
+    admissionSchedule: NonReadonly<AdmissionSchedule>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateAdmissionScheduleResponse200>(
+      {url: `/api/AdmissionSchedule`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: admissionSchedule, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAdmissionScheduleMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionSchedule>>, TError,{data: NonReadonly<AdmissionSchedule>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAdmissionSchedule>>, TError,{data: NonReadonly<AdmissionSchedule>}, TContext> => {
+
+const mutationKey = ['createAdmissionSchedule'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAdmissionSchedule>>, {data: NonReadonly<AdmissionSchedule>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAdmissionSchedule(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAdmissionScheduleMutationResult = NonNullable<Awaited<ReturnType<typeof createAdmissionSchedule>>>
+    export type CreateAdmissionScheduleMutationBody = NonReadonly<AdmissionSchedule>
+    export type CreateAdmissionScheduleMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new AdmissionSchedule
+ */
+export const useCreateAdmissionSchedule = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionSchedule>>, TError,{data: NonReadonly<AdmissionSchedule>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAdmissionSchedule>>,
+        TError,
+        {data: NonReadonly<AdmissionSchedule>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAdmissionScheduleMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a AdmissionSchedule by its ID
+ * @summary Get a specific AdmissionSchedule
+ */
+export const getAdmissionScheduleById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetAdmissionScheduleResponse200>(
+      {url: `/api/AdmissionSchedule/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAdmissionScheduleByIdQueryKey = (id?: number,) => {
+    return [`/api/AdmissionSchedule/${id}`] as const;
+    }
+
+    
+export const getGetAdmissionScheduleByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdmissionScheduleByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdmissionScheduleById>>> = ({ signal }) => getAdmissionScheduleById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdmissionScheduleByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAdmissionScheduleById>>>
+export type GetAdmissionScheduleByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetAdmissionScheduleById<TData = Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionScheduleById>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionScheduleById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionScheduleById<TData = Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdmissionScheduleById>>,
+          TError,
+          Awaited<ReturnType<typeof getAdmissionScheduleById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdmissionScheduleById<TData = Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific AdmissionSchedule
+ */
+
+export function useGetAdmissionScheduleById<TData = Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdmissionScheduleById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdmissionScheduleByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing AdmissionSchedule with the provided details
+ * @summary Update a AdmissionSchedule
+ */
+export const updateAdmissionSchedule = (
+    id: number,
+    admissionSchedule: NonReadonly<AdmissionSchedule>,
+ ) => {
+      
+      
+      return fetchData<UpdateAdmissionScheduleResponse200>(
+      {url: `/api/AdmissionSchedule/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: admissionSchedule
+    },
+      );
+    }
+  
+
+
+export const getUpdateAdmissionScheduleMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionSchedule>>, TError,{id: number;data: NonReadonly<AdmissionSchedule>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionSchedule>>, TError,{id: number;data: NonReadonly<AdmissionSchedule>}, TContext> => {
+
+const mutationKey = ['updateAdmissionSchedule'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAdmissionSchedule>>, {id: number;data: NonReadonly<AdmissionSchedule>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAdmissionSchedule(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAdmissionScheduleMutationResult = NonNullable<Awaited<ReturnType<typeof updateAdmissionSchedule>>>
+    export type UpdateAdmissionScheduleMutationBody = NonReadonly<AdmissionSchedule>
+    export type UpdateAdmissionScheduleMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a AdmissionSchedule
+ */
+export const useUpdateAdmissionSchedule = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionSchedule>>, TError,{id: number;data: NonReadonly<AdmissionSchedule>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAdmissionSchedule>>,
+        TError,
+        {id: number;data: NonReadonly<AdmissionSchedule>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAdmissionScheduleMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a AdmissionSchedule by its ID
+ * @summary Delete a AdmissionSchedule
+ */
+export const deleteAdmissionSchedule = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteAdmissionScheduleResponse200>(
+      {url: `/api/AdmissionSchedule/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteAdmissionScheduleMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdmissionSchedule>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAdmissionSchedule>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteAdmissionSchedule'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdmissionSchedule>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAdmissionSchedule(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAdmissionScheduleMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdmissionSchedule>>>
+    
+    export type DeleteAdmissionScheduleMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a AdmissionSchedule
+ */
+export const useDeleteAdmissionSchedule = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdmissionSchedule>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAdmissionSchedule>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAdmissionScheduleMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -4398,6 +5555,754 @@ export const useCreateCampusRegistrar = <TError = UnauthenticatedResponse | Forb
       > => {
 
       const mutationOptions = getCreateCampusRegistrarMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of Enrollment with optional search
+ * @summary Get paginated list of Enrollment
+ */
+export const getEnrollmentPaginated = (
+    params?: GetEnrollmentPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedEnrollmentResponse200>(
+      {url: `/api/Enrollment`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetEnrollmentPaginatedQueryKey = (params?: GetEnrollmentPaginatedParams,) => {
+    return [`/api/Enrollment`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetEnrollmentPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetEnrollmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollmentPaginated>>> = ({ signal }) => getEnrollmentPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnrollmentPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollmentPaginated>>>
+export type GetEnrollmentPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetEnrollmentPaginated<TData = Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetEnrollmentPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentPaginated<TData = Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetEnrollmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentPaginated<TData = Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetEnrollmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of Enrollment
+ */
+
+export function useGetEnrollmentPaginated<TData = Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetEnrollmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetEnrollmentPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new Enrollment with the provided details
+ * @summary Create a new Enrollment
+ */
+export const createEnrollment = (
+    enrollment: NonReadonly<Enrollment>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateEnrollmentResponse200>(
+      {url: `/api/Enrollment`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollment, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateEnrollmentMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEnrollment>>, TError,{data: NonReadonly<Enrollment>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createEnrollment>>, TError,{data: NonReadonly<Enrollment>}, TContext> => {
+
+const mutationKey = ['createEnrollment'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createEnrollment>>, {data: NonReadonly<Enrollment>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createEnrollment(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateEnrollmentMutationResult = NonNullable<Awaited<ReturnType<typeof createEnrollment>>>
+    export type CreateEnrollmentMutationBody = NonReadonly<Enrollment>
+    export type CreateEnrollmentMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Enrollment
+ */
+export const useCreateEnrollment = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEnrollment>>, TError,{data: NonReadonly<Enrollment>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createEnrollment>>,
+        TError,
+        {data: NonReadonly<Enrollment>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateEnrollmentMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a Enrollment by its ID
+ * @summary Get a specific Enrollment
+ */
+export const getEnrollmentById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetEnrollmentResponse200>(
+      {url: `/api/Enrollment/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetEnrollmentByIdQueryKey = (id?: number,) => {
+    return [`/api/Enrollment/${id}`] as const;
+    }
+
+    
+export const getGetEnrollmentByIdQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollmentById>>> = ({ signal }) => getEnrollmentById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnrollmentByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollmentById>>>
+export type GetEnrollmentByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetEnrollmentById<TData = Awaited<ReturnType<typeof getEnrollmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentById>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentById<TData = Awaited<ReturnType<typeof getEnrollmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentById>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentById<TData = Awaited<ReturnType<typeof getEnrollmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific Enrollment
+ */
+
+export function useGetEnrollmentById<TData = Awaited<ReturnType<typeof getEnrollmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetEnrollmentByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing Enrollment with the provided details
+ * @summary Update a Enrollment
+ */
+export const updateEnrollment = (
+    id: number,
+    enrollment: NonReadonly<Enrollment>,
+ ) => {
+      
+      
+      return fetchData<UpdateEnrollmentResponse200>(
+      {url: `/api/Enrollment/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollment
+    },
+      );
+    }
+  
+
+
+export const getUpdateEnrollmentMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEnrollment>>, TError,{id: number;data: NonReadonly<Enrollment>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateEnrollment>>, TError,{id: number;data: NonReadonly<Enrollment>}, TContext> => {
+
+const mutationKey = ['updateEnrollment'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateEnrollment>>, {id: number;data: NonReadonly<Enrollment>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateEnrollment(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateEnrollmentMutationResult = NonNullable<Awaited<ReturnType<typeof updateEnrollment>>>
+    export type UpdateEnrollmentMutationBody = NonReadonly<Enrollment>
+    export type UpdateEnrollmentMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a Enrollment
+ */
+export const useUpdateEnrollment = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEnrollment>>, TError,{id: number;data: NonReadonly<Enrollment>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateEnrollment>>,
+        TError,
+        {id: number;data: NonReadonly<Enrollment>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateEnrollmentMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a Enrollment by its ID
+ * @summary Delete a Enrollment
+ */
+export const deleteEnrollment = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteEnrollmentResponse200>(
+      {url: `/api/Enrollment/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteEnrollmentMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEnrollment>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteEnrollment>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteEnrollment'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteEnrollment>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteEnrollment(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteEnrollmentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteEnrollment>>>
+    
+    export type DeleteEnrollmentMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a Enrollment
+ */
+export const useDeleteEnrollment = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEnrollment>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteEnrollment>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteEnrollmentMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of EnrollmentLog with optional search
+ * @summary Get paginated list of EnrollmentLog
+ */
+export const getEnrollmentLogPaginated = (
+    params?: GetEnrollmentLogPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedEnrollmentLogResponse200>(
+      {url: `/api/EnrollmentLog`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetEnrollmentLogPaginatedQueryKey = (params?: GetEnrollmentLogPaginatedParams,) => {
+    return [`/api/EnrollmentLog`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetEnrollmentLogPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetEnrollmentLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentLogPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>> = ({ signal }) => getEnrollmentLogPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnrollmentLogPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>>
+export type GetEnrollmentLogPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetEnrollmentLogPaginated<TData = Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetEnrollmentLogPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentLogPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentLogPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentLogPaginated<TData = Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetEnrollmentLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentLogPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentLogPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentLogPaginated<TData = Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetEnrollmentLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of EnrollmentLog
+ */
+
+export function useGetEnrollmentLogPaginated<TData = Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetEnrollmentLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetEnrollmentLogPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new EnrollmentLog with the provided details
+ * @summary Create a new EnrollmentLog
+ */
+export const createEnrollmentLog = (
+    enrollmentLog: NonReadonly<EnrollmentLog>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateEnrollmentLogResponse200>(
+      {url: `/api/EnrollmentLog`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollmentLog, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateEnrollmentLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEnrollmentLog>>, TError,{data: NonReadonly<EnrollmentLog>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createEnrollmentLog>>, TError,{data: NonReadonly<EnrollmentLog>}, TContext> => {
+
+const mutationKey = ['createEnrollmentLog'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createEnrollmentLog>>, {data: NonReadonly<EnrollmentLog>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createEnrollmentLog(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateEnrollmentLogMutationResult = NonNullable<Awaited<ReturnType<typeof createEnrollmentLog>>>
+    export type CreateEnrollmentLogMutationBody = NonReadonly<EnrollmentLog>
+    export type CreateEnrollmentLogMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new EnrollmentLog
+ */
+export const useCreateEnrollmentLog = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createEnrollmentLog>>, TError,{data: NonReadonly<EnrollmentLog>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createEnrollmentLog>>,
+        TError,
+        {data: NonReadonly<EnrollmentLog>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateEnrollmentLogMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a EnrollmentLog by its ID
+ * @summary Get a specific EnrollmentLog
+ */
+export const getEnrollmentLogById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetEnrollmentLogResponse200>(
+      {url: `/api/EnrollmentLog/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetEnrollmentLogByIdQueryKey = (id?: number,) => {
+    return [`/api/EnrollmentLog/${id}`] as const;
+    }
+
+    
+export const getGetEnrollmentLogByIdQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollmentLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentLogByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollmentLogById>>> = ({ signal }) => getEnrollmentLogById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnrollmentLogByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollmentLogById>>>
+export type GetEnrollmentLogByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetEnrollmentLogById<TData = Awaited<ReturnType<typeof getEnrollmentLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentLogById>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentLogById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentLogById<TData = Awaited<ReturnType<typeof getEnrollmentLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentLogById>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentLogById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentLogById<TData = Awaited<ReturnType<typeof getEnrollmentLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific EnrollmentLog
+ */
+
+export function useGetEnrollmentLogById<TData = Awaited<ReturnType<typeof getEnrollmentLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentLogById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetEnrollmentLogByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing EnrollmentLog with the provided details
+ * @summary Update a EnrollmentLog
+ */
+export const updateEnrollmentLog = (
+    id: number,
+    enrollmentLog: NonReadonly<EnrollmentLog>,
+ ) => {
+      
+      
+      return fetchData<UpdateEnrollmentLogResponse200>(
+      {url: `/api/EnrollmentLog/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollmentLog
+    },
+      );
+    }
+  
+
+
+export const getUpdateEnrollmentLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEnrollmentLog>>, TError,{id: number;data: NonReadonly<EnrollmentLog>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateEnrollmentLog>>, TError,{id: number;data: NonReadonly<EnrollmentLog>}, TContext> => {
+
+const mutationKey = ['updateEnrollmentLog'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateEnrollmentLog>>, {id: number;data: NonReadonly<EnrollmentLog>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateEnrollmentLog(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateEnrollmentLogMutationResult = NonNullable<Awaited<ReturnType<typeof updateEnrollmentLog>>>
+    export type UpdateEnrollmentLogMutationBody = NonReadonly<EnrollmentLog>
+    export type UpdateEnrollmentLogMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a EnrollmentLog
+ */
+export const useUpdateEnrollmentLog = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEnrollmentLog>>, TError,{id: number;data: NonReadonly<EnrollmentLog>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateEnrollmentLog>>,
+        TError,
+        {id: number;data: NonReadonly<EnrollmentLog>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateEnrollmentLogMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a EnrollmentLog by its ID
+ * @summary Delete a EnrollmentLog
+ */
+export const deleteEnrollmentLog = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteEnrollmentLogResponse200>(
+      {url: `/api/EnrollmentLog/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteEnrollmentLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEnrollmentLog>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteEnrollmentLog>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteEnrollmentLog'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteEnrollmentLog>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteEnrollmentLog(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteEnrollmentLogMutationResult = NonNullable<Awaited<ReturnType<typeof deleteEnrollmentLog>>>
+    
+    export type DeleteEnrollmentLogMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a EnrollmentLog
+ */
+export const useDeleteEnrollmentLog = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteEnrollmentLog>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteEnrollmentLog>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteEnrollmentLogMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

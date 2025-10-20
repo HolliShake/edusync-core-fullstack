@@ -23,7 +23,7 @@ return new class extends Migration
                 // Polymorphic
                 $table->morphs('designitionable'); // academic_program, college
                 // Unique
-                $table->unique(['user_id', 'designitionable_id', 'designitionable_type']);
+                $table->unique(['user_id', 'designitionable_type', 'is_active'], 'designition_unique');
             });
     }
 

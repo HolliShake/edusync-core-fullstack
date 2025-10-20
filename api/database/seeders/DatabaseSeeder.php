@@ -16,6 +16,8 @@ use Database\Seeders\AcademicCalendarSeeder;
 use Database\Seeders\BuildingSeeder;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\RequirementSeeder;
+use Database\Seeders\AdmissionScheduleSeeder;
+use Database\Seeders\AcademicProgramRequirementSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -40,7 +42,9 @@ class DatabaseSeeder extends Seeder
             AcademicCalendarSeeder::class,
             BuildingSeeder::class,
             RoomSeeder::class,
-            RequirementSeeder::class
+            RequirementSeeder::class,
+            AdmissionScheduleSeeder::class,
+            AcademicProgramRequirementSeeder::class
         ]);
     }
 }

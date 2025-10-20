@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth.context';
 import { cn } from '@/lib/utils';
 import ROUTES from '@/routes';
@@ -6,7 +7,6 @@ import { ChevronLeft } from 'lucide-react';
 import type React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Button } from '../ui/button';
 
 type SideBarProps = {
   isCollapsed: boolean;
@@ -235,7 +235,7 @@ export default function SideBar({
                 </Link>
               </div>
 
-              {/* Children routes with smooth animation - hidden when collapsed */}
+              {/* Children routes with enhanced UI - hidden when collapsed */}
               {hasChildren && !isCollapsed && (
                 <div
                   className={cn(
@@ -243,7 +243,7 @@ export default function SideBar({
                     isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   )}
                 >
-                  <div className="ml-6 space-y-1 pt-1">
+                  <div className="ml-4 pl-3 space-y-0.5 pt-1 pb-1 border-l border-sidebar-border relative">
                     {route.children?.map((child: Route, childIndex: number) => {
                       const isChildActive = isActiveRoute(child.path);
 
@@ -252,24 +252,19 @@ export default function SideBar({
                           key={childIndex}
                           to={child.path}
                           className={cn(
-                            'flex items-center p-2 rounded-md transition-all duration-200 relative overflow-hidden group',
+                            'flex items-center px-2.5 py-2 rounded-md transition-all duration-200 relative overflow-hidden group',
                             isChildActive
-                              ? 'bg-primary/10 text-primary'
-                              : 'bg-transparent text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                              ? 'bg-primary/15 text-primary shadow-sm'
+                              : 'bg-transparent text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
                           )}
                         >
-                          {/* Active indicator - vertical line */}
-                          {isChildActive && (
-                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-full" />
-                          )}
-
                           {child.icon && (
                             <div
                               className={cn(
-                                'flex items-center justify-center w-6 h-6 mr-2 flex-shrink-0 rounded-md transition-all duration-200',
+                                'flex items-center justify-center w-6 h-6 mr-2.5 flex-shrink-0 rounded-md transition-all duration-200',
                                 isChildActive
-                                  ? 'bg-primary/20 text-primary'
-                                  : 'bg-accent text-accent-foreground group-hover:bg-success/20 group-hover:text-success group-hover:shadow-sm group-hover:scale-105'
+                                  ? 'bg-primary/20 text-primary shadow-sm'
+                                  : 'bg-accent/50 text-accent-foreground group-hover:bg-success/20 group-hover:text-success group-hover:shadow-sm group-hover:scale-105'
                               )}
                             >
                               <span
@@ -286,13 +281,20 @@ export default function SideBar({
                           <div className="flex-1 min-w-0">
                             <span
                               className={cn(
-                                'block text-xs font-medium text-sidebar-accent-foreground truncate tracking-wide transition-all duration-200',
-                                !isChildActive && 'group-hover:font-semibold'
+                                'block text-xs truncate tracking-wide transition-all duration-200',
+                                isChildActive
+                                  ? 'font-semibold text-primary'
+                                  : 'font-medium text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground group-hover:font-semibold'
                               )}
                             >
                               {child.title}
                             </span>
                           </div>
+
+                          {/* Active indicator badge */}
+                          {isChildActive && (
+                            <div className="ml-2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                          )}
                         </Link>
                       );
                     })}

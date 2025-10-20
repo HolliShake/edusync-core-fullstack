@@ -204,16 +204,6 @@ class SchoolYearController extends Controller
                 }
             }
 
-            // Custom validation - only one active at a time
-            if ($request->input('is_active')) {
-                $alreadyActive = DB::table('school_year')
-                    ->where('is_active', 1)
-                    ->exists();
-                if ($alreadyActive) {
-                    return $this->validationError(['is_active' => ['Only one SchoolYear can be active at a time.']]);
-                }
-            }
-
             if ($validator->fails()) {
                 return $this->validationError($validator->errors());
             }
@@ -310,17 +300,6 @@ class SchoolYearController extends Controller
                     ->exists();
                 if ($overlap) {
                     return $this->validationError(['start_date' => ['Date range overlaps with an existing SchoolYear.']]);
-                }
-            }
-
-            // Custom validation - only one active at a time
-            if ($request->input('is_active')) {
-                $alreadyActive = DB::table('school_year')
-                    ->where('is_active', 1)
-                    ->where('id', '!=', $id)
-                    ->exists();
-                if ($alreadyActive) {
-                    return $this->validationError(['is_active' => ['Only one SchoolYear can be active at a time.']]);
                 }
             }
 

@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Interface\IRepo\IAcademicCalendarRepo;
 use App\Interface\IRepo\IAcademicProgramRepo;
+use App\Interface\IRepo\IAcademicProgramRequirementRepo;
 use App\Interface\IRepo\IAcademicTermRepo;
+use App\Interface\IRepo\IAdmissionApplicationRepo;
 use App\Interface\IRepo\IBuildingRepo;
 use App\Interface\IRepo\ICampusRepo;
 use App\Interface\IRepo\ICollegeRepo;
@@ -19,8 +21,10 @@ use App\Interface\IRepo\ISchoolYearRepo;
 use App\Interface\IRepo\ISectionRepo;
 use App\Interface\IRepo\IUserRepo;
 use App\Interface\IService\IAcademicCalendarService;
+use App\Interface\IService\IAcademicProgramRequirementService;
 use App\Interface\IService\IAcademicProgramService;
 use App\Interface\IService\IAcademicTermService;
+use App\Interface\IService\IAdmissionApplicationService;
 use App\Interface\IService\IBuildingService;
 use App\Interface\IService\ICampusService;
 use App\Interface\IService\ICollegeService;
@@ -36,7 +40,9 @@ use App\Interface\IService\ISectionService;
 use App\Interface\IService\IUserService;
 use App\Repo\AcademicCalendarRepo;
 use App\Repo\AcademicProgramRepo;
+use App\Repo\AcademicProgramRequirementRepo;
 use App\Repo\AcademicTermRepo;
+use App\Repo\AdmissionApplicationRepo;
 use App\Repo\BuildingRepo;
 use App\Repo\CampusRepo;
 use App\Repo\CollegeRepo;
@@ -51,8 +57,10 @@ use App\Repo\SchoolYearRepo;
 use App\Repo\SectionRepo;
 use App\Repo\UserRepo;
 use App\Service\AcademicCalendarService;
+use App\Service\AcademicProgramRequirementService;
 use App\Service\AcademicProgramService;
 use App\Service\AcademicTermService;
+use App\Service\AdmissionApplicationService;
 use App\Service\BuildingService;
 use App\Service\CampusService;
 use App\Service\CollegeService;
@@ -92,6 +100,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ISchoolYearRepo::class, SchoolYearRepo::class);
         $this->app->bind(ISectionRepo::class, SectionRepo::class);
         $this->app->bind(IUserRepo::class, UserRepo::class);
+        $this->app->bind(IAcademicProgramRequirementRepo::class, AcademicProgramRequirementRepo::class);
+        $this->app->bind(IAdmissionApplicationRepo::class, AdmissionApplicationRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -109,6 +119,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ISchoolYearService::class, SchoolYearService::class);
         $this->app->bind(ISectionService::class, SectionService::class);
         $this->app->bind(IUserService::class, UserService::class);
+        $this->app->bind(IAcademicProgramRequirementService::class, AcademicProgramRequirementService::class);
+        $this->app->bind(IAdmissionApplicationService::class, AdmissionApplicationService::class);
     }
 
     /**
