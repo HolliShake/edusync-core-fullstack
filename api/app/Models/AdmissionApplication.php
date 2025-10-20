@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OA;
 
@@ -12,6 +14,9 @@ use OpenApi\Attributes as OA;
     type: "object",
     required: [
         // Override required
+        'user_id',
+        'school_year_id',
+        'academic_program_id',
         'firstName',
         'lastName',
         'email',
@@ -20,6 +25,10 @@ use OpenApi\Attributes as OA;
     ],
     properties: [
         // Override fillables
+        new OA\Property(property: "id", type: "integer", readOnly: true),
+        new OA\Property(property: "user_id", type: "integer"),
+        new OA\Property(property: "school_year_id", type: "integer"),
+        new OA\Property(property: "academic_program_id", type: "integer"),
         new OA\Property(property: "year", type: "integer"),
         new OA\Property(property: "pool_no", type: "integer"),
         new OA\Property(property: "firstName", type: "string"),
@@ -30,6 +39,11 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "address", type: "string"),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
+        // Relation
+        new OA\Property(property: "user", ref: "#/components/schemas/User"),
+        new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "academicProgram", ref: "#/components/schemas/AcademicProgram"),
+        new OA\Property(property: "logs", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationLog")),
     ]
 )]
 
@@ -108,6 +122,9 @@ class AdmissionApplication extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'user_id',
+        'school_year_id',
+        'academic_program_id',
         // 'year',
         // 'pool_no',
         'firstName',
@@ -117,6 +134,101 @@ class AdmissionApplication extends Model
         'phone',
         'address',
     ];
+
+    protected $casts = [
+        'user_id' => 'integer',
+        'school_year_id' => 'integer',
+        'academic_program_id' => 'integer',
+        'year' => 'integer',
+        'pool_no' => 'integer',
+    ];
+
+    protected $appends = [
+        'user',
+        'schoolYear',
+        'academicProgram',
+        'logs',
+    ];
+
+    /**
+     * Get the user that owns the admission application.
+     *
+     * @return \App\Models\User
+     */
+    public function getUserAttribute(): User
+    {
+        return $this->user()->first();
+    }
+
+    /**
+     * Get the school year that owns the admission application.
+     *
+     * @return \App\Models\SchoolYear
+     */
+    public function getSchoolYearAttribute(): SchoolYear
+    {
+        return $this->schoolYear()->first();
+    }
+
+    /**
+     * Get the academic program that owns the admission application.
+     *
+     * @return \App\Models\AcademicProgram
+     */
+    public function getAcademicProgramAttribute(): AcademicProgram
+    {
+        return $this->academicProgram()->first();
+    }
+
+    /**
+     * Get the logs for the admission application.
+     *
+     * @return array<AdmissionApplicationLog>
+     */
+    public function getLogsAttribute(): array
+    {
+        return $this->logs()->get()->toArray();
+    }
+
+    /**
+     * Get the user that owns the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the school year that owns the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function schoolYear(): BelongsTo
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
+
+    /**
+     * Get the academic program that owns the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function academicProgram(): BelongsTo
+    {
+        return $this->belongsTo(AcademicProgram::class);
+    }
+
+    /**
+     * Get the logs for the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs(): HasMany
+    {
+        return $this->hasMany(AdmissionApplicationLog::class);
+    }
 
     /********************************/
     protected static function booted()

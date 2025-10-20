@@ -14,6 +14,18 @@ return new class extends Migration
         Schema::create('admission_application', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            // Fk
+            $table->foreignId('user_id')
+                ->constrained('user')
+                ->onDelete('cascade');
+            // Fk
+            $table->foreignId('school_year_id')
+                ->constrained('school_year')
+                ->onDelete('cascade');
+            // Fk
+            $table->foreignId('academic_program_id')
+                ->constrained('academic_program')
+                ->onDelete('cascade');
             // Auto
             $table->year('year')
                 ->default(now()->year);
@@ -25,6 +37,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->text('address');
+
+            // Unique
+            $table->unique(['user_id', 'school_year_id', 'academic_program_id'], 'admission_application_unique');
         });
     }
 

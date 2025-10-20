@@ -34,6 +34,7 @@ use OpenApi\Attributes as OA;
     type: "object",
     required: [
         // flags
+        "id",
         "is_admin",
         "is_program_chair",
         "is_college_dean",
@@ -51,6 +52,7 @@ use OpenApi\Attributes as OA;
     ],
     properties: [
         // flags
+        new OA\Property(property: "id", type: "integer"),
         new OA\Property(property: "is_admin", type: "boolean"),
         new OA\Property(property: "is_program_chair", type: "boolean"),
         new OA\Property(property: "is_college_dean", type: "boolean"),

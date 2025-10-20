@@ -5,8 +5,16 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { User } from './user';
+import type { SchoolYear } from './schoolYear';
+import type { AcademicProgram } from './academicProgram';
+import type { AdmissionApplicationLog } from './admissionApplicationLog';
 
 export interface AdmissionApplication {
+  readonly id?: number;
+  user_id: number;
+  school_year_id: number;
+  academic_program_id: number;
   year?: number;
   pool_no?: number;
   firstName: string;
@@ -18,4 +26,8 @@ export interface AdmissionApplication {
   address: string;
   created_at?: string;
   updated_at?: string;
+  user?: User;
+  schoolYear?: SchoolYear;
+  academicProgram?: AcademicProgram;
+  logs?: AdmissionApplicationLog[];
 }

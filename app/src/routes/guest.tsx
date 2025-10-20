@@ -1,7 +1,9 @@
 import { UserRoleEnum } from '@/enums/role-enum';
+import GuestAdmissionApplications from '@/pages/guest/admission-applications/page';
+import GuestAdmissionApplicationStatus from '@/pages/guest/admission-applications/status/page';
 import GuestAdmissionPage from '@/pages/guest/admission/page';
 import type { Route } from '@/types/route';
-import { BookOpenIcon } from 'lucide-react';
+import { BookOpenIcon, FileTextIcon, MapPinnedIcon } from 'lucide-react';
 
 const GUEST: Route[] = [
   {
@@ -19,22 +21,32 @@ const GUEST: Route[] = [
     children: [
       {
         key: 'guest.admission.process',
-        title: 'Process',
+        title: 'Journey',
         path: '/guest/admission/process',
         component: <GuestAdmissionPage />,
-        icon: <BookOpenIcon className="h-4 w-4" />,
+        icon: <MapPinnedIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
         roles: [UserRoleEnum.GUEST],
       },
       {
         key: 'guest.admission.applications',
-        title: 'Application',
-        path: '/guest/admission/application',
-        component: <GuestAdmissionPage />,
-        icon: <BookOpenIcon className="h-4 w-4" />,
+        title: 'Applications',
+        path: '/guest/admission/applications',
+        component: <GuestAdmissionApplications />,
+        icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
+        roles: [UserRoleEnum.GUEST],
+      },
+      {
+        key: 'guest.admission.applications.status',
+        title: 'Status',
+        path: '/guest/admission/applications/:admissionApplicationId',
+        component: <GuestAdmissionApplicationStatus />,
+        icon: <FileTextIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: false,
         roles: [UserRoleEnum.GUEST],
       },
     ],

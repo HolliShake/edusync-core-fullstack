@@ -8,6 +8,7 @@
 import type { GetSessionRolesItem } from './getSessionRolesItem';
 
 export interface GetSession {
+  id: number;
   is_admin: boolean;
   is_program_chair: boolean;
   is_college_dean: boolean;

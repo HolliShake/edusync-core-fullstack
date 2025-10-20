@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\IAdmissionApplicationRepo;
 use App\Models\AdmissionApplication;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class AdmissionApplicationRepo extends GenericRepo implements IAdmissionApplicationRepo
 {
@@ -22,6 +23,9 @@ class AdmissionApplicationRepo extends GenericRepo implements IAdmissionApplicat
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('user_id'),
+            AllowedFilter::exact('school_year_id'),
+            AllowedFilter::exact('academic_program_id'),
         ];
     }
 

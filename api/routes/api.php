@@ -21,6 +21,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdmissionApplicationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -179,4 +180,12 @@ Route::controller(AcademicProgramRequirementController::class)->group(function()
     Route::post('/AcademicProgramRequirement', 'store');
     Route::put('/AcademicProgramRequirement/{id}', 'update');
     Route::delete('/AcademicProgramRequirement/{id}', 'destroy');
+});
+
+Route::controller(AdmissionApplicationController::class)->group(function() {
+    Route::get('/AdmissionApplication', 'index');
+    Route::get('/AdmissionApplication/{id}', 'show');
+    Route::post('/AdmissionApplication', 'store');
+    Route::put('/AdmissionApplication/{id}', 'update');
+    Route::delete('/AdmissionApplication/{id}', 'destroy');
 });

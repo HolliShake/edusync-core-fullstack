@@ -122,6 +122,7 @@ class AuthController extends Controller
             ->keyBy('designitionable_type');
 
         return $this->ok([
+            "id" => $user->id,
             "is_admin" => isset($userRoles[UserRoleEnum::ADMIN->value]),
             "is_program_chair" => isset($userRoles[UserRoleEnum::PROGRAM_CHAIR->value]),
             "is_college_dean" => isset($userRoles[UserRoleEnum::COLLEGE_DEAN->value]),

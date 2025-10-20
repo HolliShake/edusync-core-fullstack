@@ -244,60 +244,62 @@ export default function SideBar({
                   )}
                 >
                   <div className="ml-4 pl-3 space-y-0.5 pt-1 pb-1 border-l border-sidebar-border relative">
-                    {route.children?.map((child: Route, childIndex: number) => {
-                      const isChildActive = isActiveRoute(child.path);
+                    {route.children
+                      ?.filter((data) => data.sidebar === true || data.sidebar === undefined)
+                      .map((child: Route, childIndex: number) => {
+                        const isChildActive = isActiveRoute(child.path);
 
-                      return (
-                        <Link
-                          key={childIndex}
-                          to={child.path}
-                          className={cn(
-                            'flex items-center px-2.5 py-2 rounded-md transition-all duration-200 relative overflow-hidden group',
-                            isChildActive
-                              ? 'bg-primary/15 text-primary shadow-sm'
-                              : 'bg-transparent text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-                          )}
-                        >
-                          {child.icon && (
-                            <div
-                              className={cn(
-                                'flex items-center justify-center w-6 h-6 mr-2.5 flex-shrink-0 rounded-md transition-all duration-200',
-                                isChildActive
-                                  ? 'bg-primary/20 text-primary shadow-sm'
-                                  : 'bg-accent/50 text-accent-foreground group-hover:bg-success/20 group-hover:text-success group-hover:shadow-sm group-hover:scale-105'
-                              )}
-                            >
-                              <span
+                        return (
+                          <Link
+                            key={childIndex}
+                            to={child.path}
+                            className={cn(
+                              'flex items-center px-2.5 py-2 rounded-md transition-all duration-200 relative overflow-hidden group',
+                              isChildActive
+                                ? 'bg-primary/15 text-primary shadow-sm'
+                                : 'bg-transparent text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+                            )}
+                          >
+                            {child.icon && (
+                              <div
                                 className={cn(
-                                  'text-current text-xs transition-all duration-200',
-                                  !isChildActive && 'group-hover:scale-110'
+                                  'flex items-center justify-center w-6 h-6 mr-2.5 flex-shrink-0 rounded-md transition-all duration-200',
+                                  isChildActive
+                                    ? 'bg-primary/20 text-primary shadow-sm'
+                                    : 'bg-accent/50 text-accent-foreground group-hover:bg-success/20 group-hover:text-success group-hover:shadow-sm group-hover:scale-105'
                                 )}
                               >
-                                {child.icon}
+                                <span
+                                  className={cn(
+                                    'text-current text-xs transition-all duration-200',
+                                    !isChildActive && 'group-hover:scale-110'
+                                  )}
+                                >
+                                  {child.icon}
+                                </span>
+                              </div>
+                            )}
+
+                            <div className="flex-1 min-w-0">
+                              <span
+                                className={cn(
+                                  'block text-xs truncate tracking-wide transition-all duration-200',
+                                  isChildActive
+                                    ? 'font-semibold text-primary'
+                                    : 'font-medium text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground group-hover:font-semibold'
+                                )}
+                              >
+                                {child.title}
                               </span>
                             </div>
-                          )}
 
-                          <div className="flex-1 min-w-0">
-                            <span
-                              className={cn(
-                                'block text-xs truncate tracking-wide transition-all duration-200',
-                                isChildActive
-                                  ? 'font-semibold text-primary'
-                                  : 'font-medium text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground group-hover:font-semibold'
-                              )}
-                            >
-                              {child.title}
-                            </span>
-                          </div>
-
-                          {/* Active indicator badge */}
-                          {isChildActive && (
-                            <div className="ml-2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                          )}
-                        </Link>
-                      );
-                    })}
+                            {/* Active indicator badge */}
+                            {isChildActive && (
+                              <div className="ml-2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                            )}
+                          </Link>
+                        );
+                      })}
                   </div>
                 </div>
               )}

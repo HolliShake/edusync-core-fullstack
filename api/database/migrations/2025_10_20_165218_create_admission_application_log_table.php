@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\AdmissionApplicationLogTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,24 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollment', function (Blueprint $table) {
+        Schema::create('admission_application_log', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             // Fk
-            $table->foreignId('school_year_id')
-                ->constrained('school_year')
+            $table->foreignId('admission_application_id')
+                ->constrained('admission_application')
                 ->onDelete('cascade');
             // Fk
-            $table->foreignId('user_id')
+            $table->foreignId('user_id') // user who made the action
                 ->constrained('user')
                 ->onDelete('cascade');
-            // Fk
-            $table->foreignId('section_id')
-                ->constrained('section')
-                ->onDelete('cascade');
-
-            // Unique
-            $table->unique(['user_id', 'section_id']);
+            // Fields
+            $table->enum('type', array_column(AdmissionApplicationLogTypeEnum::cases(), 'value'));
+            $table->text('note')->nullable();
         });
     }
 
@@ -37,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('enrollment');
+        Schema::dropIfExists('admission_application_log');
     }
 };

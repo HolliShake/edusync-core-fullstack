@@ -47,6 +47,27 @@ class AdmissionApplicationController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[user_id]",
+        in: "query",
+        description: "User ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "School Year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Academic Program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
@@ -157,6 +178,9 @@ class AdmissionApplicationController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'user_id' => 'required|integer|exists:user,id',
+                'school_year_id' => 'required|integer|exists:school_year,id',
+                'academic_program_id' => 'required|integer|exists:academic_program,id',
                 'firstName' => 'required|string|max:255',
                 'lastName' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
@@ -229,6 +253,9 @@ class AdmissionApplicationController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'user_id' => 'required|integer|exists:user,id',
+                'school_year_id' => 'required|integer|exists:school_year,id',
+                'academic_program_id' => 'required|integer|exists:academic_program,id',
                 'firstName' => 'required|string|max:255',
                 'lastName' => 'required|string|max:255',
                 'email' => 'required|email|max:255',

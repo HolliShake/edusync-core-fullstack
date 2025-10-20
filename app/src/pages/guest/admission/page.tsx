@@ -9,13 +9,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/context/auth.context';
 import {
+  useCreateAdmissionApplication,
   useGetAcademicProgramPaginated,
   useGetAcademicProgramRequirementPaginated,
   useGetCampusPaginated,
   useGetCollegePaginated,
   useGetSchoolYearPaginated,
 } from '@rest/api';
+import type { AdmissionApplication } from '@rest/models';
 import {
   AlertCircle,
   Building2,
@@ -24,6 +27,7 @@ import {
   ClipboardList,
   FileText,
   GraduationCap,
+  Loader2,
   Mail,
   MapPin,
   Phone,
@@ -34,8 +38,10 @@ import {
 } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function GuestAdmissionPage(): React.ReactNode {
+  const { session } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [fields, setFields] = useState({
     campusId: 0,
@@ -43,6 +49,9 @@ export default function GuestAdmissionPage(): React.ReactNode {
     collegeId: 0,
     academicProgramId: 0,
   });
+
+  const { mutateAsync: createAdmissionApplication, isPending: isSubmitting } =
+    useCreateAdmissionApplication();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -55,18 +64,18 @@ export default function GuestAdmissionPage(): React.ReactNode {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<number, File>>({});
 
-  const { data: campusResponse } = useGetCampusPaginated({
+  const { data: campusResponse, isLoading: isLoadingCampuses } = useGetCampusPaginated({
     page: 1,
     rows: Number.MAX_SAFE_INTEGER,
   });
 
-  const { data: schoolYearResponse } = useGetSchoolYearPaginated({
+  const { data: schoolYearResponse, isLoading: isLoadingSchoolYears } = useGetSchoolYearPaginated({
     sort: '-start_date',
     page: 1,
     rows: Number.MAX_SAFE_INTEGER,
   });
 
-  const { data: collegeResponse } = useGetCollegePaginated(
+  const { data: collegeResponse, isLoading: isLoadingColleges } = useGetCollegePaginated(
     {
       'filter[campus_id]': fields.campusId,
       page: 1,
@@ -75,24 +84,26 @@ export default function GuestAdmissionPage(): React.ReactNode {
     { query: { enabled: !!fields.campusId } }
   );
 
-  const { data: academicProgramResponse } = useGetAcademicProgramPaginated(
-    {
-      'filter[college_id]': fields.collegeId,
-      page: 1,
-      rows: Number.MAX_SAFE_INTEGER,
-    },
-    { query: { enabled: !!fields.collegeId } }
-  );
+  const { data: academicProgramResponse, isLoading: isLoadingPrograms } =
+    useGetAcademicProgramPaginated(
+      {
+        'filter[college_id]': fields.collegeId,
+        page: 1,
+        rows: Number.MAX_SAFE_INTEGER,
+      },
+      { query: { enabled: !!fields.collegeId } }
+    );
 
-  const { data: academicProgramRequirementResponse } = useGetAcademicProgramRequirementPaginated(
-    {
-      'filter[academic_program_id]': fields.academicProgramId,
-      'filter[school_year_id]': fields.schoolYearId,
-      page: 1,
-      rows: Number.MAX_SAFE_INTEGER,
-    },
-    { query: { enabled: !!fields.academicProgramId && !!fields.schoolYearId } }
-  );
+  const { data: academicProgramRequirementResponse, isLoading: isLoadingRequirements } =
+    useGetAcademicProgramRequirementPaginated(
+      {
+        'filter[academic_program_id]': fields.academicProgramId,
+        'filter[school_year_id]': fields.schoolYearId,
+        page: 1,
+        rows: Number.MAX_SAFE_INTEGER,
+      },
+      { query: { enabled: !!fields.academicProgramId && !!fields.schoolYearId } }
+    );
 
   const campuses = useMemo(() => campusResponse?.data?.data ?? [], [campusResponse]);
 
@@ -128,9 +139,41 @@ export default function GuestAdmissionPage(): React.ReactNode {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ ...formData, ...fields, uploadedFiles });
+    try {
+      await createAdmissionApplication({
+        data: {
+          ...formData,
+          ...fields,
+          academic_program_id: fields.academicProgramId,
+          school_year_id: fields.schoolYearId,
+          user_id: session?.id ?? 0,
+          uploadedFiles,
+        } as AdmissionApplication,
+      });
+      // reset
+      setFormData({
+        firstName: '',
+        lastName: '',
+        middleName: '',
+        email: '',
+        phone: '',
+        address: '',
+      });
+      setFields({
+        campusId: 0,
+        schoolYearId: 0,
+        collegeId: 0,
+        academicProgramId: 0,
+      });
+      setUploadedFiles({});
+      setCurrentStep(1);
+      toast.success('Application submitted successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to create admission application');
+    }
   };
 
   const steps = [
@@ -271,9 +314,14 @@ export default function GuestAdmissionPage(): React.ReactNode {
                             academicProgramId: 0,
                           }))
                         }
+                        disabled={isLoadingCampuses}
                       >
-                        <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors">
-                          <SelectValue placeholder="Choose your campus" />
+                        <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
+                          <SelectValue
+                            placeholder={
+                              isLoadingCampuses ? 'Loading campuses...' : 'Choose your campus'
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           {campuses.map((campus) => (
@@ -302,9 +350,16 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         onValueChange={(value) =>
                           setFields((prev) => ({ ...prev, schoolYearId: Number(value) }))
                         }
+                        disabled={isLoadingSchoolYears}
                       >
-                        <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors">
-                          <SelectValue placeholder="Select academic year" />
+                        <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
+                          <SelectValue
+                            placeholder={
+                              isLoadingSchoolYears
+                                ? 'Loading academic years...'
+                                : 'Select academic year'
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           {schoolYears.map((year) => (
@@ -337,12 +392,16 @@ export default function GuestAdmissionPage(): React.ReactNode {
                           academicProgramId: 0,
                         }))
                       }
-                      disabled={!fields.campusId}
+                      disabled={!fields.campusId || isLoadingColleges}
                     >
                       <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
                         <SelectValue
                           placeholder={
-                            fields.campusId ? 'Choose your college' : '← Select campus first'
+                            !fields.campusId
+                              ? '← Select campus first'
+                              : isLoadingColleges
+                                ? 'Loading colleges...'
+                                : 'Choose your college'
                           }
                         />
                       </SelectTrigger>
@@ -372,12 +431,16 @@ export default function GuestAdmissionPage(): React.ReactNode {
                       onValueChange={(value) =>
                         setFields((prev) => ({ ...prev, academicProgramId: Number(value) }))
                       }
-                      disabled={!fields.collegeId}
+                      disabled={!fields.collegeId || isLoadingPrograms}
                     >
                       <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
                         <SelectValue
                           placeholder={
-                            fields.collegeId ? 'Choose your program' : '← Select college first'
+                            !fields.collegeId
+                              ? '← Select college first'
+                              : isLoadingPrograms
+                                ? 'Loading programs...'
+                                : 'Choose your program'
                           }
                         />
                       </SelectTrigger>
@@ -395,7 +458,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                     </Select>
                   </div>
                   {/* Program Requirements Section */}
-                  {fields.academicProgramId > 0 && academicProgramRequirements.length > 0 && (
+                  {fields.academicProgramId > 0 && (
                     <div className="mt-8 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 rounded-2xl border-2 border-primary/20">
                         <div className="flex items-start gap-4">
@@ -414,110 +477,121 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-4">
-                        {academicProgramRequirements.map((req, index) => (
-                          <div
-                            key={req.id}
-                            className="group relative bg-card hover:bg-accent/50 border-2 border-border hover:border-primary/50 rounded-xl p-5 transition-all duration-300"
-                          >
-                            <div className="flex items-start gap-4">
-                              <div className="flex-shrink-0">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center font-bold text-primary transition-colors">
-                                  {index + 1}
-                                </div>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-4 mb-2">
-                                  <div className="flex-1">
-                                    <h4 className="font-semibold text-base text-foreground mb-1 group-hover:text-primary transition-colors">
-                                      {req.requirement?.requirement_name || 'Requirement'}
-                                    </h4>
-                                    {req.requirement?.description && (
-                                      <p className="text-sm text-muted-foreground">
-                                        {req.requirement.description}
-                                      </p>
-                                    )}
-                                  </div>
-                                  {req.is_mandatory && (
-                                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 rounded-full text-xs font-medium flex-shrink-0">
-                                      <AlertCircle className="w-3 h-3" />
-                                      Required
-                                    </div>
-                                  )}
-                                </div>
-
-                                {req.is_mandatory && (
-                                  <div className="mt-4">
-                                    {uploadedFiles[req.id!] ? (
-                                      <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-950/20 border-2 border-green-200 dark:border-green-900 rounded-lg">
-                                        <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-500 flex-shrink-0" />
-                                        <div className="flex-1 min-w-0">
-                                          <p className="text-sm font-medium text-green-900 dark:text-green-100 truncate">
-                                            {uploadedFiles[req.id!].name}
-                                          </p>
-                                          <p className="text-xs text-green-700 dark:text-green-300">
-                                            {(uploadedFiles[req.id!].size / 1024).toFixed(2)} KB
-                                          </p>
-                                        </div>
-                                        <Button
-                                          type="button"
-                                          variant="ghost"
-                                          size="sm"
-                                          onClick={() => handleFileUpload(req.id!, null)}
-                                          className="flex-shrink-0 h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900"
-                                        >
-                                          <X className="w-4 h-4 text-green-700 dark:text-green-300" />
-                                        </Button>
-                                      </div>
-                                    ) : (
-                                      <div className="relative">
-                                        <Input
-                                          type="file"
-                                          id={`file-${req.id}`}
-                                          onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file) {
-                                              handleFileUpload(req.id!, file);
-                                            }
-                                          }}
-                                          className="hidden"
-                                          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                                        />
-                                        <Label
-                                          htmlFor={`file-${req.id}`}
-                                          className="flex items-center justify-center gap-2 h-12 px-4 border-2 border-dashed border-border hover:border-primary rounded-lg cursor-pointer transition-colors bg-background hover:bg-accent/50"
-                                        >
-                                          <Upload className="w-5 h-5 text-muted-foreground" />
-                                          <span className="text-sm font-medium text-muted-foreground">
-                                            Click to upload file
-                                          </span>
-                                        </Label>
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {academicProgramRequirements.some((req) => req.is_mandatory) && (
-                        <div className="bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-200 dark:border-amber-900 rounded-xl p-4">
-                          <div className="flex items-start gap-3">
-                            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
-                                Important Notice
-                              </p>
-                              <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
-                                Items marked as "Required" must be uploaded for your application to
-                                be processed. Accepted formats: PDF, DOC, DOCX, JPG, PNG
-                              </p>
-                            </div>
+                      {isLoadingRequirements ? (
+                        <div className="flex items-center justify-center py-12">
+                          <div className="text-center space-y-3">
+                            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+                            <p className="text-muted-foreground">Loading requirements...</p>
                           </div>
                         </div>
-                      )}
+                      ) : academicProgramRequirements.length > 0 ? (
+                        <>
+                          <div className="grid grid-cols-1 gap-4">
+                            {academicProgramRequirements.map((req, index) => (
+                              <div
+                                key={req.id}
+                                className="group relative bg-card hover:bg-accent/50 border-2 border-border hover:border-primary/50 rounded-xl p-5 transition-all duration-300"
+                              >
+                                <div className="flex items-start gap-4">
+                                  <div className="flex-shrink-0">
+                                    <div className="w-10 h-10 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center font-bold text-primary transition-colors">
+                                      {index + 1}
+                                    </div>
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-start justify-between gap-4 mb-2">
+                                      <div className="flex-1">
+                                        <h4 className="font-semibold text-base text-foreground mb-1 group-hover:text-primary transition-colors">
+                                          {req.requirement?.requirement_name || 'Requirement'}
+                                        </h4>
+                                        {req.requirement?.description && (
+                                          <p className="text-sm text-muted-foreground">
+                                            {req.requirement.description}
+                                          </p>
+                                        )}
+                                      </div>
+                                      {req.is_mandatory && (
+                                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 rounded-full text-xs font-medium flex-shrink-0">
+                                          <AlertCircle className="w-3 h-3" />
+                                          Required
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    {req.is_mandatory && (
+                                      <div className="mt-4">
+                                        {uploadedFiles[req.id!] ? (
+                                          <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-950/20 border-2 border-green-200 dark:border-green-900 rounded-lg">
+                                            <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-500 flex-shrink-0" />
+                                            <div className="flex-1 min-w-0">
+                                              <p className="text-sm font-medium text-green-900 dark:text-green-100 truncate">
+                                                {uploadedFiles[req.id!].name}
+                                              </p>
+                                              <p className="text-xs text-green-700 dark:text-green-300">
+                                                {(uploadedFiles[req.id!].size / 1024).toFixed(2)} KB
+                                              </p>
+                                            </div>
+                                            <Button
+                                              type="button"
+                                              variant="ghost"
+                                              size="sm"
+                                              onClick={() => handleFileUpload(req.id!, null)}
+                                              className="flex-shrink-0 h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900"
+                                            >
+                                              <X className="w-4 h-4 text-green-700 dark:text-green-300" />
+                                            </Button>
+                                          </div>
+                                        ) : (
+                                          <div className="relative">
+                                            <Input
+                                              type="file"
+                                              id={`file-${req.id}`}
+                                              onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  handleFileUpload(req.id!, file);
+                                                }
+                                              }}
+                                              className="hidden"
+                                              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                            />
+                                            <Label
+                                              htmlFor={`file-${req.id}`}
+                                              className="flex items-center justify-center gap-2 h-12 px-4 border-2 border-dashed border-border hover:border-primary rounded-lg cursor-pointer transition-colors bg-background hover:bg-accent/50"
+                                            >
+                                              <Upload className="w-5 h-5 text-muted-foreground" />
+                                              <span className="text-sm font-medium text-muted-foreground">
+                                                Click to upload file
+                                              </span>
+                                            </Label>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {academicProgramRequirements.some((req) => req.is_mandatory) && (
+                            <div className="bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-200 dark:border-amber-900 rounded-xl p-4">
+                              <div className="flex items-start gap-3">
+                                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+                                    Important Notice
+                                  </p>
+                                  <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
+                                    Items marked as "Required" must be uploaded for your application
+                                    to be processed. Accepted formats: PDF, DOC, DOCX, JPG, PNG
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      ) : null}
                     </div>
                   )}
                 </div>
@@ -547,6 +621,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         value={formData.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div className="space-y-3">
@@ -559,6 +634,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         value={formData.middleName}
                         onChange={(e) => handleInputChange('middleName', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div className="space-y-3">
@@ -571,6 +647,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         value={formData.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -607,6 +684,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div className="space-y-3">
@@ -624,6 +702,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         value={formData.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -642,6 +721,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       className="h-14 text-base border-2 focus:border-primary"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -655,6 +735,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
                     variant="outline"
                     onClick={() => setCurrentStep(currentStep - 1)}
                     className="h-14 px-8 text-base font-semibold border-2"
+                    disabled={isSubmitting}
                   >
                     ← Previous
                   </Button>
@@ -668,7 +749,8 @@ export default function GuestAdmissionPage(): React.ReactNode {
                     onClick={() => setCurrentStep(currentStep + 1)}
                     disabled={
                       (currentStep === 1 && !isStep1Complete) ||
-                      (currentStep === 2 && !isStep2Complete)
+                      (currentStep === 2 && !isStep2Complete) ||
+                      isSubmitting
                     }
                     className="h-14 px-8 text-base font-semibold shadow-lg disabled:opacity-50"
                   >
@@ -677,11 +759,20 @@ export default function GuestAdmissionPage(): React.ReactNode {
                 ) : (
                   <Button
                     type="submit"
-                    disabled={!isStep3Complete}
+                    disabled={!isStep3Complete || isSubmitting}
                     className="h-14 px-12 text-base font-semibold bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 shadow-lg disabled:opacity-50"
                   >
-                    <CheckCircle2 className="w-5 h-5 mr-2" />
-                    Submit Application
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-5 h-5 mr-2" />
+                        Submit Application
+                      </>
+                    )}
                   </Button>
                 )}
               </div>

@@ -19,9 +19,9 @@ import {
 import React from 'react';
 
 export type TableColumn<RowType> = {
-  key: string;
+  key: keyof RowType | string;
   title: React.ReactNode;
-  render?: (value: unknown, row: RowType, rowIndex: number) => React.ReactNode;
+  render?: (value: RowType[keyof RowType], row: RowType, rowIndex: number) => React.ReactNode;
   className?: string;
   headerClassName?: string;
   width?: string | number;
@@ -109,7 +109,8 @@ export default function Table<RowType extends Record<string, any>>({
     (row: RowType, index: number): React.Key => {
       if (rowKey) return rowKey(row, index);
       const firstColKey = columns[0]?.key ?? '__index__';
-      const firstVal = firstColKey === '__index__' ? index : getValueByKeyPath(row, firstColKey);
+      const firstVal =
+        firstColKey === '__index__' ? index : getValueByKeyPath(row, firstColKey as string);
       return `${String(firstVal)}-${index}`;
     },
     [rowKey, columns]
@@ -117,9 +118,9 @@ export default function Table<RowType extends Record<string, any>>({
 
   const renderCell = React.useCallback(
     (column: TableColumn<RowType>, row: RowType, rowIndex: number) => {
-      const rawValue = getValueByKeyPath(row, column.key);
+      const rawValue = getValueByKeyPath(row, column.key as string);
       if (typeof column.render === 'function') {
-        return column.render(rawValue, row, rowIndex);
+        return column.render(rawValue as RowType[keyof RowType], row, rowIndex);
       }
       if (rawValue == null) return <span className="text-muted-foreground">—</span>;
       if (typeof rawValue === 'object')

@@ -77,11 +77,11 @@ export default function SignupPage(): React.ReactNode {
       value: UserRoleEnum.CAMPUS_REGISTRAR,
       description: 'Manage student records and enrollment processes',
     },
-    {
-      label: 'Admin',
-      value: UserRoleEnum.ADMIN,
-      description: 'Full system access and administrative privileges',
-    },
+    // {
+    //   label: 'Admin',
+    //   value: UserRoleEnum.ADMIN,
+    //   description: 'Full system access and administrative privileges',
+    // },
     {
       label: 'Guest',
       value: UserRoleEnum.GUEST,

@@ -26,7 +26,7 @@ const router = createBrowserRouter(
             <DefaultLayout>{current.component}</DefaultLayout>
           ),
       } as any);
-      stack.push(...(current.children ?? []).reverse());
+      stack.push(...(current.children ?? []));
     }
 
     return items;

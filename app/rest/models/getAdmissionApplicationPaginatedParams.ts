@@ -19,4 +19,16 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
+/**
+ * User ID
+ */
+'filter[user_id]'?: number;
+/**
+ * School Year ID
+ */
+'filter[school_year_id]'?: number;
+/**
+ * Academic Program ID
+ */
+'filter[academic_program_id]'?: number;
 };

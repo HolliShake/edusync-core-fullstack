@@ -1806,7 +1806,7 @@ export function useGetAdmissionApplicationPaginated<TData = Awaited<ReturnType<t
  * @summary Create a new AdmissionApplication
  */
 export const createAdmissionApplication = (
-    admissionApplication: AdmissionApplication,
+    admissionApplication: NonReadonly<AdmissionApplication>,
  signal?: AbortSignal
 ) => {
       
@@ -1822,8 +1822,8 @@ export const createAdmissionApplication = (
 
 
 export const getCreateAdmissionApplicationMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: AdmissionApplication}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: AdmissionApplication}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: NonReadonly<AdmissionApplication>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: NonReadonly<AdmissionApplication>}, TContext> => {
 
 const mutationKey = ['createAdmissionApplication'];
 const {mutation: mutationOptions} = options ?
@@ -1835,7 +1835,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAdmissionApplication>>, {data: AdmissionApplication}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAdmissionApplication>>, {data: NonReadonly<AdmissionApplication>}> = (props) => {
           const {data} = props ?? {};
 
           return  createAdmissionApplication(data,)
@@ -1847,18 +1847,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateAdmissionApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof createAdmissionApplication>>>
-    export type CreateAdmissionApplicationMutationBody = AdmissionApplication
+    export type CreateAdmissionApplicationMutationBody = NonReadonly<AdmissionApplication>
     export type CreateAdmissionApplicationMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new AdmissionApplication
  */
 export const useCreateAdmissionApplication = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: AdmissionApplication}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionApplication>>, TError,{data: NonReadonly<AdmissionApplication>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createAdmissionApplication>>,
         TError,
-        {data: AdmissionApplication},
+        {data: NonReadonly<AdmissionApplication>},
         TContext
       > => {
 
@@ -1962,7 +1962,7 @@ export function useGetAdmissionApplicationById<TData = Awaited<ReturnType<typeof
  */
 export const updateAdmissionApplication = (
     id: number,
-    admissionApplication: AdmissionApplication,
+    admissionApplication: NonReadonly<AdmissionApplication>,
  ) => {
       
       
@@ -1977,8 +1977,8 @@ export const updateAdmissionApplication = (
 
 
 export const getUpdateAdmissionApplicationMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: AdmissionApplication}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: AdmissionApplication}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: NonReadonly<AdmissionApplication>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: NonReadonly<AdmissionApplication>}, TContext> => {
 
 const mutationKey = ['updateAdmissionApplication'];
 const {mutation: mutationOptions} = options ?
@@ -1990,7 +1990,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAdmissionApplication>>, {id: number;data: AdmissionApplication}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAdmissionApplication>>, {id: number;data: NonReadonly<AdmissionApplication>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateAdmissionApplication(id,data,)
@@ -2002,18 +2002,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateAdmissionApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof updateAdmissionApplication>>>
-    export type UpdateAdmissionApplicationMutationBody = AdmissionApplication
+    export type UpdateAdmissionApplicationMutationBody = NonReadonly<AdmissionApplication>
     export type UpdateAdmissionApplicationMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a AdmissionApplication
  */
 export const useUpdateAdmissionApplication = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: AdmissionApplication}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdmissionApplication>>, TError,{id: number;data: NonReadonly<AdmissionApplication>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateAdmissionApplication>>,
         TError,
-        {id: number;data: AdmissionApplication},
+        {id: number;data: NonReadonly<AdmissionApplication>},
         TContext
       > => {
 
