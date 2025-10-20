@@ -243,7 +243,7 @@ export default function SideBar({
                     isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   )}
                 >
-                  <div className="ml-4 pl-3 space-y-0.5 pt-1 pb-1 border-l border-sidebar-border relative">
+                  <div className="ml-4 pl-3 pt-1 pb-1 border-l border-sidebar-border relative space-y-1">
                     {route.children
                       ?.filter((data) => data.sidebar === true || data.sidebar === undefined)
                       .map((child: Route, childIndex: number) => {

@@ -278,13 +278,13 @@ export default function GuestAdmissionPage(): React.ReactNode {
 
         {/* Main Form Card */}
         <Card className="shadow-xl border overflow-hidden">
-          <div className="bg-primary p-8">
+          <div className="bg-primary p-4">
             <CardHeader className="text-primary-foreground p-0">
-              <CardTitle className="text-3xl font-bold flex items-center gap-3">
-                <Sparkles className="w-8 h-8" />
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
                 Application Form
               </CardTitle>
-              <CardDescription className="text-primary-foreground/90 text-lg mt-2">
+              <CardDescription className="text-primary-foreground/90 text-sm mt-1">
                 Step {currentStep} of 3 - {steps[currentStep - 1].title}
               </CardDescription>
             </CardHeader>
