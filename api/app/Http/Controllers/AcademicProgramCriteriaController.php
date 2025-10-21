@@ -1,31 +1,30 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Http\Controllers;
 
-use {{ rootNamespace }}Http\Controllers\Controller;
-use App\Service\{{ class }}Service;
+use App\Service\AcademicProgramCriteriaService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/{{ class }}"
+    path: "/AcademicProgramCriteria"
 )]
-class {{ class }} extends Controller
+class AcademicProgramCriteriaController extends Controller
 {
-    public function __construct(protected {{ class }}Service $service) {
+    public function __construct(protected AcademicProgramCriteriaService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/{{ class }}",
-        summary: "Get paginated list of {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Retrieve a paginated list of {{ class }} with optional search",
-        operationId:"get{{ class }}Paginated",
+        path: "/api/AcademicProgramCriteria",
+        summary: "Get paginated list of AcademicProgramCriteria",
+        tags: ["AcademicProgramCriteria"],
+        description: "Retrieve a paginated list of AcademicProgramCriteria with optional search",
+        operationId:"getAcademicProgramCriteriaPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -48,10 +47,24 @@ class {{ class }} extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "School year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/Paginated{{ class }}Response200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAcademicProgramCriteriaResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -75,11 +88,11 @@ class {{ class }} extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/{{ class }}/{id}",
-        summary: "Get a specific {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Retrieve a {{ class }} by its ID",
-        operationId: "get{{ class }}ById",
+        path: "/api/AcademicProgramCriteria/{id}",
+        summary: "Get a specific AcademicProgramCriteria",
+        tags: ["AcademicProgramCriteria"],
+        description: "Retrieve a AcademicProgramCriteria by its ID",
+        operationId: "getAcademicProgramCriteriaById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -90,7 +103,7 @@ class {{ class }} extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/Get{{ class }}Response200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetAcademicProgramCriteriaResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -104,14 +117,14 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AcademicProgramCriteria not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AcademicProgramCriteria not found');
         }
     }
 
@@ -119,20 +132,20 @@ class {{ class }} extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/{{ class }}",
-        summary: "Create a new {{ class }}",
-        tags: ["{{ class }}"],
-        description:" Create a new {{ class }} with the provided details",
-        operationId: "create{{ class }}",
+        path: "/api/AcademicProgramCriteria",
+        summary: "Create a new AcademicProgramCriteria",
+        tags: ["AcademicProgramCriteria"],
+        description:" Create a new AcademicProgramCriteria with the provided details",
+        operationId: "createAcademicProgramCriteria",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/{{ class }}")
+        content: new OA\JsonContent(ref: "#/components/schemas/AcademicProgramCriteria")
     )]
     #[OA\Response(
         response: 200,
-        description: "{{ class }} created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Create{{ class }}Response200")
+        description: "AcademicProgramCriteria created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateAcademicProgramCriteriaResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -158,7 +171,14 @@ class {{ class }} extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'school_year_id' => 'required|integer|exists:school_year,id',
+                'title' => 'required|string',
+                'description' => 'nullable|string',
+                'max_score' => 'required|integer',
+                'min_score' => 'required|integer',
+                'weight' => 'required|integer',
+                'is_active' => 'boolean',
             ]);
 
             if ($validator->fails()) {
@@ -177,11 +197,11 @@ class {{ class }} extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/{{ class }}/{id}",
-        summary: "Update a {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Update an existing {{ class }} with the provided details",
-        operationId: "update{{ class }}",
+        path: "/api/AcademicProgramCriteria/{id}",
+        summary: "Update a AcademicProgramCriteria",
+        tags: ["AcademicProgramCriteria"],
+        description: "Update an existing AcademicProgramCriteria with the provided details",
+        operationId: "updateAcademicProgramCriteria",
     )]
     #[OA\Parameter(
         name: "id",
@@ -191,12 +211,12 @@ class {{ class }} extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/{{ class }}")
+        content: new OA\JsonContent(ref: "#/components/schemas/AcademicProgramCriteria")
     )]
     #[OA\Response(
         response: 200,
-        description: "{{ class }} updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Update{{ class }}Response200")
+        description: "AcademicProgramCriteria updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAcademicProgramCriteriaResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -210,7 +230,7 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AcademicProgramCriteria not found"
     )]
     #[OA\Response(
         response: 422,
@@ -226,7 +246,14 @@ class {{ class }} extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'school_year_id' => 'required|integer|exists:school_year,id',
+                'title' => 'required|string',
+                'description' => 'nullable|string',
+                'max_score' => 'required|integer',
+                'min_score' => 'required|integer',
+                'weight' => 'required|integer',
+                'is_active' => 'boolean',
             ]);
 
             if ($validator->fails()) {
@@ -237,7 +264,7 @@ class {{ class }} extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AcademicProgramCriteria not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -247,11 +274,11 @@ class {{ class }} extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/{{ class }}/{id}",
-        summary: "Delete a {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Delete a {{ class }} by its ID",
-        operationId: "delete{{ class }}",
+        path: "/api/AcademicProgramCriteria/{id}",
+        summary: "Delete a AcademicProgramCriteria",
+        tags: ["AcademicProgramCriteria"],
+        description: "Delete a AcademicProgramCriteria by its ID",
+        operationId: "deleteAcademicProgramCriteria",
     )]
     #[OA\Parameter(
         name: "id",
@@ -261,8 +288,8 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "{{ class }} deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Delete{{ class }}Response200")
+        description: "AcademicProgramCriteria deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAcademicProgramCriteriaResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -276,7 +303,7 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AcademicProgramCriteria not found"
     )]
     #[OA\Response(
         response: 500,
@@ -289,7 +316,7 @@ class {{ class }} extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AcademicProgramCriteria not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

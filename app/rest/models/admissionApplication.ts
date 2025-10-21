@@ -26,6 +26,7 @@ export interface AdmissionApplication {
   address: string;
   created_at?: string;
   updated_at?: string;
+  latest_status?: string;
   user?: User;
   schoolYear?: SchoolYear;
   academicProgram?: AcademicProgram;

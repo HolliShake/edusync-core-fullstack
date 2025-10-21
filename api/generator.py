@@ -167,6 +167,40 @@ interface I{class_name}Service extends IGenericService
     print(f"✓ Generated service interface: {interface_file}")
 
 
+def generate_controller(class_name: str, base_dir: str):
+    """Generate a controller class based on controller.api.stub template."""
+    controller_dir = Path(base_dir) / "app" / "Http" / "Controllers"
+    controller_file = controller_dir / f"{class_name}Controller.php"
+    stub_file = Path(base_dir) / "stubs" / "controller.api.stub"
+
+    # Skip if file already exists
+    if controller_file.exists():
+        print(f"⊘ Skipped controller (already exists): {controller_file}")
+        return
+
+    # Check if stub file exists
+    if not stub_file.exists():
+        print(f"✗ Warning: Stub file not found at {stub_file}", file=sys.stderr)
+        print(f"  Skipping controller generation", file=sys.stderr)
+        return
+
+    # Read the stub file
+    with open(stub_file, 'r') as f:
+        controller_content = f.read()
+
+    # Replace placeholders
+    controller_content = controller_content.replace('{{ namespace }}', 'App\\Http\\Controllers')
+    controller_content = controller_content.replace('{{ rootNamespace }}', 'App\\')
+    controller_content = controller_content.replace('{{ class }}', class_name)
+
+    controller_dir.mkdir(parents=True, exist_ok=True)
+
+    with open(controller_file, 'w') as f:
+        f.write(controller_content)
+
+    print(f"✓ Generated controller: {controller_file}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Generate Repository and Service classes based on a model class name.'
@@ -195,7 +229,7 @@ def main():
         print(f"  Please ensure the model {class_name} exists before generating repository and service.", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Generating repository, service, and interfaces for: {class_name}")
+    print(f"Generating repository, service, controller, and interfaces for: {class_name}")
     print(f"Base directory: {base_dir}")
     print("-" * 60)
 
@@ -204,6 +238,7 @@ def main():
         generate_repository(class_name, base_dir)
         generate_service_interface(class_name, base_dir)
         generate_service(class_name, base_dir)
+        generate_controller(class_name, base_dir)
         print("-" * 60)
         print(f"✓ Generation complete for {class_name}")
     except Exception as e:

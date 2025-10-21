@@ -1,31 +1,30 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Http\Controllers;
 
-use {{ rootNamespace }}Http\Controllers\Controller;
-use App\Service\{{ class }}Service;
+use App\Service\AdmissionApplicationLogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/{{ class }}"
+    path: "/AdmissionApplicationLog"
 )]
-class {{ class }} extends Controller
+class AdmissionApplicationLogController extends Controller
 {
-    public function __construct(protected {{ class }}Service $service) {
+    public function __construct(protected AdmissionApplicationLogService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/{{ class }}",
-        summary: "Get paginated list of {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Retrieve a paginated list of {{ class }} with optional search",
-        operationId:"get{{ class }}Paginated",
+        path: "/api/AdmissionApplicationLog",
+        summary: "Get paginated list of AdmissionApplicationLog",
+        tags: ["AdmissionApplicationLog"],
+        description: "Retrieve a paginated list of AdmissionApplicationLog with optional search",
+        operationId:"getAdmissionApplicationLogPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -51,7 +50,7 @@ class {{ class }} extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/Paginated{{ class }}Response200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAdmissionApplicationLogResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -75,11 +74,11 @@ class {{ class }} extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/{{ class }}/{id}",
-        summary: "Get a specific {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Retrieve a {{ class }} by its ID",
-        operationId: "get{{ class }}ById",
+        path: "/api/AdmissionApplicationLog/{id}",
+        summary: "Get a specific AdmissionApplicationLog",
+        tags: ["AdmissionApplicationLog"],
+        description: "Retrieve a AdmissionApplicationLog by its ID",
+        operationId: "getAdmissionApplicationLogById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -90,7 +89,7 @@ class {{ class }} extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/Get{{ class }}Response200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetAdmissionApplicationLogResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -104,14 +103,14 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AdmissionApplicationLog not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AdmissionApplicationLog not found');
         }
     }
 
@@ -119,20 +118,20 @@ class {{ class }} extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/{{ class }}",
-        summary: "Create a new {{ class }}",
-        tags: ["{{ class }}"],
-        description:" Create a new {{ class }} with the provided details",
-        operationId: "create{{ class }}",
+        path: "/api/AdmissionApplicationLog",
+        summary: "Create a new AdmissionApplicationLog",
+        tags: ["AdmissionApplicationLog"],
+        description:" Create a new AdmissionApplicationLog with the provided details",
+        operationId: "createAdmissionApplicationLog",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/{{ class }}")
+        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionApplicationLog")
     )]
     #[OA\Response(
         response: 200,
-        description: "{{ class }} created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Create{{ class }}Response200")
+        description: "AdmissionApplicationLog created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateAdmissionApplicationLogResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -158,7 +157,10 @@ class {{ class }} extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'admission_application_id' => 'required|integer|exists:admission_application,id',
+                'user_id' => 'required|integer|exists:user,id',
+                'type' => 'required|string',
+                'note' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -177,11 +179,11 @@ class {{ class }} extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/{{ class }}/{id}",
-        summary: "Update a {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Update an existing {{ class }} with the provided details",
-        operationId: "update{{ class }}",
+        path: "/api/AdmissionApplicationLog/{id}",
+        summary: "Update a AdmissionApplicationLog",
+        tags: ["AdmissionApplicationLog"],
+        description: "Update an existing AdmissionApplicationLog with the provided details",
+        operationId: "updateAdmissionApplicationLog",
     )]
     #[OA\Parameter(
         name: "id",
@@ -191,12 +193,12 @@ class {{ class }} extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/{{ class }}")
+        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionApplicationLog")
     )]
     #[OA\Response(
         response: 200,
-        description: "{{ class }} updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Update{{ class }}Response200")
+        description: "AdmissionApplicationLog updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAdmissionApplicationLogResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -210,7 +212,7 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AdmissionApplicationLog not found"
     )]
     #[OA\Response(
         response: 422,
@@ -226,7 +228,10 @@ class {{ class }} extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'admission_application_id' => 'required|integer|exists:admission_application,id',
+                'user_id' => 'required|integer|exists:user,id',
+                'type' => 'required|string',
+                'note' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -237,7 +242,7 @@ class {{ class }} extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AdmissionApplicationLog not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -247,11 +252,11 @@ class {{ class }} extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/{{ class }}/{id}",
-        summary: "Delete a {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Delete a {{ class }} by its ID",
-        operationId: "delete{{ class }}",
+        path: "/api/AdmissionApplicationLog/{id}",
+        summary: "Delete a AdmissionApplicationLog",
+        tags: ["AdmissionApplicationLog"],
+        description: "Delete a AdmissionApplicationLog by its ID",
+        operationId: "deleteAdmissionApplicationLog",
     )]
     #[OA\Parameter(
         name: "id",
@@ -261,8 +266,8 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "{{ class }} deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Delete{{ class }}Response200")
+        description: "AdmissionApplicationLog deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAdmissionApplicationLogResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -276,7 +281,7 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AdmissionApplicationLog not found"
     )]
     #[OA\Response(
         response: 500,
@@ -289,7 +294,7 @@ class {{ class }} extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AdmissionApplicationLog not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

@@ -69,7 +69,7 @@ export default function SideBar({
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-30 bg-card border-r border-border shadow-sm transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0',
+        'fixed inset-y-0 left-0 z-30 bg-card border-r border-border shadow-sm transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col',
         isCollapsed ? 'translate-x-0' : '-translate-x-full',
         isCollapsed ? 'lg:w-16 w-64' : 'w-64'
       )}
@@ -77,7 +77,7 @@ export default function SideBar({
       {/* Header */}
       <div
         className={cn(
-          'flex items-center h-[64px] bg-sidebar border-b border-sidebar-border',
+          'flex items-center h-[64px] bg-sidebar border-b border-sidebar-border flex-shrink-0',
           isCollapsed ? 'lg:justify-center lg:px-2 px-4 justify-between' : 'justify-between px-4'
         )}
       >
@@ -311,7 +311,7 @@ export default function SideBar({
       {/* Footer - smoothly animate visibility when collapsing */}
       <div
         className={cn(
-          'bg-card border-t border-border overflow-hidden transition-all duration-300 ease-in-out',
+          'bg-card border-t border-border overflow-hidden transition-all duration-300 ease-in-out flex-shrink-0',
           isCollapsed ? 'max-h-0 opacity-0 p-0' : 'max-h-16 opacity-100 p-3'
         )}
       >

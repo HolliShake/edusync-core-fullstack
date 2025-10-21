@@ -12,6 +12,11 @@ use OpenApi\Attributes as OA;
     type: "object",
     required: [
         // Override required
+        'name',
+        'start_date',
+        'end_date',
+        'school_year_id',
+        'event',
     ],
     properties: [
         new OA\Property(property: "id", type: "integer", readOnly: true),

@@ -1,3 +1,4 @@
+import { useConfirm } from '@/components/confirm.provider';
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Select, { type SelectOption } from '@/components/custom/select.component';
@@ -18,7 +19,7 @@ import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function ProgramRequirementPage(): React.ReactNode {
+export default function ProgramRequirement(): React.ReactNode {
   const { session } = useAuth();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
@@ -52,9 +53,11 @@ export default function ProgramRequirementPage(): React.ReactNode {
 
   const controller = useModal<AcademicProgramRequirement>();
 
-  const handleDelete = async (id: number) => {
+  const confirm = useConfirm();
+
+  const handleDelete = async (data: AcademicProgramRequirement) => {
     try {
-      await deleteRequirement({ id });
+      await deleteRequirement({ id: data.id as number });
       toast.success('Program requirement deleted successfully');
       refetch();
     } catch (error) {
@@ -111,7 +114,6 @@ export default function ProgramRequirementPage(): React.ReactNode {
       {
         key: 'is_mandatory',
         title: 'Mandatory',
-        dataIndex: 'is_mandatory',
         render: (isMandatory) => (
           <Badge variant={isMandatory ? 'default' : 'secondary'}>
             {isMandatory ? 'Yes' : 'No'}
@@ -121,7 +123,6 @@ export default function ProgramRequirementPage(): React.ReactNode {
       {
         key: 'is_active',
         title: 'Status',
-        dataIndex: 'is_active',
         render: (isActive) => (
           <Badge variant={isActive ? 'default' : 'destructive'}>
             {isActive ? 'Active' : 'Inactive'}
@@ -131,7 +132,6 @@ export default function ProgramRequirementPage(): React.ReactNode {
       {
         key: 'actions',
         title: 'Actions',
-        dataIndex: 'actions',
         render: (_, row) => (
           <Menu
             items={[
@@ -148,7 +148,7 @@ export default function ProgramRequirementPage(): React.ReactNode {
                 icon: <DeleteIcon />,
                 variant: 'destructive',
                 onClick: () => {
-                  handleDelete(row.id!);
+                  confirm.confirm(async () => await handleDelete(row));
                 },
               },
             ]}

@@ -60,22 +60,18 @@ export default function AdminItems(): React.ReactNode {
       {
         key: 'name',
         title: 'Name',
-        dataIndex: 'name',
       },
       {
         key: 'description',
         title: 'Description',
-        dataIndex: 'description',
       },
       {
         key: 'category',
         title: 'Category',
-        dataIndex: 'category',
       },
       {
         key: 'actions',
         title: 'Actions',
-        dataIndex: 'actions',
         render: (_, row) => (
           <Menu
             items={[

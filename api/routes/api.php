@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AcademicCalendarController;
 use App\Http\Controllers\AcademicProgramController;
+use App\Http\Controllers\AcademicProgramCriteriaController;
 use App\Http\Controllers\AcademicProgramRequirementController;
 use App\Http\Controllers\AcademicTermController;
 use App\Http\Controllers\AuthController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdmissionApplicationController;
+use App\Http\Controllers\AdmissionApplicationLogController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -188,4 +190,22 @@ Route::controller(AdmissionApplicationController::class)->group(function() {
     Route::post('/AdmissionApplication', 'store');
     Route::put('/AdmissionApplication/{id}', 'update');
     Route::delete('/AdmissionApplication/{id}', 'destroy');
+});
+
+
+Route::controller(AdmissionApplicationLogController::class)->group(function() {
+    Route::get('/AdmissionApplicationLog', 'index');
+    Route::get('/AdmissionApplicationLog/{id}', 'show');
+    Route::post('/AdmissionApplicationLog', 'store');
+    Route::put('/AdmissionApplicationLog/{id}', 'update');
+    Route::delete('/AdmissionApplicationLog/{id}', 'destroy');
+});
+
+
+Route::controller(AcademicProgramCriteriaController::class)->group(function() {
+    Route::get('/AcademicProgramCriteria', 'index');
+    Route::get('/AcademicProgramCriteria/{id}', 'show');
+    Route::post('/AcademicProgramCriteria', 'store');
+    Route::put('/AcademicProgramCriteria/{id}', 'update');
+    Route::delete('/AcademicProgramCriteria/{id}', 'destroy');
 });

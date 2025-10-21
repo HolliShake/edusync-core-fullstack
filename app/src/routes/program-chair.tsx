@@ -1,8 +1,17 @@
 import { UserRoleEnum } from '@/enums/role-enum';
+import ProgramChairAdmissionApplication from '@/pages/program-chair/admission/application/page';
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
-import ProgramRequirementPage from '@/pages/program-chair/program-requirement/page';
+import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
+import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
 import type { Route } from '@/types/route';
-import { BookOpenIcon } from 'lucide-react';
+import {
+  BarChartIcon,
+  BookOpenIcon,
+  CheckCircleIcon,
+  ClipboardListIcon,
+  FileTextIcon,
+  GraduationCapIcon,
+} from 'lucide-react';
 
 const PROGRAM_CHAIR: Route[] = [
   {
@@ -11,6 +20,37 @@ const PROGRAM_CHAIR: Route[] = [
     path: '#',
     layout: 'default',
     type: 'label',
+    roles: [UserRoleEnum.PROGRAM_CHAIR],
+  },
+  {
+    key: 'program-chair.admission',
+    title: 'Admission',
+    path: '/program-chair/admission',
+    icon: <GraduationCapIcon className="h-4 w-4" />,
+    children: [
+      {
+        key: 'program-chair.admission.application',
+        title: 'Application',
+        path: '/program-chair/admission/application',
+        component: <ProgramChairAdmissionApplication />,
+        icon: <FileTextIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.PROGRAM_CHAIR],
+      },
+      {
+        key: 'program-chair.admission.evaluation',
+        title: 'Evaluation',
+        path: '/program-chair/admission/evaluation',
+        component: <div>Hello</div>,
+        icon: <CheckCircleIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.PROGRAM_CHAIR],
+      },
+    ],
+    layout: 'dashboard',
+    sidebar: true,
     roles: [UserRoleEnum.PROGRAM_CHAIR],
   },
   {
@@ -27,8 +67,18 @@ const PROGRAM_CHAIR: Route[] = [
     key: 'program-chair.program-requirement',
     title: 'Program Requirement',
     path: '/program-chair/program-requirement',
-    component: <ProgramRequirementPage />,
-    icon: <BookOpenIcon className="h-4 w-4" />,
+    component: <ProgramRequirement />,
+    icon: <ClipboardListIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.PROGRAM_CHAIR],
+  },
+  {
+    key: 'program-chair.program-criteria',
+    title: 'Program Criteria',
+    path: '/program-chair/program-criteria',
+    component: <ProgramCriteria />,
+    icon: <BarChartIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
     roles: [UserRoleEnum.PROGRAM_CHAIR],

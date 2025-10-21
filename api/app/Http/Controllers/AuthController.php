@@ -28,7 +28,8 @@ class AuthController extends Controller
         operationId: "login",
     )]
     #[OA\RequestBody(
-        ref: "#/components/schemas/AuthCredential"
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/AuthCredential")
     )]
     #[OA\Response(
         response: 200,

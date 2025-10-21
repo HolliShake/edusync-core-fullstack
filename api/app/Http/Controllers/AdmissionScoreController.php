@@ -1,31 +1,30 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Http\Controllers;
 
-use {{ rootNamespace }}Http\Controllers\Controller;
-use App\Service\{{ class }}Service;
+use App\Service\AdmissionScoreService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/{{ class }}"
+    path: "/AdmissionScore"
 )]
-class {{ class }} extends Controller
+class AdmissionScoreController extends Controller
 {
-    public function __construct(protected {{ class }}Service $service) {
+    public function __construct(protected AdmissionScoreService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/{{ class }}",
-        summary: "Get paginated list of {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Retrieve a paginated list of {{ class }} with optional search",
-        operationId:"get{{ class }}Paginated",
+        path: "/api/AdmissionScore",
+        summary: "Get paginated list of AdmissionScore",
+        tags: ["AdmissionScore"],
+        description: "Retrieve a paginated list of AdmissionScore with optional search",
+        operationId:"getAdmissionScorePaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -51,7 +50,7 @@ class {{ class }} extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/Paginated{{ class }}Response200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAdmissionScoreResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -75,11 +74,11 @@ class {{ class }} extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/{{ class }}/{id}",
-        summary: "Get a specific {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Retrieve a {{ class }} by its ID",
-        operationId: "get{{ class }}ById",
+        path: "/api/AdmissionScore/{id}",
+        summary: "Get a specific AdmissionScore",
+        tags: ["AdmissionScore"],
+        description: "Retrieve a AdmissionScore by its ID",
+        operationId: "getAdmissionScoreById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -90,7 +89,7 @@ class {{ class }} extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/Get{{ class }}Response200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetAdmissionScoreResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -104,14 +103,14 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AdmissionScore not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AdmissionScore not found');
         }
     }
 
@@ -119,20 +118,20 @@ class {{ class }} extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/{{ class }}",
-        summary: "Create a new {{ class }}",
-        tags: ["{{ class }}"],
-        description:" Create a new {{ class }} with the provided details",
-        operationId: "create{{ class }}",
+        path: "/api/AdmissionScore",
+        summary: "Create a new AdmissionScore",
+        tags: ["AdmissionScore"],
+        description:" Create a new AdmissionScore with the provided details",
+        operationId: "createAdmissionScore",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/{{ class }}")
+        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionScore")
     )]
     #[OA\Response(
         response: 200,
-        description: "{{ class }} created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Create{{ class }}Response200")
+        description: "AdmissionScore created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateAdmissionScoreResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -177,11 +176,11 @@ class {{ class }} extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/{{ class }}/{id}",
-        summary: "Update a {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Update an existing {{ class }} with the provided details",
-        operationId: "update{{ class }}",
+        path: "/api/AdmissionScore/{id}",
+        summary: "Update a AdmissionScore",
+        tags: ["AdmissionScore"],
+        description: "Update an existing AdmissionScore with the provided details",
+        operationId: "updateAdmissionScore",
     )]
     #[OA\Parameter(
         name: "id",
@@ -191,12 +190,12 @@ class {{ class }} extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/{{ class }}")
+        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionScore")
     )]
     #[OA\Response(
         response: 200,
-        description: "{{ class }} updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Update{{ class }}Response200")
+        description: "AdmissionScore updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAdmissionScoreResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -210,7 +209,7 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AdmissionScore not found"
     )]
     #[OA\Response(
         response: 422,
@@ -237,7 +236,7 @@ class {{ class }} extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AdmissionScore not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -247,11 +246,11 @@ class {{ class }} extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/{{ class }}/{id}",
-        summary: "Delete a {{ class }}",
-        tags: ["{{ class }}"],
-        description: "Delete a {{ class }} by its ID",
-        operationId: "delete{{ class }}",
+        path: "/api/AdmissionScore/{id}",
+        summary: "Delete a AdmissionScore",
+        tags: ["AdmissionScore"],
+        description: "Delete a AdmissionScore by its ID",
+        operationId: "deleteAdmissionScore",
     )]
     #[OA\Parameter(
         name: "id",
@@ -261,8 +260,8 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "{{ class }} deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/Delete{{ class }}Response200")
+        description: "AdmissionScore deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAdmissionScoreResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -276,7 +275,7 @@ class {{ class }} extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "{{ class }} not found"
+        description: "AdmissionScore not found"
     )]
     #[OA\Response(
         response: 500,
@@ -289,7 +288,7 @@ class {{ class }} extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('{{ class }} not found');
+            return $this->notFound('AdmissionScore not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

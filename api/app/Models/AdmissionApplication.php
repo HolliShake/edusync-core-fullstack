@@ -39,6 +39,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "address", type: "string"),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
+        new OA\Property(property: "latest_status", type: "string"),
         // Relation
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
@@ -144,11 +145,23 @@ class AdmissionApplication extends Model
     ];
 
     protected $appends = [
+        'latest_status',
         'user',
         'schoolYear',
         'academicProgram',
         'logs',
     ];
+
+    /**
+     * Get the latest status of the admission application.
+     *
+     * @return string
+     */
+    public function getLatestStatusAttribute(): string
+    {
+        $latestLog = $this->logs()->latest()->first();
+        return $latestLog ? $latestLog->type : '';
+    }
 
     /**
      * Get the user that owns the admission application.

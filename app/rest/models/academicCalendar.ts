@@ -10,13 +10,13 @@ import type { SchoolYear } from './schoolYear';
 
 export interface AcademicCalendar {
   readonly id?: number;
-  name?: string;
+  name: string;
   /** @nullable */
   description?: string | null;
-  start_date?: string;
-  end_date?: string;
-  school_year_id?: number;
-  event?: AcademicCalendarEvent;
+  start_date: string;
+  end_date: string;
+  school_year_id: number;
+  event: AcademicCalendarEvent;
   readonly created_at?: string;
   readonly updated_at?: string;
   school_year?: SchoolYear;

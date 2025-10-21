@@ -63,7 +63,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_faculty", type: "boolean"),
         new OA\Property(property: "is_guest", type: "boolean"),
         // user data
-        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "enum", enum: ['admin', 'program-chair', 'college-dean', 'specialization-chair', 'campus-scheduler', 'campus-registrar', 'student', 'faculty', 'guest'])),
+        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "string", enum: ['admin', 'program-chair', 'college-dean', 'specialization-chair', 'campus-scheduler', 'campus-registrar', 'student', 'faculty', 'guest'])),
         new OA\Property(property: "active_academic_program", type: "integer", nullable: true),
         new OA\Property(property: "active_college", type: "integer", nullable: true),
         new OA\Property(property: "active_specialization", type: "integer", nullable: true),
