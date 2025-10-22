@@ -7,38 +7,41 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
-    schema: "AdmissionScore",
-    title: "AdmissionScore",
+    schema: "AdmissionApplicationScore",
+    title: "AdmissionApplicationScore",
     type: "object",
     required: [
         // Override required
         'admission_application_id',
         'academic_program_criteria_id',
+        'user_id',
         'score',
-        'is_passed',
+        'is_posted',
     ],
     properties: [
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "admission_application_id", type: "integer", example: 1),
         new OA\Property(property: "academic_program_criteria_id", type: "integer", example: 1),
+        new OA\Property(property: "user_id", type: "integer", example: 1),
         new OA\Property(property: "score", type: "number", format: "decimal", example: 85.50),
         new OA\Property(property: "comments", type: "string", nullable: true, example: "Good performance"),
-        new OA\Property(property: "is_passed", type: "boolean", example: true),
+        new OA\Property(property: "is_posted", type: "boolean", example: false),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         // Relation
         new OA\Property(property: "admissionApplication", ref: "#/components/schemas/AdmissionApplication"),
         new OA\Property(property: "academicProgramCriteria", ref: "#/components/schemas/AcademicProgramCriteria"),
+        new OA\Property(property: "user", ref: "#/components/schemas/User"),
     ]
 )]
 
 #[OA\Schema(
-    schema: "PaginatedAdmissionScore",
-    title:"PaginatedAdmissionScore",
+    schema: "PaginatedAdmissionApplicationScore",
+    title:"PaginatedAdmissionApplicationScore",
     type: "object",
     properties: [
-        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionScore")),
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationScore")),
         new OA\Property(property: "current_page", type: "integer"),
         new OA\Property(property: "last_page", type: "integer"),
         new OA\Property(property: "per_page", type: "integer"),
@@ -49,69 +52,71 @@ use OpenApi\Attributes as OA;
 )]
 
 #[OA\Schema(
-    schema: "PaginatedAdmissionScoreResponse200",
+    schema: "PaginatedAdmissionApplicationScoreResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedAdmissionScore")
+        new OA\Property(property: "data", ref: "#/components/schemas/PaginatedAdmissionApplicationScore")
     ]
 )]
 
 #[OA\Schema(
-    schema: "GetAdmissionScoreResponse200",
+    schema: "GetAdmissionApplicationScoreResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", ref: "#/components/schemas/AdmissionScore")
+        new OA\Property(property: "data", ref: "#/components/schemas/AdmissionApplicationScore")
     ]
 )]
 
 #[OA\Schema(
-    schema: "GetAdmissionScoresResponse200",
+    schema: "GetAdmissionApplicationScoresResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionScore"))
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationScore"))
     ]
 )]
 
 #[OA\Schema(
-    schema: "CreateAdmissionScoreResponse200",
+    schema: "CreateAdmissionApplicationScoreResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", ref: "#/components/schemas/AdmissionScore")
+        new OA\Property(property: "data", ref: "#/components/schemas/AdmissionApplicationScore")
     ]
 )]
 
 #[OA\Schema(
-    schema: "UpdateAdmissionScoreResponse200",
+    schema: "UpdateAdmissionApplicationScoreResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
-        new OA\Property(property: "data", ref: "#/components/schemas/AdmissionScore")
+        new OA\Property(property: "data", ref: "#/components/schemas/AdmissionApplicationScore")
     ]
 )]
 
 #[OA\Schema(
-    schema: "DeleteAdmissionScoreResponse200",
+    schema: "DeleteAdmissionApplicationScoreResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true)
     ]
 )]
 
-class AdmissionScore extends Model
+class AdmissionApplicationScore extends Model
 {
-    protected $table = 'admission_score';
+    protected $table = 'admission_application_score';
 
     public $timestamps = true;
 
     protected $fillable = [
         'admission_application_id',
         'academic_program_criteria_id',
+        'user_id',
         'score',
         'comments',
+        'is_posted',
     ];
 
 
@@ -133,5 +138,15 @@ class AdmissionScore extends Model
     public function academicProgramCriteria(): BelongsTo
     {
         return $this->belongsTo(AcademicProgramCriteria::class);
+    }
+
+    /**
+     * Get the user that owns the score.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

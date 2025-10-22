@@ -24,6 +24,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdmissionApplicationController;
 use App\Http\Controllers\AdmissionApplicationLogController;
+use App\Http\Controllers\AdmissionApplicationScoreController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -208,4 +209,13 @@ Route::controller(AcademicProgramCriteriaController::class)->group(function() {
     Route::post('/AcademicProgramCriteria', 'store');
     Route::put('/AcademicProgramCriteria/{id}', 'update');
     Route::delete('/AcademicProgramCriteria/{id}', 'destroy');
+});
+
+Route::controller(AdmissionApplicationScoreController::class)->group(function() {
+    Route::get('/AdmissionApplicationScore', 'index');
+    Route::get('/AdmissionApplicationScore/{id}', 'show');
+    Route::post('/AdmissionApplicationScore', 'store');
+    Route::post('/AdmissionApplicationScore/createOrUpdateMultiple', 'createOrUpdateMultiple');
+    Route::put('/AdmissionApplicationScore/{id}', 'update');
+    Route::delete('/AdmissionApplicationScore/{id}', 'destroy');
 });

@@ -31,9 +31,9 @@ return new class extends Migration
                 ->default(now()->year);
             $table->unsignedBigInteger('pool_no');
             // Fields
-            $table->string('firstName');
-            $table->string('lastName');
-            $table->string('middleName')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('middle_name')->nullable();
             $table->string('email');
             $table->string('phone');
             $table->text('address');

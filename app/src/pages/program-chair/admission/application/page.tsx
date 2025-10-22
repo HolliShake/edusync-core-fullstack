@@ -1,148 +1,65 @@
-import Select from '@/components/custom/select.component';
-import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/context/auth.context';
-import { useGetAdmissionApplicationPaginated, useGetSchoolYearPaginated } from '@rest/api';
-import type { SchoolYear } from '@rest/models';
-import type { AdmissionApplication } from '@rest/models/admissionApplication';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  AdmissionApplicationLogTypeEnum,
+  type AdmissionApplicationLogType,
+} from '@/enums/admission-application-log-type-enum';
 import type React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import ProgramChairAdmissionApplicationGenericTab from './generic.tab';
 
 export default function ProgramChairAdmissionApplication(): React.ReactNode {
-  const [page, setPage] = useState(1);
-  const [rows] = useState(10);
-  const [schoolYearId, setSchoolYearId] = useState<number | undefined>(undefined);
-
-  const { session } = useAuth();
-
-  const { data: applications } = useGetAdmissionApplicationPaginated(
-    {
-      'filter[academic_program_id]': session?.active_academic_program ?? 0,
-      'filter[school_year_id]': schoolYearId ?? 0,
-      page,
-      rows,
-    },
-    { query: { enabled: !!schoolYearId || !!session?.active_academic_program } }
+  const [selectedTab, setSelectedTab] = useState<AdmissionApplicationLogType>(
+    AdmissionApplicationLogTypeEnum.SUBMITTED
   );
-
-  const { data: schoolYearResponse } = useGetSchoolYearPaginated({
-    sort: '-start_date',
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
-
-  const schoolYearsList = useMemo(
-    () =>
-      schoolYearResponse?.data?.data?.map((data: SchoolYear) => ({
-        label: data.name,
-        value: String(data.id),
-      })) ?? [],
-    [schoolYearResponse]
-  );
-
-  useEffect(() => {
-    if (schoolYearsList.length > 0 && schoolYearId === undefined) {
-      setSchoolYearId(parseInt(schoolYearsList[0].value));
-    }
-  }, [schoolYearsList, schoolYearId]);
-
-  const getStatusVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'accepted':
-        return 'default'; // green - final acceptance
-      case 'approved':
-        return 'secondary'; // blue/purple - approved for evaluation
-      case 'submitted':
-        return 'outline'; // neutral - initial state
-      case 'rejected':
-      case 'cancelled':
-        return 'destructive'; // red - negative outcome
-      default:
-        return 'outline';
-    }
-  };
-
-  const formatStatus = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-  };
-
-  const columns = useMemo<TableColumn<AdmissionApplication>[]>(
+  const tabs = useMemo(
     () => [
       {
-        key: 'pool_no',
-        title: 'Pool No.',
-        render: (_, row) => row.pool_no ?? 'N/A',
+        label: 'Pending', // Show as "Pending", if already submitted by applicant
+        value: AdmissionApplicationLogTypeEnum.SUBMITTED,
       },
       {
-        key: 'name',
-        title: 'Name',
-        render: (_, row) =>
-          `${row.firstName} ${row.middleName ? row.middleName + ' ' : ''}${row.lastName}`,
+        label: 'Approved',
+        value: AdmissionApplicationLogTypeEnum.APPROVED,
       },
       {
-        key: 'email',
-        title: 'Email',
+        label: 'Rejected',
+        value: AdmissionApplicationLogTypeEnum.REJECTED,
       },
       {
-        key: 'phone',
-        title: 'Phone',
-      },
-      {
-        key: 'academicProgram',
-        title: 'Program',
-        render: (_, row) => row.academicProgram?.program_name ?? 'N/A',
-      },
-      {
-        key: 'schoolYear',
-        title: 'School Year',
-        render: (_, row) => row.schoolYear?.name ?? 'N/A',
-      },
-      {
-        key: 'year',
-        title: 'Year',
-        render: (_, row) => row.year ?? 'N/A',
-      },
-      {
-        key: 'status',
-        title: 'Status',
-        render: (_, row) => {
-          const status = row.latest_status || '';
-          return (
-            <Badge variant={getStatusVariant(status)}>
-              {status ? formatStatus(status) : 'No Status'}
-            </Badge>
-          );
-        },
+        label: 'Accepted',
+        value: AdmissionApplicationLogTypeEnum.ACCEPTED,
       },
     ],
     []
   );
-
-  const tableItems = useMemo(() => applications?.data?.data ?? [], [applications]);
-  const paginationMeta = useMemo(() => applications?.data, [applications]);
 
   return (
     <TitledPage
       title="Admission Applications"
       description="Manage and review admission applications"
     >
-      <div className="w-fit">
-        <Select
-          options={schoolYearsList}
-          value={schoolYearId?.toString()}
-          onValueChange={(value) => setSchoolYearId(parseInt(value))}
-          placeholder="Select school year"
-        />
-      </div>
-      <Table
-        columns={columns}
-        rows={tableItems}
-        itemsPerPage={rows}
-        pagination={paginationMeta}
-        onPageChange={setPage}
-        showPagination={true}
-      />
+      <Tabs
+        value={selectedTab}
+        onValueChange={(value) => setSelectedTab(value as AdmissionApplicationLogType)}
+      >
+        <TabsList>
+          {tabs.map((tab) => (
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+            >
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {tabs.map((tab) => (
+          <TabsContent key={tab.value} value={tab.value}>
+            <ProgramChairAdmissionApplicationGenericTab status={tab.value} />
+          </TabsContent>
+        ))}
+      </Tabs>
     </TitledPage>
   );
 }

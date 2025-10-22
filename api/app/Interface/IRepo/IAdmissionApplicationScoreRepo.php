@@ -2,7 +2,7 @@
 
 namespace App\Interface\IRepo;
 
-interface IAdmissionScoreRepo extends IGenericRepo
+interface IAdmissionApplicationScoreRepo extends IGenericRepo
 {
     // Add custom repository methods here
 }

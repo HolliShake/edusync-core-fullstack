@@ -17,8 +17,8 @@ return new class extends Migration
             AFTER INSERT ON admission_application
             FOR EACH ROW
             BEGIN
-                INSERT INTO admission_application_log (admission_application_id, user_id, action, created_at, updated_at)
-                VALUES (NEW.id, NEW.user_id, "submitted", NOW(), NOW());
+                INSERT INTO admission_application_log (admission_application_id, user_id, type, note, created_at, updated_at)
+                VALUES (NEW.id, NEW.user_id, "submitted", NULL, NOW(), NOW());
             END
         ');
     }

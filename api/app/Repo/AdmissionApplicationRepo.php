@@ -22,7 +22,17 @@ class AdmissionApplicationRepo extends GenericRepo implements IAdmissionApplicat
         return [
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
-            // Example: AllowedFilter::partial('name'),
+            AllowedFilter::callback('name', function ($query, $value) {
+                $query->where(function ($q) use ($value) {
+                    $q->where('first_name', 'LIKE', "%{$value}%")
+                      ->orWhere('last_name', 'LIKE', "%{$value}%");
+                });
+            }),
+            AllowedFilter::callback('latest_status', function ($query, $value) {
+                $query->whereHas('latestStatus', function ($q) use ($value) {
+                    $q->where('type', $value);
+                });
+            }),
             AllowedFilter::exact('user_id'),
             AllowedFilter::exact('school_year_id'),
             AllowedFilter::exact('academic_program_id'),

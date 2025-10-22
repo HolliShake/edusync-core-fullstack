@@ -8,23 +8,23 @@
 import type { GetSessionRolesItem } from './getSessionRolesItem';
 
 export interface GetSession {
-  id: number;
-  is_admin: boolean;
-  is_program_chair: boolean;
-  is_college_dean: boolean;
-  is_specialization_chair: boolean;
-  is_campus_scheduler: boolean;
-  is_campus_registrar: boolean;
-  is_student: boolean;
-  is_faculty: boolean;
-  is_guest: boolean;
-  roles?: GetSessionRolesItem[];
+  readonly id: number;
+  readonly is_admin: boolean;
+  readonly is_program_chair: boolean;
+  readonly is_college_dean: boolean;
+  readonly is_specialization_chair: boolean;
+  readonly is_campus_scheduler: boolean;
+  readonly is_campus_registrar: boolean;
+  readonly is_student: boolean;
+  readonly is_faculty: boolean;
+  readonly is_guest: boolean;
+  readonly roles?: readonly GetSessionRolesItem[];
   /** @nullable */
-  active_academic_program: number | null;
+  readonly active_academic_program: number | null;
   /** @nullable */
-  active_college: number | null;
+  readonly active_college: number | null;
   /** @nullable */
-  active_specialization: number | null;
+  readonly active_specialization: number | null;
   /** @nullable */
-  active_campus: number | null;
+  readonly active_campus: number | null;
 }

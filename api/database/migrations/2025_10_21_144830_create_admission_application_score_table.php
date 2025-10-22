@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admission_score', function (Blueprint $table) {
+        Schema::create('admission_application_score', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             // Fk
@@ -22,10 +22,16 @@ return new class extends Migration
             $table->foreignId('academic_program_criteria_id')
                 ->constrained('academic_program_criteria')
                 ->onDelete('cascade');
+            // Fk
+            $table->foreignId('user_id')
+                ->constrained('user')
+                ->onDelete('cascade');
             // Fields
             $table->decimal('score', 10, 2);
             $table->text('comments')->nullable();
-            $table->boolean('is_passed')->default(false);
+            $table->boolean('is_posted')->default(false);
+
+            $table->unique(['admission_application_id', 'academic_program_criteria_id', 'user_id'], 'admission_application_score_unique');
         });
     }
 
@@ -34,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admission_score');
+        Schema::dropIfExists('admission_application_score');
     }
 };

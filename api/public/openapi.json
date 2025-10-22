@@ -1849,6 +1849,24 @@
                         }
                     },
                     {
+                        "name": "filter[name]",
+                        "in": "query",
+                        "description": "Name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[latest_status]",
+                        "in": "query",
+                        "description": "Latest Status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "filter[user_id]",
                         "in": "query",
                         "description": "User ID",
@@ -2528,6 +2546,435 @@
                 }
             }
         },
+        "\/api\/AdmissionApplicationScore": {
+            "get": {
+                "tags": [
+                    "AdmissionApplicationScore"
+                ],
+                "summary": "Get paginated list of AdmissionApplicationScore",
+                "description": "Retrieve a paginated list of AdmissionApplicationScore with optional search",
+                "operationId": "getAdmissionApplicationScorePaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[admission_application_id]",
+                        "in": "query",
+                        "description": "Filter by admission application ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedAdmissionApplicationScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AdmissionApplicationScore"
+                ],
+                "summary": "Create a new AdmissionApplicationScore",
+                "description": " Create a new AdmissionApplicationScore with the provided details",
+                "operationId": "createAdmissionApplicationScore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AdmissionApplicationScore created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateAdmissionApplicationScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AdmissionApplicationScore\/{id}": {
+            "get": {
+                "tags": [
+                    "AdmissionApplicationScore"
+                ],
+                "summary": "Get a specific AdmissionApplicationScore",
+                "description": "Retrieve a AdmissionApplicationScore by its ID",
+                "operationId": "getAdmissionApplicationScoreById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetAdmissionApplicationScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AdmissionApplicationScore not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "AdmissionApplicationScore"
+                ],
+                "summary": "Update a AdmissionApplicationScore",
+                "description": "Update an existing AdmissionApplicationScore with the provided details",
+                "operationId": "updateAdmissionApplicationScore",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AdmissionApplicationScore updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateAdmissionApplicationScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AdmissionApplicationScore not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AdmissionApplicationScore"
+                ],
+                "summary": "Delete a AdmissionApplicationScore",
+                "description": "Delete a AdmissionApplicationScore by its ID",
+                "operationId": "deleteAdmissionApplicationScore",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "AdmissionApplicationScore deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteAdmissionApplicationScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AdmissionApplicationScore not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AdmissionApplicationScore\/createOrUpdateMultiple": {
+            "post": {
+                "tags": [
+                    "AdmissionApplicationScore"
+                ],
+                "summary": "Create or update multiple AdmissionApplicationScores",
+                "description": "Create or update multiple AdmissionApplicationScores with the provided details",
+                "operationId": "createOrUpdateMultipleAdmissionApplicationScores",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "CurriculumDetail created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetAdmissionApplicationScoresResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/AdmissionSchedule": {
             "get": {
                 "tags": [
@@ -2858,350 +3305,6 @@
                     },
                     "404": {
                         "description": "AdmissionSchedule not found"
-                    },
-                    "500": {
-                        "description": " Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "\/api\/AdmissionScore": {
-            "get": {
-                "tags": [
-                    "AdmissionScore"
-                ],
-                "summary": "Get paginated list of AdmissionScore",
-                "description": "Retrieve a paginated list of AdmissionScore with optional search",
-                "operationId": "getAdmissionScorePaginated",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "query",
-                        "description": "Search term",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 0
-                        }
-                    },
-                    {
-                        "name": "rows",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 10
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/PaginatedAdmissionScoreResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "AdmissionScore"
-                ],
-                "summary": "Create a new AdmissionScore",
-                "description": " Create a new AdmissionScore with the provided details",
-                "operationId": "createAdmissionScore",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application\/json": {
-                            "schema": {
-                                "$ref": "#\/components\/schemas\/AdmissionScore"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "AdmissionScore created successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/CreateAdmissionScoreResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "\/api\/AdmissionScore\/{id}": {
-            "get": {
-                "tags": [
-                    "AdmissionScore"
-                ],
-                "summary": "Get a specific AdmissionScore",
-                "description": "Retrieve a AdmissionScore by its ID",
-                "operationId": "getAdmissionScoreById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/GetAdmissionScoreResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AdmissionScore not found"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "AdmissionScore"
-                ],
-                "summary": "Update a AdmissionScore",
-                "description": "Update an existing AdmissionScore with the provided details",
-                "operationId": "updateAdmissionScore",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application\/json": {
-                            "schema": {
-                                "$ref": "#\/components\/schemas\/AdmissionScore"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "AdmissionScore updated successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UpdateAdmissionScoreResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AdmissionScore not found"
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "AdmissionScore"
-                ],
-                "summary": "Delete a AdmissionScore",
-                "description": "Delete a AdmissionScore by its ID",
-                "operationId": "deleteAdmissionScore",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "AdmissionScore deleted successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/DeleteAdmissionScoreResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AdmissionScore not found"
                     },
                     "500": {
                         "description": " Internal server error",
@@ -10062,8 +10165,8 @@
                     "user_id",
                     "school_year_id",
                     "academic_program_id",
-                    "firstName",
-                    "lastName",
+                    "first_name",
+                    "last_name",
                     "email",
                     "phone",
                     "address"
@@ -10088,13 +10191,13 @@
                     "pool_no": {
                         "type": "integer"
                     },
-                    "firstName": {
+                    "first_name": {
                         "type": "string"
                     },
-                    "lastName": {
+                    "last_name": {
                         "type": "string"
                     },
-                    "middleName": {
+                    "middle_name": {
                         "type": "string",
                         "nullable": true
                     },
@@ -10392,6 +10495,170 @@
                 },
                 "type": "object"
             },
+            "AdmissionApplicationScore": {
+                "title": "AdmissionApplicationScore",
+                "required": [
+                    "admission_application_id",
+                    "academic_program_criteria_id",
+                    "user_id",
+                    "score",
+                    "is_posted"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "admission_application_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "academic_program_criteria_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "score": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 85.5
+                    },
+                    "comments": {
+                        "type": "string",
+                        "example": "Good performance",
+                        "nullable": true
+                    },
+                    "is_posted": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "admissionApplication": {
+                        "$ref": "#\/components\/schemas\/AdmissionApplication"
+                    },
+                    "academicProgramCriteria": {
+                        "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
+                    },
+                    "user": {
+                        "$ref": "#\/components\/schemas\/User"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAdmissionApplicationScore": {
+                "title": "PaginatedAdmissionApplicationScore",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAdmissionApplicationScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedAdmissionApplicationScore"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAdmissionApplicationScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAdmissionApplicationScoresResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAdmissionApplicationScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAdmissionApplicationScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AdmissionApplicationScore"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteAdmissionApplicationScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "AdmissionSchedule": {
                 "title": "AdmissionSchedule",
                 "required": [
@@ -10542,162 +10809,6 @@
                 },
                 "type": "object"
             },
-            "AdmissionScore": {
-                "title": "AdmissionScore",
-                "required": [
-                    "admission_application_id",
-                    "academic_program_criteria_id",
-                    "score",
-                    "is_passed"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "readOnly": true
-                    },
-                    "admission_application_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "academic_program_criteria_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "score": {
-                        "type": "number",
-                        "format": "decimal",
-                        "example": 85.5
-                    },
-                    "comments": {
-                        "type": "string",
-                        "example": "Good performance",
-                        "nullable": true
-                    },
-                    "is_passed": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "admissionApplication": {
-                        "$ref": "#\/components\/schemas\/AdmissionApplication"
-                    },
-                    "academicProgramCriteria": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                    }
-                },
-                "type": "object"
-            },
-            "PaginatedAdmissionScore": {
-                "title": "PaginatedAdmissionScore",
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AdmissionScore"
-                        }
-                    },
-                    "current_page": {
-                        "type": "integer"
-                    },
-                    "last_page": {
-                        "type": "integer"
-                    },
-                    "per_page": {
-                        "type": "integer"
-                    },
-                    "total": {
-                        "type": "integer"
-                    },
-                    "from": {
-                        "type": "integer",
-                        "nullable": true
-                    },
-                    "to": {
-                        "type": "integer",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "PaginatedAdmissionScoreResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/PaginatedAdmissionScore"
-                    }
-                },
-                "type": "object"
-            },
-            "GetAdmissionScoreResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AdmissionScore"
-                    }
-                },
-                "type": "object"
-            },
-            "GetAdmissionScoresResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AdmissionScore"
-                        }
-                    }
-                },
-                "type": "object"
-            },
-            "CreateAdmissionScoreResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AdmissionScore"
-                    }
-                },
-                "type": "object"
-            },
-            "UpdateAdmissionScoreResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AdmissionScore"
-                    }
-                },
-                "type": "object"
-            },
-            "DeleteAdmissionScoreResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    }
-                },
-                "type": "object"
-            },
             "AuthCredential": {
                 "title": "AuthCredential",
                 "required": [
@@ -10746,34 +10857,44 @@
                 ],
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "readOnly": true
                     },
                     "is_admin": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_program_chair": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_college_dean": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_specialization_chair": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_campus_scheduler": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_campus_registrar": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_student": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_faculty": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "is_guest": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "readOnly": true
                     },
                     "roles": {
                         "type": "array",
@@ -10790,22 +10911,27 @@
                                 "faculty",
                                 "guest"
                             ]
-                        }
+                        },
+                        "readOnly": true
                     },
                     "active_academic_program": {
                         "type": "integer",
+                        "readOnly": true,
                         "nullable": true
                     },
                     "active_college": {
                         "type": "integer",
+                        "readOnly": true,
                         "nullable": true
                     },
                     "active_specialization": {
                         "type": "integer",
+                        "readOnly": true,
                         "nullable": true
                     },
                     "active_campus": {
                         "type": "integer",
+                        "readOnly": true,
                         "nullable": true
                     }
                 },
@@ -13278,12 +13404,12 @@
             "description": "AdmissionApplicationLog"
         },
         {
-            "name": "AdmissionSchedule",
-            "description": "AdmissionSchedule"
+            "name": "AdmissionApplicationScore",
+            "description": "AdmissionApplicationScore"
         },
         {
-            "name": "AdmissionScore",
-            "description": "AdmissionScore"
+            "name": "AdmissionSchedule",
+            "description": "AdmissionSchedule"
         },
         {
             "name": "Auth",

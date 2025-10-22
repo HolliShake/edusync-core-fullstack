@@ -20,6 +20,14 @@ page?: number;
  */
 rows?: number;
 /**
+ * Name
+ */
+'filter[name]'?: string;
+/**
+ * Latest Status
+ */
+'filter[latest_status]'?: string;
+/**
  * User ID
  */
 'filter[user_id]'?: number;

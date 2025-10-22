@@ -54,9 +54,9 @@ export default function GuestAdmissionPage(): React.ReactNode {
     useCreateAdmissionApplication();
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    middleName: '',
+    first_name: '',
+    last_name: '',
+    middle_name: '',
     email: '',
     phone: '',
     address: '',
@@ -154,9 +154,9 @@ export default function GuestAdmissionPage(): React.ReactNode {
       });
       // reset
       setFormData({
-        firstName: '',
-        lastName: '',
-        middleName: '',
+        first_name: '',
+        last_name: '',
+        middle_name: '',
         email: '',
         phone: '',
         address: '',
@@ -191,7 +191,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
     fields.collegeId &&
     fields.academicProgramId &&
     allMandatoryFilesUploaded;
-  const isStep2Complete = formData.firstName && formData.lastName;
+  const isStep2Complete = formData.first_name && formData.last_name;
   const isStep3Complete = formData.email && formData.phone && formData.address;
 
   return (
@@ -612,40 +612,40 @@ export default function GuestAdmissionPage(): React.ReactNode {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-3">
-                      <Label htmlFor="firstName" className="text-base font-bold">
+                      <Label htmlFor="first_name" className="text-base font-bold">
                         First Name *
                       </Label>
                       <Input
-                        id="firstName"
+                        id="first_name"
                         placeholder="Juan"
-                        value={formData.firstName}
-                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                        value={formData.first_name}
+                        onChange={(e) => handleInputChange('first_name', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
                         disabled={isSubmitting}
                       />
                     </div>
                     <div className="space-y-3">
-                      <Label htmlFor="middleName" className="text-base font-bold">
+                      <Label htmlFor="middle_name" className="text-base font-bold">
                         Middle Name
                       </Label>
                       <Input
-                        id="middleName"
+                        id="middle_name"
                         placeholder="Santos"
-                        value={formData.middleName}
-                        onChange={(e) => handleInputChange('middleName', e.target.value)}
+                        value={formData.middle_name}
+                        onChange={(e) => handleInputChange('middle_name', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
                         disabled={isSubmitting}
                       />
                     </div>
                     <div className="space-y-3">
-                      <Label htmlFor="lastName" className="text-base font-bold">
+                      <Label htmlFor="last_name" className="text-base font-bold">
                         Last Name *
                       </Label>
                       <Input
-                        id="lastName"
+                        id="last_name"
                         placeholder="Dela Cruz"
-                        value={formData.lastName}
-                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                        value={formData.last_name}
+                        onChange={(e) => handleInputChange('last_name', e.target.value)}
                         className="h-14 text-base border-2 focus:border-primary"
                         disabled={isSubmitting}
                       />

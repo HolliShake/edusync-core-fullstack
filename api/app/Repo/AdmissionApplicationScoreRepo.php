@@ -2,14 +2,15 @@
 
 namespace App\Repo;
 
-use App\Interface\IRepo\IAdmissionScoreRepo;
-use App\Models\AdmissionScore;
+use App\Interface\IRepo\IAdmissionApplicationScoreRepo;
+use App\Models\AdmissionApplicationScore;
+use Spatie\QueryBuilder\AllowedFilter;
 
-class AdmissionScoreRepo extends GenericRepo implements IAdmissionScoreRepo
+class AdmissionApplicationScoreRepo extends GenericRepo implements IAdmissionApplicationScoreRepo
 {
     public function __construct()
     {
-        parent::__construct(AdmissionScore::class);
+        parent::__construct(AdmissionApplicationScore::class);
     }
 
     /**
@@ -22,6 +23,8 @@ class AdmissionScoreRepo extends GenericRepo implements IAdmissionScoreRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('admission_application_id'),
+            AllowedFilter::exact('academic_program_criteria_id'),
         ];
     }
 

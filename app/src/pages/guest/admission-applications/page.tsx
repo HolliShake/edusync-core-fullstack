@@ -163,7 +163,7 @@ export default function GuestAdmissionApplications(): React.ReactNode {
                 <div className="flex items-center gap-3">
                   <UserIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <p className="text-sm truncate">
-                    {`${application.firstName} ${application.middleName ? application.middleName + ' ' : ''}${application.lastName}`}
+                    {`${application.first_name} ${application.middle_name ? application.middle_name + ' ' : ''}${application.last_name}`}
                   </p>
                 </div>
 

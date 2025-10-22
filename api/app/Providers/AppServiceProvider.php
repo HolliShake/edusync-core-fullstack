@@ -9,6 +9,7 @@ use App\Interface\IRepo\IAcademicProgramRequirementRepo;
 use App\Interface\IRepo\IAcademicTermRepo;
 use App\Interface\IRepo\IAdmissionApplicationLogRepo;
 use App\Interface\IRepo\IAdmissionApplicationRepo;
+use App\Interface\IRepo\IAdmissionApplicationScoreRepo;
 use App\Interface\IRepo\IBuildingRepo;
 use App\Interface\IRepo\ICampusRepo;
 use App\Interface\IRepo\ICollegeRepo;
@@ -28,6 +29,7 @@ use App\Interface\IService\IAcademicProgramRequirementService;
 use App\Interface\IService\IAcademicProgramService;
 use App\Interface\IService\IAcademicTermService;
 use App\Interface\IService\IAdmissionApplicationLogService;
+use App\Interface\IService\IAdmissionApplicationScoreService;
 use App\Interface\IService\IAdmissionApplicationService;
 use App\Interface\IService\IBuildingService;
 use App\Interface\IService\ICampusService;
@@ -49,6 +51,7 @@ use App\Repo\AcademicProgramRequirementRepo;
 use App\Repo\AcademicTermRepo;
 use App\Repo\AdmissionApplicationLogRepo;
 use App\Repo\AdmissionApplicationRepo;
+use App\Repo\AdmissionApplicationScoreRepo;
 use App\Repo\BuildingRepo;
 use App\Repo\CampusRepo;
 use App\Repo\CollegeRepo;
@@ -68,6 +71,7 @@ use App\Service\AcademicProgramRequirementService;
 use App\Service\AcademicProgramService;
 use App\Service\AcademicTermService;
 use App\Service\AdmissionApplicationLogService;
+use App\Service\AdmissionApplicationScoreService;
 use App\Service\AdmissionApplicationService;
 use App\Service\BuildingService;
 use App\Service\CampusService;
@@ -112,6 +116,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAdmissionApplicationRepo::class, AdmissionApplicationRepo::class);
         $this->app->bind(IAdmissionApplicationLogRepo::class, AdmissionApplicationLogRepo::class);
         $this->app->bind(IAcademicProgramCriteriaRepo::class, AcademicProgramCriteriaRepo::class);
+        $this->app->bind(IAdmissionApplicationScoreRepo::class, AdmissionApplicationScoreRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -133,6 +138,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAdmissionApplicationService::class, AdmissionApplicationService::class);
         $this->app->bind(IAdmissionApplicationLogService::class, AdmissionApplicationLogService::class);
         $this->app->bind(IAcademicProgramCriteriaService::class, AcademicProgramCriteriaService::class);
+        $this->app->bind(IAdmissionApplicationScoreService::class, AdmissionApplicationScoreService::class);
     }
 
     /**

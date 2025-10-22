@@ -26,6 +26,9 @@ return new class extends Migration
             // Fields
             $table->enum('type', array_column(AdmissionApplicationLogTypeEnum::cases(), 'value'));
             $table->text('note')->nullable();
+
+            // Unique
+            $table->unique(['admission_application_id', 'user_id', 'type'], 'admission_application_log_unique');
         });
     }
 

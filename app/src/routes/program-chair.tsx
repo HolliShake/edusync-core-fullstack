@@ -1,5 +1,7 @@
 import { UserRoleEnum } from '@/enums/role-enum';
 import ProgramChairAdmissionApplication from '@/pages/program-chair/admission/application/page';
+import ProgramChairAdmissionApplicationStatus from '@/pages/program-chair/admission/application/status/page';
+import ProgramChairAdmissionEvaluation from '@/pages/program-chair/admission/evaluation/page';
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
@@ -39,10 +41,20 @@ const PROGRAM_CHAIR: Route[] = [
         roles: [UserRoleEnum.PROGRAM_CHAIR],
       },
       {
+        key: 'program-chair.admission.application.status',
+        title: 'Status',
+        path: '/program-chair/admission/application/:admissionApplicationId',
+        component: <ProgramChairAdmissionApplicationStatus />,
+        icon: <FileTextIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: false,
+        roles: [UserRoleEnum.PROGRAM_CHAIR],
+      },
+      {
         key: 'program-chair.admission.evaluation',
         title: 'Evaluation',
         path: '/program-chair/admission/evaluation',
-        component: <div>Hello</div>,
+        component: <ProgramChairAdmissionEvaluation />,
         icon: <CheckCircleIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,

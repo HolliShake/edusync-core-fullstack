@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OA;
 
@@ -17,8 +18,8 @@ use OpenApi\Attributes as OA;
         'user_id',
         'school_year_id',
         'academic_program_id',
-        'firstName',
-        'lastName',
+        'first_name',
+        'last_name',
         'email',
         'phone',
         'address',
@@ -31,9 +32,9 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "academic_program_id", type: "integer"),
         new OA\Property(property: "year", type: "integer"),
         new OA\Property(property: "pool_no", type: "integer"),
-        new OA\Property(property: "firstName", type: "string"),
-        new OA\Property(property: "lastName", type: "string"),
-        new OA\Property(property: "middleName", type: "string", nullable: true),
+        new OA\Property(property: "first_name", type: "string"),
+        new OA\Property(property: "last_name", type: "string"),
+        new OA\Property(property: "middle_name", type: "string", nullable: true),
         new OA\Property(property: "email", type: "string"),
         new OA\Property(property: "phone", type: "string"),
         new OA\Property(property: "address", type: "string"),
@@ -128,9 +129,9 @@ class AdmissionApplication extends Model
         'academic_program_id',
         // 'year',
         // 'pool_no',
-        'firstName',
-        'lastName',
-        'middleName',
+        'first_name',
+        'last_name',
+        'middle_name',
         'email',
         'phone',
         'address',
@@ -159,7 +160,7 @@ class AdmissionApplication extends Model
      */
     public function getLatestStatusAttribute(): string
     {
-        $latestLog = $this->logs()->latest()->first();
+        $latestLog = $this->latestStatus()->first();
         return $latestLog ? $latestLog->type : '';
     }
 
@@ -241,6 +242,16 @@ class AdmissionApplication extends Model
     public function logs(): HasMany
     {
         return $this->hasMany(AdmissionApplicationLog::class);
+    }
+
+    /**
+     * Get the latest status of the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function latestStatus():HasOne
+    {
+        return $this->hasOne(AdmissionApplicationLog::class)->latestOfMany();
     }
 
     /********************************/

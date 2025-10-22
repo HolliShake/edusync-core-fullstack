@@ -52,22 +52,22 @@ use OpenApi\Attributes as OA;
     ],
     properties: [
         // flags
-        new OA\Property(property: "id", type: "integer"),
-        new OA\Property(property: "is_admin", type: "boolean"),
-        new OA\Property(property: "is_program_chair", type: "boolean"),
-        new OA\Property(property: "is_college_dean", type: "boolean"),
-        new OA\Property(property: "is_specialization_chair", type: "boolean"),
-        new OA\Property(property: "is_campus_scheduler", type: "boolean"),
-        new OA\Property(property: "is_campus_registrar", type: "boolean"),
-        new OA\Property(property: "is_student", type: "boolean"),
-        new OA\Property(property: "is_faculty", type: "boolean"),
-        new OA\Property(property: "is_guest", type: "boolean"),
+        new OA\Property(property: "id", type: "integer", readOnly: true),
+        new OA\Property(property: "is_admin", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_program_chair", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_college_dean", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_specialization_chair", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_campus_scheduler", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_campus_registrar", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_student", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_faculty", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_guest", type: "boolean", readOnly: true),
         // user data
-        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "string", enum: ['admin', 'program-chair', 'college-dean', 'specialization-chair', 'campus-scheduler', 'campus-registrar', 'student', 'faculty', 'guest'])),
-        new OA\Property(property: "active_academic_program", type: "integer", nullable: true),
-        new OA\Property(property: "active_college", type: "integer", nullable: true),
-        new OA\Property(property: "active_specialization", type: "integer", nullable: true),
-        new OA\Property(property: "active_campus", type: "integer", nullable: true)
+        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "string", enum: ['admin', 'program-chair', 'college-dean', 'specialization-chair', 'campus-scheduler', 'campus-registrar', 'student', 'faculty', 'guest']), readOnly: true),
+        new OA\Property(property: "active_academic_program", type: "integer", nullable: true, readOnly: true),
+        new OA\Property(property: "active_college", type: "integer", nullable: true, readOnly: true),
+        new OA\Property(property: "active_specialization", type: "integer", nullable: true, readOnly: true),
+        new OA\Property(property: "active_campus", type: "integer", nullable: true, readOnly: true)
     ]
 )]
 

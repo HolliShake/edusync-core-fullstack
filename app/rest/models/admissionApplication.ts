@@ -17,10 +17,10 @@ export interface AdmissionApplication {
   academic_program_id: number;
   year?: number;
   pool_no?: number;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   /** @nullable */
-  middleName?: string | null;
+  middle_name?: string | null;
   email: string;
   phone: string;
   address: string;
