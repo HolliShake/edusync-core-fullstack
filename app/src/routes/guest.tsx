@@ -2,8 +2,10 @@ import { UserRoleEnum } from '@/enums/role-enum';
 import GuestAdmissionApplications from '@/pages/guest/admission-applications/page';
 import GuestAdmissionApplicationStatus from '@/pages/guest/admission-applications/status/page';
 import GuestAdmissionPage from '@/pages/guest/admission/page';
+import GuestEnrollmentApplication from '@/pages/guest/enrollment/application/page';
+import GuestEnrollment from '@/pages/guest/enrollment/page';
 import type { Route } from '@/types/route';
-import { BookOpenIcon, FileTextIcon, MapPinnedIcon } from 'lucide-react';
+import { BookOpenIcon, FileTextIcon, GraduationCapIcon, MapPinnedIcon } from 'lucide-react';
 
 const GUEST: Route[] = [
   {
@@ -53,6 +55,26 @@ const GUEST: Route[] = [
     icon: <BookOpenIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
+    roles: [UserRoleEnum.GUEST],
+  },
+  {
+    key: 'guest.enrollment',
+    title: 'Enrollment',
+    path: '/guest/enrollment',
+    component: <GuestEnrollment />,
+    icon: <GraduationCapIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.GUEST],
+  },
+  {
+    key: 'guest.enrollment.application',
+    title: 'Application',
+    path: '/guest/enrollment/:applicationId',
+    component: <GuestEnrollmentApplication />,
+    icon: <FileTextIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
     roles: [UserRoleEnum.GUEST],
   },
 ];

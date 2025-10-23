@@ -1,3 +1,39 @@
+/*
+ * Admission Application Status View
+ *
+ * This component displays the detailed status and history of an admission application.
+ * It is designed to be used by authenticated users who have access to view admission applications.
+ *
+ * @route /admission-application/:admissionApplicationId
+ *
+ * @authentication Required
+ * - Uses `useAuth` hook to access the current user session
+ * - Session must be active for the component to function properly
+ *
+ * @route-parameters
+ * - `admissionApplicationId` (string, required): Encrypted/hashed ID of the AdmissionApplication
+ *   The ID is decrypted using `decryptIdFromUrl()` before fetching application data
+ *
+ * @features
+ * - Displays application details and status
+ * - Shows application log history
+ * - Allows authorized users to add new logs/actions (based on role permissions)
+ * - Real-time status updates with visual indicators
+ *
+ * @permissions
+ * - Different actions are available based on user role (handled by `can()` utility)
+ * - Role-based access control for creating admission application logs
+ *
+ * @example
+ * ```tsx
+ * // Route definition
+ * <Route path="/admission-application/:admissionApplicationId" element={<AdmissionApplicationStatusView />} />
+ *
+ * // Navigation
+ * navigate(`/admission-application/${encryptIdForUrl(applicationId)}`);
+ * ```
+ */
+
 import AdmissionApplicationLogModal from '@/components/admission-application-log/admission-application-log.modal';
 import { useModal } from '@/components/custom/modal.component';
 import { Badge } from '@/components/ui/badge';

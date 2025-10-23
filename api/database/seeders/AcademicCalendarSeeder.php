@@ -21,279 +21,253 @@ class AcademicCalendarSeeder extends Seeder
 
     private function createAcademicCalendarForSchoolYear(SchoolYear $schoolYear): void
     {
-        $startYear = $schoolYear->start_date->year;
-        $endYear = $schoolYear->end_date->year;
-        
+        $baseDate = Carbon::now();
         $events = [];
 
-        // Registration Period
-        $events[] = [
-            'name' => 'Registration Period',
-            'description' => 'Student registration for the academic year',
-            'start_date' => Carbon::create($startYear, 5, 15),
-            'end_date' => Carbon::create($startYear, 5, 31),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::REGISTRATION,
-        ];
+        // FIRST SEMESTER
 
-        // Enrollment Period
+        // Enrollment Period - First Semester
         $events[] = [
-            'name' => 'Enrollment Period',
-            'description' => 'Course enrollment and schedule selection',
-            'start_date' => Carbon::create($startYear, 5, 20),
-            'end_date' => Carbon::create($startYear, 6, 5),
+            'name' => 'Enrollment Period - First Semester',
+            'description' => 'Regular and late enrollment for first semester',
+            'start_date' => $baseDate->copy(),
+            'end_date' => $baseDate->copy()->addDays(27),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::ENROLLMENT,
         ];
 
-        // Orientation
+        // Start of First Semester
         $events[] = [
-            'name' => 'New Student Orientation',
-            'description' => 'Orientation program for new students',
-            'start_date' => Carbon::create($startYear, 5, 25),
-            'end_date' => Carbon::create($startYear, 5, 27),
+            'name' => 'Start of First Semester',
+            'description' => 'First Semester officially begins',
+            'start_date' => $baseDate->copy(),
+            'end_date' => $baseDate->copy(),
             'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::ORIENTATION,
+            'event' => CalendarEventEnum::ACADEMIC_TRANSITION,
         ];
 
         // Start of Classes - First Semester
         $events[] = [
             'name' => 'Start of Classes - First Semester',
-            'description' => 'Beginning of first semester classes',
-            'start_date' => Carbon::create($startYear, 6, 10),
-            'end_date' => Carbon::create($startYear, 6, 10),
+            'description' => 'Classes begin for first semester',
+            'start_date' => $baseDate->copy(),
+            'end_date' => $baseDate->copy(),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::START_OF_CLASSES,
         ];
 
-        // Independence Day Holiday
+        // Preliminary Examinations - First Semester
         $events[] = [
-            'name' => 'Independence Day',
-            'description' => 'National Independence Day holiday',
-            'start_date' => Carbon::create($startYear, 6, 12),
-            'end_date' => Carbon::create($startYear, 6, 12),
+            'name' => 'Preliminary Examinations - First Semester',
+            'description' => 'Preliminary examinations for first semester',
+            'start_date' => $baseDate->copy()->addDays(28),
+            'end_date' => $baseDate->copy()->addDays(55),
             'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::HOLIDAY,
+            'event' => CalendarEventEnum::PERIODIC_EXAM,
         ];
 
-        // Midterm Exams - First Semester
+        // Midterm Examinations - First Semester
         $events[] = [
             'name' => 'Midterm Examinations - First Semester',
             'description' => 'Midterm examinations for first semester',
-            'start_date' => Carbon::create($startYear, 8, 5),
-            'end_date' => Carbon::create($startYear, 8, 9),
+            'start_date' => $baseDate->copy()->addDays(56),
+            'end_date' => $baseDate->copy()->addDays(83),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::PERIODIC_EXAM,
         ];
 
-        // National Heroes Day
+        // All Saints' / All Souls' Day Break
         $events[] = [
-            'name' => 'National Heroes Day',
-            'description' => 'National Heroes Day holiday',
-            'start_date' => Carbon::create($startYear, 8, 26),
-            'end_date' => Carbon::create($startYear, 8, 26),
+            'name' => 'All Saints\' / All Souls\' Day Break',
+            'description' => 'All Saints\' and All Souls\' Day holiday (no classes)',
+            'start_date' => $baseDate->copy()->addDays(84),
+            'end_date' => $baseDate->copy()->addDays(111),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::HOLIDAY,
         ];
 
-        // Final Exams - First Semester
+        // Final Examinations - First Semester
         $events[] = [
             'name' => 'Final Examinations - First Semester',
             'description' => 'Final examinations for first semester',
-            'start_date' => Carbon::create($startYear, 10, 7),
-            'end_date' => Carbon::create($startYear, 10, 11),
+            'start_date' => $baseDate->copy()->addDays(112),
+            'end_date' => $baseDate->copy()->addDays(139),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::PERIODIC_EXAM,
-        ];
-
-        // End of First Semester
-        $events[] = [
-            'name' => 'End of First Semester',
-            'description' => 'End of first semester classes',
-            'start_date' => Carbon::create($startYear, 10, 12),
-            'end_date' => Carbon::create($startYear, 10, 12),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::END_OF_CLASSES,
-        ];
-
-        // Grade Submission Deadline - First Semester
-        $events[] = [
-            'name' => 'Grade Submission Deadline - First Semester',
-            'description' => 'Deadline for faculty to submit first semester grades',
-            'start_date' => Carbon::create($startYear, 10, 18),
-            'end_date' => Carbon::create($startYear, 10, 18),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::GRADE_SUBMISSION,
-        ];
-
-        // All Saints Day
-        $events[] = [
-            'name' => 'All Saints Day',
-            'description' => 'All Saints Day holiday',
-            'start_date' => Carbon::create($startYear, 11, 1),
-            'end_date' => Carbon::create($startYear, 11, 1),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::HOLIDAY,
-        ];
-
-        // Bonifacio Day
-        $events[] = [
-            'name' => 'Bonifacio Day',
-            'description' => 'Bonifacio Day holiday',
-            'start_date' => Carbon::create($startYear, 11, 30),
-            'end_date' => Carbon::create($startYear, 11, 30),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::HOLIDAY,
         ];
 
         // Christmas Break
         $events[] = [
             'name' => 'Christmas Break',
             'description' => 'Christmas and New Year holiday break',
-            'start_date' => Carbon::create($startYear, 12, 20),
-            'end_date' => Carbon::create($startYear + 1, 1, 5),
+            'start_date' => $baseDate->copy()->addDays(140),
+            'end_date' => $baseDate->copy()->addDays(167),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::HOLIDAY,
+        ];
+
+        // Grade Submission Deadline - First Semester
+        $events[] = [
+            'name' => 'Grade Submission Deadline - First Semester',
+            'description' => 'Deadline for faculty to submit first semester grades to registrar',
+            'start_date' => $baseDate->copy()->addDays(168),
+            'end_date' => $baseDate->copy()->addDays(168),
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::GRADE_SUBMISSION,
+        ];
+
+        // Adding / Dropping of Subjects - First Semester
+        $events[] = [
+            'name' => 'Adding / Dropping of Subjects - First Semester',
+            'description' => 'Adding/Dropping period - requires adviser approval',
+            'start_date' => $baseDate->copy(),
+            'end_date' => $baseDate->copy()->addDays(27),
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::DEADLINE,
+        ];
+
+        // SECOND SEMESTER
+
+        // Enrollment Period - Second Semester
+        $events[] = [
+            'name' => 'Enrollment Period - Second Semester',
+            'description' => 'Regular and late enrollment for second semester',
+            'start_date' => $baseDate->copy()->addDays(169),
+            'end_date' => $baseDate->copy()->addDays(196),
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::ENROLLMENT,
         ];
 
         // Start of Second Semester
         $events[] = [
+            'name' => 'Start of Second Semester',
+            'description' => 'Second Semester officially begins',
+            'start_date' => $baseDate->copy()->addDays(169),
+            'end_date' => $baseDate->copy()->addDays(169),
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::ACADEMIC_TRANSITION,
+        ];
+
+        // Start of Classes - Second Semester
+        $events[] = [
             'name' => 'Start of Classes - Second Semester',
-            'description' => 'Beginning of second semester classes',
-            'start_date' => Carbon::create($startYear + 1, 1, 8),
-            'end_date' => Carbon::create($startYear + 1, 1, 8),
+            'description' => 'Classes begin for second semester',
+            'start_date' => $baseDate->copy()->addDays(169),
+            'end_date' => $baseDate->copy()->addDays(169),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::START_OF_CLASSES,
         ];
 
-        // EDSA Revolution Anniversary
+        // Preliminary Examinations - Second Semester
         $events[] = [
-            'name' => 'EDSA Revolution Anniversary',
-            'description' => 'EDSA Revolution Anniversary holiday',
-            'start_date' => Carbon::create($startYear + 1, 2, 25),
-            'end_date' => Carbon::create($startYear + 1, 2, 25),
+            'name' => 'Preliminary Examinations - Second Semester',
+            'description' => 'Preliminary examinations for second semester',
+            'start_date' => $baseDate->copy()->addDays(197),
+            'end_date' => $baseDate->copy()->addDays(224),
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::PERIODIC_EXAM,
+        ];
+
+        // Holy Week Break
+        $events[] = [
+            'name' => 'Holy Week Break',
+            'description' => 'Holy Week holiday (no classes)',
+            'start_date' => $baseDate->copy()->addDays(225),
+            'end_date' => $baseDate->copy()->addDays(252),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::HOLIDAY,
         ];
 
-        // Midterm Exams - Second Semester
+        // Midterm Examinations - Second Semester
         $events[] = [
             'name' => 'Midterm Examinations - Second Semester',
             'description' => 'Midterm examinations for second semester',
-            'start_date' => Carbon::create($startYear + 1, 3, 11),
-            'end_date' => Carbon::create($startYear + 1, 3, 15),
+            'start_date' => $baseDate->copy()->addDays(253),
+            'end_date' => $baseDate->copy()->addDays(280),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::PERIODIC_EXAM,
         ];
 
-        // Holy Week
-        $events[] = [
-            'name' => 'Holy Week',
-            'description' => 'Holy Week holiday break',
-            'start_date' => Carbon::create($startYear + 1, 3, 25),
-            'end_date' => Carbon::create($startYear + 1, 3, 31),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::HOLIDAY,
-        ];
-
-        // Araw ng Kagitingan
-        $events[] = [
-            'name' => 'Araw ng Kagitingan',
-            'description' => 'Araw ng Kagitingan holiday',
-            'start_date' => Carbon::create($startYear + 1, 4, 9),
-            'end_date' => Carbon::create($startYear + 1, 4, 9),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::HOLIDAY,
-        ];
-
-        // Labor Day
-        $events[] = [
-            'name' => 'Labor Day',
-            'description' => 'Labor Day holiday',
-            'start_date' => Carbon::create($startYear + 1, 5, 1),
-            'end_date' => Carbon::create($startYear + 1, 5, 1),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::HOLIDAY,
-        ];
-
-        // Final Exams - Second Semester
+        // Final Examinations - Second Semester
         $events[] = [
             'name' => 'Final Examinations - Second Semester',
             'description' => 'Final examinations for second semester',
-            'start_date' => Carbon::create($startYear + 1, 5, 6),
-            'end_date' => Carbon::create($startYear + 1, 5, 10),
+            'start_date' => $baseDate->copy()->addDays(281),
+            'end_date' => $baseDate->copy()->addDays(308),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::PERIODIC_EXAM,
-        ];
-
-        // End of Second Semester
-        $events[] = [
-            'name' => 'End of Second Semester',
-            'description' => 'End of second semester classes',
-            'start_date' => Carbon::create($startYear + 1, 5, 11),
-            'end_date' => Carbon::create($startYear + 1, 5, 11),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::END_OF_CLASSES,
         ];
 
         // Grade Submission Deadline - Second Semester
         $events[] = [
             'name' => 'Grade Submission Deadline - Second Semester',
-            'description' => 'Deadline for faculty to submit second semester grades',
-            'start_date' => Carbon::create($startYear + 1, 5, 17),
-            'end_date' => Carbon::create($startYear + 1, 5, 17),
+            'description' => 'Deadline for faculty to submit second semester grades to registrar',
+            'start_date' => $baseDate->copy()->addDays(309),
+            'end_date' => $baseDate->copy()->addDays(309),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::GRADE_SUBMISSION,
         ];
 
-        // Faculty Evaluation Period
+        // Adding / Dropping of Subjects - Second Semester
         $events[] = [
-            'name' => 'Faculty Evaluation Period',
-            'description' => 'Student evaluation of faculty performance',
-            'start_date' => Carbon::create($startYear + 1, 5, 20),
-            'end_date' => Carbon::create($startYear + 1, 5, 24),
+            'name' => 'Adding / Dropping of Subjects - Second Semester',
+            'description' => 'Adding/Dropping period - requires adviser approval',
+            'start_date' => $baseDate->copy()->addDays(169),
+            'end_date' => $baseDate->copy()->addDays(196),
             'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::FACULTY_EVALUATION,
+            'event' => CalendarEventEnum::DEADLINE,
         ];
 
         // Graduation Ceremony
         $events[] = [
             'name' => 'Graduation Ceremony',
-            'description' => 'Annual graduation ceremony for graduating students',
-            'start_date' => Carbon::create($startYear + 1, 5, 25),
-            'end_date' => Carbon::create($startYear + 1, 5, 25),
+            'description' => 'Annual graduation ceremony - End of AY',
+            'start_date' => $baseDate->copy()->addDays(310),
+            'end_date' => $baseDate->copy()->addDays(310),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::GRADUATION,
         ];
 
-        // Academic Transition Period
+        // SUMMER TERM (Optional)
+
+        // Enrollment - Summer Term
         $events[] = [
-            'name' => 'Academic Transition Period',
-            'description' => 'Transition period between academic years',
-            'start_date' => Carbon::create($startYear + 1, 5, 26),
-            'end_date' => Carbon::create($startYear + 1, 5, 31),
+            'name' => 'Enrollment - Summer Term',
+            'description' => 'Enrollment for optional summer term',
+            'start_date' => $baseDate->copy()->addDays(311),
+            'end_date' => $baseDate->copy()->addDays(338),
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::ENROLLMENT,
+        ];
+
+        // Start of Summer Term
+        $events[] = [
+            'name' => 'Start of Summer Term',
+            'description' => 'Summer Term officially begins',
+            'start_date' => $baseDate->copy()->addDays(311),
+            'end_date' => $baseDate->copy()->addDays(311),
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::ACADEMIC_TRANSITION,
         ];
 
-        // University Foundation Day
+        // Summer Classes
         $events[] = [
-            'name' => 'University Foundation Day',
-            'description' => 'Annual celebration of university foundation',
-            'start_date' => Carbon::create($startYear, 9, 15),
-            'end_date' => Carbon::create($startYear, 9, 15),
+            'name' => 'Summer Classes',
+            'description' => 'Intensive summer courses',
+            'start_date' => $baseDate->copy()->addDays(311),
+            'end_date' => $baseDate->copy()->addDays(338),
             'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::UNIVERSITY_EVENT,
+            'event' => CalendarEventEnum::START_OF_CLASSES,
         ];
 
-        // Research Week
+        // Final Exams - Summer Term
         $events[] = [
-            'name' => 'Research Week',
-            'description' => 'Annual research presentation and exhibition week',
-            'start_date' => Carbon::create($startYear + 1, 2, 12),
-            'end_date' => Carbon::create($startYear + 1, 2, 16),
+            'name' => 'Final Examinations - Summer Term',
+            'description' => 'Final examinations for summer term',
+            'start_date' => $baseDate->copy()->addDays(339),
+            'end_date' => $baseDate->copy()->addDays(366),
             'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::UNIVERSITY_EVENT,
+            'event' => CalendarEventEnum::PERIODIC_EXAM,
         ];
 
         // Create all events for this school year

@@ -47,10 +47,15 @@ export default function GuestAdmissionApplications(): React.ReactNode {
 
   const getStatusBadge = (status: string = 'pending') => {
     const variants = {
-      pending: {
+      submitted: {
         variant: 'secondary' as const,
         className: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-        label: 'Pending Review',
+        label: 'Submitted',
+      },
+      cancelled: {
+        variant: 'secondary' as const,
+        className: 'bg-gray-100 text-gray-800 border-gray-200',
+        label: 'Cancelled',
       },
       approved: {
         variant: 'default' as const,
@@ -62,8 +67,13 @@ export default function GuestAdmissionApplications(): React.ReactNode {
         className: 'bg-red-100 text-red-800 border-red-200',
         label: 'Rejected',
       },
+      accepted: {
+        variant: 'default' as const,
+        className: 'bg-blue-100 text-blue-800 border-blue-200',
+        label: 'Accepted',
+      },
     };
-    const config = variants[status as keyof typeof variants] || variants.pending;
+    const config = variants[status as keyof typeof variants] || variants.submitted;
     return (
       <Badge variant={config.variant} className={config.className}>
         {config.label}
@@ -143,7 +153,7 @@ export default function GuestAdmissionApplications(): React.ReactNode {
                     </CardTitle>
                     <CardDescription className="mt-1">Application ID</CardDescription>
                   </div>
-                  {getStatusBadge()}
+                  {getStatusBadge(application.latest_status)}
                 </div>
               </CardHeader>
               <Separator />

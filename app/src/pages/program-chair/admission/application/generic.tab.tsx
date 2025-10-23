@@ -132,7 +132,7 @@ export default function ProgramChairAdmissionApplicationGenericTab({
   const paginationMeta = useMemo(() => applications?.data, [applications]);
 
   return (
-    <div>
+    <div className="space-y-2">
       <div className="w-fit">
         <Select
           options={schoolYearsList}

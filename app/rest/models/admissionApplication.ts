@@ -27,6 +27,7 @@ export interface AdmissionApplication {
   created_at?: string;
   updated_at?: string;
   latest_status?: string;
+  is_open_for_enrollment?: boolean;
   user?: User;
   schoolYear?: SchoolYear;
   academicProgram?: AcademicProgram;

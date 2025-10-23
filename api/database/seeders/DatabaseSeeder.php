@@ -19,6 +19,7 @@ use Database\Seeders\RequirementSeeder;
 use Database\Seeders\AdmissionScheduleSeeder;
 use Database\Seeders\AcademicProgramRequirementSeeder;
 use Database\Seeders\AcademicProgramCriteriaSeeder;
+use Database\Seeders\AdmissionApplicationSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -46,7 +47,8 @@ class DatabaseSeeder extends Seeder
             RequirementSeeder::class,
             AdmissionScheduleSeeder::class,
             AcademicProgramRequirementSeeder::class,
-            AcademicProgramCriteriaSeeder::class
+            AcademicProgramCriteriaSeeder::class,
+            AdmissionApplicationSeeder::class
         ]);
     }
 }

@@ -1895,6 +1895,16 @@
                             "type": "integer",
                             "default": 0
                         }
+                    },
+                    {
+                        "name": "filter[open_enrollment]",
+                        "in": "query",
+                        "description": "Open Enrollment",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
                     }
                 ],
                 "responses": {
@@ -8391,6 +8401,15 @@
                         }
                     },
                     {
+                        "name": "filter[for_freshmen]",
+                        "in": "query",
+                        "description": "Filter by freshmen",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
                         "name": "paginate",
                         "in": "query",
                         "description": "Paginate the results",
@@ -10220,6 +10239,9 @@
                     },
                     "latest_status": {
                         "type": "string"
+                    },
+                    "is_open_for_enrollment": {
+                        "type": "boolean"
                     },
                     "user": {
                         "$ref": "#\/components\/schemas\/User"

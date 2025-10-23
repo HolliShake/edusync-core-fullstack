@@ -82,6 +82,13 @@ class AdmissionApplicationController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 0)
     )]
+    #[OA\Parameter(
+        name: "filter[open_enrollment]",
+        in: "query",
+        description: "Open Enrollment",
+        required: false,
+        schema: new OA\Schema(type: "boolean", default: false)
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

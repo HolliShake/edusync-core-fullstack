@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\CalendarEventEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -41,6 +42,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         new OA\Property(property: "latest_status", type: "string"),
+        new OA\Property(property: "is_open_for_enrollment", type: "boolean"),
         // Relation
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
@@ -150,8 +152,24 @@ class AdmissionApplication extends Model
         'user',
         'schoolYear',
         'academicProgram',
+        'is_open_for_enrollment',
         'logs',
     ];
+
+    /**
+     * Check if the admission application is open for enrollment.
+     *
+     * @return bool
+     */
+    public function getIsOpenForEnrollmentAttribute(): bool
+    {
+        return $this->schoolYear
+            ->academicCalendars()
+            ->where('event', CalendarEventEnum::ENROLLMENT->value)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->exists();
+    }
 
     /**
      * Get the latest status of the admission application.

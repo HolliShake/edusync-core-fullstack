@@ -39,4 +39,8 @@ rows?: number;
  * Academic Program ID
  */
 'filter[academic_program_id]'?: number;
+/**
+ * Open Enrollment
+ */
+'filter[open_enrollment]'?: boolean;
 };

@@ -2,6 +2,7 @@
 
 namespace App\Repo;
 
+use App\Enum\CalendarEventEnum;
 use App\Interface\IRepo\IAdmissionApplicationRepo;
 use App\Models\AdmissionApplication;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -31,6 +32,13 @@ class AdmissionApplicationRepo extends GenericRepo implements IAdmissionApplicat
             AllowedFilter::callback('latest_status', function ($query, $value) {
                 $query->whereHas('latestStatus', function ($q) use ($value) {
                     $q->where('type', $value);
+                });
+            }),
+            AllowedFilter::callback('open_enrollment', function ($query, $value) {
+                $query->whereHas('schoolYear.academicCalendars', function ($q) {
+                    $q->where('event', CalendarEventEnum::ENROLLMENT->value)
+                      ->where('start_date', '<=', now())
+                      ->where('end_date', '>=', now());
                 });
             }),
             AllowedFilter::exact('user_id'),

@@ -156,7 +156,17 @@ class CurriculumDetail extends Model
         'year_label',
         'term_label',
         'course',
+        'curriculum',
     ];
+
+    /**
+     * Get the curriculum that owns the curriculum detail.
+     *
+     * @return Curriculum
+     */
+    public function getCurriculumAttribute(): Curriculum {
+        return $this->curriculum()->first();
+    }
 
     /**
      * Get the year label.

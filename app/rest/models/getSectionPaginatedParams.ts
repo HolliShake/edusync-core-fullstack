@@ -28,6 +28,10 @@ rows?: number;
  */
 'filter[school_year_id]'?: number;
 /**
+ * Filter by freshmen
+ */
+'filter[for_freshmen]'?: boolean;
+/**
  * Paginate the results
  */
 paginate?: boolean;

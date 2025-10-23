@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -147,5 +148,15 @@ class SchoolYear extends Model
         $current = now();
         // Mark as current if today is within range and the school year hasn't ended yet
         return $current->between($this->start_date, $this->end_date);
+    }
+
+    /**
+     * Get the academic calendars for the school year.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function academicCalendars(): HasMany
+    {
+        return $this->hasMany(AcademicCalendar::class);
     }
 }
