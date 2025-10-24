@@ -21,6 +21,6 @@ export interface AcademicProgramCriteria {
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
-  academicProgram?: AcademicProgram;
-  schoolYear?: SchoolYear;
+  academic_program?: AcademicProgram;
+  school_year?: SchoolYear;
 }

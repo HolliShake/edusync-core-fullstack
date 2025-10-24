@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -24,7 +25,9 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "longitude", type: "number", format: "float"),
         new OA\Property(property: "campus_id", type: "integer"),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
-        new OA\Property(property: "updated_at", type: "string", format: "date-time")
+        new OA\Property(property: "updated_at", type: "string", format: "date-time"),
+        // Relations
+        new OA\Property(property: "campus", ref: "#/components/schemas/Campus"),
     ]
 )]
 
@@ -107,8 +110,10 @@ class Building extends Model
 
     /**
      * Get the campus that owns the building.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function campus()
+    public function campus(): BelongsTo
     {
         return $this->belongsTo(Campus::class);
     }

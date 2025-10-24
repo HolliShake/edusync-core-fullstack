@@ -331,11 +331,13 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <span className="text-muted-foreground block mb-1">Program</span>
-                    <span className="font-medium">{application.academicProgram?.program_name}</span>
+                    <span className="font-medium">
+                      {application.academic_program?.program_name}
+                    </span>
                   </div>
                   <div>
                     <span className="text-muted-foreground block mb-1">School Year</span>
-                    <span className="font-medium">{application.schoolYear?.name}</span>
+                    <span className="font-medium">{application.school_year?.name}</span>
                   </div>
                 </div>
                 <Separator />

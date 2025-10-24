@@ -20,7 +20,7 @@ export interface AdmissionApplicationScore {
   is_posted: boolean;
   created_at?: string;
   updated_at?: string;
-  admissionApplication?: AdmissionApplication;
-  academicProgramCriteria?: AcademicProgramCriteria;
+  admission_application?: AdmissionApplication;
+  academic_program_criteria?: AcademicProgramCriteria;
   user?: User;
 }

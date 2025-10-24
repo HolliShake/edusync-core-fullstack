@@ -26,10 +26,10 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Computed
         new OA\Property(property: "validated", type: "boolean", readOnly: true),
-        // Relationships
+        // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
-        new OA\Property(property: "enrollmentLogs", type: "array", items: new OA\Items(ref: "#/components/schemas/EnrollmentLog")),
+        new OA\Property(property: "enrollment_logs", type: "array", items: new OA\Items(ref: "#/components/schemas/EnrollmentLog")),
     ]
 )]
 

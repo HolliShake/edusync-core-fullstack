@@ -29,6 +29,9 @@ return new class extends Migration
                 ->onDelete('cascade');
             // Field
             $table->enum('action', array_column(EnrollmentLogActionEnum::cases(), 'value'));
+
+            // Unique
+            $table->unique(['enrollment_id', 'action'], 'enrollment_log_unique');
         });
     }
 

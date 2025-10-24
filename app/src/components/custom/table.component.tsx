@@ -1,3 +1,4 @@
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Pagination,
   PaginationContent,
@@ -40,7 +41,7 @@ export type PaginationMeta = {
 export type TableProps<RowType extends Record<string, any>> = {
   columns: Array<TableColumn<RowType>>;
   rows: RowType[];
-  rowKey?: (row: RowType, index: number) => React.Key;
+  rowKey?: (row: RowType, index: number) => RowType[keyof RowType];
   className?: string;
   tableClassName?: string;
   theadClassName?: string;
@@ -58,6 +59,10 @@ export type TableProps<RowType extends Record<string, any>> = {
   showPagination?: boolean;
   onClickRow?: (row: RowType, index: number) => void;
   loading?: boolean;
+  // Selection props
+  selectable?: boolean;
+  selectedRows?: React.Key[];
+  onSelectionChange?: (selectedKeys: React.Key[]) => void;
 };
 
 function normalizeKeyPath(keyPath: string): Array<string | number> {
@@ -104,6 +109,9 @@ export default function Table<RowType extends Record<string, any>>({
   showPagination = false,
   onClickRow = undefined,
   loading = false,
+  selectable = false,
+  selectedRows = [],
+  onSelectionChange,
 }: TableProps<RowType>) {
   const getRowKey = React.useCallback(
     (row: RowType, index: number): React.Key => {
@@ -149,6 +157,11 @@ export default function Table<RowType extends Record<string, any>>({
     const skeletonRowCount = pagination?.per_page || 10;
     return Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
       <TableRow key={`skeleton-row-${rowIndex}`}>
+        {selectable && (
+          <TableCell className={`${compact ? 'px-3 py-2' : 'px-4 py-3'} w-12`}>
+            <Skeleton className="h-4 w-4" />
+          </TableCell>
+        )}
         {columns.map((col, colIndex) => (
           <TableCell
             key={`skeleton-cell-${rowIndex}-${colIndex}`}
@@ -163,6 +176,31 @@ export default function Table<RowType extends Record<string, any>>({
       </TableRow>
     ));
   };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (!onSelectionChange) return;
+    if (checked) {
+      const allKeys = rows.map((row, index) => getRowKey(row, index));
+      onSelectionChange(allKeys);
+    } else {
+      onSelectionChange([]);
+    }
+  };
+
+  const handleSelectRow = (rowKey: React.Key, checked: boolean) => {
+    if (!onSelectionChange) return;
+    if (checked) {
+      onSelectionChange([...selectedRows, rowKey]);
+    } else {
+      onSelectionChange(selectedRows.filter((key) => key !== rowKey));
+    }
+  };
+
+  const isAllSelected =
+    selectable &&
+    rows.length > 0 &&
+    rows.every((row, index) => selectedRows.includes(getRowKey(row, index)));
+  const isSomeSelected = selectable && selectedRows.length > 0 && selectedRows.length < rows.length;
 
   const renderPagination = () => {
     const {
@@ -307,6 +345,22 @@ export default function Table<RowType extends Record<string, any>>({
         >
           <TableHeader className={theadClassName}>
             <TableRow>
+              {selectable && (
+                <TableHead
+                  className={`
+                    text-[0.75rem] leading-5 font-medium tracking-wide uppercase text-muted-foreground/90 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
+                    ${compact ? 'px-3 py-2' : 'px-4 py-3'}
+                    w-12
+                  `}
+                >
+                  <Checkbox
+                    checked={isAllSelected}
+                    onCheckedChange={handleSelectAll}
+                    aria-label="Select all rows"
+                    className={isSomeSelected ? 'data-[state=checked]:bg-primary/50' : ''}
+                  />
+                </TableHead>
+              )}
               {columns.map((col, idx) => (
                 <TableHead
                   key={`th-${idx}-${String(col.key)}`}
@@ -330,7 +384,10 @@ export default function Table<RowType extends Record<string, any>>({
               renderSkeletonRows()
             ) : rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-36 text-center">
+                <TableCell
+                  colSpan={columns.length + (selectable ? 1 : 0)}
+                  className="h-36 text-center"
+                >
                   <div className="flex flex-col items-center justify-center gap-2">
                     <div className="w-12 h-12 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
                       <svg
@@ -354,29 +411,49 @@ export default function Table<RowType extends Record<string, any>>({
                 </TableCell>
               </TableRow>
             ) : (
-              rows.map((row, rowIndex) => (
-                <TableRow
-                  key={getRowKey(row, rowIndex)}
-                  className={` 
-                    !cursor-pointer
-                    ${getRowClassName(row, rowIndex)}
-                  `}
-                  onClick={() => onClickRow?.(row, rowIndex)}
-                >
-                  {columns.map((col, colIndex) => (
-                    <TableCell
-                      key={`td-${rowIndex}-${colIndex}`}
-                      className={`
-                        ${compact ? 'px-3 py-2' : 'px-4 py-3'}
-                        ${col.className || ''}
-                      `}
-                      style={{ textAlign: col.align ?? 'left' }}
-                    >
-                      {renderCell(col, row, rowIndex)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              rows.map((row, rowIndex) => {
+                const key = getRowKey(row, rowIndex);
+                const isSelected = selectedRows.includes(key);
+                return (
+                  <TableRow
+                    key={key}
+                    className={` 
+                      ${onClickRow ? '!cursor-pointer' : ''}
+                      ${getRowClassName(row, rowIndex)}
+                      ${isSelected ? 'bg-muted/70' : ''}
+                    `}
+                    onClick={() => onClickRow?.(row, rowIndex)}
+                  >
+                    {selectable && (
+                      <TableCell
+                        className={`
+                          ${compact ? 'px-3 py-2' : 'px-4 py-3'}
+                          w-12
+                        `}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => handleSelectRow(key, checked as boolean)}
+                          aria-label={`Select row ${rowIndex + 1}`}
+                        />
+                      </TableCell>
+                    )}
+                    {columns.map((col, colIndex) => (
+                      <TableCell
+                        key={`td-${rowIndex}-${colIndex}`}
+                        className={`
+                          ${compact ? 'px-3 py-2' : 'px-4 py-3'}
+                          ${col.className || ''}
+                        `}
+                        style={{ textAlign: col.align ?? 'left' }}
+                      >
+                        {renderCell(col, row, rowIndex)}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </UITable>

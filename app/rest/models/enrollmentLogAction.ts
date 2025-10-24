@@ -11,7 +11,10 @@ export type EnrollmentLogAction = typeof EnrollmentLogAction[keyof typeof Enroll
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EnrollmentLogAction = {
+  enroll: 'enroll',
   program_chair_approved: 'program_chair_approved',
   registrar_approved: 'registrar_approved',
+  program_chair_dropped_approved: 'program_chair_dropped_approved',
+  registrar_dropped_approved: 'registrar_dropped_approved',
   dropped: 'dropped',
 } as const;

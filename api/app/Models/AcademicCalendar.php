@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
     title: "AcademicCalendar",
     type: "object",
     required: [
-        // Override required
+        // Fillables
         'name',
         'start_date',
         'end_date',
@@ -47,7 +47,7 @@ use OpenApi\Attributes as OA;
         ),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
-        // Computed
+        // Relations
         new OA\Property(property: "school_year", type: "object", ref: "#/components/schemas/SchoolYear"),
     ]
 )]

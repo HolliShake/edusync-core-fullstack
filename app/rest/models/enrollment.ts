@@ -18,5 +18,5 @@ export interface Enrollment {
   readonly validated?: boolean;
   user?: User;
   section?: Section;
-  enrollmentLogs?: EnrollmentLog[];
+  enrollment_logs?: EnrollmentLog[];
 }

@@ -18,7 +18,7 @@ export interface AcademicProgramRequirement {
   is_active: boolean;
   readonly created_at?: string;
   readonly updated_at?: string;
-  academicProgram?: AcademicProgram;
+  academic_program?: AcademicProgram;
   requirement?: Requirement;
-  schoolYear?: SchoolYear;
+  school_year?: SchoolYear;
 }

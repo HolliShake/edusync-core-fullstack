@@ -32,7 +32,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "min_students", type: "integer"),
         new OA\Property(property: "max_students", type: "integer"),
         new OA\Property(property: "is_posted", type: "boolean"),
-        // relationships
+        // Relations
         new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
         new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
     ]

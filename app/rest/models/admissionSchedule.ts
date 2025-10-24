@@ -16,6 +16,6 @@ export interface AdmissionSchedule {
   end_date: string;
   readonly created_at?: string;
   readonly updated_at?: string;
-  schoolYear?: SchoolYear;
+  school_year?: SchoolYear;
   campus?: Campus;
 }

@@ -28,10 +28,10 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_active", type: "boolean"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
-        // Relationships
-        new OA\Property(property: "academicProgram", ref: "#/components/schemas/AcademicProgram"),
+        // Relations
+        new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
         new OA\Property(property: "requirement", ref: "#/components/schemas/Requirement"),
-        new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
     ]
 )]
 
@@ -126,9 +126,9 @@ class AcademicProgramRequirement extends Model
     ];
 
     protected $appends = [
-        'academicProgram',
+        'academic_program',
         'requirement',
-        'schoolYear',
+        'school_year',
     ];
 
     /**

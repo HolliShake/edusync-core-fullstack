@@ -10,14 +10,14 @@ use OpenApi\Attributes as OA;
     title: "AcademicTerm",
     type: "object",
     required: [
-        // Override required
+        // Fillables
         'name',
         'description',
         'suffix',
         'number_of_terms',
     ],
     properties: [
-        // Override fillables
+        // Fillables
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "name", type: "string", example: "Term 1"),
         new OA\Property(property: "description", type: "string", nullable: true, example: "Description of Term 1"),

@@ -140,7 +140,7 @@ Route::controller(SchoolYearController::class)->group(function() {
 });
 
 Route::controller(SectionController::class)->group(function() {
-    Route::get('/Section', 'index');
+    Route::middleware(['throttle:150,1'])->get('/Section', 'index');
     Route::get('/Section/{id}', 'show');
     Route::post('/Section', 'store');
     Route::post('/Section/generate', 'generate');

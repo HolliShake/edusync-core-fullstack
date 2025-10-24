@@ -27,7 +27,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Relationships
-        new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
         new OA\Property(property: "campus", ref: "#/components/schemas/Campus"),
     ]
 )]
@@ -121,7 +121,7 @@ class AdmissionSchedule extends Model
     ];
 
     protected $appends = [
-        'schoolYear',
+        'school_year',
         'campus',
     ];
 

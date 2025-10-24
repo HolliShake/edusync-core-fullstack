@@ -9761,10 +9761,10 @@
                         "format": "date-time",
                         "example": "2024-01-01T00:00:00.000000Z"
                     },
-                    "academicProgram": {
+                    "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
                     },
-                    "schoolYear": {
+                    "school_year": {
                         "$ref": "#\/components\/schemas\/SchoolYear"
                     }
                 },
@@ -9913,13 +9913,13 @@
                         "format": "date-time",
                         "readOnly": true
                     },
-                    "academicProgram": {
+                    "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
                     },
                     "requirement": {
                         "$ref": "#\/components\/schemas\/Requirement"
                     },
-                    "schoolYear": {
+                    "school_year": {
                         "$ref": "#\/components\/schemas\/SchoolYear"
                     }
                 },
@@ -10246,10 +10246,10 @@
                     "user": {
                         "$ref": "#\/components\/schemas\/User"
                     },
-                    "schoolYear": {
+                    "school_year": {
                         "$ref": "#\/components\/schemas\/SchoolYear"
                     },
-                    "academicProgram": {
+                    "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
                     },
                     "logs": {
@@ -10404,7 +10404,7 @@
                         "type": "string",
                         "format": "date-time"
                     },
-                    "admissionApplication": {
+                    "admission_application": {
                         "$ref": "#\/components\/schemas\/AdmissionApplication"
                     },
                     "user": {
@@ -10565,10 +10565,10 @@
                         "type": "string",
                         "format": "date-time"
                     },
-                    "admissionApplication": {
+                    "admission_application": {
                         "$ref": "#\/components\/schemas\/AdmissionApplication"
                     },
-                    "academicProgramCriteria": {
+                    "academic_program_criteria": {
                         "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
                     },
                     "user": {
@@ -10718,7 +10718,7 @@
                         "format": "date-time",
                         "readOnly": true
                     },
-                    "schoolYear": {
+                    "school_year": {
                         "$ref": "#\/components\/schemas\/SchoolYear"
                     },
                     "campus": {
@@ -11010,6 +11010,9 @@
                     "updated_at": {
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "campus": {
+                        "$ref": "#\/components\/schemas\/Campus"
                     }
                 },
                 "type": "object"
@@ -11242,6 +11245,9 @@
                     "updated_at": {
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "campus": {
+                        "$ref": "#\/components\/schemas\/Campus"
                     }
                 },
                 "type": "object"
@@ -12105,7 +12111,7 @@
                     "section": {
                         "$ref": "#\/components\/schemas\/Section"
                     },
-                    "enrollmentLogs": {
+                    "enrollment_logs": {
                         "type": "array",
                         "items": {
                             "$ref": "#\/components\/schemas\/EnrollmentLog"
@@ -12240,8 +12246,11 @@
                     "action": {
                         "type": "string",
                         "enum": [
+                            "enroll",
                             "program_chair_approved",
                             "registrar_approved",
+                            "program_chair_dropped_approved",
+                            "registrar_dropped_approved",
                             "dropped"
                         ]
                     },
@@ -12699,6 +12708,9 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2025-01-01T00:00:00Z"
+                    },
+                    "building": {
+                        "$ref": "#\/components\/schemas\/Building"
                     }
                 },
                 "type": "object"

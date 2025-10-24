@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { Building } from './building';
 
 export interface Room {
   id?: number;
@@ -17,4 +18,5 @@ export interface Room {
   room_capacity: number;
   created_at?: string;
   updated_at?: string;
+  building?: Building;
 }

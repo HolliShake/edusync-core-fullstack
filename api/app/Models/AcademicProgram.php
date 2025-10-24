@@ -27,7 +27,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "program_type_id", type: "integer", example: 1),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-01-07T10:30:14.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-07T10:30:14.000000Z"),
-        // Custom
+        // Relations
         new OA\Property(property: "program_type", type: "object", ref: "#/components/schemas/ProgramType"),
         new OA\Property(property: "requirements", type: "array", items: new OA\Items(ref: "#/components/schemas/AcademicProgramRequirement")),
     ]

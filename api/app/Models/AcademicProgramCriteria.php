@@ -34,8 +34,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T00:00:00.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T00:00:00.000000Z"),
         // Relation
-        new OA\Property(property: "academicProgram", ref: "#/components/schemas/AcademicProgram"),
-        new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
     ]
 )]
 
@@ -132,8 +132,8 @@ class AcademicProgramCriteria extends Model
     ];
 
     protected $appends = [
-        'academicProgram',
-        'schoolYear',
+        'academic_program',
+        'school_year',
     ];
 
     /**

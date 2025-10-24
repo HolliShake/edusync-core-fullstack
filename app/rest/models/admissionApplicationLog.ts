@@ -18,6 +18,6 @@ export interface AdmissionApplicationLog {
   note?: string | null;
   created_at?: string;
   updated_at?: string;
-  admissionApplication?: AdmissionApplication;
+  admission_application?: AdmissionApplication;
   user?: User;
 }

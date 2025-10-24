@@ -43,10 +43,10 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         new OA\Property(property: "latest_status", type: "string"),
         new OA\Property(property: "is_open_for_enrollment", type: "boolean"),
-        // Relation
+        // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
-        new OA\Property(property: "schoolYear", ref: "#/components/schemas/SchoolYear"),
-        new OA\Property(property: "academicProgram", ref: "#/components/schemas/AcademicProgram"),
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
         new OA\Property(property: "logs", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationLog")),
     ]
 )]
@@ -150,8 +150,8 @@ class AdmissionApplication extends Model
     protected $appends = [
         'latest_status',
         'user',
-        'schoolYear',
-        'academicProgram',
+        'school_year',
+        'academic_program',
         'is_open_for_enrollment',
         'logs',
     ];
@@ -219,7 +219,7 @@ class AdmissionApplication extends Model
      */
     public function getLogsAttribute(): array
     {
-        return $this->logs()->get()->toArray();
+        return $this->logs()->get()->makeHidden(['admission_application', 'user'])->toArray();
     }
 
     /**

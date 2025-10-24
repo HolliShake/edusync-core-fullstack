@@ -30,7 +30,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'is_include_gwa', type: 'boolean', example: false),
         new OA\Property(property: 'created_at', type: 'string', format: 'date-time', readOnly: true),
         new OA\Property(property: 'updated_at', type: 'string', format: 'date-time', readOnly: true),
-        // relationships
+        // Relations
         new OA\Property(property: "curriculum", ref: "#/components/schemas/Curriculum"),
         new OA\Property(property: "course", ref: "#/components/schemas/Course"),
         // computed

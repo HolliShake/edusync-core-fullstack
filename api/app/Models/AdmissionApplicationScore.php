@@ -29,9 +29,9 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_posted", type: "boolean", example: false),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
-        // Relation
-        new OA\Property(property: "admissionApplication", ref: "#/components/schemas/AdmissionApplication"),
-        new OA\Property(property: "academicProgramCriteria", ref: "#/components/schemas/AcademicProgramCriteria"),
+        // Relations
+        new OA\Property(property: "admission_application", ref: "#/components/schemas/AdmissionApplication"),
+        new OA\Property(property: "academic_program_criteria", ref: "#/components/schemas/AcademicProgramCriteria"),
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
     ]
 )]

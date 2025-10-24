@@ -31,6 +31,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "room_capacity", type: "integer", example: 30),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00Z"),
+        // Relations
+        new OA\Property(property: "building", ref: "#/components/schemas/Building"),
     ]
 )]
 
@@ -116,7 +118,7 @@ class Room extends Model
 
     /**
      * Get the building that owns the room.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function building(): BelongsTo

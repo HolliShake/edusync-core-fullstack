@@ -22,6 +22,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "campus_id", type: "integer"),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
+        // Relations
+        new OA\Property(property: "campus", ref: "#/components/schemas/Campus"),
     ]
 )]
 
@@ -100,7 +102,7 @@ class College extends Model
 
     /**
      * Get the campus that owns the college.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function campus(): BelongsTo

@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { Campus } from './campus';
 
 export interface College {
   id?: number;
@@ -13,4 +14,5 @@ export interface College {
   campus_id: number;
   created_at?: string;
   updated_at?: string;
+  campus?: Campus;
 }
