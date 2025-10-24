@@ -11,4 +11,9 @@ class EnrollmentService extends GenericService implements IEnrollmentService
     {
         parent::__construct($enrollmentRepository);
     }
+
+    public function createMultiple(array $data): array
+    {
+        return $this->repository->createMultiple($data);
+    }
 }

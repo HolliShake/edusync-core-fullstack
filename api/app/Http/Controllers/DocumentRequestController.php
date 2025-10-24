@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\EnrollmentService;
+use App\Http\Controllers\Controller;
+use App\Service\DocumentRequestService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/Enrollment"
+    path: "/DocumentRequest"
 )]
-class Enrollment extends Controller
+class DocumentRequestController extends Controller
 {
-    public function __construct(protected EnrollmentService $service) {
+    public function __construct(protected DocumentRequestService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/Enrollment",
-        summary: "Get paginated list of Enrollment",
-        tags: ["Enrollment"],
-        description: "Retrieve a paginated list of Enrollment with optional search",
-        operationId:"getEnrollmentPaginated",
+        path: "/api/DocumentRequest",
+        summary: "Get paginated list of DocumentRequest",
+        tags: ["DocumentRequest"],
+        description: "Retrieve a paginated list of DocumentRequest with optional search",
+        operationId:"getDocumentRequestPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -50,7 +51,7 @@ class Enrollment extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedEnrollmentResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedDocumentRequestResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -74,11 +75,11 @@ class Enrollment extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/Enrollment/{id}",
-        summary: "Get a specific Enrollment",
-        tags: ["Enrollment"],
-        description: "Retrieve a Enrollment by its ID",
-        operationId: "getEnrollmentById",
+        path: "/api/DocumentRequest/{id}",
+        summary: "Get a specific DocumentRequest",
+        tags: ["DocumentRequest"],
+        description: "Retrieve a DocumentRequest by its ID",
+        operationId: "getDocumentRequestById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -89,7 +90,7 @@ class Enrollment extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetEnrollmentResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetDocumentRequestResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -103,14 +104,14 @@ class Enrollment extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "Enrollment not found"
+        description: "DocumentRequest not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Enrollment not found');
+            return $this->notFound('DocumentRequest not found');
         }
     }
 
@@ -118,20 +119,20 @@ class Enrollment extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/Enrollment",
-        summary: "Create a new Enrollment",
-        tags: ["Enrollment"],
-        description:" Create a new Enrollment with the provided details",
-        operationId: "createEnrollment",
+        path: "/api/DocumentRequest",
+        summary: "Create a new DocumentRequest",
+        tags: ["DocumentRequest"],
+        description:" Create a new DocumentRequest with the provided details",
+        operationId: "createDocumentRequest",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/Enrollment")
+        content: new OA\JsonContent(ref: "#/components/schemas/DocumentRequest")
     )]
     #[OA\Response(
         response: 200,
-        description: "Enrollment created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateEnrollmentResponse200")
+        description: "DocumentRequest created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateDocumentRequestResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -176,11 +177,11 @@ class Enrollment extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/Enrollment/{id}",
-        summary: "Update a Enrollment",
-        tags: ["Enrollment"],
-        description: "Update an existing Enrollment with the provided details",
-        operationId: "updateEnrollment",
+        path: "/api/DocumentRequest/{id}",
+        summary: "Update a DocumentRequest",
+        tags: ["DocumentRequest"],
+        description: "Update an existing DocumentRequest with the provided details",
+        operationId: "updateDocumentRequest",
     )]
     #[OA\Parameter(
         name: "id",
@@ -190,12 +191,12 @@ class Enrollment extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/Enrollment")
+        content: new OA\JsonContent(ref: "#/components/schemas/DocumentRequest")
     )]
     #[OA\Response(
         response: 200,
-        description: "Enrollment updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateEnrollmentResponse200")
+        description: "DocumentRequest updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateDocumentRequestResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -209,7 +210,7 @@ class Enrollment extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "Enrollment not found"
+        description: "DocumentRequest not found"
     )]
     #[OA\Response(
         response: 422,
@@ -236,7 +237,7 @@ class Enrollment extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Enrollment not found');
+            return $this->notFound('DocumentRequest not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -246,11 +247,11 @@ class Enrollment extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/Enrollment/{id}",
-        summary: "Delete a Enrollment",
-        tags: ["Enrollment"],
-        description: "Delete a Enrollment by its ID",
-        operationId: "deleteEnrollment",
+        path: "/api/DocumentRequest/{id}",
+        summary: "Delete a DocumentRequest",
+        tags: ["DocumentRequest"],
+        description: "Delete a DocumentRequest by its ID",
+        operationId: "deleteDocumentRequest",
     )]
     #[OA\Parameter(
         name: "id",
@@ -260,8 +261,8 @@ class Enrollment extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "Enrollment deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteEnrollmentResponse200")
+        description: "DocumentRequest deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteDocumentRequestResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -275,7 +276,7 @@ class Enrollment extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "Enrollment not found"
+        description: "DocumentRequest not found"
     )]
     #[OA\Response(
         response: 500,
@@ -288,7 +289,7 @@ class Enrollment extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Enrollment not found');
+            return $this->notFound('DocumentRequest not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

@@ -23,7 +23,7 @@ import type React from 'react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function GuestEnrollment(): React.ReactNode {
+export default function GuestAcceptedAdmission(): React.ReactNode {
   const { session } = useAuth();
   const navigate = useNavigate();
   const { data: applicationResponse, isLoading } = useGetAdmissionApplicationPaginated(
@@ -64,7 +64,7 @@ export default function GuestEnrollment(): React.ReactNode {
   };
 
   const handleApplicationClick = (applicationId: number) => {
-    navigate(`/guest/enrollment/${encryptIdForUrl(applicationId)}`);
+    navigate(`/guest/enrollment/accepted/${encryptIdForUrl(applicationId)}`);
   };
 
   if (isLoading) {
@@ -110,7 +110,6 @@ export default function GuestEnrollment(): React.ReactNode {
               <Card
                 key={application.id}
                 className="group overflow-hidden transition-all hover:shadow-lg hover:border-primary/50"
-                onClick={() => handleApplicationClick(application.id!)}
               >
                 <CardHeader className="space-y-3 pb-4">
                   <div className="flex items-start justify-between gap-3">
@@ -171,6 +170,7 @@ export default function GuestEnrollment(): React.ReactNode {
                     className="w-full group-hover:shadow-md transition-all"
                     size="lg"
                     disabled={!application.is_open_for_enrollment}
+                    onClick={() => handleApplicationClick(application.id!)}
                   >
                     <span>Proceed to Enrollment</span>
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

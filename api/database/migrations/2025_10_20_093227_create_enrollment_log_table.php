@@ -28,6 +28,7 @@ return new class extends Migration
                 ->constrained('user')
                 ->onDelete('cascade');
             // Field
+            $table->text('note')->nullable();
             $table->enum('action', array_column(EnrollmentLogActionEnum::cases(), 'value'));
 
             // Unique

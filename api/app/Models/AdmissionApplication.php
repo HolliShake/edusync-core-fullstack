@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\AdmissionApplicationLogTypeEnum;
 use App\Enum\CalendarEventEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -179,7 +180,7 @@ class AdmissionApplication extends Model
     public function getLatestStatusAttribute(): string
     {
         $latestLog = $this->latestStatus()->first();
-        return $latestLog ? $latestLog->type : '';
+        return $latestLog ? $latestLog->type : AdmissionApplicationLogTypeEnum::SUBMITTED->value;
     }
 
     /**
@@ -267,7 +268,7 @@ class AdmissionApplication extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function latestStatus():HasOne
+    public function latestStatus(): HasOne
     {
         return $this->hasOne(AdmissionApplicationLog::class)->latestOfMany();
     }

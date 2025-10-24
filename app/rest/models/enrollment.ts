@@ -16,6 +16,8 @@ export interface Enrollment {
   readonly created_at?: string;
   readonly updated_at?: string;
   readonly validated?: boolean;
+  readonly is_dropped?: boolean;
+  readonly latest_status?: string;
   user?: User;
   section?: Section;
   enrollment_logs?: EnrollmentLog[];

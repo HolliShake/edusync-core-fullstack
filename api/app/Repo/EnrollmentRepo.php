@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\IEnrollmentRepo;
 use App\Models\Enrollment;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class EnrollmentRepo extends GenericRepo implements IEnrollmentRepo
 {
@@ -22,6 +23,7 @@ class EnrollmentRepo extends GenericRepo implements IEnrollmentRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('user_id'),
         ];
     }
 

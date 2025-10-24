@@ -17,6 +17,10 @@ use App\Interface\IRepo\ICourseRepo;
 use App\Interface\IRepo\ICurriculumDetailRepo;
 use App\Interface\IRepo\ICurriculumRepo;
 use App\Interface\IRepo\IDesignitionRepo;
+use App\Interface\IRepo\IDocumentRequestLogRepo;
+use App\Interface\IRepo\IDocumentRequestRepo;
+use App\Interface\IRepo\IDocumentTypeRepo;
+use App\Interface\IRepo\IEnrollmentRepo;
 use App\Interface\IRepo\IProgramTypeRepo;
 use App\Interface\IRepo\IRequirementRepo;
 use App\Interface\IRepo\IRoomRepo;
@@ -38,6 +42,10 @@ use App\Interface\IService\ICourseService;
 use App\Interface\IService\ICurriculumDetailService;
 use App\Interface\IService\ICurriculumService;
 use App\Interface\IService\IDesignitionService;
+use App\Interface\IService\IDocumentRequestLogService;
+use App\Interface\IService\IDocumentRequestService;
+use App\Interface\IService\IDocumentTypeService;
+use App\Interface\IService\IEnrollmentService;
 use App\Interface\IService\IProgramTypeService;
 use App\Interface\IService\IRequirementService;
 use App\Interface\IService\IRoomService;
@@ -59,6 +67,10 @@ use App\Repo\CourseRepo;
 use App\Repo\CurriculumDetailRepo;
 use App\Repo\CurriculumRepo;
 use App\Repo\DesignitionRepo;
+use App\Repo\DocumentRequestLogRepo;
+use App\Repo\DocumentRequestRepo;
+use App\Repo\DocumentTypeRepo;
+use App\Repo\EnrollmentRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RequirementRepo;
 use App\Repo\RoomRepo;
@@ -80,6 +92,10 @@ use App\Service\CourseService;
 use App\Service\CurriculumDetailService;
 use App\Service\CurriculumService;
 use App\Service\DesignitionService;
+use App\Service\DocumentRequestLogService;
+use App\Service\DocumentRequestService;
+use App\Service\DocumentTypeService;
+use App\Service\EnrollmentService;
 use App\Service\ProgramTypeService;
 use App\Service\RequirementService;
 use App\Service\RoomService;
@@ -117,6 +133,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAdmissionApplicationLogRepo::class, AdmissionApplicationLogRepo::class);
         $this->app->bind(IAcademicProgramCriteriaRepo::class, AcademicProgramCriteriaRepo::class);
         $this->app->bind(IAdmissionApplicationScoreRepo::class, AdmissionApplicationScoreRepo::class);
+        $this->app->bind(IEnrollmentRepo::class, EnrollmentRepo::class);
+        $this->app->bind(IDocumentRequestRepo::class, DocumentRequestRepo::class);
+        $this->app->bind(IDocumentRequestLogRepo::class, DocumentRequestLogRepo::class);
+        $this->app->bind(IDocumentTypeRepo::class, DocumentTypeRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -139,6 +159,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAdmissionApplicationLogService::class, AdmissionApplicationLogService::class);
         $this->app->bind(IAcademicProgramCriteriaService::class, AcademicProgramCriteriaService::class);
         $this->app->bind(IAdmissionApplicationScoreService::class, AdmissionApplicationScoreService::class);
+        $this->app->bind(IEnrollmentService::class, EnrollmentService::class);
+        $this->app->bind(IDocumentRequestService::class, DocumentRequestService::class);
+        $this->app->bind(IDocumentRequestLogService::class, DocumentRequestLogService::class);
+        $this->app->bind(IDocumentTypeService::class, DocumentTypeService::class);
     }
 
     /**

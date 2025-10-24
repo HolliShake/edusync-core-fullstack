@@ -6,6 +6,7 @@ use App\Enum\EnrollmentLogActionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -26,6 +27,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Computed
         new OA\Property(property: "validated", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_dropped", type: "boolean", readOnly: true),
+        new OA\Property(property: "latest_status", type: "string", readOnly: true),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
@@ -119,7 +122,36 @@ class Enrollment extends Model
 
     protected $appends = [
         'validated',
+        'is_dropped',
+        'section',
+        'latest_status'
     ];
+
+    /**
+     * Get the latest status of the enrollment.
+     *
+     * @return string
+     */
+    public function getLatestStatusAttribute(): string
+    {
+        $logs = $this->latestStatus()->first();
+        switch ($logs->action) {
+            case EnrollmentLogActionEnum::ENROLL->value:
+                return 'Pending';
+            case EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value:
+                return 'Approved';
+            case EnrollmentLogActionEnum::REGISTRAR_APPROVED->value:
+                return 'Validated';
+            case EnrollmentLogActionEnum::DROPPED->value:
+                return 'Dropped Requested';
+            case EnrollmentLogActionEnum::PROGRAM_CHAIR_DROPPED_APPROVED->value:
+                return 'Dropped Approved';
+            case EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value:
+                return 'Dropped Validated';
+            default:
+            return 'Pending';
+        }
+    }
 
     /**
      * Get the validated attribute.
@@ -128,15 +160,31 @@ class Enrollment extends Model
      */
     public function getValidatedAttribute(): bool
     {
-        return $this->enrollmentLogs()
-            ->where('action', EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value)
-            ->exists()
-            && $this->enrollmentLogs()
-                ->where('action', EnrollmentLogActionEnum::REGISTRAR_APPROVED->value)
-                ->exists()
-            && !$this->enrollmentLogs()
-                ->where('action', EnrollmentLogActionEnum::DROPPED->value)
-                ->exists();
+        $logs = $this->enrollmentLogs()->pluck('action');
+        return $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value)
+            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED->value);
+    }
+
+    /**
+     * Get the is dropped attribute.
+     *
+     * @return bool
+     */
+    public function getIsDroppedAttribute(): bool
+    {
+        $logs = $this->enrollmentLogs()->pluck('action');
+        return $logs->contains(EnrollmentLogActionEnum::DROPPED->value)
+            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value);
+    }
+
+    /**
+     * Get the section that owns the enrollment.
+     *
+     * @return Section
+     */
+    public function getSectionAttribute(): Section
+    {
+        return $this->section()->first();
     }
 
     /**
@@ -160,12 +208,22 @@ class Enrollment extends Model
     }
 
     /**
+     * Get the latest status of the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function latestStatus(): HasOne
+    {
+        return $this->hasOne(EnrollmentLog::class)->latestOfMany();
+    }
+
+    /**
      * Get the enrollment logs for the enrollment.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function enrollmentLogs(): HasMany
     {
-        return $this->hasMany(EnrollmentLog::class);
+        return $this->hasMany(EnrollmentLog::class)->latest();
     }
 }

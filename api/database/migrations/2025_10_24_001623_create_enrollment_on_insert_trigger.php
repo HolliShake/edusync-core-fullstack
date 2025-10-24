@@ -17,8 +17,8 @@ return new class extends Migration
             AFTER INSERT ON enrollment
             FOR EACH ROW
             BEGIN
-                INSERT INTO enrollment_log (enrollment_id, user_id, action, logged_by_user_id, created_at, updated_at)
-                VALUES (NEW.id, NEW.user_id, "enroll", NEW.user_id, NOW(), NOW());
+                INSERT INTO enrollment_log (enrollment_id, user_id, action, note, logged_by_user_id, created_at, updated_at)
+                VALUES (NEW.id, NEW.user_id, "enroll", "Enrollment submitted", NEW.user_id, NOW(), NOW());
             END
         ');
     }

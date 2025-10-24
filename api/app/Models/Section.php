@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -35,6 +36,7 @@ use OpenApi\Attributes as OA;
         // Relations
         new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
         new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "available_slots", type: "integer", readOnly: true),
     ]
 )]
 
@@ -145,7 +147,28 @@ class Section extends Model
 
     protected $appends = [
         'curriculum_detail',
+        'available_slots',
     ];
+
+    /**
+     * Get the current enrolled attribute.
+     *
+     * @return int
+     */
+    public function getAvailableSlotsAttribute(): int
+    {
+        $all = $this->enrollments()
+            ->get()
+            ->makeHidden(['section', 'user'])
+            ->toArray();
+
+        // Filter out enrollments that are validated and not dropped
+        $validatedAndNotDropped = array_filter($all, function($enrollment) {
+            return $enrollment['validated'] && !$enrollment['is_dropped'];
+        });
+
+        return $this->max_students - count($validatedAndNotDropped);
+    }
 
     /**
      * Get the curriculum detail that owns the section.
@@ -185,5 +208,15 @@ class Section extends Model
     public function schoolYear(): BelongsTo
     {
         return $this->belongsTo(SchoolYear::class, 'school_year_id');
+    }
+
+    /**
+     * Get the enrollments for the section.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
     }
 }

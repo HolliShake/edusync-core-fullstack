@@ -48,7 +48,8 @@ class DatabaseSeeder extends Seeder
             AdmissionScheduleSeeder::class,
             AcademicProgramRequirementSeeder::class,
             AcademicProgramCriteriaSeeder::class,
-            AdmissionApplicationSeeder::class
+            AdmissionApplicationSeeder::class,
+            DocumentTypeSeeder::class
         ]);
     }
 }

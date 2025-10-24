@@ -5,17 +5,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { decryptIdFromUrl } from '@/lib/hash';
-import { useGetAdmissionApplicationById, useGetSectionPaginated } from '@rest/api';
-import type { Section } from '@rest/models';
+import { useEnrollUser, useGetAdmissionApplicationById, useGetSectionPaginated } from '@rest/api';
+import type { Enrollment, Section } from '@rest/models';
 import { AlertCircle, BookOpen, Calendar, CheckCircle2, Trash, Users } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-export default function GuestEnrollmentApplication(): React.ReactNode {
+export default function GuestEnrollment(): React.ReactNode {
   //   const { session } = useAuth();
   //   const navigate = useNavigate();
+
+  const { mutateAsync: enrollUser, isPending: isEnrollingUser } = useEnrollUser();
 
   const [alert, setAlert] = useState<string | undefined>(undefined);
 
@@ -122,6 +124,26 @@ export default function GuestEnrollmentApplication(): React.ReactNode {
     }
     setAlert(undefined);
     return true;
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const payload = selectedSectionCourses.map((sectionCourse) => ({
+        user_id: application?.user_id,
+        section_id: sectionCourse.id,
+      }));
+      await enrollUser({
+        data: payload as Enrollment[],
+      });
+      toast.success('Enrollment submitted successfully');
+      // reset
+      setSelectedCourses([]);
+      setSelectedSection(null);
+      setAlert(undefined);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to enroll user');
+    }
   };
 
   return (
@@ -291,6 +313,16 @@ export default function GuestEnrollmentApplication(): React.ReactNode {
                             </Badge>
                           ),
                       },
+                      {
+                        key: 'available_slots',
+                        title: 'Available Slots',
+                        align: 'center',
+                        render: (_, row) => (
+                          <Badge variant="secondary" className="text-xs">
+                            {row.max_students - row.available_slots!} / {row.max_students}
+                          </Badge>
+                        ),
+                      },
                     ]}
                     rows={courses}
                     emptyState={
@@ -314,86 +346,91 @@ export default function GuestEnrollmentApplication(): React.ReactNode {
                     }}
                   />
                   {/*  */}
-                  <div className="mt-6">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-lg">Selected Courses</CardTitle>
-                        <CardDescription>
-                          Review your selected courses for enrollment
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Table
-                          className="border"
-                          columns={[
-                            {
-                              key: 'section_name',
-                              title: 'Section',
-                            },
-                            {
-                              key: 'curriculum_detail.course.course_code',
-                              title: 'Course Code',
-                            },
-                            {
-                              key: 'curriculum_detail.course.course_title',
-                              title: 'Course Title',
-                            },
-                            {
-                              key: 'curriculum_detail.course.lecture_units',
-                              title: 'Lecture Units',
-                              align: 'center',
-                            },
-                            {
-                              key: 'curriculum_detail.course.laboratory_units',
-                              title: 'Lab Units',
-                              align: 'center',
-                            },
-                            {
-                              key: 'curriculum_detail.course.credit_units',
-                              title: 'Credit Units',
-                              align: 'center',
-                            },
-                            {
-                              key: 'id',
-                              title: 'Action',
-                              align: 'center',
-                              render: (value) => (
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => {
-                                    setSelectedCourses(
-                                      selectedCourses.filter((section) => section != value)
-                                    );
-                                  }}
-                                >
-                                  <Trash className="h-4 w-4" />
-                                </Button>
-                              ),
-                            },
-                          ]}
-                          rows={selectedSectionCourses}
-                          emptyState={
-                            <div className="flex flex-col items-center justify-center py-12 text-center">
-                              <div className="rounded-full bg-muted p-3 mb-4">
-                                <BookOpen className="h-6 w-6 text-muted-foreground" />
-                              </div>
-                              <p className="text-sm font-medium text-muted-foreground">
-                                No courses selected
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Select courses from the table above to add them here
-                              </p>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Selected Courses</CardTitle>
+                      <CardDescription>Review your selected courses for enrollment</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Table
+                        className="border"
+                        columns={[
+                          {
+                            key: 'section_name',
+                            title: 'Section',
+                          },
+                          {
+                            key: 'curriculum_detail.course.course_code',
+                            title: 'Course Code',
+                          },
+                          {
+                            key: 'curriculum_detail.course.course_title',
+                            title: 'Course Title',
+                          },
+                          {
+                            key: 'curriculum_detail.course.lecture_units',
+                            title: 'Lecture Units',
+                            align: 'center',
+                          },
+                          {
+                            key: 'curriculum_detail.course.laboratory_units',
+                            title: 'Lab Units',
+                            align: 'center',
+                          },
+                          {
+                            key: 'curriculum_detail.course.credit_units',
+                            title: 'Credit Units',
+                            align: 'center',
+                          },
+                          {
+                            key: 'id',
+                            title: 'Action',
+                            align: 'center',
+                            render: (value) => (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  setSelectedCourses(
+                                    selectedCourses.filter((section) => section != value)
+                                  );
+                                }}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            ),
+                          },
+                        ]}
+                        rows={selectedSectionCourses}
+                        emptyState={
+                          <div className="flex flex-col items-center justify-center py-12 text-center">
+                            <div className="rounded-full bg-muted p-3 mb-4">
+                              <BookOpen className="h-6 w-6 text-muted-foreground" />
                             </div>
-                          }
-                          loading={false}
-                          rowKey={(row: Section) => row.id}
-                        />
-                        <span className="block mt-2">
-                          {totalUnitsSelected}/{totalUnitsRequired}
-                        </span>
-                      </CardContent>
-                    </Card>
+                            <p className="text-sm font-medium text-muted-foreground">
+                              No courses selected
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Select courses from the table above to add them here
+                            </p>
+                          </div>
+                        }
+                        loading={false}
+                        rowKey={(row: Section) => row.id}
+                      />
+                    </CardContent>
+                  </Card>
+                  {/*  */}
+                  <div className="flex flex-row justify-between items-center">
+                    <span className="block">
+                      {totalUnitsSelected}/{totalUnitsRequired}
+                    </span>
+                    <Button
+                      disabled={totalUnitsSelected != totalUnitsRequired || isEnrollingUser}
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
                   </div>
                 </div>
               </div>

@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\EnrollmentLogService;
+use App\Http\Controllers\Controller;
+use App\Service\DocumentTypeService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/EnrollmentLog"
+    path: "/DocumentType"
 )]
-class EnrollmentLog extends Controller
+class DocumentTypeController extends Controller
 {
-    public function __construct(protected EnrollmentLogService $service) {
+    public function __construct(protected DocumentTypeService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/EnrollmentLog",
-        summary: "Get paginated list of EnrollmentLog",
-        tags: ["EnrollmentLog"],
-        description: "Retrieve a paginated list of EnrollmentLog with optional search",
-        operationId:"getEnrollmentLogPaginated",
+        path: "/api/DocumentType",
+        summary: "Get paginated list of DocumentType",
+        tags: ["DocumentType"],
+        description: "Retrieve a paginated list of DocumentType with optional search",
+        operationId:"getDocumentTypePaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -50,7 +51,7 @@ class EnrollmentLog extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedEnrollmentLogResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedDocumentTypeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -74,11 +75,11 @@ class EnrollmentLog extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/EnrollmentLog/{id}",
-        summary: "Get a specific EnrollmentLog",
-        tags: ["EnrollmentLog"],
-        description: "Retrieve a EnrollmentLog by its ID",
-        operationId: "getEnrollmentLogById",
+        path: "/api/DocumentType/{id}",
+        summary: "Get a specific DocumentType",
+        tags: ["DocumentType"],
+        description: "Retrieve a DocumentType by its ID",
+        operationId: "getDocumentTypeById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -89,7 +90,7 @@ class EnrollmentLog extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetEnrollmentLogResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetDocumentTypeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -103,14 +104,14 @@ class EnrollmentLog extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "EnrollmentLog not found"
+        description: "DocumentType not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('EnrollmentLog not found');
+            return $this->notFound('DocumentType not found');
         }
     }
 
@@ -118,20 +119,20 @@ class EnrollmentLog extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/EnrollmentLog",
-        summary: "Create a new EnrollmentLog",
-        tags: ["EnrollmentLog"],
-        description:" Create a new EnrollmentLog with the provided details",
-        operationId: "createEnrollmentLog",
+        path: "/api/DocumentType",
+        summary: "Create a new DocumentType",
+        tags: ["DocumentType"],
+        description:" Create a new DocumentType with the provided details",
+        operationId: "createDocumentType",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/EnrollmentLog")
+        content: new OA\JsonContent(ref: "#/components/schemas/DocumentType")
     )]
     #[OA\Response(
         response: 200,
-        description: "EnrollmentLog created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateEnrollmentLogResponse200")
+        description: "DocumentType created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateDocumentTypeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -176,11 +177,11 @@ class EnrollmentLog extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/EnrollmentLog/{id}",
-        summary: "Update a EnrollmentLog",
-        tags: ["EnrollmentLog"],
-        description: "Update an existing EnrollmentLog with the provided details",
-        operationId: "updateEnrollmentLog",
+        path: "/api/DocumentType/{id}",
+        summary: "Update a DocumentType",
+        tags: ["DocumentType"],
+        description: "Update an existing DocumentType with the provided details",
+        operationId: "updateDocumentType",
     )]
     #[OA\Parameter(
         name: "id",
@@ -190,12 +191,12 @@ class EnrollmentLog extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/EnrollmentLog")
+        content: new OA\JsonContent(ref: "#/components/schemas/DocumentType")
     )]
     #[OA\Response(
         response: 200,
-        description: "EnrollmentLog updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateEnrollmentLogResponse200")
+        description: "DocumentType updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateDocumentTypeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -209,7 +210,7 @@ class EnrollmentLog extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "EnrollmentLog not found"
+        description: "DocumentType not found"
     )]
     #[OA\Response(
         response: 422,
@@ -236,7 +237,7 @@ class EnrollmentLog extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('EnrollmentLog not found');
+            return $this->notFound('DocumentType not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -246,11 +247,11 @@ class EnrollmentLog extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/EnrollmentLog/{id}",
-        summary: "Delete a EnrollmentLog",
-        tags: ["EnrollmentLog"],
-        description: "Delete a EnrollmentLog by its ID",
-        operationId: "deleteEnrollmentLog",
+        path: "/api/DocumentType/{id}",
+        summary: "Delete a DocumentType",
+        tags: ["DocumentType"],
+        description: "Delete a DocumentType by its ID",
+        operationId: "deleteDocumentType",
     )]
     #[OA\Parameter(
         name: "id",
@@ -260,8 +261,8 @@ class EnrollmentLog extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "EnrollmentLog deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteEnrollmentLogResponse200")
+        description: "DocumentType deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteDocumentTypeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -275,7 +276,7 @@ class EnrollmentLog extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "EnrollmentLog not found"
+        description: "DocumentType not found"
     )]
     #[OA\Response(
         response: 500,
@@ -288,7 +289,7 @@ class EnrollmentLog extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('EnrollmentLog not found');
+            return $this->notFound('DocumentType not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

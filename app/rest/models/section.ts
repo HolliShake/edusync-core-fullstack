@@ -20,4 +20,5 @@ export interface Section {
   is_posted: boolean;
   curriculum_detail?: CurriculumDetail;
   school_year?: SchoolYear;
+  readonly available_slots?: number;
 }

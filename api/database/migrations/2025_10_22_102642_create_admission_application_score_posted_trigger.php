@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -26,7 +25,7 @@ return new class extends Migration
                 DECLARE passing_threshold DECIMAL(10, 2);
                 DECLARE is_passing BOOLEAN;
                 DECLARE log_exists INT;
-                
+
                 -- Only proceed if the new score is posted
                 IF NEW.is_posted = 1 THEN
                     -- Get the academic program and school year from the admission application
@@ -34,7 +33,7 @@ return new class extends Migration
                     INTO @program_id, @school_year_id
                     FROM admission_application aa
                     WHERE aa.id = NEW.admission_application_id;
-                    
+
                     -- Count total criteria for this program and school year
                     SELECT COUNT(*)
                     INTO criteria_count
@@ -42,41 +41,41 @@ return new class extends Migration
                     WHERE academic_program_id = @program_id
                     AND school_year_id = @school_year_id
                     AND is_active = 1;
-                    
+
                     -- Count posted scores for this admission application
                     SELECT COUNT(*)
                     INTO posted_scores_count
                     FROM admission_application_score
                     WHERE admission_application_id = NEW.admission_application_id
                     AND is_posted = 1;
-                    
+
                     -- Check if all scores are posted (posted score count equals criteria count)
                     SET all_scores_posted = (posted_scores_count = criteria_count);
-                    
+
                     IF all_scores_posted = 1 THEN
                         -- Calculate weighted score
-                        SELECT 
+                        SELECT
                             SUM((aas.score / apc.max_score) * apc.weight),
                             SUM(apc.weight)
                         INTO weighted_score, total_weight
                         FROM admission_application_score aas
-                        INNER JOIN academic_program_criteria apc 
+                        INNER JOIN academic_program_criteria apc
                             ON aas.academic_program_criteria_id = apc.id
                         WHERE aas.admission_application_id = NEW.admission_application_id
                         AND aas.is_posted = 1
                         AND apc.is_active = 1;
-                        
+
                         -- Calculate final score as percentage
                         IF total_weight > 0 THEN
                             SET total_score = (weighted_score / total_weight) * 100;
                         ELSE
                             SET total_score = 0;
                         END IF;
-                        
+
                         -- Set passing threshold to 75%
                         SET passing_threshold = 75.00;
                         SET is_passing = (total_score >= passing_threshold);
-                        
+
                         IF is_passing = 1 THEN
                             -- Check if accepted log already exists
                             SELECT COUNT(*)
@@ -84,7 +83,7 @@ return new class extends Migration
                             FROM admission_application_log
                             WHERE admission_application_id = NEW.admission_application_id
                             AND type = "accepted";
-                            
+
                             -- Insert accepted log if it doesn\'t exist
                             IF log_exists = 0 THEN
                                 INSERT INTO admission_application_log (
@@ -123,7 +122,7 @@ return new class extends Migration
                 END IF;
             END
         ');
-        
+
         // Create trigger for UPDATE
         DB::unprepared('
             CREATE TRIGGER admission_application_score_posted_update_trigger
@@ -139,13 +138,13 @@ return new class extends Migration
                 DECLARE passing_threshold DECIMAL(10, 2);
                 DECLARE is_passing BOOLEAN;
                 DECLARE log_exists INT;
-                
+
                 -- Get the academic program and school year from the admission application
                 SELECT aa.academic_program_id, aa.school_year_id
                 INTO @program_id, @school_year_id
                 FROM admission_application aa
                 WHERE aa.id = NEW.admission_application_id;
-                
+
                 -- Count total criteria for this program and school year
                 SELECT COUNT(*)
                 INTO criteria_count
@@ -153,41 +152,41 @@ return new class extends Migration
                 WHERE academic_program_id = @program_id
                 AND school_year_id = @school_year_id
                 AND is_active = 1;
-                
+
                 -- Count posted scores for this admission application
                 SELECT COUNT(*)
                 INTO posted_scores_count
                 FROM admission_application_score
                 WHERE admission_application_id = NEW.admission_application_id
                 AND is_posted = 1;
-                
+
                 -- Check if all scores are posted (posted score count equals criteria count)
                 SET all_scores_posted = (posted_scores_count = criteria_count);
-                
+
                 IF all_scores_posted = 1 THEN
                     -- Calculate weighted score
-                    SELECT 
+                    SELECT
                         SUM((aas.score / apc.max_score) * apc.weight),
                         SUM(apc.weight)
                     INTO weighted_score, total_weight
                     FROM admission_application_score aas
-                    INNER JOIN academic_program_criteria apc 
+                    INNER JOIN academic_program_criteria apc
                         ON aas.academic_program_criteria_id = apc.id
                     WHERE aas.admission_application_id = NEW.admission_application_id
                     AND aas.is_posted = 1
                     AND apc.is_active = 1;
-                    
+
                     -- Calculate final score as percentage
                     IF total_weight > 0 THEN
                         SET total_score = (weighted_score / total_weight) * 100;
                     ELSE
                         SET total_score = 0;
                     END IF;
-                    
+
                     -- Set passing threshold to 75%
                     SET passing_threshold = 75.00;
                     SET is_passing = (total_score >= passing_threshold);
-                    
+
                     IF is_passing = 1 THEN
                         -- Check if accepted log already exists
                         SELECT COUNT(*)
@@ -195,7 +194,7 @@ return new class extends Migration
                         FROM admission_application_log
                         WHERE admission_application_id = NEW.admission_application_id
                         AND type = "accepted";
-                        
+
                         -- Insert accepted log if it doesn\'t exist
                         IF log_exists = 0 THEN
                             INSERT INTO admission_application_log (

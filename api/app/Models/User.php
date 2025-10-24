@@ -181,7 +181,7 @@ class User extends Authenticatable
         if ($program_chair = Designition::where('user_id', $this->id)->where('designitionable_type', AcademicProgram::class)->exists()) {
             $roles[] = UserRoleEnum::PROGRAM_CHAIR->value;
         }
-        if ($student = Enrollment::where('user_id', $this->id)->exists()) {
+        if ($this->is_student) {
             $roles[] = UserRoleEnum::STUDENT->value;
         }
         // Auto Guest?
@@ -189,6 +189,30 @@ class User extends Authenticatable
             $roles[] = UserRoleEnum::GUEST->value;
         }
         return $roles;
+    }
+
+    /**
+     * Get the is student attribute.
+     *
+     * @return bool
+     */
+    public function getIsStudentAttribute(): bool
+    {
+        $enrollments = $this->enrollments()->get()->makeHidden(['user', 'section'])->toArray();
+        $items = array_filter($enrollments, function($enrollment) {
+            return $enrollment['validated'] && !$enrollment['is_dropped'];
+        });
+        return count($items) > 0;
+    }
+
+    /**
+     * Get all user enrollments
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
     }
 
     /**

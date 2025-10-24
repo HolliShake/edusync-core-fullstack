@@ -19,4 +19,8 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
+/**
+ * User ID
+ */
+'filter[user_id]'?: number;
 };

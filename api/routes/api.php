@@ -25,6 +25,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdmissionApplicationController;
 use App\Http\Controllers\AdmissionApplicationLogController;
 use App\Http\Controllers\AdmissionApplicationScoreController;
+use App\Http\Controllers\DocumentRequestController;
+use App\Http\Controllers\DocumentRequestLogController;
+use App\Http\Controllers\DocumentTypeController;
+use App\Http\Controllers\EnrollmentController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -218,4 +222,37 @@ Route::controller(AdmissionApplicationScoreController::class)->group(function() 
     Route::post('/AdmissionApplicationScore/createOrUpdateMultiple', 'createOrUpdateMultiple');
     Route::put('/AdmissionApplicationScore/{id}', 'update');
     Route::delete('/AdmissionApplicationScore/{id}', 'destroy');
+});
+
+Route::controller(EnrollmentController::class)->group(function() {
+    Route::get('/Enrollment', 'index');
+    Route::get('/Enrollment/{id}', 'show');
+    Route::post('/Enrollment', 'store');
+    Route::post('/Enrollment/enroll', 'enroll');
+    Route::put('/Enrollment/{id}', 'update');
+    Route::delete('/Enrollment/{id}', 'destroy');
+});
+
+Route::controller(DocumentRequestController::class)->group(function() {
+    Route::get('/DocumentRequest', 'index');
+    Route::get('/DocumentRequest/{id}', 'show');
+    Route::post('/DocumentRequest', 'store');
+    Route::put('/DocumentRequest/{id}', 'update');
+    Route::delete('/DocumentRequest/{id}', 'destroy');
+});
+
+Route::controller(DocumentRequestLogController::class)->group(function() {
+    Route::get('/DocumentRequestLog', 'index');
+    Route::get('/DocumentRequestLog/{id}', 'show');
+    Route::post('/DocumentRequestLog', 'store');
+    Route::put('/DocumentRequestLog/{id}', 'update');
+    Route::delete('/DocumentRequestLog/{id}', 'destroy');
+});
+
+Route::controller(DocumentTypeController::class)->group(function() {
+    Route::get('/DocumentType', 'index');
+    Route::get('/DocumentType/{id}', 'show');
+    Route::post('/DocumentType', 'store');
+    Route::put('/DocumentType/{id}', 'update');
+    Route::delete('/DocumentType/{id}', 'destroy');
 });

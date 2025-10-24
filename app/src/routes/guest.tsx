@@ -2,10 +2,19 @@ import { UserRoleEnum } from '@/enums/role-enum';
 import GuestAdmissionApplications from '@/pages/guest/admission-applications/page';
 import GuestAdmissionApplicationStatus from '@/pages/guest/admission-applications/status/page';
 import GuestAdmissionPage from '@/pages/guest/admission/page';
-import GuestEnrollmentApplication from '@/pages/guest/enrollment/application/page';
-import GuestEnrollment from '@/pages/guest/enrollment/page';
+import GuestEnrollment from '@/pages/guest/enrollment/accepted/application/page';
+import GuestAcceptedAdmission from '@/pages/guest/enrollment/accepted/page';
+import { default as GuestEnrollmentApplications } from '@/pages/guest/enrollment/applications/page';
 import type { Route } from '@/types/route';
-import { BookOpenIcon, FileTextIcon, GraduationCapIcon, MapPinnedIcon } from 'lucide-react';
+import {
+  BookOpenIcon,
+  ClipboardListIcon,
+  FileTextIcon,
+  GraduationCapIcon,
+  ListIcon,
+  MapPinnedIcon,
+  ScrollIcon,
+} from 'lucide-react';
 
 const GUEST: Route[] = [
   {
@@ -22,7 +31,7 @@ const GUEST: Route[] = [
     path: '/guest/admission',
     children: [
       {
-        key: 'guest.admission.process',
+        key: 'guest.admission.journey',
         title: 'Journey',
         path: '/guest/admission/process',
         component: <GuestAdmissionPage />,
@@ -42,8 +51,8 @@ const GUEST: Route[] = [
         roles: [UserRoleEnum.GUEST],
       },
       {
-        key: 'guest.admission.applications.status',
-        title: 'Status',
+        key: 'guest.admission.application.status',
+        title: 'Application Status',
         path: '/guest/admission/applications/:admissionApplicationId',
         component: <GuestAdmissionApplicationStatus />,
         icon: <FileTextIcon className="h-4 w-4" />,
@@ -61,20 +70,41 @@ const GUEST: Route[] = [
     key: 'guest.enrollment',
     title: 'Enrollment',
     path: '/guest/enrollment',
-    component: <GuestEnrollment />,
+    children: [
+      {
+        key: 'guest.enrollment.accepted',
+        title: 'Active Enrollment',
+        path: '/guest/enrollment/accepted',
+        component: <GuestAcceptedAdmission />,
+        icon: <ClipboardListIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.GUEST],
+      },
+      {
+        key: 'guest.enrollment.accepted.application',
+        title: 'Enrollment Application',
+        path: '/guest/enrollment/accepted/:applicationId',
+        component: <GuestEnrollment />,
+        icon: <ScrollIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: false,
+        roles: [UserRoleEnum.GUEST],
+      },
+      {
+        key: 'guest.enrollment.list',
+        title: 'Enrollment List',
+        path: '/guest/enrollment/list',
+        component: <GuestEnrollmentApplications />,
+        icon: <ListIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.GUEST],
+      },
+    ],
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.GUEST],
-  },
-  {
-    key: 'guest.enrollment.application',
-    title: 'Application',
-    path: '/guest/enrollment/:applicationId',
-    component: <GuestEnrollmentApplication />,
-    icon: <FileTextIcon className="h-4 w-4" />,
-    layout: 'dashboard',
-    sidebar: false,
     roles: [UserRoleEnum.GUEST],
   },
 ];

@@ -5,10 +5,10 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { User } from './user';
+import type { SchoolYear } from './schoolYear';
 import type { AcademicProgram } from './academicProgram';
 import type { AdmissionApplicationLog } from './admissionApplicationLog';
-import type { SchoolYear } from './schoolYear';
-import type { User } from './user';
 
 export interface AdmissionApplication {
   readonly id?: number;

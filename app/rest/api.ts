@@ -55,6 +55,9 @@ import type {
   CreateCurriculumDetailResponse200,
   CreateCurriculumResponse200,
   CreateDesignitionResponse200,
+  CreateDocumentRequestLogResponse200,
+  CreateDocumentRequestResponse200,
+  CreateDocumentTypeResponse200,
   CreateEnrollmentLogResponse200,
   CreateEnrollmentResponse200,
   CreateProgramTypeResponse200,
@@ -81,6 +84,9 @@ import type {
   DeleteCurriculumDetailResponse200,
   DeleteCurriculumResponse200,
   DeleteDesignitionResponse200,
+  DeleteDocumentRequestLogResponse200,
+  DeleteDocumentRequestResponse200,
+  DeleteDocumentTypeResponse200,
   DeleteEnrollmentLogResponse200,
   DeleteEnrollmentResponse200,
   DeleteProgramTypeResponse200,
@@ -90,6 +96,9 @@ import type {
   DeleteSectionResponse200,
   DeleteUserResponse200,
   Designition,
+  DocumentRequest,
+  DocumentRequestLog,
+  DocumentType,
   Enrollment,
   EnrollmentLog,
   ForbiddenResponse,
@@ -128,6 +137,12 @@ import type {
   GetCurriculumResponse200,
   GetDesignitionPaginatedParams,
   GetDesignitionResponse200,
+  GetDocumentRequestLogPaginatedParams,
+  GetDocumentRequestLogResponse200,
+  GetDocumentRequestPaginatedParams,
+  GetDocumentRequestResponse200,
+  GetDocumentTypePaginatedParams,
+  GetDocumentTypeResponse200,
   GetEnrollmentLogPaginatedParams,
   GetEnrollmentLogResponse200,
   GetEnrollmentPaginatedParams,
@@ -164,6 +179,9 @@ import type {
   PaginatedCurriculumDetailResponse200,
   PaginatedCurriculumResponse200,
   PaginatedDesignitionResponse200,
+  PaginatedDocumentRequestLogResponse200,
+  PaginatedDocumentRequestResponse200,
+  PaginatedDocumentTypeResponse200,
   PaginatedEnrollmentLogResponse200,
   PaginatedEnrollmentResponse200,
   PaginatedProgramTypeResponse200,
@@ -197,6 +215,9 @@ import type {
   UpdateCurriculumDetailResponse200,
   UpdateCurriculumResponse200,
   UpdateDesignitionResponse200,
+  UpdateDocumentRequestLogResponse200,
+  UpdateDocumentRequestResponse200,
+  UpdateDocumentTypeResponse200,
   UpdateEnrollmentLogResponse200,
   UpdateEnrollmentResponse200,
   UpdateProgramTypeResponse200,
@@ -6771,6 +6792,1128 @@ export const useCreateCampusRegistrar = <TError = UnauthenticatedResponse | Forb
     }
     
 /**
+ * Retrieve a paginated list of DocumentRequest with optional search
+ * @summary Get paginated list of DocumentRequest
+ */
+export const getDocumentRequestPaginated = (
+    params?: GetDocumentRequestPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedDocumentRequestResponse200>(
+      {url: `/api/DocumentRequest`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetDocumentRequestPaginatedQueryKey = (params?: GetDocumentRequestPaginatedParams,) => {
+    return [`/api/DocumentRequest`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDocumentRequestPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetDocumentRequestPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDocumentRequestPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDocumentRequestPaginated>>> = ({ signal }) => getDocumentRequestPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDocumentRequestPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getDocumentRequestPaginated>>>
+export type GetDocumentRequestPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetDocumentRequestPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetDocumentRequestPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentRequestPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentRequestPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of DocumentRequest
+ */
+
+export function useGetDocumentRequestPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentRequestPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDocumentRequestPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new DocumentRequest with the provided details
+ * @summary Create a new DocumentRequest
+ */
+export const createDocumentRequest = (
+    documentRequest: DocumentRequest,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDocumentRequestResponse200>(
+      {url: `/api/DocumentRequest`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: documentRequest, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateDocumentRequestMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: DocumentRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: DocumentRequest}, TContext> => {
+
+const mutationKey = ['createDocumentRequest'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequest>>, {data: DocumentRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createDocumentRequest(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateDocumentRequestMutationResult = NonNullable<Awaited<ReturnType<typeof createDocumentRequest>>>
+    export type CreateDocumentRequestMutationBody = DocumentRequest
+    export type CreateDocumentRequestMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new DocumentRequest
+ */
+export const useCreateDocumentRequest = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: DocumentRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createDocumentRequest>>,
+        TError,
+        {data: DocumentRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateDocumentRequestMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a DocumentRequest by its ID
+ * @summary Get a specific DocumentRequest
+ */
+export const getDocumentRequestById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetDocumentRequestResponse200>(
+      {url: `/api/DocumentRequest/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetDocumentRequestByIdQueryKey = (id?: number,) => {
+    return [`/api/DocumentRequest/${id}`] as const;
+    }
+
+    
+export const getGetDocumentRequestByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDocumentRequestById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDocumentRequestByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDocumentRequestById>>> = ({ signal }) => getDocumentRequestById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDocumentRequestByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDocumentRequestById>>>
+export type GetDocumentRequestByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetDocumentRequestById<TData = Awaited<ReturnType<typeof getDocumentRequestById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestById>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestById<TData = Awaited<ReturnType<typeof getDocumentRequestById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestById>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestById<TData = Awaited<ReturnType<typeof getDocumentRequestById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific DocumentRequest
+ */
+
+export function useGetDocumentRequestById<TData = Awaited<ReturnType<typeof getDocumentRequestById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDocumentRequestByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing DocumentRequest with the provided details
+ * @summary Update a DocumentRequest
+ */
+export const updateDocumentRequest = (
+    id: number,
+    documentRequest: DocumentRequest,
+ ) => {
+      
+      
+      return fetchData<UpdateDocumentRequestResponse200>(
+      {url: `/api/DocumentRequest/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: documentRequest
+    },
+      );
+    }
+  
+
+
+export const getUpdateDocumentRequestMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: DocumentRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: DocumentRequest}, TContext> => {
+
+const mutationKey = ['updateDocumentRequest'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequest>>, {id: number;data: DocumentRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateDocumentRequest(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDocumentRequestMutationResult = NonNullable<Awaited<ReturnType<typeof updateDocumentRequest>>>
+    export type UpdateDocumentRequestMutationBody = DocumentRequest
+    export type UpdateDocumentRequestMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a DocumentRequest
+ */
+export const useUpdateDocumentRequest = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: DocumentRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateDocumentRequest>>,
+        TError,
+        {id: number;data: DocumentRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateDocumentRequestMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a DocumentRequest by its ID
+ * @summary Delete a DocumentRequest
+ */
+export const deleteDocumentRequest = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteDocumentRequestResponse200>(
+      {url: `/api/DocumentRequest/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteDocumentRequestMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentRequest>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentRequest>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteDocumentRequest'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDocumentRequest>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteDocumentRequest(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteDocumentRequestMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDocumentRequest>>>
+    
+    export type DeleteDocumentRequestMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a DocumentRequest
+ */
+export const useDeleteDocumentRequest = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentRequest>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteDocumentRequest>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteDocumentRequestMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of DocumentRequestLog with optional search
+ * @summary Get paginated list of DocumentRequestLog
+ */
+export const getDocumentRequestLogPaginated = (
+    params?: GetDocumentRequestLogPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedDocumentRequestLogResponse200>(
+      {url: `/api/DocumentRequestLog`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetDocumentRequestLogPaginatedQueryKey = (params?: GetDocumentRequestLogPaginatedParams,) => {
+    return [`/api/DocumentRequestLog`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDocumentRequestLogPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetDocumentRequestLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDocumentRequestLogPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>> = ({ signal }) => getDocumentRequestLogPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDocumentRequestLogPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>>
+export type GetDocumentRequestLogPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetDocumentRequestLogPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetDocumentRequestLogPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestLogPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentRequestLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestLogPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentRequestLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of DocumentRequestLog
+ */
+
+export function useGetDocumentRequestLogPaginated<TData = Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentRequestLogPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDocumentRequestLogPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new DocumentRequestLog with the provided details
+ * @summary Create a new DocumentRequestLog
+ */
+export const createDocumentRequestLog = (
+    documentRequestLog: DocumentRequestLog,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDocumentRequestLogResponse200>(
+      {url: `/api/DocumentRequestLog`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: documentRequestLog, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext> => {
+
+const mutationKey = ['createDocumentRequestLog'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequestLog>>, {data: DocumentRequestLog}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createDocumentRequestLog(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof createDocumentRequestLog>>>
+    export type CreateDocumentRequestLogMutationBody = DocumentRequestLog
+    export type CreateDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new DocumentRequestLog
+ */
+export const useCreateDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createDocumentRequestLog>>,
+        TError,
+        {data: DocumentRequestLog},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateDocumentRequestLogMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a DocumentRequestLog by its ID
+ * @summary Get a specific DocumentRequestLog
+ */
+export const getDocumentRequestLogById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetDocumentRequestLogResponse200>(
+      {url: `/api/DocumentRequestLog/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetDocumentRequestLogByIdQueryKey = (id?: number,) => {
+    return [`/api/DocumentRequestLog/${id}`] as const;
+    }
+
+    
+export const getGetDocumentRequestLogByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDocumentRequestLogByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDocumentRequestLogById>>> = ({ signal }) => getDocumentRequestLogById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDocumentRequestLogByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDocumentRequestLogById>>>
+export type GetDocumentRequestLogByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetDocumentRequestLogById<TData = Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestLogById>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestLogById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestLogById<TData = Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentRequestLogById>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentRequestLogById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentRequestLogById<TData = Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific DocumentRequestLog
+ */
+
+export function useGetDocumentRequestLogById<TData = Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentRequestLogById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDocumentRequestLogByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing DocumentRequestLog with the provided details
+ * @summary Update a DocumentRequestLog
+ */
+export const updateDocumentRequestLog = (
+    id: number,
+    documentRequestLog: DocumentRequestLog,
+ ) => {
+      
+      
+      return fetchData<UpdateDocumentRequestLogResponse200>(
+      {url: `/api/DocumentRequestLog/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: documentRequestLog
+    },
+      );
+    }
+  
+
+
+export const getUpdateDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext> => {
+
+const mutationKey = ['updateDocumentRequestLog'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequestLog>>, {id: number;data: DocumentRequestLog}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateDocumentRequestLog(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof updateDocumentRequestLog>>>
+    export type UpdateDocumentRequestLogMutationBody = DocumentRequestLog
+    export type UpdateDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a DocumentRequestLog
+ */
+export const useUpdateDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateDocumentRequestLog>>,
+        TError,
+        {id: number;data: DocumentRequestLog},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateDocumentRequestLogMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a DocumentRequestLog by its ID
+ * @summary Delete a DocumentRequestLog
+ */
+export const deleteDocumentRequestLog = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteDocumentRequestLogResponse200>(
+      {url: `/api/DocumentRequestLog/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentRequestLog>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentRequestLog>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteDocumentRequestLog'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDocumentRequestLog>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteDocumentRequestLog(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDocumentRequestLog>>>
+    
+    export type DeleteDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a DocumentRequestLog
+ */
+export const useDeleteDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentRequestLog>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteDocumentRequestLog>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteDocumentRequestLogMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of DocumentType with optional search
+ * @summary Get paginated list of DocumentType
+ */
+export const getDocumentTypePaginated = (
+    params?: GetDocumentTypePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedDocumentTypeResponse200>(
+      {url: `/api/DocumentType`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetDocumentTypePaginatedQueryKey = (params?: GetDocumentTypePaginatedParams,) => {
+    return [`/api/DocumentType`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDocumentTypePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetDocumentTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDocumentTypePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDocumentTypePaginated>>> = ({ signal }) => getDocumentTypePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDocumentTypePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getDocumentTypePaginated>>>
+export type GetDocumentTypePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetDocumentTypePaginated<TData = Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetDocumentTypePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentTypePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentTypePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentTypePaginated<TData = Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentTypePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentTypePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentTypePaginated<TData = Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of DocumentType
+ */
+
+export function useGetDocumentTypePaginated<TData = Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetDocumentTypePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDocumentTypePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new DocumentType with the provided details
+ * @summary Create a new DocumentType
+ */
+export const createDocumentType = (
+    documentType: DocumentType,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDocumentTypeResponse200>(
+      {url: `/api/DocumentType`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: documentType, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateDocumentTypeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentType>>, TError,{data: DocumentType}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDocumentType>>, TError,{data: DocumentType}, TContext> => {
+
+const mutationKey = ['createDocumentType'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentType>>, {data: DocumentType}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createDocumentType(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateDocumentTypeMutationResult = NonNullable<Awaited<ReturnType<typeof createDocumentType>>>
+    export type CreateDocumentTypeMutationBody = DocumentType
+    export type CreateDocumentTypeMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new DocumentType
+ */
+export const useCreateDocumentType = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentType>>, TError,{data: DocumentType}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createDocumentType>>,
+        TError,
+        {data: DocumentType},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateDocumentTypeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a DocumentType by its ID
+ * @summary Get a specific DocumentType
+ */
+export const getDocumentTypeById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetDocumentTypeResponse200>(
+      {url: `/api/DocumentType/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetDocumentTypeByIdQueryKey = (id?: number,) => {
+    return [`/api/DocumentType/${id}`] as const;
+    }
+
+    
+export const getGetDocumentTypeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDocumentTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypeById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDocumentTypeByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDocumentTypeById>>> = ({ signal }) => getDocumentTypeById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypeById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDocumentTypeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDocumentTypeById>>>
+export type GetDocumentTypeByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetDocumentTypeById<TData = Awaited<ReturnType<typeof getDocumentTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypeById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentTypeById>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentTypeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentTypeById<TData = Awaited<ReturnType<typeof getDocumentTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypeById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDocumentTypeById>>,
+          TError,
+          Awaited<ReturnType<typeof getDocumentTypeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDocumentTypeById<TData = Awaited<ReturnType<typeof getDocumentTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypeById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific DocumentType
+ */
+
+export function useGetDocumentTypeById<TData = Awaited<ReturnType<typeof getDocumentTypeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDocumentTypeById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDocumentTypeByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing DocumentType with the provided details
+ * @summary Update a DocumentType
+ */
+export const updateDocumentType = (
+    id: number,
+    documentType: DocumentType,
+ ) => {
+      
+      
+      return fetchData<UpdateDocumentTypeResponse200>(
+      {url: `/api/DocumentType/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: documentType
+    },
+      );
+    }
+  
+
+
+export const getUpdateDocumentTypeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentType>>, TError,{id: number;data: DocumentType}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentType>>, TError,{id: number;data: DocumentType}, TContext> => {
+
+const mutationKey = ['updateDocumentType'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentType>>, {id: number;data: DocumentType}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateDocumentType(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDocumentTypeMutationResult = NonNullable<Awaited<ReturnType<typeof updateDocumentType>>>
+    export type UpdateDocumentTypeMutationBody = DocumentType
+    export type UpdateDocumentTypeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a DocumentType
+ */
+export const useUpdateDocumentType = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentType>>, TError,{id: number;data: DocumentType}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateDocumentType>>,
+        TError,
+        {id: number;data: DocumentType},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateDocumentTypeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a DocumentType by its ID
+ * @summary Delete a DocumentType
+ */
+export const deleteDocumentType = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteDocumentTypeResponse200>(
+      {url: `/api/DocumentType/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteDocumentTypeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentType>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentType>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteDocumentType'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDocumentType>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteDocumentType(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteDocumentTypeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDocumentType>>>
+    
+    export type DeleteDocumentTypeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a DocumentType
+ */
+export const useDeleteDocumentType = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDocumentType>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteDocumentType>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteDocumentTypeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of Enrollment with optional search
  * @summary Get paginated list of Enrollment
  */
@@ -7140,6 +8283,72 @@ export const useDeleteEnrollment = <TError = UnauthenticatedResponse | Forbidden
       > => {
 
       const mutationOptions = getDeleteEnrollmentMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Enroll a user in a section with the provided details
+ * @summary Enroll a user in a section
+ */
+export const enrollUser = (
+    enrollment: NonReadonly<Enrollment[]>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateEnrollmentResponse200>(
+      {url: `/api/Enrollment/enroll`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollment, signal
+    },
+      );
+    }
+  
+
+
+export const getEnrollUserMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollUser>>, TError,{data: NonReadonly<Enrollment[]>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof enrollUser>>, TError,{data: NonReadonly<Enrollment[]>}, TContext> => {
+
+const mutationKey = ['enrollUser'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enrollUser>>, {data: NonReadonly<Enrollment[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  enrollUser(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EnrollUserMutationResult = NonNullable<Awaited<ReturnType<typeof enrollUser>>>
+    export type EnrollUserMutationBody = NonReadonly<Enrollment[]>
+    export type EnrollUserMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Enroll a user in a section
+ */
+export const useEnrollUser = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollUser>>, TError,{data: NonReadonly<Enrollment[]>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof enrollUser>>,
+        TError,
+        {data: NonReadonly<Enrollment[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getEnrollUserMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
