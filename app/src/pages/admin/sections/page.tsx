@@ -25,7 +25,6 @@ import {
   useGetCampusPaginated,
   useGetCollegePaginated,
   useGetCurriculumPaginated,
-  useGetSchoolYearPaginated,
   useGetSectionPaginated,
 } from '@rest/api';
 import type { Section } from '@rest/models/section';
@@ -49,7 +48,6 @@ interface StoredFilters {
   selectedCollege: number;
   selectedProgram: number;
   selectedCurriculum: number;
-  selectedSchoolYear: number;
   selectedYear: number;
   selectedTerm: number;
   query: string;
@@ -70,7 +68,6 @@ export default function AdminSections(): React.ReactNode {
           selectedCollege: parsed.selectedCollege ?? 0,
           selectedProgram: parsed.selectedProgram ?? 0,
           selectedCurriculum: parsed.selectedCurriculum ?? 0,
-          selectedSchoolYear: parsed.selectedSchoolYear ?? 0,
           selectedYear: parsed.selectedYear ?? 0,
           selectedTerm: parsed.selectedTerm ?? 0,
         };
@@ -83,7 +80,6 @@ export default function AdminSections(): React.ReactNode {
       selectedCollege: 0,
       selectedProgram: 0,
       selectedCurriculum: 0,
-      selectedSchoolYear: 0,
       selectedYear: 0,
       selectedTerm: 0,
     };
@@ -117,7 +113,6 @@ export default function AdminSections(): React.ReactNode {
 
   const [openPopover, setOpenPopover] = useState<string | null>(null);
   const [numberOfSchedules, setNumberOfSchedules] = useState<{ [key: string]: string }>({});
-  const [schoolYearId, setSchoolYearId] = useState<{ [key: string]: string }>({});
   const [autoPost, setAutoPost] = useState<{ [key: string]: boolean }>({});
 
   const { mutateAsync: generateScection, isPending: isGeneratingSections } = useGenerateSections();
@@ -147,7 +142,7 @@ export default function AdminSections(): React.ReactNode {
     {
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
-      ['filter[campus_id]']: filters.selectedCampus,
+      'filter[campus_id]': filters.selectedCampus,
     },
     { query: { enabled: !!filters.selectedCampus } }
   );
@@ -156,7 +151,7 @@ export default function AdminSections(): React.ReactNode {
     {
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
-      ['filter[college_id]']: filters.selectedCollege,
+      'filter[college_id]': filters.selectedCollege,
     },
     { query: { enabled: !!filters.selectedCollege } }
   );
@@ -166,16 +161,10 @@ export default function AdminSections(): React.ReactNode {
       paginate: true,
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
-      ['filter[academic_program_id]']: filters.selectedProgram,
+      'filter[academic_program_id]': filters.selectedProgram,
     },
     { query: { enabled: !!filters.selectedProgram } }
   );
-
-  const { data: schoolYearsResponse } = useGetSchoolYearPaginated({
-    sort: '-start_date',
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
 
   const {
     data: sectionsResponse,
@@ -185,10 +174,9 @@ export default function AdminSections(): React.ReactNode {
     {
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
-      'filter[curriculumDetail.curriculum_id]': filters.selectedCurriculum,
-      'filter[school_year_id]': filters.selectedSchoolYear,
+      'filter[curriculum_id]': filters.selectedCurriculum,
     },
-    { query: { enabled: !!filters.selectedCurriculum && !!filters.selectedSchoolYear } }
+    { query: { enabled: !!filters.selectedCurriculum } }
   );
 
   const campuses = useMemo(() => campusesResponse?.data?.data ?? [], [campusesResponse]);
@@ -199,16 +187,7 @@ export default function AdminSections(): React.ReactNode {
 
   const curriculums = useMemo(() => curriculumsResponse?.data?.data ?? [], [curriculumsResponse]);
 
-  const schoolYears = useMemo(() => schoolYearsResponse?.data?.data ?? [], [schoolYearsResponse]);
-
   const sectionItems = useMemo(() => sectionsResponse?.data?.data ?? [], [sectionsResponse]);
-
-  const schoolYearOptions = useMemo(() => {
-    return schoolYears.map((sy) => ({
-      label: sy.name || '',
-      value: sy.id?.toString() || '',
-    }));
-  }, [schoolYears]);
 
   // Extract unique years and terms from sections
   const availableYears = useMemo(() => {
@@ -282,16 +261,6 @@ export default function AdminSections(): React.ReactNode {
       }
     }
   }, [curriculums, filters.selectedCurriculum, filters.selectedProgram]);
-
-  // Auto-select first school year when school years are loaded and no school year is selected
-  useEffect(() => {
-    if (schoolYears.length > 0 && filters.selectedSchoolYear === 0) {
-      const firstSchoolYearId = schoolYears[0]?.id;
-      if (firstSchoolYearId) {
-        setFilters((prev) => ({ ...prev, selectedSchoolYear: firstSchoolYearId }));
-      }
-    }
-  }, [schoolYears, filters.selectedSchoolYear]);
 
   // Auto-select first year when years are loaded and no year is selected
   useEffect(() => {
@@ -449,7 +418,6 @@ export default function AdminSections(): React.ReactNode {
       selectedCollege: 0,
       selectedProgram: 0,
       selectedCurriculum: 0,
-      selectedSchoolYear: 0,
       selectedYear: 0,
       selectedTerm: 0,
     });
@@ -483,15 +451,9 @@ export default function AdminSections(): React.ReactNode {
     async (year: number, term: number) => {
       const key = `${year}-${term}`;
       const numSchedules = parseInt(numberOfSchedules[key] || '1', 10);
-      const selectedSchoolYearId = parseInt(schoolYearId[key] || '0', 10);
 
       if (isNaN(numSchedules) || numSchedules < 1) {
         toast.error('Please enter a valid number of schedules');
-        return;
-      }
-
-      if (!selectedSchoolYearId || selectedSchoolYearId === 0) {
-        toast.error('Please select a school year');
         return;
       }
 
@@ -502,7 +464,6 @@ export default function AdminSections(): React.ReactNode {
             year_order: year,
             term_order: year,
             number_of_section: numSchedules,
-            school_year_id: selectedSchoolYearId,
             auto_post: autoPost[key] || false,
             curriculum_id: filters.selectedCurriculum,
           },
@@ -516,27 +477,14 @@ export default function AdminSections(): React.ReactNode {
 
       setOpenPopover(null);
       setNumberOfSchedules((prev) => ({ ...prev, [key]: '' }));
-      setSchoolYearId((prev) => ({ ...prev, [key]: '' }));
       setAutoPost((prev) => ({ ...prev, [key]: false }));
     },
-    [
-      numberOfSchedules,
-      schoolYearId,
-      autoPost,
-      filters.selectedCurriculum,
-      generateScection,
-      refetch,
-    ]
+    [numberOfSchedules, autoPost, filters.selectedCurriculum, generateScection, refetch]
   );
 
   const handleInputChange = useCallback((year: number, term: number, value: string) => {
     const key = `${year}-${term}`;
     setNumberOfSchedules((prev) => ({ ...prev, [key]: value }));
-  }, []);
-
-  const handleSchoolYearChange = useCallback((year: number, term: number, value: string) => {
-    const key = `${year}-${term}`;
-    setSchoolYearId((prev) => ({ ...prev, [key]: value }));
   }, []);
 
   const handleAutoPostChange = useCallback((year: number, term: number, checked: boolean) => {
@@ -585,84 +533,104 @@ export default function AdminSections(): React.ReactNode {
                 </Button>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-              <CustomSelect
-                options={campuses.map((campus) => ({
-                  label: campus.name ?? 'Unknown',
-                  value: campus.id?.toString() ?? '',
-                }))}
-                value={`${filters.selectedCampus}`}
-                onValueChange={(value) => handleFilterChange('selectedCampus', Number(value))}
-                placeholder="Select Campus"
-                className="w-full"
-              />
-              <CustomSelect
-                options={colleges.map((college) => ({
-                  label: college.college_name ?? 'Unknown',
-                  value: college.id?.toString() ?? '',
-                }))}
-                value={`${filters.selectedCollege}`}
-                onValueChange={(value) => handleFilterChange('selectedCollege', Number(value))}
-                placeholder="Select College"
-                className="w-full"
-                disabled={!filters.selectedCampus}
-              />
-              <CustomSelect
-                options={programs.map((program) => ({
-                  label: program.program_name ?? 'Unknown',
-                  value: program.id?.toString() ?? '',
-                }))}
-                value={`${filters.selectedProgram}`}
-                onValueChange={(value) => handleFilterChange('selectedProgram', Number(value))}
-                placeholder="Select Program"
-                className="w-full"
-                disabled={!filters.selectedCollege}
-              />
-              <CustomSelect
-                options={curriculums.map((curriculum) => ({
-                  label: curriculum.curriculum_name ?? 'Unknown',
-                  value: curriculum.id?.toString() ?? '',
-                }))}
-                value={`${filters.selectedCurriculum}`}
-                onValueChange={(value) => handleFilterChange('selectedCurriculum', Number(value))}
-                placeholder="Select Curriculum"
-                className="w-full"
-                disabled={!filters.selectedProgram}
-              />
-              <CustomSelect
-                options={schoolYears.map((schoolYear) => ({
-                  label: schoolYear.name ?? 'Unknown',
-                  value: schoolYear.id?.toString() ?? '',
-                }))}
-                value={`${filters.selectedSchoolYear}`}
-                onValueChange={(value) => handleFilterChange('selectedSchoolYear', Number(value))}
-                placeholder="Select School Year"
-                className="w-full"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="campus-select" className="text-xs font-medium">
+                  Campus
+                </Label>
+                <CustomSelect
+                  options={campuses.map((campus) => ({
+                    label: campus.name ?? 'Unknown',
+                    value: campus.id?.toString() ?? '',
+                  }))}
+                  value={`${filters.selectedCampus}`}
+                  onValueChange={(value) => handleFilterChange('selectedCampus', Number(value))}
+                  placeholder="Select Campus"
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="college-select" className="text-xs font-medium">
+                  College
+                </Label>
+                <CustomSelect
+                  options={colleges.map((college) => ({
+                    label: college.college_name ?? 'Unknown',
+                    value: college.id?.toString() ?? '',
+                  }))}
+                  value={`${filters.selectedCollege}`}
+                  onValueChange={(value) => handleFilterChange('selectedCollege', Number(value))}
+                  placeholder="Select College"
+                  className="w-full"
+                  disabled={!filters.selectedCampus}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="program-select" className="text-xs font-medium">
+                  Program
+                </Label>
+                <CustomSelect
+                  options={programs.map((program) => ({
+                    label: program.program_name ?? 'Unknown',
+                    value: program.id?.toString() ?? '',
+                  }))}
+                  value={`${filters.selectedProgram}`}
+                  onValueChange={(value) => handleFilterChange('selectedProgram', Number(value))}
+                  placeholder="Select Program"
+                  className="w-full"
+                  disabled={!filters.selectedCollege}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="curriculum-select" className="text-xs font-medium">
+                  Curriculum
+                </Label>
+                <CustomSelect
+                  options={curriculums.map((curriculum) => ({
+                    label: curriculum.curriculum_name ?? 'Unknown',
+                    value: curriculum.id?.toString() ?? '',
+                  }))}
+                  value={`${filters.selectedCurriculum}`}
+                  onValueChange={(value) => handleFilterChange('selectedCurriculum', Number(value))}
+                  placeholder="Select Curriculum"
+                  className="w-full"
+                  disabled={!filters.selectedProgram}
+                />
+              </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <CustomSelect
-                options={availableYears.map((year) => ({
-                  label: year.label,
-                  value: year.order.toString(),
-                }))}
-                value={`${filters.selectedYear}`}
-                onValueChange={(value) => handleFilterChange('selectedYear', Number(value))}
-                placeholder="Select Year"
-                className="w-full"
-                disabled={!filters.selectedCurriculum || !filters.selectedSchoolYear}
-              />
-              <CustomSelect
-                options={availableTerms.map((term) => ({
-                  label: term.label,
-                  value: term.order.toString(),
-                }))}
-                value={`${filters.selectedTerm}`}
-                onValueChange={(value) => handleFilterChange('selectedTerm', Number(value))}
-                placeholder="Select Term"
-                className="w-full"
-                disabled={!filters.selectedCurriculum || !filters.selectedSchoolYear}
-              />
+              <div className="space-y-1.5">
+                <Label htmlFor="year-select" className="text-xs font-medium">
+                  Year
+                </Label>
+                <CustomSelect
+                  options={availableYears.map((year) => ({
+                    label: year.label,
+                    value: year.order.toString(),
+                  }))}
+                  value={`${filters.selectedYear}`}
+                  onValueChange={(value) => handleFilterChange('selectedYear', Number(value))}
+                  placeholder="Select Year"
+                  className="w-full"
+                  disabled={!filters.selectedCurriculum}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="term-select" className="text-xs font-medium">
+                  Term
+                </Label>
+                <CustomSelect
+                  options={availableTerms.map((term) => ({
+                    label: term.label,
+                    value: term.order.toString(),
+                  }))}
+                  value={`${filters.selectedTerm}`}
+                  onValueChange={(value) => handleFilterChange('selectedTerm', Number(value))}
+                  placeholder="Select Term"
+                  className="w-full"
+                  disabled={!filters.selectedCurriculum}
+                />
+              </div>
             </div>
           </div>
         </Card>
@@ -705,7 +673,7 @@ export default function AdminSections(): React.ReactNode {
                 <Button
                   onClick={handleAddSection}
                   className="whitespace-nowrap shadow-sm"
-                  disabled={!filters.selectedCurriculum || !filters.selectedSchoolYear}
+                  disabled={!filters.selectedCurriculum}
                 >
                   <PlusIcon className="h-4 w-4 mr-2" />
                   Add Section
@@ -718,19 +686,6 @@ export default function AdminSections(): React.ReactNode {
                     <p className="text-xs text-muted-foreground">
                       Configure section generation settings
                     </p>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor={`school-year-${popoverKey}`} className="text-xs">
-                      School Year
-                    </Label>
-                    <CustomSelect
-                      value={schoolYearId[popoverKey] || ''}
-                      onValueChange={(value) =>
-                        handleSchoolYearChange(filters.selectedYear, filters.selectedTerm, value)
-                      }
-                      options={schoolYearOptions}
-                      placeholder="Select school year"
-                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor={`schedules-${popoverKey}`} className="text-xs">
@@ -797,15 +752,13 @@ export default function AdminSections(): React.ReactNode {
       </div>
 
       <div className="flex flex-col gap-4">
-        {!filters.selectedCurriculum || !filters.selectedSchoolYear ? (
+        {!filters.selectedCurriculum ? (
           <Card className="p-12 text-center shadow-sm bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border-slate-200 dark:border-slate-700">
             <div className="flex flex-col items-center gap-3">
               <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center">
                 <SearchIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <p className="text-muted-foreground text-lg">
-                Select a curriculum and school year to view sections
-              </p>
+              <p className="text-muted-foreground text-lg">Select a curriculum to view sections</p>
               <p className="text-sm text-muted-foreground">
                 Use the filters above to narrow down your search
               </p>

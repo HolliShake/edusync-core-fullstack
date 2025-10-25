@@ -102,7 +102,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
       },
-      { query: { enabled: !!fields.academicProgramId && !!fields.schoolYearId } }
+      { query: { enabled: !!fields.academicProgramId || !!fields.schoolYearId } }
     );
 
   const campuses = useMemo(() => campusResponse?.data?.data ?? [], [campusResponse]);

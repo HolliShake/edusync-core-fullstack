@@ -119,10 +119,10 @@ class Designition extends Model
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_active'            => 'boolean',
         'designitionable_type' => 'string',
-        'designitionable_id' => 'integer',
-        'user_id' => 'integer',
+        'designitionable_id'   => 'integer',
+        'user_id'              => 'integer',
     ];
 
     protected $appends = [
@@ -133,7 +133,7 @@ class Designition extends Model
     /**
      * Get the user that owns the designition.
      *
-     * @return \App\Models\User
+     * @return User
      */
     public function getUserAttribute(): User
     {

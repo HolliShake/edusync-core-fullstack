@@ -118,10 +118,10 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'with_laboratory' => 'boolean',
-        'is_specialize' => 'boolean',
-        'lecture_units' => 'float',
+        'with_laboratory'  => 'boolean',
+        'is_specialize'    => 'boolean',
+        'lecture_units'    => 'float',
         'laboratory_units' => 'float',
-        'credit_units' => 'float',
+        'credit_units'     => 'float',
     ];
 }

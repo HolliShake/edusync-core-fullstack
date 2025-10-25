@@ -14,7 +14,6 @@ use OpenApi\Attributes as OA;
     required: [
         // Override required
         'curriculum_detail_id',
-        'school_year_id',
         'section_ref',
         'section_code',
         'section_name',
@@ -26,7 +25,6 @@ use OpenApi\Attributes as OA;
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "curriculum_detail_id", type: "integer"),
-        new OA\Property(property: "school_year_id", type: "integer"),
         new OA\Property(property: "section_ref", type: "string"),
         new OA\Property(property: "section_code", type: "string"),
         new OA\Property(property: "section_name", type: "string"),
@@ -35,7 +33,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_posted", type: "boolean"),
         // Relations
         new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
-        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
         new OA\Property(property: "available_slots", type: "integer", readOnly: true),
     ]
 )]
@@ -50,7 +47,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "term_order", type: "integer"),
         new OA\Property(property: "auto_post", type: "boolean", default: false),
         new OA\Property(property: "number_of_section", type: "integer"),
-        new OA\Property(property: "school_year_id", type: "integer"),
     ]
 )]
 
@@ -130,7 +126,6 @@ class Section extends Model
 
     protected $fillable = [
         'curriculum_detail_id',
-        'school_year_id',
         'section_ref',
         'section_code',
         'section_name',
@@ -140,7 +135,7 @@ class Section extends Model
     ];
 
     protected $casts = [
-        'is_posted' => 'boolean',
+        'is_posted'    => 'boolean',
         'min_students' => 'integer',
         'max_students' => 'integer',
     ];
@@ -159,7 +154,7 @@ class Section extends Model
     {
         $all = $this->enrollments()
             ->get()
-            ->makeHidden(['section', 'user'])
+            ->makeHidden(['section', 'user', 'enrollment_logs'])
             ->toArray();
 
         // Filter out enrollments that are validated and not dropped
@@ -181,33 +176,13 @@ class Section extends Model
     }
 
     /**
-     * Get the school year that owns the section.
-     *
-     * @return SchoolYear
-     */
-    public function getSchoolYearAttribute(): SchoolYear
-    {
-        return $this->schoolYear()->first();
-    }
-
-    /**
      * Get the curriculum detail that owns the section.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function curriculumDetail(): BelongsTo
     {
-        return $this->belongsTo(CurriculumDetail::class, 'curriculum_detail_id');
-    }
-
-    /**
-     * Get the school year that owns the section.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function schoolYear(): BelongsTo
-    {
-        return $this->belongsTo(SchoolYear::class, 'school_year_id');
+        return $this->belongsTo(CurriculumDetail::class);
     }
 
     /**

@@ -117,15 +117,6 @@ export default function SectionModal({ controller, onSubmit }: SectionModalProps
               </p>
             </div>
           )}
-
-          {controller.data?.school_year && (
-            <div className="space-y-2">
-              <Label className="text-muted-foreground">School Year</Label>
-              <p className="text-sm font-medium">
-                {controller.data.school_year.start_date} - {controller.data.school_year.end_date}
-              </p>
-            </div>
-          )}
         </div>
 
         {/* Editable fields */}

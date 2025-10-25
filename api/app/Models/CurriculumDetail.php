@@ -147,8 +147,8 @@ class CurriculumDetail extends Model
     ];
 
     protected $casts = [
-        'year_order' => 'integer',
-        'term_order' => 'integer',
+        'year_order'     => 'integer',
+        'term_order'     => 'integer',
         'is_include_gwa' => 'boolean',
     ];
 
@@ -222,7 +222,7 @@ class CurriculumDetail extends Model
      */
     public function curriculum(): BelongsTo
     {
-        return $this->belongsTo(Curriculum::class, 'curriculum_id');
+        return $this->belongsTo(Curriculum::class);
     }
 
     /**
@@ -232,6 +232,6 @@ class CurriculumDetail extends Model
      */
     public function course(): BelongsTo
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(Course::class);
     }
 }

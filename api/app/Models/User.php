@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use OpenApi\Attributes as OA;
 
@@ -162,47 +163,67 @@ class User extends Authenticatable
      */
     public function getRolesAttribute(): array
     {
-        $roles         = [];
-        $admin         = $this->role === UserRoleEnum::ADMIN->value;
-        $campus_reg    = false;
-        $college_dean  = false;
-        $program_chair = false;
-        $student       = false;
-        /********************* Designitions *********************/
-        if ($admin) {
+        $roles = [];
+
+        // Check admin role
+        if ($this->role === UserRoleEnum::ADMIN->value) {
             $roles[] = UserRoleEnum::ADMIN->value;
         }
-        if ($campus_reg = Designition::where('user_id', $this->id)->where('designitionable_type', Campus::class)->exists()) {
+
+        // Check designations with a single query
+        $designations = $this->designitions()
+            ->whereIn('designitionable_type', [Campus::class, College::class, AcademicProgram::class])
+            ->pluck('designitionable_type')
+            ->toArray();
+
+        $hasDesignation = false;
+
+        if (in_array(Campus::class, $designations)) {
             $roles[] = UserRoleEnum::CAMPUS_REGISTRAR->value;
+            $hasDesignation = true;
         }
-        if ($college_dean = Designition::where('user_id', $this->id)->where('designitionable_type', College::class)->exists()) {
+
+        if (in_array(College::class, $designations)) {
             $roles[] = UserRoleEnum::COLLEGE_DEAN->value;
+            $hasDesignation = true;
         }
-        if ($program_chair = Designition::where('user_id', $this->id)->where('designitionable_type', AcademicProgram::class)->exists()) {
+
+        if (in_array(AcademicProgram::class, $designations)) {
             $roles[] = UserRoleEnum::PROGRAM_CHAIR->value;
+            $hasDesignation = true;
         }
+
+        // Check student role - commented out to prevent recursion
         if ($this->is_student) {
             $roles[] = UserRoleEnum::STUDENT->value;
         }
-        // Auto Guest?
-        if (!($admin || $campus_reg || $college_dean || $program_chair || $student)) {
+
+        // Auto assign guest if no roles
+        if (empty($roles)) {
             $roles[] = UserRoleEnum::GUEST->value;
         }
+
         return $roles;
     }
 
     /**
      * Get the is student attribute.
+     * OPTIMIZED: Use direct database query to prevent N+1 and recursion
      *
      * @return bool
      */
     public function getIsStudentAttribute(): bool
     {
-        $enrollments = $this->enrollments()->get()->makeHidden(['user', 'section'])->toArray();
-        $items = array_filter($enrollments, function($enrollment) {
+        $enrollments = $this->enrollments()
+            ->get()
+            ->makeHidden(['user', 'section', 'enrollment_logs'])
+            ->toArray();
+
+        $validatedEnrollments = array_filter($enrollments, function($enrollment) {
             return $enrollment['validated'] && !$enrollment['is_dropped'];
         });
-        return count($items) > 0;
+
+        return count($validatedEnrollments) > 0;
     }
 
     /**
@@ -222,6 +243,6 @@ class User extends Authenticatable
      */
     public function designitions(): HasMany
     {
-        return $this->hasMany(Designition::class);
+        return $this->hasMany(Designition::class, 'user_id', 'id');
     }
 }

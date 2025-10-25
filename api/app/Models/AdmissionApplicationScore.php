@@ -119,6 +119,15 @@ class AdmissionApplicationScore extends Model
         'is_posted',
     ];
 
+    protected $casts = [
+        'admission_application_id'     => 'integer',
+        'academic_program_criteria_id' => 'integer',
+        'user_id'                      => 'integer',
+        'score'                        => 'decimal:2',
+        'comments'                     => 'string',
+        'is_posted'                    => 'boolean',
+    ];
+
 
     /**
      * Get the admission application that owns the score.

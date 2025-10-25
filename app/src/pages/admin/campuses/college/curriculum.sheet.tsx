@@ -15,10 +15,11 @@ import {
   useDeleteCurriculum,
   useGetAcademicTermPaginated,
   useGetCurriculumPaginated,
+  useGetSchoolYearPaginated,
   useUpdateCurriculum,
 } from '@rest/api';
 import type { AcademicProgram, Curriculum, GetCurriculumsResponse200 } from '@rest/models';
-import { Calendar, Clock, Eye, FileText, Hash, PlusCircle } from 'lucide-react';
+import { Calendar, Clock, Eye, FileText, GraduationCap, Hash, PlusCircle } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -51,6 +52,7 @@ const curriculumSchema = z.object({
   approved_date: z.string().optional(),
   academic_program_id: z.number().min(1, 'Academic program required'),
   academic_term_id: z.number().min(1, 'Academic term required'),
+  school_year_id: z.number().min(1, 'School year required'),
 });
 
 type CurriculumFormData = z.infer<typeof curriculumSchema>;
@@ -80,6 +82,7 @@ const getDefaultValues = (academicProgramId?: number): CurriculumFormData => ({
   approved_date: new Date().toISOString(),
   academic_program_id: academicProgramId ?? 0,
   academic_term_id: 0,
+  school_year_id: 0,
 });
 
 export const useCurriculumSheetState = (): CurriculumSheetState => {
@@ -192,18 +195,28 @@ const CurriculumCard = React.memo(
                 <span className="text-xs font-medium">{curriculum.total_hours || '—'}</span>
               </div>
             </div>
-            {curriculum.approved_date && (
+            {curriculum.school_year && (
               <div className="flex items-center gap-2">
-                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                <GraduationCap className="h-3.5 w-3.5 text-muted-foreground" />
                 <div className="flex flex-col">
-                  <span className="text-xs text-muted-foreground">Approved</span>
-                  <span className="text-xs font-medium">
-                    {new Date(curriculum.approved_date).toLocaleDateString()}
-                  </span>
+                  <span className="text-xs text-muted-foreground">School Year</span>
+                  <span className="text-xs font-medium">{curriculum.school_year.name}</span>
                 </div>
               </div>
             )}
           </div>
+
+          {curriculum.approved_date && (
+            <div className="flex items-center gap-2 pt-2 border-t">
+              <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+              <div className="flex flex-col">
+                <span className="text-xs text-muted-foreground">Approved</span>
+                <span className="text-xs font-medium">
+                  {new Date(curriculum.approved_date).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          )}
 
           {(curriculum.created_at || curriculum.updated_at) && (
             <div className="flex items-center gap-3 text-xs text-muted-foreground pt-2 border-t">
@@ -282,6 +295,12 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
     rows: Number.MAX_SAFE_INTEGER,
   });
 
+  const { data: listOfSchoolYearsResponse } = useGetSchoolYearPaginated({
+    sort: '-start_date',
+    page: 1,
+    rows: Number.MAX_SAFE_INTEGER,
+  });
+
   const { mutateAsync: createCurriculum, isPending: creating } = useCreateCurriculum();
   const { mutateAsync: updateCurriculum, isPending: updating } = useUpdateCurriculum();
   const { mutateAsync: deleteCurriculum, isPending: deleting } = useDeleteCurriculum();
@@ -293,6 +312,15 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
         value: data.id?.toString() ?? '',
       })) ?? [],
     [listOfAcademicTermsResponse]
+  );
+
+  const listOfSchoolYears = useMemo<SelectOption[]>(
+    () =>
+      listOfSchoolYearsResponse?.data?.data?.map<SelectOption>((data) => ({
+        label: data.name,
+        value: data.id?.toString() ?? '',
+      })) ?? [],
+    [listOfSchoolYearsResponse]
   );
 
   const isSaving = useMemo(() => creating || updating, [creating, updating]);
@@ -354,7 +382,7 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
         `/admin/campuses/${campusId}/colleges/${collegeId}/programs/${encryptIdForUrl(academicProgram?.id as number)}/curriculum/${encryptIdForUrl(curr.id as number)}`
       );
     },
-    [navigate, campusId, collegeId]
+    [navigate, campusId, collegeId, academicProgram?.id]
   );
 
   const handleCreateNew = useCallback(() => {
@@ -376,6 +404,7 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
 
   const currentStatus = watch('status');
   const currentAcademicTermId = watch('academic_term_id');
+  const currentSchoolYearId = watch('school_year_id');
 
   if (!isOpen) return null;
 
@@ -554,6 +583,24 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
               />
               {errors.academic_term_id && (
                 <p className="text-xs text-destructive">{errors.academic_term_id.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="school_year_id" className="text-sm font-medium">
+                School Year
+              </Label>
+              <CustomSelect
+                options={listOfSchoolYears}
+                value={
+                  currentSchoolYearId && currentSchoolYearId > 0 ? `${currentSchoolYearId}` : ''
+                }
+                onValueChange={(val) => setValue('school_year_id', val ? Number(val) : 0)}
+                placeholder="Select school year"
+                disabled={isSaving}
+              />
+              {errors.school_year_id && (
+                <p className="text-xs text-destructive">{errors.school_year_id.message}</p>
               )}
             </div>
 

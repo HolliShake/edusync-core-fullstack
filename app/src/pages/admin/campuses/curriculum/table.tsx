@@ -1,4 +1,3 @@
-import Select from '@/components/custom/select.component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useGetSchoolYearPaginated } from '@rest/api';
 import type { CurriculumDetail } from '@rest/models';
 import { BookOpen, Calendar, FlaskConical, GraduationCap } from 'lucide-react';
 import type React from 'react';
@@ -37,7 +35,6 @@ export interface ScheduleGenerationData {
   year: number;
   term: number;
   numberOfSchedules: number;
-  schoolYearId: number;
   autoPost: boolean;
 }
 
@@ -48,25 +45,7 @@ export default function CurriculumTable({
 }: CurriculumTableProps): React.ReactNode {
   const [openPopover, setOpenPopover] = useState<string | null>(null);
   const [numberOfSchedules, setNumberOfSchedules] = useState<{ [key: string]: string }>({});
-  const [schoolYearId, setSchoolYearId] = useState<{ [key: string]: string }>({});
   const [autoPost, setAutoPost] = useState<{ [key: string]: boolean }>({});
-
-  const { data: listOfSchoolYearsResponse } = useGetSchoolYearPaginated({
-    sort: '-start_date',
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
-
-  const listOfSchoolYears = useMemo(() => {
-    return listOfSchoolYearsResponse?.data?.data ?? [];
-  }, [listOfSchoolYearsResponse]);
-
-  const schoolYearOptions = useMemo(() => {
-    return listOfSchoolYears.map((sy) => ({
-      label: sy.name || '',
-      value: sy.id?.toString() || '',
-    }));
-  }, [listOfSchoolYears]);
 
   const groupedDetails = useMemo(() => {
     const grouped: GroupedCurriculumDetails = {};
@@ -100,13 +79,8 @@ export default function CurriculumTable({
   const handleGenerateSchedule = (year: number, term: number) => {
     const key = `${year}-${term}`;
     const numSchedules = parseInt(numberOfSchedules[key] || '1', 10);
-    const selectedSchoolYearId = parseInt(schoolYearId[key] || '0', 10);
 
     if (isNaN(numSchedules) || numSchedules < 1) {
-      return;
-    }
-
-    if (!selectedSchoolYearId || selectedSchoolYearId === 0) {
       return;
     }
 
@@ -114,7 +88,6 @@ export default function CurriculumTable({
       year,
       term,
       numberOfSchedules: numSchedules,
-      schoolYearId: selectedSchoolYearId,
       autoPost: autoPost[key] || false,
     };
 
@@ -124,18 +97,12 @@ export default function CurriculumTable({
 
     setOpenPopover(null);
     setNumberOfSchedules((prev) => ({ ...prev, [key]: '' }));
-    setSchoolYearId((prev) => ({ ...prev, [key]: '' }));
     setAutoPost((prev) => ({ ...prev, [key]: false }));
   };
 
   const handleInputChange = (year: number, term: number, value: string) => {
     const key = `${year}-${term}`;
     setNumberOfSchedules((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleSchoolYearChange = (year: number, term: number, value: string) => {
-    const key = `${year}-${term}`;
-    setSchoolYearId((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleAutoPostChange = (year: number, term: number, checked: boolean) => {
@@ -254,19 +221,6 @@ export default function CurriculumTable({
                                   <p className="text-xs text-muted-foreground">
                                     Configure schedule generation settings for {termLabel}
                                   </p>
-                                </div>
-                                <div className="space-y-2">
-                                  <Label htmlFor={`school-year-${popoverKey}`} className="text-xs">
-                                    School Year
-                                  </Label>
-                                  <Select
-                                    value={schoolYearId[popoverKey] || ''}
-                                    onValueChange={(value) =>
-                                      handleSchoolYearChange(year, term, value)
-                                    }
-                                    options={schoolYearOptions}
-                                    placeholder="Select school year"
-                                  />
                                 </div>
                                 <div className="space-y-2">
                                   <Label htmlFor={`schedules-${popoverKey}`} className="text-xs">

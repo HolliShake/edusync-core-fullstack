@@ -26,12 +26,12 @@ export default function ProgramRequirement(): React.ReactNode {
   const [schoolYearId, setSchoolYearId] = useState<number>(0);
   const { data: programRequirements, refetch } = useGetAcademicProgramRequirementPaginated(
     {
-      'filter[academic_program_id]': session?.active_academic_program ?? 0,
       'filter[school_year_id]': schoolYearId,
+      'filter[academic_program_id]': Number(session?.active_academic_program),
       page,
       rows,
     },
-    { query: { enabled: !!session?.active_academic_program } }
+    { query: { enabled: !!session?.active_academic_program || schoolYearId > 0 } }
   );
 
   const { data: schoolYearResponse } = useGetSchoolYearPaginated({
@@ -72,7 +72,7 @@ export default function ProgramRequirement(): React.ReactNode {
   const columns = useMemo<TableColumn<AcademicProgramRequirement>[]>(
     () => [
       {
-        key: 'academicProgram',
+        key: 'academic_program',
         title: 'Academic Program',
         render: (academicProgram: any) => (
           <div className="flex flex-col gap-1">

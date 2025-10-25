@@ -48,7 +48,14 @@ class SectionController extends Controller
         schema: new OA\Schema(type: "integer", default: 10)
     )]
     #[OA\Parameter(
-        name: "filter[curriculumDetail.curriculum_id]",
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Filter by academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[curriculum_id]",
         in: "query",
         description: "Filter by curriculum ID",
         required: false,
@@ -251,7 +258,6 @@ class SectionController extends Controller
                 'term_order'        => 'required|integer|min:1',
                 'auto_post'         => 'boolean',
                 'number_of_section' => 'required|integer|min:1',
-                'school_year_id'    => 'required|integer|exists:school_year,id',
             ]);
 
             if ($validator->fails()) {

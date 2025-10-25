@@ -37,14 +37,15 @@ export default function GuestEnrollment(): React.ReactNode {
   const { data: availableSectionsResponse, isLoading: isLoadingAvailableSections } =
     useGetSectionPaginated(
       {
-        'filter[school_year_id]': application?.school_year_id,
+        'filter[school_year_id]': Number(application?.school_year_id),
+        'filter[academic_program_id]': Number(application?.academic_program_id),
         'filter[for_freshmen]': true,
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
       },
       {
         query: {
-          enabled: !!application?.school_year_id,
+          enabled: !!application,
           refetchInterval: 5000, // 5 seconds
         },
       }

@@ -113,6 +113,6 @@ class Requirement extends Model
 
     protected $casts = [
         'is_mandatory' => 'boolean',
-        'is_active' => 'boolean'
+        'is_active'    => 'boolean'
     ];
 }

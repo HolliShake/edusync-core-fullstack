@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -14,7 +15,6 @@ use OpenApi\Attributes as OA;
         'enrollment_id',
         'user_id',
         'action',
-        'logged_by_user_id',
     ],
     properties: [
         // Override fillables
@@ -23,13 +23,11 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "user_id", type: "integer"),
         new OA\Property(property: "action", type: "string", enum: ['enroll', 'program_chair_approved', 'registrar_approved', 'program_chair_dropped_approved', 'registrar_dropped_approved', 'dropped']),
         new OA\Property(property: "note", type: "string", nullable: true),
-        new OA\Property(property: "logged_by_user_id", type: "integer"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Relationships
         new OA\Property(property: "enrollment", ref: "#/components/schemas/Enrollment"),
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
-        new OA\Property(property: "logged_by_user", ref: "#/components/schemas/User"),
     ]
 )]
 
@@ -107,10 +105,59 @@ class EnrollmentLog extends Model
 
     public $timestamps = true;
 
+    protected $casts = [
+        'enrollment_id' => 'integer',
+        'user_id'       => 'integer',
+    ];
+
     protected $fillable = [
         'enrollment_id',
         'user_id',
         'action',
-        'logged_by_user_id',
     ];
+
+    protected $appends = [
+        'enrollment',
+        'user',
+    ];
+
+        /**
+     * Get the enrollment attribute.
+     *
+     * @return Enrollment
+     */
+    public function getEnrollmentAttribute(): Enrollment
+    {
+        return $this->enrollment()->first();
+    }
+
+    /**
+     * Get the user attribute.
+     *
+     * @return User
+     */
+    public function getUserAttribute(): User
+    {
+        return $this->user()->first();
+    }
+
+    /**
+     * Get the enrollment that owns the log.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function enrollment(): BelongsTo
+    {
+        return $this->belongsTo(Enrollment::class);
+    }
+
+    /**
+     * Get the user that owns the log.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -21,49 +21,48 @@ class SectionRepo extends GenericRepo implements ISectionRepo
     protected function getAllowedFilters(): array
     {
         return [
-            // Add campus-specific filters here
-            // Example: AllowedFilter::exact('status'),
-            // Example: AllowedFilter::partial('name'),
-            AllowedFilter::exact('curriculumDetail.curriculum_id'),
-            AllowedFilter::exact('school_year_id'),
-            AllowedFilter::callback('for_freshmen', function ($query, $value) {
-                if (!filter_var($value, FILTER_VALIDATE_BOOLEAN)) return;
-                $query
-                    ->where('is_posted', true)
-                    ->whereHas('curriculumDetail', function ($q) use ($query) {
-                    $q->where('year_order', 1)
-                      ->whereIn('curriculum_id', function ($subQuery) {
-                        $subQuery->selectRaw('MAX(id)')
-                            ->from('curriculum')
-                            ->groupBy('academic_program_id');
-                    })
-                    ->whereRaw('term_order = (
-                        SELECT COUNT(*)
-                        FROM academic_calendar
-                        WHERE academic_calendar.school_year_id = (
-                            SELECT school_year_id
-                            FROM section
-                            WHERE section.curriculum_detail_id = curriculum_detail.id
-                            LIMIT 1
-                        )
-                        AND academic_calendar.event = "ACADEMIC_TRANSITION"
-                        AND DATE(academic_calendar.start_date) <= (
-                            SELECT DATE(ac2.start_date)
-                            FROM academic_calendar ac2
-                            WHERE ac2.school_year_id = (
-                                SELECT school_year_id
-                                FROM section
-                                WHERE section.curriculum_detail_id = curriculum_detail.id
-                                LIMIT 1
-                            )
-                            AND ac2.event = "ACADEMIC_TRANSITION"
-                            AND DATE(ac2.start_date) <= CURDATE()
-                            ORDER BY ABS(DATEDIFF(ac2.start_date, CURDATE()))
-                            LIMIT 1
-                        )
-                    )');
+            AllowedFilter::callback('school_year_id', function ($query, $value) {
+                $query->whereHas('curriculumDetail', function ($q) use ($value) {
+                    $q->whereHas('curriculum', function ($q) use ($value) {
+                        $q->where('school_year_id', $value);
+                    });
                 });
             }),
+            AllowedFilter::callback('academic_program_id', function ($query, $value) {
+                $query->whereHas('curriculumDetail', function ($q) use ($value) {
+                    $q->whereHas('curriculum', function ($q) use ($value) {
+                        $q->where('academic_program_id', $value);
+                    });
+                });
+            }),
+            AllowedFilter::callback('curriculum_id', function ($query, $value) {
+                $query->whereHas('curriculumDetail', function ($q) use ($value) {
+                    $q->where('curriculum_id', $value);
+                });
+            }),
+            AllowedFilter::callback('for_freshmen', function ($query, $value) {
+                if (!filter_var($value, FILTER_VALIDATE_BOOLEAN)) return;
+
+                $query->whereHas('curriculumDetail', function ($q) {
+                    $q->where('year_order', 1)
+                      ->whereHas('curriculum', function ($q) {
+                        $q->whereHas('schoolYear', function ($q) {
+                            $q->whereHas('academicCalendars', function ($q) {
+                                $q->where('event', 'ENROLLMENT')
+                                    ->whereDate('start_date', '<=', now())
+                                    ->whereDate('end_date', '>=', now());
+                            });
+                        });
+                    })->where('term_order', '=', function ($subQuery) use ($q) {
+                        $subQuery->selectRaw('COUNT(*)')
+                            ->from('academic_calendar as ac')
+                            ->join('curriculum', 'curriculum.school_year_id', '=', 'ac.school_year_id')
+                            ->whereColumn('curriculum.id', 'curriculum_detail.curriculum_id')
+                            ->where('ac.event', 'ACADEMIC_TRANSITION')
+                            ->whereDate('ac.start_date', '<=', now());
+                    });
+                });
+            })
         ];
     }
 

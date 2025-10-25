@@ -12,5 +12,4 @@ export interface GenerateSection {
   term_order?: number;
   auto_post?: boolean;
   number_of_section?: number;
-  school_year_id?: number;
 }

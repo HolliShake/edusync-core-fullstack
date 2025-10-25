@@ -117,8 +117,8 @@ class SchoolYear extends Model
 
     protected $casts = [
         'start_date' => 'date',
-        'end_date' => 'date',
-        'is_active' => 'boolean',
+        'end_date'   => 'date',
+        'is_active'  => 'boolean',
     ];
 
     protected $appends = [

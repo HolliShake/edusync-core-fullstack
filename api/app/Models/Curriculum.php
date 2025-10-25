@@ -26,6 +26,7 @@ use OpenApi\Attributes as OA;
     properties: [
         // Override fillables
         new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "school_year_id", type: "integer", example: 1),
         new OA\Property(property: "academic_program_id", type: "integer", example: 1),
         new OA\Property(property: "academic_term_id", type: "integer", example: 1),
         new OA\Property(property: "curriculum_code", type: "string", example: "CURR-2024-001"),
@@ -38,7 +39,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "approved_date", type: "string", format: "date", nullable: true, example: "2024-01-15"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z"),
-        // Relationships
+        // Relations
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
         new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
         new OA\Property(property: "academic_term", ref: "#/components/schemas/AcademicTerm"),
     ]
@@ -119,6 +121,7 @@ class Curriculum extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'school_year_id',
         'academic_program_id',
         'academic_term_id',
         'curriculum_code',
@@ -132,19 +135,31 @@ class Curriculum extends Model
     ];
 
     protected $casts = [
+        'school_year_id'      => 'integer',
         'academic_program_id' => 'integer',
-        'academic_term_id' => 'integer',
-        'total_units' => 'integer',
-        'total_hours' => 'integer',
-        'status' => 'string',
-        'approved_date' => 'date',
-        'effective_year' => 'integer',
+        'academic_term_id'    => 'integer',
+        'total_units'         => 'integer',
+        'total_hours'         => 'integer',
+        'status'              => 'string',
+        'approved_date'       => 'date',
+        'effective_year'      => 'integer',
     ];
 
     protected $appends = [
+        'school_year',
         'academic_program',
         'academic_term',
     ];
+
+    /**
+     * Get the school year that owns the curriculum.
+     *
+     * @return SchoolYear
+     */
+    public function getSchoolYearAttribute(): SchoolYear
+    {
+        return $this->schoolYear()->first();
+    }
 
     /**
      * Get the academic program that owns the curriculum.
@@ -173,7 +188,7 @@ class Curriculum extends Model
      */
     public function academicProgram(): BelongsTo
     {
-        return $this->belongsTo(AcademicProgram::class, 'academic_program_id');
+        return $this->belongsTo(AcademicProgram::class);
     }
 
     /**
@@ -183,6 +198,16 @@ class Curriculum extends Model
      */
     public function academicTerm(): BelongsTo
     {
-        return $this->belongsTo(AcademicTerm::class, 'academic_term_id');
+        return $this->belongsTo(AcademicTerm::class);
+    }
+
+    /**
+     * Get the school year that owns the curriculum.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function schoolYear(): BelongsTo
+    {
+        return $this->belongsTo(SchoolYear::class);
     }
 }

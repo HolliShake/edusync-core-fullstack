@@ -71,7 +71,6 @@ export default function CurriculumContent(): React.ReactNode {
           term_order: data.term,
           auto_post: data.autoPost,
           number_of_section: data.numberOfSchedules,
-          school_year_id: data.schoolYearId,
         },
       });
       toast.success('Sections generated successfully');

@@ -21,20 +21,30 @@ class AcademicCalendarSeeder extends Seeder
 
     private function createAcademicCalendarForSchoolYear(SchoolYear $schoolYear): void
     {
-        $baseDate = Carbon::now();
+        // For active school years, create dynamic calendar with upcoming enrollment
+        if ($schoolYear->is_active) {
+            $baseDate = $this->getDynamicBaseDate($schoolYear);
+        } else {
+            // Use the school year's start date as the base date for calendar events
+            $baseDate = Carbon::parse($schoolYear->start_date);
+        }
         $events = [];
 
-        // FIRST SEMESTER
-
-        // Enrollment Period - First Semester
-        $events[] = [
-            'name' => 'Enrollment Period - First Semester',
-            'description' => 'Regular and late enrollment for first semester',
-            'start_date' => $baseDate->copy(),
-            'end_date' => $baseDate->copy()->addDays(27),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::ENROLLMENT,
-        ];
+        // Create dynamic enrollment periods for active school years
+        if ($schoolYear->is_active) {
+            $enrollmentEvents = $this->createDynamicEnrollmentPeriods($schoolYear, $baseDate);
+            $events = array_merge($events, $enrollmentEvents);
+        } else {
+            // For inactive school years, use the original static enrollment periods
+            $events[] = [
+                'name' => 'Enrollment Period - First Semester',
+                'description' => 'Regular and late enrollment for first semester',
+                'start_date' => $baseDate->copy(),
+                'end_date' => $baseDate->copy()->addDays(30),
+                'school_year_id' => $schoolYear->id,
+                'event' => CalendarEventEnum::ENROLLMENT,
+            ];
+        }
 
         // Start of First Semester
         $events[] = [
@@ -121,22 +131,14 @@ class AcademicCalendarSeeder extends Seeder
             'name' => 'Adding / Dropping of Subjects - First Semester',
             'description' => 'Adding/Dropping period - requires adviser approval',
             'start_date' => $baseDate->copy(),
-            'end_date' => $baseDate->copy()->addDays(27),
+            'end_date' => $baseDate->copy()->addDays(30), // Extended to 30 days
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::DEADLINE,
         ];
 
         // SECOND SEMESTER
 
-        // Enrollment Period - Second Semester
-        $events[] = [
-            'name' => 'Enrollment Period - Second Semester',
-            'description' => 'Regular and late enrollment for second semester',
-            'start_date' => $baseDate->copy()->addDays(169),
-            'end_date' => $baseDate->copy()->addDays(196),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::ENROLLMENT,
-        ];
+        // Note: Enrollment periods are now handled dynamically for active school years
 
         // Start of Second Semester
         $events[] = [
@@ -213,7 +215,7 @@ class AcademicCalendarSeeder extends Seeder
             'name' => 'Adding / Dropping of Subjects - Second Semester',
             'description' => 'Adding/Dropping period - requires adviser approval',
             'start_date' => $baseDate->copy()->addDays(169),
-            'end_date' => $baseDate->copy()->addDays(196),
+            'end_date' => $baseDate->copy()->addDays(199), // Extended to 30 days
             'school_year_id' => $schoolYear->id,
             'event' => CalendarEventEnum::DEADLINE,
         ];
@@ -230,15 +232,7 @@ class AcademicCalendarSeeder extends Seeder
 
         // SUMMER TERM (Optional)
 
-        // Enrollment - Summer Term
-        $events[] = [
-            'name' => 'Enrollment - Summer Term',
-            'description' => 'Enrollment for optional summer term',
-            'start_date' => $baseDate->copy()->addDays(311),
-            'end_date' => $baseDate->copy()->addDays(338),
-            'school_year_id' => $schoolYear->id,
-            'event' => CalendarEventEnum::ENROLLMENT,
-        ];
+        // Note: Summer enrollment periods are now handled dynamically for active school years
 
         // Start of Summer Term
         $events[] = [
@@ -274,5 +268,125 @@ class AcademicCalendarSeeder extends Seeder
         foreach ($events as $event) {
             AcademicCalendar::create($event);
         }
+    }
+
+    /**
+     * Get dynamic base date for active school years
+     * Ensures there's always an upcoming enrollment period
+     */
+    private function getDynamicBaseDate(SchoolYear $schoolYear): Carbon
+    {
+        $today = Carbon::now();
+        $schoolYearStart = Carbon::parse($schoolYear->start_date);
+        $schoolYearEnd = Carbon::parse($schoolYear->end_date);
+
+        // If we're in the middle of the school year, create a current enrollment period
+        if ($today->between($schoolYearStart, $schoolYearEnd)) {
+            // Create enrollment period that includes today and extends 30 days
+            return $today->copy()->subDays(rand(1, 7)); // Start 1-7 days ago
+        }
+
+        // If we're before the school year starts, create upcoming enrollment
+        if ($today->lt($schoolYearStart)) {
+            // Create enrollment period starting 1-2 weeks before school year starts
+            return $schoolYearStart->copy()->subDays(rand(7, 14));
+        }
+
+        // If we're after the school year ends, create a new enrollment for next semester
+        if ($today->gt($schoolYearEnd)) {
+            // Create a new enrollment period starting soon
+            return $today->copy()->subDays(rand(1, 3));
+        }
+
+        // Fallback: create enrollment period around today
+        return $today->copy()->subDays(rand(1, 7));
+    }
+
+    /**
+     * Create dynamic enrollment periods that are always available
+     */
+    private function createDynamicEnrollmentPeriods(SchoolYear $schoolYear, Carbon $baseDate): array
+    {
+        $events = [];
+        $today = Carbon::now();
+
+        // Ensure we always have at least one active enrollment period
+        $this->ensureActiveEnrollmentPeriod($schoolYear, $baseDate, $events);
+
+        // First Semester Enrollment - Always includes today or starts soon
+        $firstSemesterStart = $baseDate->copy();
+        $firstSemesterEnd = $firstSemesterStart->copy()->addDays(30);
+
+        $events[] = [
+            'name' => 'Enrollment Period - First Semester',
+            'description' => 'Regular and late enrollment for first semester',
+            'start_date' => $firstSemesterStart,
+            'end_date' => $firstSemesterEnd,
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::ENROLLMENT,
+        ];
+
+        // Second Semester Enrollment - 6 months later
+        $secondSemesterStart = $firstSemesterStart->copy()->addMonths(6);
+        $secondSemesterEnd = $secondSemesterStart->copy()->addDays(30);
+
+        $events[] = [
+            'name' => 'Enrollment Period - Second Semester',
+            'description' => 'Regular and late enrollment for second semester',
+            'start_date' => $secondSemesterStart,
+            'end_date' => $secondSemesterEnd,
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::ENROLLMENT,
+        ];
+
+        // Summer Term Enrollment - 1 year later
+        $summerStart = $firstSemesterStart->copy()->addYear();
+        $summerEnd = $summerStart->copy()->addDays(30);
+
+        $events[] = [
+            'name' => 'Enrollment - Summer Term',
+            'description' => 'Enrollment for optional summer term',
+            'start_date' => $summerStart,
+            'end_date' => $summerEnd,
+            'school_year_id' => $schoolYear->id,
+            'event' => CalendarEventEnum::ENROLLMENT,
+        ];
+
+        return $events;
+    }
+
+    /**
+     * Ensure there's always an active enrollment period
+     */
+    private function ensureActiveEnrollmentPeriod(SchoolYear $schoolYear, Carbon $baseDate, array &$events): void
+    {
+        $today = Carbon::now();
+
+        // Check if we need to create an immediate enrollment period
+        $hasActiveEnrollment = false;
+
+        // If today is not within any enrollment period, create one that starts today
+        if (!$this->hasActiveEnrollmentPeriod($schoolYear, $today)) {
+            $events[] = [
+                'name' => 'Immediate Enrollment Period',
+                'description' => 'Open enrollment period for immediate registration',
+                'start_date' => $today->copy(),
+                'end_date' => $today->copy()->addDays(30),
+                'school_year_id' => $schoolYear->id,
+                'event' => CalendarEventEnum::ENROLLMENT,
+            ];
+        }
+    }
+
+    /**
+     * Check if school year has an active enrollment period for today
+     */
+    private function hasActiveEnrollmentPeriod(SchoolYear $schoolYear, Carbon $date): bool
+    {
+        return $schoolYear->academicCalendars()
+            ->where('event', CalendarEventEnum::ENROLLMENT->value)
+            ->where('start_date', '<=', $date)
+            ->where('end_date', '>=', $date)
+            ->exists();
     }
 }

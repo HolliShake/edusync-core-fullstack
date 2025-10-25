@@ -110,10 +110,10 @@ class Room extends Model
     ];
 
     protected $casts = [
-        'building_id' => 'integer',
-        'floor' => 'integer',
+        'building_id'   => 'integer',
+        'floor'         => 'integer',
         'room_capacity' => 'integer',
-        'is_lab' => 'boolean',
+        'is_lab'        => 'boolean',
     ];
 
     /**

@@ -112,6 +112,13 @@ class AdmissionApplicationLog extends Model
         'note',
     ];
 
+    protected $casts = [
+        'admission_application_id' => 'integer',
+        'user_id'                  => 'integer',
+        'type'                     => 'string',
+        'note'                     => 'string',
+    ];
+
     protected $appends = [
         'admission_application',
         'user',

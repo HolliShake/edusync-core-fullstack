@@ -114,10 +114,10 @@ class AdmissionSchedule extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'start_date'     => 'date',
+        'end_date'       => 'date',
         'school_year_id' => 'integer',
-        'campus_id' => 'integer',
+        'campus_id'      => 'integer',
     ];
 
     protected $appends = [

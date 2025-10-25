@@ -28,9 +28,9 @@ export default function GuestAcceptedAdmission(): React.ReactNode {
   const navigate = useNavigate();
   const { data: applicationResponse, isLoading } = useGetAdmissionApplicationPaginated(
     {
-      'filter[user_id]': session?.id ?? 0,
-      'filter[open_enrollment]': true,
+      'filter[user_id]': Number(session?.id),
       'filter[latest_status]': AdmissionApplicationLogTypeEnum.ACCEPTED,
+      'filter[open_enrollment]': true,
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
     },

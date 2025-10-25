@@ -162,7 +162,6 @@ class EnrollmentLogController extends Controller
                 'user_id' => 'required|integer|exists:user,id',
                 'action' => 'required|string|in:' . implode(',', array_column(EnrollmentLogActionEnum::cases(), 'value')),
                 'note' => 'nullable|string',
-                'logged_by_user_id' => 'required|integer|exists:user,id',
             ]);
 
             if ($validator->fails()) {
@@ -234,7 +233,6 @@ class EnrollmentLogController extends Controller
                 'user_id' => 'required|integer|exists:user,id',
                 'action' => 'required|string|in:' . implode(',', array_column(EnrollmentLogActionEnum::cases(), 'value')),
                 'note' => 'nullable|string',
-                'logged_by_user_id' => 'required|integer|exists:user,id',
             ]);
 
             if ($validator->fails()) {

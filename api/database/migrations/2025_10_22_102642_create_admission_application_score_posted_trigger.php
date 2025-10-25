@@ -42,28 +42,37 @@ return new class extends Migration
                     AND school_year_id = @school_year_id
                     AND is_active = 1;
 
-                    -- Count posted scores for this admission application
-                    SELECT COUNT(*)
+                    -- Count posted scores for this admission application (grouped by criteria and user)
+                    SELECT COUNT(DISTINCT CONCAT(academic_program_criteria_id, "-", user_id))
                     INTO posted_scores_count
                     FROM admission_application_score
                     WHERE admission_application_id = NEW.admission_application_id
                     AND is_posted = 1;
 
                     -- Check if all scores are posted (posted score count equals criteria count)
-                    SET all_scores_posted = (posted_scores_count = criteria_count);
+                    SET all_scores_posted = (posted_scores_count >= criteria_count);
 
                     IF all_scores_posted = 1 THEN
-                        -- Calculate weighted score
+                        -- Calculate weighted score using the latest posted score for each criteria-user combination
                         SELECT
                             SUM((aas.score / apc.max_score) * apc.weight),
                             SUM(apc.weight)
                         INTO weighted_score, total_weight
-                        FROM admission_application_score aas
+                        FROM (
+                            SELECT
+                                admission_application_id,
+                                academic_program_criteria_id,
+                                user_id,
+                                score,
+                                MAX(id) as max_id
+                            FROM admission_application_score
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND is_posted = 1
+                            GROUP BY admission_application_id, academic_program_criteria_id, user_id
+                        ) aas
                         INNER JOIN academic_program_criteria apc
                             ON aas.academic_program_criteria_id = apc.id
-                        WHERE aas.admission_application_id = NEW.admission_application_id
-                        AND aas.is_posted = 1
-                        AND apc.is_active = 1;
+                        WHERE apc.is_active = 1;
 
                         -- Calculate final score as percentage
                         IF total_weight > 0 THEN
@@ -153,28 +162,37 @@ return new class extends Migration
                 AND school_year_id = @school_year_id
                 AND is_active = 1;
 
-                -- Count posted scores for this admission application
-                SELECT COUNT(*)
+                -- Count posted scores for this admission application (grouped by criteria and user)
+                SELECT COUNT(DISTINCT CONCAT(academic_program_criteria_id, "-", user_id))
                 INTO posted_scores_count
                 FROM admission_application_score
                 WHERE admission_application_id = NEW.admission_application_id
                 AND is_posted = 1;
 
                 -- Check if all scores are posted (posted score count equals criteria count)
-                SET all_scores_posted = (posted_scores_count = criteria_count);
+                SET all_scores_posted = (posted_scores_count >= criteria_count);
 
                 IF all_scores_posted = 1 THEN
-                    -- Calculate weighted score
+                    -- Calculate weighted score using the latest posted score for each criteria-user combination
                     SELECT
                         SUM((aas.score / apc.max_score) * apc.weight),
                         SUM(apc.weight)
                     INTO weighted_score, total_weight
-                    FROM admission_application_score aas
+                    FROM (
+                        SELECT
+                            admission_application_id,
+                            academic_program_criteria_id,
+                            user_id,
+                            score,
+                            MAX(id) as max_id
+                        FROM admission_application_score
+                        WHERE admission_application_id = NEW.admission_application_id
+                        AND is_posted = 1
+                        GROUP BY admission_application_id, academic_program_criteria_id, user_id
+                    ) aas
                     INNER JOIN academic_program_criteria apc
                         ON aas.academic_program_criteria_id = apc.id
-                    WHERE aas.admission_application_id = NEW.admission_application_id
-                    AND aas.is_posted = 1
-                    AND apc.is_active = 1;
+                    WHERE apc.is_active = 1;
 
                     -- Calculate final score as percentage
                     IF total_weight > 0 THEN

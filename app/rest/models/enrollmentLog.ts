@@ -16,10 +16,8 @@ export interface EnrollmentLog {
   action: EnrollmentLogAction;
   /** @nullable */
   note?: string | null;
-  logged_by_user_id: number;
   readonly created_at?: string;
   readonly updated_at?: string;
   enrollment?: Enrollment;
   user?: User;
-  logged_by_user?: User;
 }

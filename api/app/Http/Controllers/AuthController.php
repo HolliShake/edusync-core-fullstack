@@ -120,6 +120,7 @@ class AuthController extends Controller
             ->where('is_active', true)
             ->whereIn('designitionable_type', [Campus::class, College::class, AcademicProgram::class])
             ->get()
+            ->makeHidden(['user', 'designitionable'])
             ->keyBy('designitionable_type');
 
         return $this->ok([

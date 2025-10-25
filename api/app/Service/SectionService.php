@@ -31,7 +31,6 @@ class SectionService extends GenericService implements ISectionService
      *                      - term_order: integer
      *                      - auto_post: boolean (default: false)
      *                      - number_of_section: integer
-     *                      - school_year_id: integer
      * @return array Array of created sections
      */
     public function generate(array $config): array {
@@ -40,7 +39,6 @@ class SectionService extends GenericService implements ISectionService
         $term_order     = $config['term_order'];
         $auto_post      = $config['auto_post'];
         $number_of_section = $config['number_of_section'];
-        $school_year_id = $config['school_year_id'];
 
         $curriculum = $this->curriculumRepository->getById($curriculum_id);
 
@@ -58,7 +56,6 @@ class SectionService extends GenericService implements ISectionService
             ->where('curriculum_detail.curriculum_id', $curriculum_id)
             ->where('curriculum_detail.year_order', $year_order)
             ->where('curriculum_detail.term_order', $term_order)
-            ->where('section.school_year_id', $school_year_id)
             ->orderBy('section.section_name', 'desc')
             ->pluck('section.section_name')
             ->toArray();
@@ -101,7 +98,6 @@ class SectionService extends GenericService implements ISectionService
                 // Check if section already exists for this curriculum_detail and school_year
                 $existingSection = $this->repository->query()
                     ->where('curriculum_detail_id', $curriculum_detail['id'])
-                    ->where('school_year_id', $school_year_id)
                     ->where('section_name', $sectionName)
                     ->exists();
 
@@ -114,7 +110,6 @@ class SectionService extends GenericService implements ISectionService
 
                 $sections[] = [
                     'curriculum_detail_id' => $curriculum_detail['id'],
-                    'school_year_id' => $school_year_id,
                     'section_ref'    => strtoupper($rand),
                     'section_code'   => strtoupper($code),
                     'section_name'   => $sectionName,

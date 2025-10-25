@@ -100,5 +100,4 @@ class DocumentType extends Model
         'name',
         'description',
     ];
-
 }

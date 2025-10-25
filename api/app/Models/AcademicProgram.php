@@ -106,9 +106,24 @@ class AcademicProgram extends Model
 
     protected $casts = [
         'year_first_implemented' => 'date',
-        'college_id' => 'integer',
-        'program_type_id' => 'integer',
+        'college_id'             => 'integer',
+        'program_type_id'        => 'integer',
     ];
+
+    protected $appends = [
+
+        'program_type',
+    ];
+
+    /**
+     * Get the program type for the academic program.
+     *
+     * @return ProgramType
+     */
+    public function getProgramTypeAttribute(): ProgramType
+    {
+        return $this->programType()->first();
+    }
 
     /**
      * Get the requirements for the academic program.
@@ -137,7 +152,7 @@ class AcademicProgram extends Model
      */
     public function programType(): BelongsTo
     {
-        return $this->belongsTo(ProgramType::class, 'program_type_id');
+        return $this->belongsTo(ProgramType::class);
     }
 
     /**
@@ -148,6 +163,16 @@ class AcademicProgram extends Model
     public function programRequirements(): HasMany
     {
         return $this->hasMany(AcademicProgramRequirement::class);
+    }
+
+    /**
+     * Get the admission applications for the academic program.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function admissionApplications(): HasMany
+    {
+        return $this->hasMany(AdmissionApplication::class);
     }
 
     /*****************************************************************/

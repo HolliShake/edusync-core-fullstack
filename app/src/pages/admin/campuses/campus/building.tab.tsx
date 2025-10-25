@@ -31,7 +31,7 @@ export default function AdminBuildingTab(): React.ReactNode {
     {
       page,
       rows,
-      ['filter[campus_id]']: campus?.id,
+      'filter[campus_id]': campus?.id,
     },
     {
       query: {

@@ -141,11 +141,11 @@ class AdmissionApplication extends Model
     ];
 
     protected $casts = [
-        'user_id' => 'integer',
-        'school_year_id' => 'integer',
+        'user_id'             => 'integer',
+        'school_year_id'      => 'integer',
         'academic_program_id' => 'integer',
-        'year' => 'integer',
-        'pool_no' => 'integer',
+        'year'                => 'integer',
+        'pool_no'             => 'integer',
     ];
 
     protected $appends = [
@@ -186,27 +186,27 @@ class AdmissionApplication extends Model
     /**
      * Get the user that owns the admission application.
      *
-     * @return \App\Models\User
+     * @return User
      */
     public function getUserAttribute(): User
     {
-        return $this->user()->first();
+        return $this->user()->first()->makeHidden(['roles', 'is_student', 'enrollments', 'designitions']);
     }
 
     /**
      * Get the school year that owns the admission application.
      *
-     * @return \App\Models\SchoolYear
+     * @return SchoolYear
      */
     public function getSchoolYearAttribute(): SchoolYear
     {
-        return $this->schoolYear()->first();
+        return $this->schoolYear()->first()->makeHidden(['academic_calendars']);
     }
 
     /**
      * Get the academic program that owns the admission application.
      *
-     * @return \App\Models\AcademicProgram
+     * @return AcademicProgram
      */
     public function getAcademicProgramAttribute(): AcademicProgram
     {
@@ -220,7 +220,10 @@ class AdmissionApplication extends Model
      */
     public function getLogsAttribute(): array
     {
-        return $this->logs()->get()->makeHidden(['admission_application', 'user'])->toArray();
+        return $this->logs()
+            ->get()
+            ->makeHidden(['admission_application', 'user'])
+            ->toArray();
     }
 
     /**

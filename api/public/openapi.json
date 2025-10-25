@@ -9500,7 +9500,16 @@
                         }
                     },
                     {
-                        "name": "filter[curriculumDetail.curriculum_id]",
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Filter by academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[curriculum_id]",
                         "in": "query",
                         "description": "Filter by curriculum ID",
                         "required": false,
@@ -12646,6 +12655,10 @@
                         "type": "integer",
                         "example": 1
                     },
+                    "school_year_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
                     "academic_program_id": {
                         "type": "integer",
                         "example": 1
@@ -12703,6 +12716,9 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2024-01-01T12:00:00Z"
+                    },
+                    "school_year": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
                     },
                     "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
@@ -13797,8 +13813,7 @@
                 "required": [
                     "enrollment_id",
                     "user_id",
-                    "action",
-                    "logged_by_user_id"
+                    "action"
                 ],
                 "properties": {
                     "id": {
@@ -13826,9 +13841,6 @@
                         "type": "string",
                         "nullable": true
                     },
-                    "logged_by_user_id": {
-                        "type": "integer"
-                    },
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
@@ -13843,9 +13855,6 @@
                         "$ref": "#\/components\/schemas\/Enrollment"
                     },
                     "user": {
-                        "$ref": "#\/components\/schemas\/User"
-                    },
-                    "logged_by_user": {
                         "$ref": "#\/components\/schemas\/User"
                     }
                 },
@@ -14541,7 +14550,6 @@
                 "title": "Section",
                 "required": [
                     "curriculum_detail_id",
-                    "school_year_id",
                     "section_ref",
                     "section_code",
                     "section_name",
@@ -14555,9 +14563,6 @@
                         "readOnly": true
                     },
                     "curriculum_detail_id": {
-                        "type": "integer"
-                    },
-                    "school_year_id": {
                         "type": "integer"
                     },
                     "section_ref": {
@@ -14580,9 +14585,6 @@
                     },
                     "curriculum_detail": {
                         "$ref": "#\/components\/schemas\/CurriculumDetail"
-                    },
-                    "school_year": {
-                        "$ref": "#\/components\/schemas\/SchoolYear"
                     },
                     "available_slots": {
                         "type": "integer",
@@ -14608,9 +14610,6 @@
                         "default": false
                     },
                     "number_of_section": {
-                        "type": "integer"
-                    },
-                    "school_year_id": {
                         "type": "integer"
                     }
                 },

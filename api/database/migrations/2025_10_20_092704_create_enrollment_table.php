@@ -15,10 +15,6 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             // Fk
-            $table->foreignId('school_year_id')
-                ->constrained('school_year')
-                ->onDelete('cascade');
-            // Fk
             $table->foreignId('user_id')
                 ->constrained('user')
                 ->onDelete('cascade');

@@ -103,7 +103,7 @@ class Building extends Model
     ];
 
     protected $casts = [
-        'latitude' => 'float',
+        'latitude'  => 'float',
         'longitude' => 'float',
         'campus_id' => 'integer',
     ];

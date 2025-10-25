@@ -136,8 +136,24 @@ class AcademicCalendar extends Model
     ];
 
     protected $casts = [
-        'event' => CalendarEventEnum::class,
+        'school_year_id' => 'integer',
     ];
+
+    protected $appends = [
+        'school_year',
+    ];
+
+    /**
+     * Get the school year that owns the academic calendar.
+     *
+     * @return SchoolYear
+     */
+    public function getSchoolYearAttribute(): SchoolYear
+    {
+        return $this->schoolYear()
+            ->first()
+            ->makeHidden(['academic_calendars']);
+    }
 
     /**
      * Get the school year that owns the academic calendar.

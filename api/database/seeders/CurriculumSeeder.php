@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\AcademicProgram;
 use App\Models\AcademicTerm;
 use App\Models\Curriculum;
+use App\Models\SchoolYear;
+use App\Enum\CurriculumStateEnum;
 use Illuminate\Database\Seeder;
 
 class CurriculumSeeder extends Seeder
@@ -16,6 +18,7 @@ class CurriculumSeeder extends Seeder
     {
         $academicPrograms = AcademicProgram::all();
         $academicTerms = AcademicTerm::all();
+        $schoolYears = SchoolYear::all();
 
         foreach ($academicPrograms as $program) {
             // Create multiple curricula for each program (different years)
@@ -27,7 +30,7 @@ class CurriculumSeeder extends Seeder
                     'effective_year' => 2024,
                     'total_units' => rand(120, 180),
                     'total_hours' => rand(2400, 3600),
-                    'status' => 'active',
+                    'status' => CurriculumStateEnum::ACTIVE->value,
                     'approved_date' => '2024-01-15'
                 ],
                 [
@@ -37,7 +40,7 @@ class CurriculumSeeder extends Seeder
                     'effective_year' => 2023,
                     'total_units' => rand(120, 180),
                     'total_hours' => rand(2400, 3600),
-                    'status' => 'inactive',
+                    'status' => CurriculumStateEnum::INACTIVE->value,
                     'approved_date' => '2023-01-15'
                 ],
                 [
@@ -47,16 +50,18 @@ class CurriculumSeeder extends Seeder
                     'effective_year' => 2022,
                     'total_units' => rand(120, 180),
                     'total_hours' => rand(2400, 3600),
-                    'status' => 'archived',
+                    'status' => CurriculumStateEnum::ARCHIVED->value,
                     'approved_date' => '2022-01-15'
                 ]
             ];
 
             foreach ($curricula as $curriculumData) {
-                // Get a random academic term
+                // Get a random academic term and school year
                 $academicTerm = $academicTerms->random();
-                
+                $schoolYear = $schoolYears->random();
+
                 Curriculum::create([
+                    'school_year_id' => $schoolYear->id,
                     'academic_program_id' => $program->id,
                     'academic_term_id' => $academicTerm->id,
                     'curriculum_code' => $curriculumData['curriculum_code'],

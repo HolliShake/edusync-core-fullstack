@@ -23,10 +23,6 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained('user')
                 ->onDelete('cascade');
-            // Fk
-            $table->foreignId('logged_by_user_id')
-                ->constrained('user')
-                ->onDelete('cascade');
             // Field
             $table->text('note')->nullable();
             $table->enum('action', array_column(EnrollmentLogActionEnum::cases(), 'value'));

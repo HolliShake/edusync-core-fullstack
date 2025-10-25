@@ -62,12 +62,16 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
     useCreateOrUpdateMultipleAdmissionApplicationScores();
 
   const { data: applicationsResponse, isLoading: isLoadingApplications } =
-    useGetAdmissionApplicationPaginated({
-      page: 1,
-      rows: Number.MAX_SAFE_INTEGER,
-      'filter[name]': debouncedSearchQuery,
-      'filter[latest_status]': selectedStatus,
-    });
+    useGetAdmissionApplicationPaginated(
+      {
+        'filter[name]': debouncedSearchQuery,
+        'filter[latest_status]': selectedStatus,
+        'filter[academic_program_id]': Number(session?.active_academic_program),
+        page: 1,
+        rows: Number.MAX_SAFE_INTEGER,
+      },
+      { query: { enabled: !!debouncedSearchQuery || !!selectedStatus || !session } }
+    );
 
   const { data: admissionProgramCriteriaResponse, isLoading: isLoadingCriteria } =
     useGetAcademicProgramCriteriaPaginated(

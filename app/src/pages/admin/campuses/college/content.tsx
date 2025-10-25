@@ -41,8 +41,7 @@ export default function AdminCollegeDetailContent(): React.ReactNode {
     {
       page,
       rows,
-      ['filter[college_id]']: college?.id,
-      ['include']: 'programType',
+      'filter[college_id]': college?.id,
     },
     {
       query: {

@@ -127,7 +127,7 @@ class AcademicProgramCriteria extends Model
     protected $casts = [
         'max_score' => 'integer',
         'min_score' => 'integer',
-        'weight' => 'integer',
+        'weight'    => 'integer',
         'is_active' => 'boolean',
     ];
 

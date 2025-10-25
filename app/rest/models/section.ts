@@ -6,12 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CurriculumDetail } from './curriculumDetail';
-import type { SchoolYear } from './schoolYear';
 
 export interface Section {
   readonly id?: number;
   curriculum_detail_id: number;
-  school_year_id: number;
   section_ref: string;
   section_code: string;
   section_name: string;
@@ -19,6 +17,5 @@ export interface Section {
   max_students: number;
   is_posted: boolean;
   curriculum_detail?: CurriculumDetail;
-  school_year?: SchoolYear;
   readonly available_slots?: number;
 }

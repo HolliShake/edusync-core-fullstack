@@ -116,7 +116,7 @@ class Enrollment extends Model
     ];
 
     protected $casts = [
-        'user_id' => 'integer',
+        'user_id'    => 'integer',
         'section_id' => 'integer',
     ];
 
@@ -160,7 +160,10 @@ class Enrollment extends Model
      */
     public function getValidatedAttribute(): bool
     {
-        $logs = $this->enrollmentLogs()->pluck('action');
+        $logs = $this->enrollmentLogs()
+            ->get()
+            ->makeHidden(['enrollment', 'user'])
+            ->pluck('action');
         return $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value)
             && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED->value);
     }
@@ -172,7 +175,10 @@ class Enrollment extends Model
      */
     public function getIsDroppedAttribute(): bool
     {
-        $logs = $this->enrollmentLogs()->pluck('action');
+        $logs = $this->enrollmentLogs()
+            ->get()
+            ->makeHidden(['enrollment', 'user'])
+            ->pluck('action');
         return $logs->contains(EnrollmentLogActionEnum::DROPPED->value)
             && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value);
     }

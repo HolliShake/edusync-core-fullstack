@@ -20,6 +20,12 @@ use Database\Seeders\AdmissionScheduleSeeder;
 use Database\Seeders\AcademicProgramRequirementSeeder;
 use Database\Seeders\AcademicProgramCriteriaSeeder;
 use Database\Seeders\AdmissionApplicationSeeder;
+use Database\Seeders\SectionSeeder;
+use Database\Seeders\EnrollmentSeeder;
+use Database\Seeders\EnrollmentLogSeeder;
+use Database\Seeders\AdmissionApplicationLogSeeder;
+use Database\Seeders\AdmissionApplicationScoreSeeder;
+use Database\Seeders\DesignitionSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -31,25 +37,46 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            // Foundation seeders (no dependencies)
             AcademicTermSeeder::class,
-            UserSeeder::class,
             ProgramTypeSeeder::class,
-            CourseSeeder::class,
             CampusSeeder::class,
             CollegeSeeder::class,
-            AcademicProgramSeeder::class,
-            CurriculumSeeder::class,
-            CurriculumDetailSeeder::class,
+            CourseSeeder::class,
+            RequirementSeeder::class,
+            DocumentTypeSeeder::class,
+
+            // User and basic data
+            UserSeeder::class,
             SchoolYearSeeder::class,
             AcademicCalendarSeeder::class,
             BuildingSeeder::class,
             RoomSeeder::class,
-            RequirementSeeder::class,
-            AdmissionScheduleSeeder::class,
+
+            // Academic programs and curriculum
+            AcademicProgramSeeder::class,
+            CurriculumSeeder::class,
+            CurriculumDetailSeeder::class,
             AcademicProgramRequirementSeeder::class,
             AcademicProgramCriteriaSeeder::class,
+
+            // Designations (needs AcademicProgram)
+            DesignitionSeeder::class,
+
+            // Sections (needs CurriculumDetail, SchoolYear)
+            SectionSeeder::class,
+
+            // Admission applications (needs SchoolYear, AcademicProgram, Users)
             AdmissionApplicationSeeder::class,
-            DocumentTypeSeeder::class
+            AdmissionApplicationLogSeeder::class,
+            AdmissionApplicationScoreSeeder::class,
+
+            // Enrollments (needs Sections, Users)
+            EnrollmentSeeder::class,
+            EnrollmentLogSeeder::class,
+
+            // Schedules (needs other data)
+            AdmissionScheduleSeeder::class,
         ]);
     }
 }

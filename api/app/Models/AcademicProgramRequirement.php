@@ -118,11 +118,11 @@ class AcademicProgramRequirement extends Model
     ];
 
     protected $casts = [
-        'is_mandatory' => 'boolean',
-        'is_active' => 'boolean',
+        'is_mandatory'        => 'boolean',
+        'is_active'           => 'boolean',
         'academic_program_id' => 'integer',
-        'requirement_id' => 'integer',
-        'school_year_id' => 'integer',
+        'requirement_id'      => 'integer',
+        'school_year_id'      => 'integer',
     ];
 
     protected $appends = [

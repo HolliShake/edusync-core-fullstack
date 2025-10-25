@@ -385,7 +385,6 @@ export default function AdminAcademicCalendarPage(): React.ReactNode {
     isLoading: isLoadingCalendars,
   } = useGetAcademicCalendarPaginated({
     'filter[school_year_id]': Number(decryptId(schoolYearId as string)),
-    include: 'schoolYear',
     page: 1,
     rows: 50,
   });

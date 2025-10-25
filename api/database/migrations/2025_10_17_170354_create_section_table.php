@@ -18,10 +18,6 @@ return new class extends Migration
             $table->foreignId('curriculum_detail_id')
                 ->constrained('curriculum_detail')
                 ->onDelete('cascade');
-            // FK
-            $table->foreignId('school_year_id')
-                ->constrained('school_year')
-                ->onDelete('cascade');
             // Field
             $table->string('section_ref')->unique();
             $table->string('section_code'); // unique per section
@@ -31,7 +27,7 @@ return new class extends Migration
             $table->boolean('is_posted')
                 ->default(false);
 
-            $table->unique(['curriculum_detail_id', 'school_year_id', 'section_name']);
+            $table->unique(['curriculum_detail_id', 'section_name']);
         });
     }
 

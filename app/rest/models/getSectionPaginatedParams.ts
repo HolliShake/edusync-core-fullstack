@@ -20,9 +20,13 @@ page?: number;
  */
 rows?: number;
 /**
+ * Filter by academic program ID
+ */
+'filter[academic_program_id]'?: number;
+/**
  * Filter by curriculum ID
  */
-'filter[curriculumDetail.curriculum_id]'?: number;
+'filter[curriculum_id]'?: number;
 /**
  * Filter by school year ID
  */

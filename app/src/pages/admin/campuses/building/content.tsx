@@ -34,7 +34,7 @@ export default function AdminBuildingDetailContent(): React.ReactNode {
     {
       page,
       rows,
-      ['filter[building_id]']: building?.id,
+      'filter[building_id]': building?.id,
     },
     {
       query: {
