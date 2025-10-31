@@ -1,4 +1,7 @@
 import CurriculumDetailModal from '@/components/curriclum-detail/curriculum-detail.modal';
+import CurriculumTable, {
+  type ScheduleGenerationData,
+} from '@/components/curriclum-detail/curriculum-detail.table';
 import { useModal } from '@/components/custom/modal.component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,7 +23,6 @@ import {
 import type React from 'react';
 import { useMemo } from 'react';
 import { toast } from 'sonner';
-import CurriculumTable, { type ScheduleGenerationData } from './table';
 
 const STATUS_COLORS = {
   active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',

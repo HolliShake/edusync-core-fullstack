@@ -1,11 +1,19 @@
 import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EnrollmentLogAction } from '@rest/models';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ProgramChairEnrollmentGenericTab from './generic.tab';
 
 export default function ProgramChairEnrollment(): React.ReactNode {
-  const [selectedTab, setSelectedTab] = useState<EnrollmentLogAction>(EnrollmentLogAction.enroll);
+  const [selectedTab, setSelectedTab] = useState<EnrollmentLogAction>(() => {
+    const saved = sessionStorage.getItem(window.location.pathname + '_tab');
+    return saved ? (saved as EnrollmentLogAction) : EnrollmentLogAction.enroll;
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem(window.location.pathname + '_tab', selectedTab);
+  }, [selectedTab]);
+
   const tabs = useMemo(
     () => [
       {

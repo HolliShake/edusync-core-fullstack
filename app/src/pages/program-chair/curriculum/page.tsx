@@ -6,14 +6,17 @@ import TitledPage from '@/components/pages/titled.page';
 import CurriculumModal from '@/components/program-chair-only/curriculum/curriculum.modal';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth.context';
+import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteCurriculum, useGetCurriculumPaginated } from '@rest/api';
 import type { Curriculum } from '@rest/models';
 import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 export default function ProgramChairCurriculum(): React.ReactNode {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
   const { session } = useAuth();
@@ -130,6 +133,9 @@ export default function ProgramChairCurriculum(): React.ReactNode {
         onPageChange={setPage}
         showPagination={true}
         loading={isLoading}
+        onClickRow={(row) => {
+          navigate(`/program-chair/curriculum/${encryptIdForUrl(row.id as number)}`);
+        }}
       />
       <CurriculumModal controller={controller} onSubmit={handleModalSubmit} />
     </TitledPage>

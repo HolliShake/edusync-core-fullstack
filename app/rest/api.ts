@@ -39,6 +39,7 @@ import type {
   Campus,
   College,
   Course,
+  CourseRequisite,
   CreateAcademicCalendarResponse200,
   CreateAcademicProgramCriteriaResponse200,
   CreateAcademicProgramRequirementResponse200,
@@ -51,6 +52,7 @@ import type {
   CreateBuildingResponse200,
   CreateCampusResponse200,
   CreateCollegeResponse200,
+  CreateCourseRequisiteResponse200,
   CreateCourseResponse200,
   CreateCurriculumDetailResponse200,
   CreateCurriculumResponse200,
@@ -80,6 +82,7 @@ import type {
   DeleteBuildingResponse200,
   DeleteCampusResponse200,
   DeleteCollegeResponse200,
+  DeleteCourseRequisiteResponse200,
   DeleteCourseResponse200,
   DeleteCurriculumDetailResponse200,
   DeleteCurriculumResponse200,
@@ -129,6 +132,8 @@ import type {
   GetCollegePaginatedParams,
   GetCollegeResponse200,
   GetCoursePaginatedParams,
+  GetCourseRequisitePaginatedParams,
+  GetCourseRequisiteResponse200,
   GetCourseResponse200,
   GetCurriculumDetailPaginatedParams,
   GetCurriculumDetailResponse200,
@@ -178,6 +183,7 @@ import type {
   PaginatedBuildingResponse200,
   PaginatedCampusResponse200,
   PaginatedCollegeResponse200,
+  PaginatedCourseRequisiteResponse200,
   PaginatedCourseResponse200,
   PaginatedCurriculumDetailResponse200,
   PaginatedCurriculumResponse200,
@@ -214,6 +220,7 @@ import type {
   UpdateBuildingResponse200,
   UpdateCampusResponse200,
   UpdateCollegeResponse200,
+  UpdateCourseRequisiteResponse200,
   UpdateCourseResponse200,
   UpdateCurriculumDetailResponse200,
   UpdateCurriculumResponse200,
@@ -5404,6 +5411,380 @@ export const useDeleteCourse = <TError = UnauthenticatedResponse | ForbiddenResp
       > => {
 
       const mutationOptions = getDeleteCourseMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of CourseRequisite with optional search
+ * @summary Get paginated list of CourseRequisite
+ */
+export const getCourseRequisitePaginated = (
+    params?: GetCourseRequisitePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedCourseRequisiteResponse200>(
+      {url: `/api/CourseRequisite`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetCourseRequisitePaginatedQueryKey = (params?: GetCourseRequisitePaginatedParams,) => {
+    return [`/api/CourseRequisite`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetCourseRequisitePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetCourseRequisitePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCourseRequisitePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseRequisitePaginated>>> = ({ signal }) => getCourseRequisitePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCourseRequisitePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getCourseRequisitePaginated>>>
+export type GetCourseRequisitePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetCourseRequisitePaginated<TData = Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetCourseRequisitePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCourseRequisitePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getCourseRequisitePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCourseRequisitePaginated<TData = Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetCourseRequisitePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCourseRequisitePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getCourseRequisitePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCourseRequisitePaginated<TData = Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetCourseRequisitePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of CourseRequisite
+ */
+
+export function useGetCourseRequisitePaginated<TData = Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetCourseRequisitePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisitePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCourseRequisitePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new CourseRequisite with the provided details
+ * @summary Create a new CourseRequisite
+ */
+export const createCourseRequisite = (
+    courseRequisite: CourseRequisite,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateCourseRequisiteResponse200>(
+      {url: `/api/CourseRequisite`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: courseRequisite, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateCourseRequisiteMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCourseRequisite>>, TError,{data: CourseRequisite}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCourseRequisite>>, TError,{data: CourseRequisite}, TContext> => {
+
+const mutationKey = ['createCourseRequisite'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCourseRequisite>>, {data: CourseRequisite}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCourseRequisite(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCourseRequisiteMutationResult = NonNullable<Awaited<ReturnType<typeof createCourseRequisite>>>
+    export type CreateCourseRequisiteMutationBody = CourseRequisite
+    export type CreateCourseRequisiteMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new CourseRequisite
+ */
+export const useCreateCourseRequisite = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCourseRequisite>>, TError,{data: CourseRequisite}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createCourseRequisite>>,
+        TError,
+        {data: CourseRequisite},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateCourseRequisiteMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a CourseRequisite by its ID
+ * @summary Get a specific CourseRequisite
+ */
+export const getCourseRequisiteById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetCourseRequisiteResponse200>(
+      {url: `/api/CourseRequisite/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetCourseRequisiteByIdQueryKey = (id?: number,) => {
+    return [`/api/CourseRequisite/${id}`] as const;
+    }
+
+    
+export const getGetCourseRequisiteByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCourseRequisiteById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisiteById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCourseRequisiteByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseRequisiteById>>> = ({ signal }) => getCourseRequisiteById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisiteById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCourseRequisiteByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCourseRequisiteById>>>
+export type GetCourseRequisiteByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetCourseRequisiteById<TData = Awaited<ReturnType<typeof getCourseRequisiteById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisiteById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCourseRequisiteById>>,
+          TError,
+          Awaited<ReturnType<typeof getCourseRequisiteById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCourseRequisiteById<TData = Awaited<ReturnType<typeof getCourseRequisiteById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisiteById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCourseRequisiteById>>,
+          TError,
+          Awaited<ReturnType<typeof getCourseRequisiteById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCourseRequisiteById<TData = Awaited<ReturnType<typeof getCourseRequisiteById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisiteById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific CourseRequisite
+ */
+
+export function useGetCourseRequisiteById<TData = Awaited<ReturnType<typeof getCourseRequisiteById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourseRequisiteById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCourseRequisiteByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing CourseRequisite with the provided details
+ * @summary Update a CourseRequisite
+ */
+export const updateCourseRequisite = (
+    id: number,
+    courseRequisite: CourseRequisite,
+ ) => {
+      
+      
+      return fetchData<UpdateCourseRequisiteResponse200>(
+      {url: `/api/CourseRequisite/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: courseRequisite
+    },
+      );
+    }
+  
+
+
+export const getUpdateCourseRequisiteMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCourseRequisite>>, TError,{id: number;data: CourseRequisite}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateCourseRequisite>>, TError,{id: number;data: CourseRequisite}, TContext> => {
+
+const mutationKey = ['updateCourseRequisite'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCourseRequisite>>, {id: number;data: CourseRequisite}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateCourseRequisite(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCourseRequisiteMutationResult = NonNullable<Awaited<ReturnType<typeof updateCourseRequisite>>>
+    export type UpdateCourseRequisiteMutationBody = CourseRequisite
+    export type UpdateCourseRequisiteMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a CourseRequisite
+ */
+export const useUpdateCourseRequisite = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCourseRequisite>>, TError,{id: number;data: CourseRequisite}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCourseRequisite>>,
+        TError,
+        {id: number;data: CourseRequisite},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateCourseRequisiteMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a CourseRequisite by its ID
+ * @summary Delete a CourseRequisite
+ */
+export const deleteCourseRequisite = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteCourseRequisiteResponse200>(
+      {url: `/api/CourseRequisite/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteCourseRequisiteMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCourseRequisite>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteCourseRequisite>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteCourseRequisite'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCourseRequisite>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteCourseRequisite(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteCourseRequisiteMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCourseRequisite>>>
+    
+    export type DeleteCourseRequisiteMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a CourseRequisite
+ */
+export const useDeleteCourseRequisite = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCourseRequisite>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteCourseRequisite>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteCourseRequisiteMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

@@ -6,6 +6,7 @@ import AdminCollege from '@/pages/admin/campuses/college/page';
 import AdminCurriculum from '@/pages/admin/campuses/curriculum/page';
 import AdminCampus from '@/pages/admin/campuses/page';
 import AdminCourses from '@/pages/admin/courses/page';
+import AdminCourseRequisites from '@/pages/admin/courses/requisite/page';
 import AdminDashboard from '@/pages/admin/dashboard';
 import AdminProgramTypes from '@/pages/admin/program-type/page';
 import AdminRequirements from '@/pages/admin/requirements/page';
@@ -151,6 +152,16 @@ const ADMIN: Route[] = [
     layout: 'dashboard',
     sidebar: true,
     roles: [UserRoleEnum.ADMIN],
+  },
+  // Courses/:id/requisites
+  {
+    key: 'admin.course-requisite',
+    title: 'Course Requisite',
+    path: '/admin/courses/:courseId',
+    component: <AdminCourseRequisites />,
+    icon: <BookIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
   },
   // Sections
   {

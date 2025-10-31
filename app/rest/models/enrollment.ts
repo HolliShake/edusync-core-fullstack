@@ -20,6 +20,7 @@ export interface Enrollment {
   readonly is_dropped?: boolean;
   readonly latest_status?: EnrollmentLatestStatus;
   readonly latest_status_label?: string;
+  readonly is_enrollment_valid?: boolean;
   user?: User;
   section?: Section;
   enrollment_logs?: EnrollmentLog[];

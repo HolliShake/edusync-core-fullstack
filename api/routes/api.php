@@ -25,10 +25,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdmissionApplicationController;
 use App\Http\Controllers\AdmissionApplicationLogController;
 use App\Http\Controllers\AdmissionApplicationScoreController;
+use App\Http\Controllers\CourseRequisiteController;
 use App\Http\Controllers\DocumentRequestController;
 use App\Http\Controllers\DocumentRequestLogController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\EnrollmentLogController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -100,6 +102,14 @@ Route::controller(CourseController::class)->group(function() {
     Route::post('/Course', 'store');
     Route::put('/Course/{id}', 'update');
     Route::delete('/Course/{id}', 'destroy');
+});
+
+Route::controller(CourseRequisiteController::class)->group(function() {
+    Route::get('/CourseRequisite', 'index');
+    Route::get('/CourseRequisite/{id}', 'show');
+    Route::post('/CourseRequisite', 'store');
+    Route::put('/CourseRequisite/{id}', 'update');
+    Route::delete('/CourseRequisite/{id}', 'destroy');
 });
 
 Route::controller(CurriculumController::class)->group(function() {
@@ -233,6 +243,14 @@ Route::controller(EnrollmentController::class)->group(function() {
     Route::post('/Enrollment/enroll', 'enroll');
     Route::put('/Enrollment/{id}', 'update');
     Route::delete('/Enrollment/{id}', 'destroy');
+});
+
+Route::controller(EnrollmentLogController::class)->group(function() {
+    Route::get('/EnrollmentLog', 'index');
+    Route::get('/EnrollmentLog/{id}', 'show');
+    Route::post('/EnrollmentLog', 'store');
+    Route::put('/EnrollmentLog/{id}', 'update');
+    Route::delete('/EnrollmentLog/{id}', 'destroy');
 });
 
 Route::controller(DocumentRequestController::class)->group(function() {

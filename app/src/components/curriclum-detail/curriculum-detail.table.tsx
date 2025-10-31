@@ -1,3 +1,4 @@
+import { useModal } from '@/components/custom/modal.component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,14 +15,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useUpdateCurriculumDetail } from '@rest/api';
 import type { CurriculumDetail } from '@rest/models';
 import { BookOpen, Calendar, FlaskConical, GraduationCap } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import CurriculumDetailUpdateModal from './curriculum-detail-update.modal';
 
 interface CurriculumTableProps {
   curriculumDetails: CurriculumDetail[];
   isLoading?: boolean;
+  allowEdit?: boolean;
   onGenerateSchedule?: (data: ScheduleGenerationData) => void;
 }
 
@@ -41,11 +45,16 @@ export interface ScheduleGenerationData {
 export default function CurriculumTable({
   curriculumDetails,
   isLoading = false,
+  allowEdit = false,
   onGenerateSchedule,
 }: CurriculumTableProps): React.ReactNode {
   const [openPopover, setOpenPopover] = useState<string | null>(null);
   const [numberOfSchedules, setNumberOfSchedules] = useState<{ [key: string]: string }>({});
   const [autoPost, setAutoPost] = useState<{ [key: string]: boolean }>({});
+
+  const { mutateAsync: updateCurriculumDetail } = useUpdateCurriculumDetail();
+
+  const modalController = useModal<CurriculumDetail>();
 
   const groupedDetails = useMemo(() => {
     const grouped: GroupedCurriculumDetails = {};
@@ -126,6 +135,10 @@ export default function CurriculumTable({
       </div>
     );
   }
+
+  const handleUpdateCurriculumDetail = async (data: CurriculumDetail) => {
+    modalController.openFn(data);
+  };
 
   if (curriculumDetails.length === 0) {
     return (
@@ -312,6 +325,7 @@ export default function CurriculumTable({
                                   ? 'bg-white dark:bg-slate-950'
                                   : 'bg-slate-50/50 dark:bg-slate-900/50'
                               }
+                              onClick={() => handleUpdateCurriculumDetail(detail)}
                             >
                               <TableCell className="font-mono text-xs font-semibold text-blue-700 dark:text-blue-400 border-r py-2">
                                 {detail.course?.course_code}
@@ -402,6 +416,7 @@ export default function CurriculumTable({
           </Card>
         );
       })}
+      <CurriculumDetailUpdateModal controller={modalController} onSubmit={() => {}} />
     </div>
   );
 }

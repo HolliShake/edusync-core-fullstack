@@ -5,11 +5,13 @@ import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
 import { Button } from '@/components/ui/button';
+import { encryptIdForUrl } from '@/lib/hash';
 import { deleteCourse, useGetCoursePaginated } from '@rest/api';
 import type { Course } from '@rest/models/course';
 import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 function formatTwoDecimals(value: any): string {
@@ -23,6 +25,7 @@ function formatTwoDecimals(value: any): string {
 }
 
 export default function AdminCourses(): React.ReactNode {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
 
@@ -152,6 +155,7 @@ export default function AdminCourses(): React.ReactNode {
         onPageChange={setPage}
         showPagination={true}
         loading={isLoading}
+        onClickRow={(row) => navigate(`/admin/courses/${encryptIdForUrl(row?.id as number)}`)}
       />
       <CourseModal
         controller={controller}

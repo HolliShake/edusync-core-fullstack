@@ -5,13 +5,17 @@ import {
   type AdmissionApplicationLogType,
 } from '@/enums/admission-application-log-type-enum';
 import type React from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ProgramChairAdmissionApplicationGenericTab from './generic.tab';
 
 export default function ProgramChairAdmissionApplication(): React.ReactNode {
-  const [selectedTab, setSelectedTab] = useState<AdmissionApplicationLogType>(
-    AdmissionApplicationLogTypeEnum.SUBMITTED
-  );
+  const [selectedTab, setSelectedTab] = useState<AdmissionApplicationLogType>(() => {
+    const saved = localStorage.getItem(window.location.pathname + '_tab');
+    return saved
+      ? (saved as AdmissionApplicationLogType)
+      : AdmissionApplicationLogTypeEnum.SUBMITTED;
+  });
+
   const tabs = useMemo(
     () => [
       {
@@ -34,15 +38,24 @@ export default function ProgramChairAdmissionApplication(): React.ReactNode {
     []
   );
 
+  const handleTabChange = (value: string): void => {
+    localStorage.setItem(window.location.pathname + '_tab', value);
+    setSelectedTab(value as AdmissionApplicationLogType);
+  };
+
+  useEffect(() => {
+    const tab = localStorage.getItem(window.location.pathname + '_tab');
+    if (tabs.some((t) => t.value === tab)) {
+      setSelectedTab(tab as AdmissionApplicationLogType);
+    }
+  }, [tabs]);
+
   return (
     <TitledPage
       title="Admission Applications"
       description="Manage and review admission applications"
     >
-      <Tabs
-        value={selectedTab}
-        onValueChange={(value) => setSelectedTab(value as AdmissionApplicationLogType)}
-      >
+      <Tabs value={selectedTab} onValueChange={handleTabChange}>
         <TabsList>
           {tabs.map((tab) => (
             <TabsTrigger

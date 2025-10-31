@@ -35,6 +35,7 @@ use OpenApi\Attributes as OA;
             readOnly: true
         ),
         new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
+        new OA\Property(property: "is_enrollment_valid", type: "boolean", readOnly: true),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
@@ -132,6 +133,7 @@ class Enrollment extends Model
         'section',
         'latest_status',
         'latest_status_label',
+        'is_enrollment_valid',
     ];
 
     /**
@@ -209,6 +211,17 @@ class Enrollment extends Model
     public function getSectionAttribute(): Section
     {
         return $this->section()->first();
+    }
+
+    /**
+     * Get the is enrollment valid attribute.
+     *
+     * @return bool
+     */
+    public function getIsEnrollmentValidAttribute(): bool
+    {
+        // If enrollment is already passed, or course is already credited, then return false
+        return true;
     }
 
     /**

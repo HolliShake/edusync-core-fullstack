@@ -54,7 +54,7 @@ const Select = ({
       <SelectTrigger className={cn(className)}>
         <SelectValue placeholder={placeholder}>{selectedOption?.label || placeholder}</SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="max-h-[300px] overflow-y-auto">
         {options.map((option) => (
           <SelectItem
             key={`${option.value}-${option.label}`}
