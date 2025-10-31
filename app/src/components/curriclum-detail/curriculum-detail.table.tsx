@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useUpdateCurriculumDetail } from '@rest/api';
 import type { CurriculumDetail } from '@rest/models';
 import { BookOpen, Calendar, FlaskConical, GraduationCap } from 'lucide-react';
 import type React from 'react';
@@ -26,6 +25,7 @@ interface CurriculumTableProps {
   curriculumDetails: CurriculumDetail[];
   isLoading?: boolean;
   allowEdit?: boolean;
+  onMutate?: () => void;
   onGenerateSchedule?: (data: ScheduleGenerationData) => void;
 }
 
@@ -46,13 +46,12 @@ export default function CurriculumTable({
   curriculumDetails,
   isLoading = false,
   allowEdit = false,
+  onMutate = () => {},
   onGenerateSchedule,
 }: CurriculumTableProps): React.ReactNode {
   const [openPopover, setOpenPopover] = useState<string | null>(null);
   const [numberOfSchedules, setNumberOfSchedules] = useState<{ [key: string]: string }>({});
   const [autoPost, setAutoPost] = useState<{ [key: string]: boolean }>({});
-
-  const { mutateAsync: updateCurriculumDetail } = useUpdateCurriculumDetail();
 
   const modalController = useModal<CurriculumDetail>();
 
@@ -137,6 +136,7 @@ export default function CurriculumTable({
   }
 
   const handleUpdateCurriculumDetail = async (data: CurriculumDetail) => {
+    if (!allowEdit) return;
     modalController.openFn(data);
   };
 
@@ -416,7 +416,7 @@ export default function CurriculumTable({
           </Card>
         );
       })}
-      <CurriculumDetailUpdateModal controller={modalController} onSubmit={() => {}} />
+      <CurriculumDetailUpdateModal controller={modalController} onSubmit={onMutate} />
     </div>
   );
 }

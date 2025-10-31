@@ -1,34 +1,20 @@
-import CurriculumTable from '@/components/curriclum-detail/curriculum-detail.table';
 import TitledPage from '@/components/pages/titled.page';
+import { CurriculumContext } from '@/context/curriculum.context';
 import { decryptIdFromUrl } from '@/lib/hash';
-import { useGetCurriculumDetailPaginated } from '@rest/api';
-import type { CurriculumDetail } from '@rest/models';
-import { useMemo } from 'react';
+import { useGetCurriculumById } from '@rest/api';
 import { useParams } from 'react-router';
+import CurriculumContent from './content';
 
 export default function ProgramChairCurriculumDetail(): React.ReactNode {
   const { curriculumId } = useParams();
-  const { data: curriculumDetailsResponse, isLoading } = useGetCurriculumDetailPaginated({
-    'filter[curriculum_id]': decryptIdFromUrl(curriculumId as string),
-    paginate: false,
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
+  const { data: curriculum } = useGetCurriculumById(decryptIdFromUrl(curriculumId as string), {
+    query: { enabled: !!curriculumId },
   });
-
-  const curriculumDetails = useMemo(
-    () => curriculumDetailsResponse?.data ?? [],
-    [curriculumDetailsResponse]
-  );
-
-  console.log(curriculumDetails);
-
   return (
     <TitledPage title="Curriculum Detail" description="Manage your curriculum detail">
-      <CurriculumTable
-        curriculumDetails={curriculumDetails as CurriculumDetail[]}
-        isLoading={isLoading}
-        onGenerateSchedule={() => {}}
-      />
+      <CurriculumContext value={curriculum?.data}>
+        <CurriculumContent />
+      </CurriculumContext>
     </TitledPage>
   );
 }
