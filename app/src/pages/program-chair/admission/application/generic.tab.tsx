@@ -1,6 +1,8 @@
 import Select from '@/components/custom/select.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { type AdmissionApplicationLogType } from '@/enums/admission-application-log-type-enum';
 import { encryptIdForUrl } from '@/lib/hash';
@@ -24,18 +26,19 @@ export default function ProgramChairAdmissionApplicationGenericTab({
 
   const { session } = useAuth();
 
-  const { data: applications } = useGetAdmissionApplicationPaginated(
-    {
-      'filter[academic_program_id]': session?.active_academic_program ?? 0,
-      'filter[school_year_id]': schoolYearId ?? 0,
-      'filter[latest_status]': status,
-      page,
-      rows,
-    },
-    { query: { enabled: !!schoolYearId || !!session?.active_academic_program } }
-  );
+  const { data: applications, isLoading: isLoadingApplications } =
+    useGetAdmissionApplicationPaginated(
+      {
+        'filter[academic_program_id]': session?.active_academic_program ?? 0,
+        'filter[school_year_id]': schoolYearId ?? 0,
+        'filter[latest_status]': status,
+        page,
+        rows,
+      },
+      { query: { enabled: !!schoolYearId || !!session?.active_academic_program } }
+    );
 
-  const { data: schoolYearResponse } = useGetSchoolYearPaginated({
+  const { data: schoolYearResponse, isLoading: isLoadingSchoolYears } = useGetSchoolYearPaginated({
     sort: '-start_date',
     page: 1,
     rows: Number.MAX_SAFE_INTEGER,
@@ -130,6 +133,46 @@ export default function ProgramChairAdmissionApplicationGenericTab({
 
   const tableItems = useMemo(() => applications?.data?.data ?? [], [applications]);
   const paginationMeta = useMemo(() => applications?.data, [applications]);
+
+  if (isLoadingSchoolYears || isLoadingApplications) {
+    return (
+      <div className="space-y-2">
+        <div className="w-fit">
+          <Skeleton className="h-10 w-[200px]" />
+        </div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {/* Table Header Skeleton */}
+              <div className="flex gap-4 pb-4 border-b">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-36" />
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+              {/* Table Rows Skeleton */}
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="flex gap-4 py-3">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-40" />
+                  <Skeleton className="h-4 w-28" />
+                  <Skeleton className="h-4 w-36" />
+                  <Skeleton className="h-4 w-28" />
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-2">

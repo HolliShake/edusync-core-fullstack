@@ -6,11 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EnrollmentLogAction = typeof EnrollmentLogAction[keyof typeof EnrollmentLogAction];
+export type EnrollmentLatestStatus = typeof EnrollmentLatestStatus[keyof typeof EnrollmentLatestStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const EnrollmentLogAction = {
+export const EnrollmentLatestStatus = {
   enroll: 'enroll',
   program_chair_approved: 'program_chair_approved',
   registrar_approved: 'registrar_approved',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\DocumentRequestLogActionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
@@ -22,7 +23,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "document_request_id", type: "integer", example: 1),
         new OA\Property(property: "user_id", type: "integer", example: 1),
-        new OA\Property(property: "action", type: "string", example: "submitted"),
+        new OA\Property(property: "action", type: "string", enum: DocumentRequestLogActionEnum::class, readOnly: true),
         new OA\Property(property: "note", type: "string", example: "Document request submitted"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00.000000Z"),
@@ -109,6 +110,10 @@ class DocumentRequestLog extends Model
         'user_id',
         'action',
         'note',
+    ];
+
+    protected $casts = [
+        'action' => DocumentRequestLogActionEnum::class,
     ];
 
     protected $appends = [

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\AdmissionApplicationLogTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
@@ -21,10 +22,11 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "admission_application_id", type: "integer"),
         new OA\Property(property: "user_id", type: "integer"),
-        new OA\Property(property: "type", type: "string", enum: ['submitted', 'cancelled', 'approved', 'rejected']),
+        new OA\Property(property: "type", type: "string", enum: AdmissionApplicationLogTypeEnum::class, readOnly: true),
         new OA\Property(property: "note", type: "string", nullable: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
+        new OA\Property(property: "type_label", type: "string", readOnly: true),
         // Relations
         new OA\Property(property: "admission_application", ref: "#/components/schemas/AdmissionApplication"),
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
@@ -115,14 +117,38 @@ class AdmissionApplicationLog extends Model
     protected $casts = [
         'admission_application_id' => 'integer',
         'user_id'                  => 'integer',
-        'type'                     => 'string',
+        'type'                     => AdmissionApplicationLogTypeEnum::class,
         'note'                     => 'string',
     ];
 
     protected $appends = [
+        'type_label',
         'admission_application',
         'user',
     ];
+
+    /**
+     * Get the label for the type.
+     *
+     * @return string
+     */
+    public function getTypeLabelAttribute(): string
+    {
+        switch ($this->type) {
+            case AdmissionApplicationLogTypeEnum::SUBMITTED->value:
+                return 'Pending';
+            case AdmissionApplicationLogTypeEnum::APPROVED->value:
+                return 'Approved for Evaluation';
+            case AdmissionApplicationLogTypeEnum::REJECTED->value:
+                return 'Rejected by Program Chair';
+            case AdmissionApplicationLogTypeEnum::ACCEPTED->value:
+            return 'Ready for Enrollment';
+            case AdmissionApplicationLogTypeEnum::CANCELLED->value:
+                return 'Cancelled by Student';
+            default:
+                return 'Pending';
+        }
+    }
 
     /**
      * Get the admission application that owns the log.

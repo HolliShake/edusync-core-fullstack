@@ -12,7 +12,7 @@ export interface Requirement {
   requirement_name: string;
   /** @nullable */
   description?: string | null;
-  requirement_type: RequirementRequirementType;
+  readonly requirement_type: RequirementRequirementType;
   is_mandatory: boolean;
   is_active: boolean;
   readonly created_at?: string;

@@ -6,11 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type AdmissionApplicationLogType = typeof AdmissionApplicationLogType[keyof typeof AdmissionApplicationLogType];
+export type AdmissionApplicationLatestStatus = typeof AdmissionApplicationLatestStatus[keyof typeof AdmissionApplicationLatestStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const AdmissionApplicationLogType = {
+export const AdmissionApplicationLatestStatus = {
   submitted: 'submitted',
   cancelled: 'cancelled',
   approved: 'approved',

@@ -22,7 +22,7 @@ export interface Curriculum {
   effective_year: number;
   total_units: number;
   total_hours: number;
-  status: CurriculumStatus;
+  readonly status: CurriculumStatus;
   /** @nullable */
   approved_date: string | null;
   created_at?: string;

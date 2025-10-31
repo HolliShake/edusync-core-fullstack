@@ -28,7 +28,13 @@ use OpenApi\Attributes as OA;
         // Computed
         new OA\Property(property: "validated", type: "boolean", readOnly: true),
         new OA\Property(property: "is_dropped", type: "boolean", readOnly: true),
-        new OA\Property(property: "latest_status", type: "string", readOnly: true),
+        new OA\Property(
+            property: "latest_status",
+            type: "string",
+            enum: EnrollmentLogActionEnum::class,
+            readOnly: true
+        ),
+        new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
@@ -124,7 +130,8 @@ class Enrollment extends Model
         'validated',
         'is_dropped',
         'section',
-        'latest_status'
+        'latest_status',
+        'latest_status_label',
     ];
 
     /**
@@ -135,21 +142,32 @@ class Enrollment extends Model
     public function getLatestStatusAttribute(): string
     {
         $logs = $this->latestStatus()->first();
-        switch ($logs->action) {
+        return $logs ? $logs->action->value : EnrollmentLogActionEnum::ENROLL->value;
+    }
+
+    public function getLatestStatusLabelAttribute(): string
+    {
+        $latestLog = $this->latestStatus()->first();
+        $action = $latestLog ? $latestLog->action : EnrollmentLogActionEnum::ENROLL;
+
+        // Handle both enum and string values
+        $actionValue = $action instanceof EnrollmentLogActionEnum ? $action->value : $action;
+
+        switch ($actionValue) {
             case EnrollmentLogActionEnum::ENROLL->value:
                 return 'Pending';
             case EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value:
-                return 'Approved';
+                return 'Program Chair Approved';
             case EnrollmentLogActionEnum::REGISTRAR_APPROVED->value:
-                return 'Validated';
+                return 'Officially Enrolled';
             case EnrollmentLogActionEnum::DROPPED->value:
                 return 'Dropped Requested';
             case EnrollmentLogActionEnum::PROGRAM_CHAIR_DROPPED_APPROVED->value:
-                return 'Dropped Approved';
+                return 'Dropped Approved by Program Chair';
             case EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value:
-                return 'Dropped Validated';
+                return 'Officially Dropped';
             default:
-            return 'Pending';
+                return 'Pending';
         }
     }
 

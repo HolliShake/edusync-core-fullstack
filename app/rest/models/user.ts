@@ -12,7 +12,7 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  role?: UserRole;
+  readonly role?: UserRole;
   /** @nullable */
   email_verified_at?: string | null;
   created_at?: string;

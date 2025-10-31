@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { EnrollmentLatestStatus } from './enrollmentLatestStatus';
 import type { User } from './user';
 import type { Section } from './section';
 import type { EnrollmentLog } from './enrollmentLog';
@@ -17,7 +18,8 @@ export interface Enrollment {
   readonly updated_at?: string;
   readonly validated?: boolean;
   readonly is_dropped?: boolean;
-  readonly latest_status?: string;
+  readonly latest_status?: EnrollmentLatestStatus;
+  readonly latest_status_label?: string;
   user?: User;
   section?: Section;
   enrollment_logs?: EnrollmentLog[];

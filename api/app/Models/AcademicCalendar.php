@@ -28,22 +28,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(
             property: "event",
             type: "string",
-            enum: [
-                'REGISTRATION',
-                'ENROLLMENT',
-                'ORIENTATION',
-                'START_OF_CLASSES',
-                'HOLIDAY',
-                'UNIVERSITY_EVENT',
-                'DEADLINE',
-                'PERIODIC_EXAM',
-                'END_OF_CLASSES',
-                'GRADE_SUBMISSION',
-                'GRADUATION',
-                'FACULTY_EVALUATION',
-                'ACADEMIC_TRANSITION',
-                'OTHER'
-            ]
+            enum: CalendarEventEnum::class,
+            readOnly: true
         ),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
@@ -137,6 +123,7 @@ class AcademicCalendar extends Model
 
     protected $casts = [
         'school_year_id' => 'integer',
+        'event'          => CalendarEventEnum::class,
     ];
 
     protected $appends = [

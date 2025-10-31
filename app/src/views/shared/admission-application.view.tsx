@@ -132,7 +132,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string, label: string) => {
     const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
       approved: 'default',
       rejected: 'destructive',
@@ -142,7 +142,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
 
     return (
       <Badge variant={variants[status] || 'outline'} className="text-xs">
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {label ?? status}
       </Badge>
     );
   };
@@ -224,7 +224,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                             onClick={() => setSelectedLog(selectedLog?.id === log.id ? null : log)}
                           >
                             <div className="flex items-center gap-2 mb-1">
-                              {getStatusBadge(log.type)}
+                              {getStatusBadge(log.type, log.type_label!)}
                             </div>
                             <span className="text-xs text-muted-foreground block mt-1">
                               {log.created_at &&
@@ -322,7 +322,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                     </CardDescription>
                   </div>
                 </div>
-                {getStatusBadge(latestStatus)}
+                {getStatusBadge(latestStatus, application.latest_status_label!)}
               </div>
             </CardHeader>
             <Separator />
@@ -398,7 +398,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                       </CardDescription>
                     )}
                   </div>
-                  {getStatusBadge(selectedLog.type)}
+                  {getStatusBadge(selectedLog.type, selectedLog.type_label!)}
                 </div>
               </CardHeader>
               <Separator />

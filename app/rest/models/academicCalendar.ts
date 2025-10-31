@@ -16,7 +16,7 @@ export interface AcademicCalendar {
   start_date: string;
   end_date: string;
   school_year_id: number;
-  event: AcademicCalendarEvent;
+  readonly event: AcademicCalendarEvent;
   readonly created_at?: string;
   readonly updated_at?: string;
   school_year?: SchoolYear;

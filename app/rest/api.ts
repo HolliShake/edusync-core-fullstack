@@ -147,12 +147,15 @@ import type {
   GetEnrollmentLogResponse200,
   GetEnrollmentPaginatedParams,
   GetEnrollmentResponse200,
+  GetEnrollmentsByAcademicProgramIdGroupedByUserParams,
   GetProgramTypePaginatedParams,
   GetProgramTypeResponse200,
   GetRequirementPaginatedParams,
   GetRequirementResponse200,
   GetRoomPaginatedParams,
   GetRoomResponse200,
+  GetScholasticFilter200,
+  GetScholasticFilterParams,
   GetSchoolYearPaginatedParams,
   GetSchoolYearResponse200,
   GetSectionPaginatedParams,
@@ -5500,7 +5503,7 @@ export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getC
  * @summary Create a new Curriculum
  */
 export const createCurriculum = (
-    curriculum: Curriculum,
+    curriculum: NonReadonly<Curriculum>,
  signal?: AbortSignal
 ) => {
       
@@ -5516,8 +5519,8 @@ export const createCurriculum = (
 
 
 export const getCreateCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: NonReadonly<Curriculum>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: NonReadonly<Curriculum>}, TContext> => {
 
 const mutationKey = ['createCurriculum'];
 const {mutation: mutationOptions} = options ?
@@ -5529,7 +5532,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCurriculum>>, {data: Curriculum}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCurriculum>>, {data: NonReadonly<Curriculum>}> = (props) => {
           const {data} = props ?? {};
 
           return  createCurriculum(data,)
@@ -5541,18 +5544,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof createCurriculum>>>
-    export type CreateCurriculumMutationBody = Curriculum
+    export type CreateCurriculumMutationBody = NonReadonly<Curriculum>
     export type CreateCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Curriculum
  */
 export const useCreateCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: NonReadonly<Curriculum>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCurriculum>>,
         TError,
-        {data: Curriculum},
+        {data: NonReadonly<Curriculum>},
         TContext
       > => {
 
@@ -5656,7 +5659,7 @@ export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurric
  */
 export const updateCurriculum = (
     id: number,
-    curriculum: Curriculum,
+    curriculum: NonReadonly<Curriculum>,
  ) => {
       
       
@@ -5671,8 +5674,8 @@ export const updateCurriculum = (
 
 
 export const getUpdateCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: NonReadonly<Curriculum>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: NonReadonly<Curriculum>}, TContext> => {
 
 const mutationKey = ['updateCurriculum'];
 const {mutation: mutationOptions} = options ?
@@ -5684,7 +5687,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCurriculum>>, {id: number;data: Curriculum}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCurriculum>>, {id: number;data: NonReadonly<Curriculum>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateCurriculum(id,data,)
@@ -5696,18 +5699,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof updateCurriculum>>>
-    export type UpdateCurriculumMutationBody = Curriculum
+    export type UpdateCurriculumMutationBody = NonReadonly<Curriculum>
     export type UpdateCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Curriculum
  */
 export const useUpdateCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: NonReadonly<Curriculum>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCurriculum>>,
         TError,
-        {id: number;data: Curriculum},
+        {id: number;data: NonReadonly<Curriculum>},
         TContext
       > => {
 
@@ -7260,7 +7263,7 @@ export function useGetDocumentRequestLogPaginated<TData = Awaited<ReturnType<typ
  * @summary Create a new DocumentRequestLog
  */
 export const createDocumentRequestLog = (
-    documentRequestLog: DocumentRequestLog,
+    documentRequestLog: NonReadonly<DocumentRequestLog>,
  signal?: AbortSignal
 ) => {
       
@@ -7276,8 +7279,8 @@ export const createDocumentRequestLog = (
 
 
 export const getCreateDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: NonReadonly<DocumentRequestLog>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: NonReadonly<DocumentRequestLog>}, TContext> => {
 
 const mutationKey = ['createDocumentRequestLog'];
 const {mutation: mutationOptions} = options ?
@@ -7289,7 +7292,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequestLog>>, {data: DocumentRequestLog}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequestLog>>, {data: NonReadonly<DocumentRequestLog>}> = (props) => {
           const {data} = props ?? {};
 
           return  createDocumentRequestLog(data,)
@@ -7301,18 +7304,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof createDocumentRequestLog>>>
-    export type CreateDocumentRequestLogMutationBody = DocumentRequestLog
+    export type CreateDocumentRequestLogMutationBody = NonReadonly<DocumentRequestLog>
     export type CreateDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new DocumentRequestLog
  */
 export const useCreateDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: NonReadonly<DocumentRequestLog>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createDocumentRequestLog>>,
         TError,
-        {data: DocumentRequestLog},
+        {data: NonReadonly<DocumentRequestLog>},
         TContext
       > => {
 
@@ -7416,7 +7419,7 @@ export function useGetDocumentRequestLogById<TData = Awaited<ReturnType<typeof g
  */
 export const updateDocumentRequestLog = (
     id: number,
-    documentRequestLog: DocumentRequestLog,
+    documentRequestLog: NonReadonly<DocumentRequestLog>,
  ) => {
       
       
@@ -7431,8 +7434,8 @@ export const updateDocumentRequestLog = (
 
 
 export const getUpdateDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: NonReadonly<DocumentRequestLog>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: NonReadonly<DocumentRequestLog>}, TContext> => {
 
 const mutationKey = ['updateDocumentRequestLog'];
 const {mutation: mutationOptions} = options ?
@@ -7444,7 +7447,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequestLog>>, {id: number;data: DocumentRequestLog}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequestLog>>, {id: number;data: NonReadonly<DocumentRequestLog>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateDocumentRequestLog(id,data,)
@@ -7456,18 +7459,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof updateDocumentRequestLog>>>
-    export type UpdateDocumentRequestLogMutationBody = DocumentRequestLog
+    export type UpdateDocumentRequestLogMutationBody = NonReadonly<DocumentRequestLog>
     export type UpdateDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a DocumentRequestLog
  */
 export const useUpdateDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: NonReadonly<DocumentRequestLog>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateDocumentRequestLog>>,
         TError,
-        {id: number;data: DocumentRequestLog},
+        {id: number;data: NonReadonly<DocumentRequestLog>},
         TContext
       > => {
 
@@ -8069,6 +8072,200 @@ export const useCreateEnrollment = <TError = UnauthenticatedResponse | Forbidden
       return useMutation(mutationOptions , queryClient);
     }
     
+/**
+ * Retrieve a scholastic filter
+ * @summary Get scholastic filter
+ */
+export const getScholasticFilter = (
+    academicProgramId: number,
+    params?: GetScholasticFilterParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetScholasticFilter200>(
+      {url: `/api/Enrollment/academic-program/scholastic-filter/${academicProgramId}`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetScholasticFilterQueryKey = (academicProgramId?: number,
+    params?: GetScholasticFilterParams,) => {
+    return [`/api/Enrollment/academic-program/scholastic-filter/${academicProgramId}`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetScholasticFilterQueryOptions = <TData = Awaited<ReturnType<typeof getScholasticFilter>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(academicProgramId: number,
+    params?: GetScholasticFilterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScholasticFilter>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScholasticFilterQueryKey(academicProgramId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScholasticFilter>>> = ({ signal }) => getScholasticFilter(academicProgramId,params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(academicProgramId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScholasticFilter>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetScholasticFilterQueryResult = NonNullable<Awaited<ReturnType<typeof getScholasticFilter>>>
+export type GetScholasticFilterQueryError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+
+export function useGetScholasticFilter<TData = Awaited<ReturnType<typeof getScholasticFilter>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params: undefined |  GetScholasticFilterParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScholasticFilter>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScholasticFilter>>,
+          TError,
+          Awaited<ReturnType<typeof getScholasticFilter>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScholasticFilter<TData = Awaited<ReturnType<typeof getScholasticFilter>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetScholasticFilterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScholasticFilter>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScholasticFilter>>,
+          TError,
+          Awaited<ReturnType<typeof getScholasticFilter>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScholasticFilter<TData = Awaited<ReturnType<typeof getScholasticFilter>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetScholasticFilterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScholasticFilter>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get scholastic filter
+ */
+
+export function useGetScholasticFilter<TData = Awaited<ReturnType<typeof getScholasticFilter>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetScholasticFilterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScholasticFilter>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetScholasticFilterQueryOptions(academicProgramId,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a paginated list of Enrollment by Academic Program ID
+ * @summary Get paginated list of Enrollment by Academic Program ID
+ */
+export const getEnrollmentsByAcademicProgramIdGroupedByUser = (
+    academicProgramId: number,
+    params?: GetEnrollmentsByAcademicProgramIdGroupedByUserParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedEnrollmentResponse200>(
+      {url: `/api/Enrollment/academic-program/grouped-by-user-name/${academicProgramId}`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetEnrollmentsByAcademicProgramIdGroupedByUserQueryKey = (academicProgramId?: number,
+    params?: GetEnrollmentsByAcademicProgramIdGroupedByUserParams,) => {
+    return [`/api/Enrollment/academic-program/grouped-by-user-name/${academicProgramId}`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetEnrollmentsByAcademicProgramIdGroupedByUserQueryOptions = <TData = Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(academicProgramId: number,
+    params?: GetEnrollmentsByAcademicProgramIdGroupedByUserParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnrollmentsByAcademicProgramIdGroupedByUserQueryKey(academicProgramId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>> = ({ signal }) => getEnrollmentsByAcademicProgramIdGroupedByUser(academicProgramId,params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(academicProgramId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnrollmentsByAcademicProgramIdGroupedByUserQueryResult = NonNullable<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>>
+export type GetEnrollmentsByAcademicProgramIdGroupedByUserQueryError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+
+export function useGetEnrollmentsByAcademicProgramIdGroupedByUser<TData = Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params: undefined |  GetEnrollmentsByAcademicProgramIdGroupedByUserParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentsByAcademicProgramIdGroupedByUser<TData = Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetEnrollmentsByAcademicProgramIdGroupedByUserParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnrollmentsByAcademicProgramIdGroupedByUser<TData = Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetEnrollmentsByAcademicProgramIdGroupedByUserParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of Enrollment by Academic Program ID
+ */
+
+export function useGetEnrollmentsByAcademicProgramIdGroupedByUser<TData = Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetEnrollmentsByAcademicProgramIdGroupedByUserParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsByAcademicProgramIdGroupedByUser>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetEnrollmentsByAcademicProgramIdGroupedByUserQueryOptions(academicProgramId,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 /**
  * Retrieve a Enrollment by its ID
  * @summary Get a specific Enrollment

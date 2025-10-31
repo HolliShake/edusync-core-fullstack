@@ -226,6 +226,8 @@ Route::controller(AdmissionApplicationScoreController::class)->group(function() 
 
 Route::controller(EnrollmentController::class)->group(function() {
     Route::get('/Enrollment', 'index');
+    Route::get('/Enrollment/academic-program/scholastic-filter/{academic_program_id}', 'getScholasticFilter');
+    Route::get('/Enrollment/academic-program/grouped-by-user-name/{academic_program_id}', 'getEnrollmentsByAcademicProgramIdGroupedByUser');
     Route::get('/Enrollment/{id}', 'show');
     Route::post('/Enrollment', 'store');
     Route::post('/Enrollment/enroll', 'enroll');

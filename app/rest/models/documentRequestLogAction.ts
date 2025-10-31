@@ -6,14 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type AdmissionApplicationLogType = typeof AdmissionApplicationLogType[keyof typeof AdmissionApplicationLogType];
+export type DocumentRequestLogAction = typeof DocumentRequestLogAction[keyof typeof DocumentRequestLogAction];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const AdmissionApplicationLogType = {
+export const DocumentRequestLogAction = {
   submitted: 'submitted',
   cancelled: 'cancelled',
-  approved: 'approved',
   rejected: 'rejected',
-  accepted: 'accepted',
+  processing: 'processing',
+  pickup: 'pickup',
+  completed: 'completed',
 } as const;

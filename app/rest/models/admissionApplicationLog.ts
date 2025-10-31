@@ -13,11 +13,12 @@ export interface AdmissionApplicationLog {
   readonly id?: number;
   admission_application_id: number;
   user_id: number;
-  type: AdmissionApplicationLogType;
+  readonly type: AdmissionApplicationLogType;
   /** @nullable */
   note?: string | null;
   created_at?: string;
   updated_at?: string;
+  readonly type_label?: string;
   admission_application?: AdmissionApplication;
   user?: User;
 }

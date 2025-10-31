@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\RequirementTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use OpenApi\Attributes as OA;
 
@@ -21,7 +22,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "requirement_name", type: "string"),
         new OA\Property(property: "description", type: "string", nullable: true),
-        new OA\Property(property: "requirement_type", type: "string", enum: ['admission', 'graduation', 'enrollment', 'scholarship', 'transfer', 'general']),
+        new OA\Property(property: "requirement_type", type: "string", enum: RequirementTypeEnum::class, readOnly: true),
         new OA\Property(property: "is_mandatory", type: "boolean", default: true),
         new OA\Property(property: "is_active", type: "boolean", default: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),

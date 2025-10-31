@@ -3,6 +3,7 @@ import ProgramChairAdmissionApplication from '@/pages/program-chair/admission/ap
 import ProgramChairAdmissionApplicationStatus from '@/pages/program-chair/admission/application/status/page';
 import ProgramChairAdmissionEvaluation from '@/pages/program-chair/admission/evaluation/page';
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
+import ProgramChairEnrollment from '@/pages/program-chair/enrollment/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
 import type { Route } from '@/types/route';
@@ -61,6 +62,16 @@ const PROGRAM_CHAIR: Route[] = [
         roles: [UserRoleEnum.PROGRAM_CHAIR],
       },
     ],
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.PROGRAM_CHAIR],
+  },
+  {
+    key: 'program-chair.enrollment',
+    title: 'Enrollment',
+    path: '/program-chair/enrollment',
+    component: <ProgramChairEnrollment />,
+    icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
     roles: [UserRoleEnum.PROGRAM_CHAIR],

@@ -7307,6 +7307,16 @@
                             "type": "integer",
                             "default": 0
                         }
+                    },
+                    {
+                        "name": "filter[academic_program_id_grouped_by_user_name]",
+                        "in": "query",
+                        "description": "Academic Program ID grouped by user name",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
                     }
                 ],
                 "responses": {
@@ -7399,6 +7409,237 @@
                                 }
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Enrollment\/academic-program\/scholastic-filter\/{academic_program_id}": {
+            "get": {
+                "tags": [
+                    "Enrollment"
+                ],
+                "summary": "Get scholastic filter",
+                "description": "Retrieve a scholastic filter",
+                "operationId": "getScholasticFilter",
+                "parameters": [
+                    {
+                        "name": "academic_program_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[latest_status]",
+                        "in": "query",
+                        "description": "Latest status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "School year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "year": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#\/components\/schemas\/KeyValuePair"
+                                                    }
+                                                },
+                                                "term": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#\/components\/schemas\/KeyValuePair"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Academic Program not found"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Enrollment\/academic-program\/grouped-by-user-name\/{academic_program_id}": {
+            "get": {
+                "tags": [
+                    "Enrollment"
+                ],
+                "summary": "Get paginated list of Enrollment by Academic Program ID",
+                "description": "Retrieve a paginated list of Enrollment by Academic Program ID",
+                "operationId": "getEnrollmentsByAcademicProgramIdGroupedByUser",
+                "parameters": [
+                    {
+                        "name": "academic_program_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[latest_status]",
+                        "in": "query",
+                        "description": "Latest status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "School year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "filter[year_id]",
+                        "in": "query",
+                        "description": "Year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "filter[term_id]",
+                        "in": "query",
+                        "description": "Term ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedEnrollmentResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Academic Program not found"
                     },
                     "500": {
                         "description": "Internal server error",
@@ -10550,17 +10791,18 @@
                             "ENROLLMENT",
                             "ORIENTATION",
                             "START_OF_CLASSES",
-                            "HOLIDAY",
-                            "UNIVERSITY_EVENT",
-                            "DEADLINE",
+                            "ACADEMIC_TRANSITION",
                             "PERIODIC_EXAM",
                             "END_OF_CLASSES",
-                            "GRADE_SUBMISSION",
-                            "GRADUATION",
                             "FACULTY_EVALUATION",
-                            "ACADEMIC_TRANSITION",
+                            "GRADE_SUBMISSION",
+                            "DEADLINE",
+                            "GRADUATION",
+                            "UNIVERSITY_EVENT",
+                            "HOLIDAY",
                             "OTHER"
-                        ]
+                        ],
+                        "readOnly": true
                     },
                     "created_at": {
                         "type": "string",
@@ -11364,7 +11606,19 @@
                         "format": "date-time"
                     },
                     "latest_status": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                            "submitted",
+                            "cancelled",
+                            "approved",
+                            "rejected",
+                            "accepted"
+                        ],
+                        "readOnly": true
+                    },
+                    "latest_status_label": {
+                        "type": "string",
+                        "readOnly": true
                     },
                     "is_open_for_enrollment": {
                         "type": "boolean"
@@ -11515,8 +11769,10 @@
                             "submitted",
                             "cancelled",
                             "approved",
-                            "rejected"
-                        ]
+                            "rejected",
+                            "accepted"
+                        ],
+                        "readOnly": true
                     },
                     "note": {
                         "type": "string",
@@ -11529,6 +11785,10 @@
                     "updated_at": {
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "type_label": {
+                        "type": "string",
+                        "readOnly": true
                     },
                     "admission_application": {
                         "$ref": "#\/components\/schemas\/AdmissionApplication"
@@ -12699,7 +12959,7 @@
                             "inactive",
                             "archived"
                         ],
-                        "example": "active"
+                        "readOnly": true
                     },
                     "approved_date": {
                         "type": "string",
@@ -13385,7 +13645,15 @@
                     },
                     "action": {
                         "type": "string",
-                        "example": "submitted"
+                        "enum": [
+                            "submitted",
+                            "cancelled",
+                            "rejected",
+                            "processing",
+                            "pickup",
+                            "completed"
+                        ],
+                        "readOnly": true
                     },
                     "note": {
                         "type": "string",
@@ -13687,6 +13955,19 @@
                     },
                     "latest_status": {
                         "type": "string",
+                        "enum": [
+                            "enroll",
+                            "program_chair_approved",
+                            "registrar_approved",
+                            "program_chair_dropped_approved",
+                            "registrar_dropped_approved",
+                            "dropped",
+                            "rejected"
+                        ],
+                        "readOnly": true
+                    },
+                    "latest_status_label": {
+                        "type": "string",
                         "readOnly": true
                     },
                     "user": {
@@ -13834,7 +14115,8 @@
                             "registrar_approved",
                             "program_chair_dropped_approved",
                             "registrar_dropped_approved",
-                            "dropped"
+                            "dropped",
+                            "rejected"
                         ]
                     },
                     "note": {
@@ -14109,7 +14391,8 @@
                             "scholarship",
                             "transfer",
                             "general"
-                        ]
+                        ],
+                        "readOnly": true
                     },
                     "is_mandatory": {
                         "type": "boolean",
@@ -14754,7 +15037,8 @@
                             "student",
                             "faculty",
                             "guest"
-                        ]
+                        ],
+                        "readOnly": true
                     },
                     "email_verified_at": {
                         "type": "string",
@@ -14878,6 +15162,22 @@
                     "success": {
                         "type": "boolean",
                         "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "KeyValuePair": {
+                "title": "KeyValuePair",
+                "required": [
+                    "label",
+                    "value"
+                ],
+                "properties": {
+                    "label": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
                     }
                 },
                 "type": "object"

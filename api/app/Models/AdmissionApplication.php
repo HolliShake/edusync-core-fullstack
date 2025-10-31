@@ -42,7 +42,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "address", type: "string"),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
-        new OA\Property(property: "latest_status", type: "string"),
+        new OA\Property(property: "latest_status", type: "string", enum: AdmissionApplicationLogTypeEnum::class, readOnly: true),
+        new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
         new OA\Property(property: "is_open_for_enrollment", type: "boolean"),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
@@ -150,6 +151,7 @@ class AdmissionApplication extends Model
 
     protected $appends = [
         'latest_status',
+        'latest_status_label',
         'user',
         'school_year',
         'academic_program',
@@ -181,6 +183,30 @@ class AdmissionApplication extends Model
     {
         $latestLog = $this->latestStatus()->first();
         return $latestLog ? $latestLog->type : AdmissionApplicationLogTypeEnum::SUBMITTED->value;
+    }
+
+    /**
+     * Get the label for the latest status.
+     *
+     * @return string
+     */
+    public function getLatestStatusLabelAttribute(): string
+    {
+        $latestLog = $this->latestStatus()->first() ?? AdmissionApplicationLogTypeEnum::SUBMITTED->value;
+        switch ($latestLog->type) {
+            case AdmissionApplicationLogTypeEnum::SUBMITTED->value:
+                return 'Pending';
+            case AdmissionApplicationLogTypeEnum::APPROVED->value:
+                return 'Approved for Evaluation';
+            case AdmissionApplicationLogTypeEnum::REJECTED->value:
+                return 'Rejected by Program Chair';
+            case AdmissionApplicationLogTypeEnum::ACCEPTED->value:
+                return 'Ready for Enrollment';
+            case AdmissionApplicationLogTypeEnum::CANCELLED->value:
+                return 'Cancelled by Student';
+            default:
+                return 'Pending';
+        }
     }
 
     /**

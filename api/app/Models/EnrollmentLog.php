@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\EnrollmentLogActionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
@@ -21,7 +22,11 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "enrollment_id", type: "integer"),
         new OA\Property(property: "user_id", type: "integer"),
-        new OA\Property(property: "action", type: "string", enum: ['enroll', 'program_chair_approved', 'registrar_approved', 'program_chair_dropped_approved', 'registrar_dropped_approved', 'dropped']),
+        new OA\Property(
+            property: "action",
+            type: "string",
+            enum: EnrollmentLogActionEnum::class,
+        ),
         new OA\Property(property: "note", type: "string", nullable: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
@@ -108,6 +113,7 @@ class EnrollmentLog extends Model
     protected $casts = [
         'enrollment_id' => 'integer',
         'user_id'       => 'integer',
+        'action'        => EnrollmentLogActionEnum::class,
     ];
 
     protected $fillable = [

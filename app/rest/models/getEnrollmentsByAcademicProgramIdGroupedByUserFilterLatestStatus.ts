@@ -6,16 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EnrollmentLogAction = typeof EnrollmentLogAction[keyof typeof EnrollmentLogAction];
+export type GetEnrollmentsByAcademicProgramIdGroupedByUserFilterLatestStatus = typeof GetEnrollmentsByAcademicProgramIdGroupedByUserFilterLatestStatus[keyof typeof GetEnrollmentsByAcademicProgramIdGroupedByUserFilterLatestStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const EnrollmentLogAction = {
+export const GetEnrollmentsByAcademicProgramIdGroupedByUserFilterLatestStatus = {
   enroll: 'enroll',
   program_chair_approved: 'program_chair_approved',
   registrar_approved: 'registrar_approved',
   program_chair_dropped_approved: 'program_chair_dropped_approved',
   registrar_dropped_approved: 'registrar_dropped_approved',
   dropped: 'dropped',
-  rejected: 'rejected',
 } as const;

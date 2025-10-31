@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { AdmissionApplicationLatestStatus } from './admissionApplicationLatestStatus';
 import type { User } from './user';
 import type { SchoolYear } from './schoolYear';
 import type { AcademicProgram } from './academicProgram';
@@ -26,7 +27,8 @@ export interface AdmissionApplication {
   address: string;
   created_at?: string;
   updated_at?: string;
-  latest_status?: string;
+  readonly latest_status?: AdmissionApplicationLatestStatus;
+  readonly latest_status_label?: string;
   is_open_for_enrollment?: boolean;
   user?: User;
   school_year?: SchoolYear;

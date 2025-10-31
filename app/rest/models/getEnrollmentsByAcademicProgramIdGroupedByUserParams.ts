@@ -6,11 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetEnrollmentPaginatedParams = {
-/**
- * Search term
- */
-search?: string;
+export type GetEnrollmentsByAcademicProgramIdGroupedByUserParams = {
 /**
  * Page number
  */
@@ -20,11 +16,19 @@ page?: number;
  */
 rows?: number;
 /**
- * User ID
+ * Latest status
  */
-'filter[user_id]'?: number;
+'filter[latest_status]'?: string;
 /**
- * Academic Program ID grouped by user name
+ * School year ID
  */
-'filter[academic_program_id_grouped_by_user_name]'?: number;
+'filter[school_year_id]'?: number;
+/**
+ * Year ID
+ */
+'filter[year_id]'?: number;
+/**
+ * Term ID
+ */
+'filter[term_id]'?: number;
 };
