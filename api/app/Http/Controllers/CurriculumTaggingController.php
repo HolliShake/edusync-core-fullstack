@@ -48,6 +48,13 @@ class CurriculumTaggingController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[curriculum_id]",
+        in: "query",
+        description: "Filter by curriculum ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

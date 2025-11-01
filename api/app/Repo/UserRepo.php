@@ -23,7 +23,8 @@ class UserRepo extends GenericRepo implements IUserRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
-            AllowedFilter::partial('name')
+            AllowedFilter::partial('name'),
+            AllowedFilter::exact('role'),
         ];
     }
 

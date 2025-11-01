@@ -133,7 +133,7 @@ class Enrollment extends Model
         'section',
         'latest_status',
         'latest_status_label',
-        'is_enrollment_valid',
+        'is_enrollment_valid'
     ];
 
     /**

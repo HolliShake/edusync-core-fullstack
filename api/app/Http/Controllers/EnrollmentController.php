@@ -87,11 +87,83 @@ class EnrollmentController extends Controller
     }
 
     #[OA\Get(
+        path: "/api/Enrollment/campus/scholastic-filter/{campus_id}",
+        summary: "Get scholastic filter",
+        tags: ["Enrollment"],
+        description: "Retrieve a scholastic filter",
+        operationId: "getScholasticFilterByCampusId",
+    )]
+    #[OA\Parameter(
+        name: "campus_id",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[latest_status]",
+        in: "query",
+        description: "Latest status",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "School year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                // success
+                new OA\Property(property: "success", type: "boolean", example: true),
+                // data
+                new OA\Property(property: "data", type: "object", properties: [
+                    new OA\Property(property: "year", type: "array", items: new OA\Items(ref: "#/components/schemas/KeyValuePair")),
+                    new OA\Property(property: "term", type: "array", items: new OA\Items(ref: "#/components/schemas/KeyValuePair")),
+                ]),
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Academic Program not found"
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function getScholasticFilterByCampusId(Request $request, $campus_id)
+    {
+        $latestStatus = $request->input('filter.latest_status', null);
+        $schoolYearId = $request->input('filter.school_year_id', null);
+        if (!$schoolYearId) {
+            return $this->validationError('School year ID is required');
+        }
+        return $this->ok($this->service->getScholasticFilterByCampusId($campus_id, $latestStatus, $schoolYearId));
+    }
+
+    #[OA\Get(
         path: "/api/Enrollment/academic-program/scholastic-filter/{academic_program_id}",
         summary: "Get scholastic filter",
         tags: ["Enrollment"],
         description: "Retrieve a scholastic filter",
-        operationId: "getScholasticFilter",
+        operationId: "getScholasticFilterByProgramId",
     )]
     #[OA\Parameter(
         name: "academic_program_id",
@@ -148,14 +220,115 @@ class EnrollmentController extends Controller
         description: "Internal server error",
         content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
     )]
-    public function getScholasticFilter(Request $request, $academic_program_id)
+    public function getScholasticFilterByProgramId(Request $request, $academic_program_id)
     {
         $latestStatus = $request->input('filter.latest_status', null);
         $schoolYearId = $request->input('filter.school_year_id', null);
         if (!$schoolYearId) {
             return $this->validationError('School year ID is required');
         }
-        return $this->ok($this->service->getScholasticFilter($academic_program_id, $latestStatus, $schoolYearId));
+        return $this->ok($this->service->getScholasticFilterByProgramId($academic_program_id, $latestStatus, $schoolYearId));
+    }
+
+    #[OA\Get(
+        path: "/api/Enrollment/campus/grouped-by-user-name/{campus_id}",
+        summary: "Get paginated list of Enrollment by Campus ID",
+        tags: ["Enrollment"],
+        description: "Retrieve a paginated list of Enrollment by Campus ID",
+        operationId: "getEnrollmentsByCampusIdGroupedByUser",
+    )]
+    #[OA\Parameter(
+        name: "campus_id",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        in: "query",
+        description: "Page number",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 1)
+    )]
+    #[OA\Parameter(
+        name: "rows",
+        in: "query",
+        description: "Number of items per page",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 10)
+    )]
+    #[OA\Parameter(
+        name: "filter[latest_status]",
+        in: "query",
+        description: "Latest status",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "School year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
+        name: "filter[year_id]",
+        in: "query",
+        description: "Year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
+        name: "filter[term_id]",
+        in: "query",
+        description: "Term ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedEnrollmentResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Campus not found"
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function getEnrollmentsByCampusIdGroupedByUser(Request $request, $campus_id)
+    {
+        $latestStatus = $request->input('filter.latest_status', null);
+        $schoolYearId = $request->input('filter.school_year_id', null);
+        $yearId = $request->input('filter.year_id', null);
+        $termId = $request->input('filter.term_id', null);
+        $page = $request->query("page", 1);
+        $rows = $request->query("rows", 10);
+        if (!$schoolYearId || !$yearId || !$termId) {
+            return $this->validationError('School year ID, year ID and term ID are required');
+        }
+        return $this->ok($this->service->getEnrollmentsByCampusId(
+            $campus_id,
+            $latestStatus,
+            $schoolYearId,
+            $yearId,
+            $termId,
+            $page,
+            $rows
+        ));
     }
 
     #[OA\Get(
@@ -248,7 +421,7 @@ class EnrollmentController extends Controller
         if (!$schoolYearId || !$yearId || !$termId) {
             return $this->validationError('School year ID, year ID and term ID are required');
         }
-        return $this->ok($this->service->getEnrollmentsByAcademicProgramId(
+        return $this->ok($this->service->getEnrollmentsByProgramId(
             $academic_program_id,
             $latestStatus,
             $schoolYearId,

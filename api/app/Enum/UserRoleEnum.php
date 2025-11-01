@@ -2,6 +2,8 @@
 
 namespace App\Enum;
 
+// TODO: Make values use snake_case
+
 enum UserRoleEnum: string
 {
     case ADMIN = 'admin';

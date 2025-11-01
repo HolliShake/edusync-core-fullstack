@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\ICurriculumTaggingRepo;
 use App\Models\CurriculumTagging;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class CurriculumTaggingRepo extends GenericRepo implements ICurriculumTaggingRepo
 {
@@ -21,7 +22,7 @@ class CurriculumTaggingRepo extends GenericRepo implements ICurriculumTaggingRep
         return [
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
-            // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('curriculum_id'),
         ];
     }
 

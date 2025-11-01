@@ -9,7 +9,7 @@ import { useAuth } from '@/context/auth.context';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteCurriculum, useGetCurriculumPaginated } from '@rest/api';
 import type { Curriculum } from '@rest/models';
-import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
+import { DeleteIcon, EditIcon, EllipsisIcon, GraduationCapIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -89,6 +89,16 @@ export default function ProgramChairCurriculum(): React.ReactNode {
         render: (_, row) => (
           <Menu
             items={[
+              {
+                label: 'Students',
+                icon: <GraduationCapIcon />,
+                variant: 'default',
+                onClick: () => {
+                  navigate(
+                    `/program-chair/curriculum/${encryptIdForUrl(row.id as number)}/student`
+                  );
+                },
+              },
               {
                 label: 'Edit',
                 icon: <EditIcon />,

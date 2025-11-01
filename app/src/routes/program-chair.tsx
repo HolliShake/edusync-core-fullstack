@@ -4,6 +4,7 @@ import ProgramChairAdmissionApplicationStatus from '@/pages/program-chair/admiss
 import ProgramChairAdmissionEvaluation from '@/pages/program-chair/admission/evaluation/page';
 import ProgramChairCurriculumDetail from '@/pages/program-chair/curriculum/curriculum-detail/page';
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
+import ProgramChairCurriculumStudent from '@/pages/program-chair/curriculum/student/page';
 import ProgramChairEnrollment from '@/pages/program-chair/enrollment/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
@@ -87,12 +88,23 @@ const PROGRAM_CHAIR: Route[] = [
     sidebar: true,
     roles: [UserRoleEnum.PROGRAM_CHAIR],
   },
+  // curriculum detail
   {
     key: 'program-chair.curriculum-detail',
     title: 'Curriculum Detail',
     path: '/program-chair/curriculum/:curriculumId',
     component: <ProgramChairCurriculumDetail />,
     icon: <BookOpenIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
+  },
+  // curriculum student
+  {
+    key: 'program-chair.curriculum-student',
+    title: 'Curriculum Student',
+    path: '/program-chair/curriculum/:curriculumId/student',
+    component: <ProgramChairCurriculumStudent />,
+    icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
   },

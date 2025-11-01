@@ -142,7 +142,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
@@ -243,6 +243,16 @@ class User extends Authenticatable
      */
     public function designitions(): HasMany
     {
-        return $this->hasMany(Designition::class, 'user_id', 'id');
+        return $this->hasMany(Designition::class);
+    }
+
+    /**
+     * Get the curriculum taggings for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function curriculumTaggings(): HasMany
+    {
+        return $this->hasMany(CurriculumTagging::class);
     }
 }

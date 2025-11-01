@@ -17,6 +17,7 @@ use App\Interface\IRepo\ICourseRepo;
 use App\Interface\IRepo\ICourseRequisiteRepo;
 use App\Interface\IRepo\ICurriculumDetailRepo;
 use App\Interface\IRepo\ICurriculumRepo;
+use App\Interface\IRepo\ICurriculumTaggingRepo;
 use App\Interface\IRepo\IDesignitionRepo;
 use App\Interface\IRepo\IDocumentRequestLogRepo;
 use App\Interface\IRepo\IDocumentRequestRepo;
@@ -44,6 +45,7 @@ use App\Interface\IService\ICourseRequisiteService;
 use App\Interface\IService\ICourseService;
 use App\Interface\IService\ICurriculumDetailService;
 use App\Interface\IService\ICurriculumService;
+use App\Interface\IService\ICurriculumTaggingService;
 use App\Interface\IService\IDesignitionService;
 use App\Interface\IService\IDocumentRequestLogService;
 use App\Interface\IService\IDocumentRequestService;
@@ -71,6 +73,7 @@ use App\Repo\CourseRepo;
 use App\Repo\CourseRequisiteRepo;
 use App\Repo\CurriculumDetailRepo;
 use App\Repo\CurriculumRepo;
+use App\Repo\CurriculumTaggingRepo;
 use App\Repo\DesignitionRepo;
 use App\Repo\DocumentRequestLogRepo;
 use App\Repo\DocumentRequestRepo;
@@ -98,6 +101,7 @@ use App\Service\CourseRequisiteService;
 use App\Service\CourseService;
 use App\Service\CurriculumDetailService;
 use App\Service\CurriculumService;
+use App\Service\CurriculumTaggingService;
 use App\Service\DesignitionService;
 use App\Service\DocumentRequestLogService;
 use App\Service\DocumentRequestService;
@@ -147,6 +151,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IDocumentTypeRepo::class, DocumentTypeRepo::class);
         $this->app->bind(ICourseRequisiteRepo::class, CourseRequisiteRepo::class);
         $this->app->bind(IEnrollmentLogRepo::class, EnrollmentLogRepo::class);
+        $this->app->bind(ICurriculumTaggingRepo::class, CurriculumTaggingRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -175,6 +180,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IDocumentTypeService::class, DocumentTypeService::class);
         $this->app->bind(ICourseRequisiteService::class, CourseRequisiteService::class);
         $this->app->bind(IEnrollmentLogService::class, EnrollmentLogService::class);
+        $this->app->bind(ICurriculumTaggingService::class, CurriculumTaggingService::class);
     }
 
     /**

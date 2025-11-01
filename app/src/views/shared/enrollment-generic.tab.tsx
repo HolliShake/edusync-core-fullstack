@@ -13,14 +13,23 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import {
+  EnrollmentLogActionEnum,
+  type EnrollmentLogAction,
+} from '@/enums/enrollment-log-action-enum';
+import { UserRoleEnum } from '@/enums/role-enum';
+import {
   useCreateEnrollmentLog,
   useGetEnrollmentsByAcademicProgramIdGroupedByUser,
-  useGetScholasticFilter,
+  useGetEnrollmentsByCampusIdGroupedByUser,
+  useGetScholasticFilterByCampusId,
+  useGetScholasticFilterByProgramId,
   useGetSchoolYearPaginated,
 } from '@rest/api';
 import {
-  EnrollmentLogAction,
+  UserRole,
   type Enrollment,
+  type GetScholasticFilterByCampusId200,
+  type GetScholasticFilterByProgramId200,
   type KeyValuePair,
   type SchoolYear,
 } from '@rest/models';
@@ -37,13 +46,17 @@ import {
   UserIcon,
   XCircleIcon,
 } from 'lucide-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 
-export default function ProgramChairEnrollmentGenericTab({
+export default function EnrollmentGenericTab({
+  role,
   status,
+  needsAction = true,
 }: {
+  role: UserRole;
   status: EnrollmentLogAction;
+  needsAction?: boolean;
 }): React.ReactNode {
   const { session } = useAuth();
   const [page] = React.useState(1);
@@ -61,19 +74,48 @@ export default function ProgramChairEnrollmentGenericTab({
     rows: Number.MAX_SAFE_INTEGER,
   });
 
-  const { data: scholasticFilterResponse } = useGetScholasticFilter(
+  const { data: programChairScholasticFilterResponse } = useGetScholasticFilterByProgramId(
     Number(session?.active_academic_program),
     {
       'filter[latest_status]': status,
       'filter[school_year_id]': Number(schoolYearId),
     },
-    { query: { enabled: !!schoolYearId && !!session?.active_academic_program } }
+    {
+      query: {
+        enabled:
+          role === UserRoleEnum.PROGRAM_CHAIR &&
+          !!schoolYearId &&
+          !!session?.active_academic_program,
+      },
+    }
   );
 
+  const { data: campusScholasticFilterResponse } = useGetScholasticFilterByCampusId(
+    Number(session?.active_campus),
+    {
+      'filter[latest_status]': status,
+      'filter[school_year_id]': Number(schoolYearId),
+    },
+    {
+      query: {
+        enabled:
+          role === UserRoleEnum.CAMPUS_REGISTRAR && !!schoolYearId && !!session?.active_campus,
+      },
+    }
+  );
+
+  const scholasticFilterResponse = useMemo<
+    (GetScholasticFilterByCampusId200 | GetScholasticFilterByProgramId200) | undefined
+  >(() => {
+    if (role === UserRoleEnum.PROGRAM_CHAIR) return programChairScholasticFilterResponse;
+    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return campusScholasticFilterResponse;
+    return undefined;
+  }, [role, programChairScholasticFilterResponse, campusScholasticFilterResponse]);
+
   const {
-    data: enrollmentResponse,
-    isLoading: isLoadingEnrollments,
-    refetch: refetchEnrollments,
+    data: programChairEnrollmentResponse,
+    isLoading: isLoadingProgramChairEnrollments,
+    refetch: refetchProgramChairEnrollments,
   } = useGetEnrollmentsByAcademicProgramIdGroupedByUser(
     Number(session?.active_academic_program),
     {
@@ -86,12 +128,58 @@ export default function ProgramChairEnrollmentGenericTab({
     },
     {
       query: {
-        enabled: !!schoolYearId && !!session?.active_academic_program && !!yearId && !!termId,
+        enabled:
+          role === UserRoleEnum.PROGRAM_CHAIR &&
+          !!schoolYearId &&
+          !!session?.active_academic_program &&
+          !!yearId &&
+          !!termId,
+      },
+    }
+  );
+
+  const {
+    data: campusRegistrarEnrollmentResponse,
+    isLoading: isLoadingCampusRegistrarEnrollments,
+    refetch: refetchCampusRegistrarEnrollments,
+  } = useGetEnrollmentsByCampusIdGroupedByUser(
+    Number(session?.active_campus),
+    {
+      'filter[latest_status]': status,
+      'filter[school_year_id]': Number(schoolYearId),
+      'filter[year_id]': Number(yearId),
+      'filter[term_id]': Number(termId),
+      page: page,
+      rows: rows,
+    },
+    {
+      query: {
+        enabled:
+          role === UserRoleEnum.CAMPUS_REGISTRAR &&
+          !!schoolYearId &&
+          !!session?.active_campus &&
+          !!yearId &&
+          !!termId,
       },
     }
   );
 
   const controller = useModal<any>();
+
+  const enrollmentResponse = useMemo(() => {
+    if (role === UserRoleEnum.PROGRAM_CHAIR) return programChairEnrollmentResponse;
+    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return campusRegistrarEnrollmentResponse;
+    return undefined;
+  }, [role, programChairEnrollmentResponse, campusRegistrarEnrollmentResponse]);
+
+  const isLoadingEnrollments = useMemo(() => {
+    return isLoadingProgramChairEnrollments || isLoadingCampusRegistrarEnrollments;
+  }, [isLoadingProgramChairEnrollments, isLoadingCampusRegistrarEnrollments]);
+
+  const refetchEnrollments = useCallback(() => {
+    if (role === UserRoleEnum.PROGRAM_CHAIR) refetchProgramChairEnrollments();
+    if (role === UserRoleEnum.CAMPUS_REGISTRAR) refetchCampusRegistrarEnrollments();
+  }, [role, refetchProgramChairEnrollments, refetchCampusRegistrarEnrollments]);
 
   const groupedData = useMemo(() => {
     const data = enrollmentResponse?.data?.data;
@@ -183,15 +271,15 @@ export default function ProgramChairEnrollmentGenericTab({
   const getEnrollmentBadgeVariant = (enrollment: Enrollment) => {
     const status = enrollment.latest_status;
     switch (status) {
-      case EnrollmentLogAction.enroll:
+      case EnrollmentLogActionEnum.enroll:
         return 'default' as const;
-      case EnrollmentLogAction.dropped:
+      case EnrollmentLogActionEnum.dropped:
         return 'secondary' as const;
-      case EnrollmentLogAction.program_chair_approved:
-      case EnrollmentLogAction.registrar_approved:
+      case EnrollmentLogActionEnum.program_chair_approved:
+      case EnrollmentLogActionEnum.registrar_approved:
         return 'default' as const;
-      case EnrollmentLogAction.program_chair_dropped_approved:
-      case EnrollmentLogAction.registrar_dropped_approved:
+      case EnrollmentLogActionEnum.program_chair_dropped_approved:
+      case EnrollmentLogActionEnum.registrar_dropped_approved:
         return 'destructive' as const;
       default:
         return 'outline' as const;
@@ -200,27 +288,27 @@ export default function ProgramChairEnrollmentGenericTab({
 
   const getEmptyStateContent = () => {
     switch (status) {
-      case EnrollmentLogAction.enroll:
+      case EnrollmentLogActionEnum.enroll:
         return {
           icon: <ClockIcon className="h-16 w-16 text-muted-foreground/50" />,
           title: 'No Pending Enrollments',
           description:
             'All enrollment requests have been processed. Check back later for new submissions.',
         };
-      case EnrollmentLogAction.dropped:
+      case EnrollmentLogActionEnum.dropped:
         return {
           icon: <XCircleIcon className="h-16 w-16 text-muted-foreground/50" />,
           title: 'No Drop Requests',
           description: 'There are currently no pending drop requests to review.',
         };
-      case EnrollmentLogAction.program_chair_approved:
+      case EnrollmentLogActionEnum.program_chair_approved:
         return {
           icon: <CheckCircle2Icon className="h-16 w-16 text-muted-foreground/50" />,
           title: 'No Recently Approved Enrollments',
           description:
             'No enrollments have been approved recently. Approved items will appear here.',
         };
-      case EnrollmentLogAction.rejected:
+      case EnrollmentLogActionEnum.rejected:
         return {
           icon: <XCircleIcon className="h-16 w-16 text-muted-foreground/50" />,
           title: 'No Rejected Enrollments',
@@ -235,6 +323,47 @@ export default function ProgramChairEnrollmentGenericTab({
     }
   };
 
+  const getApprovalAction = (): EnrollmentLogAction => {
+    // Program Chair only
+    if (
+      role == UserRoleEnum.PROGRAM_CHAIR &&
+      // User applied for enrollment
+      status == EnrollmentLogActionEnum.enroll
+    )
+      return EnrollmentLogActionEnum.program_chair_approved;
+
+    if (
+      role == UserRoleEnum.PROGRAM_CHAIR &&
+      // User requested to drop the course
+      status == EnrollmentLogActionEnum.dropped
+    )
+      return EnrollmentLogActionEnum.program_chair_dropped_approved;
+
+    /***********************************************************/
+
+    // Campus Registrar only
+    if (
+      role == UserRoleEnum.CAMPUS_REGISTRAR &&
+      // Must be approved by program chair first
+      status == EnrollmentLogActionEnum.program_chair_approved
+    )
+      return EnrollmentLogActionEnum.registrar_approved;
+    if (
+      role == UserRoleEnum.CAMPUS_REGISTRAR &&
+      // Must be approved by program chair first
+      status == EnrollmentLogActionEnum.program_chair_dropped_approved
+    )
+      return EnrollmentLogActionEnum.registrar_dropped_approved;
+
+    if (
+      role === UserRoleEnum.CAMPUS_REGISTRAR &&
+      // Program Chair approved the drop request
+      status === EnrollmentLogActionEnum.registrar_dropped_approved
+    )
+      return EnrollmentLogActionEnum.registrar_dropped_approved;
+    throw new Error('Invalid status');
+  };
+
   const programChairApproveSingleCallback = async (enrollment: Enrollment) => {
     if (!enrollment.is_enrollment_valid) return toast.error('Enrollment is not valid');
     try {
@@ -242,15 +371,12 @@ export default function ProgramChairEnrollmentGenericTab({
         data: {
           enrollment_id: enrollment.id!,
           user_id: session?.id!,
-          action:
-            status === EnrollmentLogAction.dropped
-              ? EnrollmentLogAction.program_chair_dropped_approved
-              : EnrollmentLogAction.program_chair_approved,
+          action: getApprovalAction(),
           note: 'Approved by program chair',
         },
       });
       toast.success('Enrollment approved successfully');
-      await refetchEnrollments();
+      refetchEnrollments();
     } catch (error) {
       console.error('Error approving enrollment:', error);
       toast.error('Failed to approve enrollment');
@@ -506,26 +632,28 @@ export default function ProgramChairEnrollmentGenericTab({
                               </div>
 
                               {/* Actions */}
-                              <div className="flex items-center gap-2 min-w-[120px]">
-                                <Button
-                                  onClick={() => programChairApproveSingleCallback(enrollment)}
-                                  disabled={isApprovingSingle || !enrollment.is_enrollment_valid}
-                                  size="sm"
-                                  className="gap-1.5 h-8 px-3"
-                                >
-                                  {isApprovingSingle ? (
-                                    <>
-                                      <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                      <span className="text-xs">Approving...</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <CheckCircle2Icon className="h-3.5 w-3.5" />
-                                      <span className="text-xs">Approve</span>
-                                    </>
-                                  )}
-                                </Button>
-                              </div>
+                              {needsAction === true && (
+                                <div className="flex items-center gap-2 min-w-[120px]">
+                                  <Button
+                                    onClick={() => programChairApproveSingleCallback(enrollment)}
+                                    disabled={isApprovingSingle || !enrollment.is_enrollment_valid}
+                                    size="sm"
+                                    className="gap-1.5 h-8 px-3"
+                                  >
+                                    {isApprovingSingle ? (
+                                      <>
+                                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                        <span className="text-xs">Approving...</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <CheckCircle2Icon className="h-3.5 w-3.5" />
+                                        <span className="text-xs">Approve</span>
+                                      </>
+                                    )}
+                                  </Button>
+                                </div>
+                              )}
                             </div>
                           </CardContent>
                         </Card>

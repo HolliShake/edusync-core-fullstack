@@ -24,6 +24,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_active", type: "boolean", example: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T00:00:00.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T00:00:00.000000Z"),
+        // Computed
+        new OA\Property(property: "is_internal_student", type: "boolean", example: true),
         // Relations
         new OA\Property(property: "curriculum", ref: "#/components/schemas/Curriculum"),
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
@@ -64,7 +66,7 @@ use OpenApi\Attributes as OA;
 )]
 
 #[OA\Schema(
-    schema: "GetCurriculumTaggingResponse200",
+    schema: "GetCurriculumTaggingsResponse200",
     type: "object",
     properties: [
         new OA\Property(property: "success", type: "boolean", example: true),
@@ -120,6 +122,26 @@ class CurriculumTagging extends Model
         'curriculum',
         'user',
     ];
+
+    /**
+     * Get the is current program student attribute.
+     *
+     * @return bool
+     */
+    public function getIsInternalStudenttAttribute(): bool
+    {
+        // True if not enrolled to other program and curriculum is active
+        // Or simply it shifts to other program or college?
+        $is_enrolled_to_other_program = $this->user->curriculumTaggings()
+            ->where('is_active', true)
+            // Enrolled in a different program
+            ->whereHas('curriculum', function ($query) {
+                $query->where('program_id', '!=', $this->curriculum->program_id);
+            })
+            ->exists();
+
+        return !$is_enrolled_to_other_program;
+    }
 
     /**
      * Get the curriculum that owns the curriculum tagging.

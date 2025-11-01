@@ -5,10 +5,10 @@ import EnrollmentGenericTab from '@/views/shared/enrollment-generic.tab';
 import { EnrollmentLogAction } from '@rest/models';
 import React, { useEffect, useMemo, useState } from 'react';
 
-export default function ProgramChairEnrollment(): React.ReactNode {
+export default function CampusRegistrarEnrollment(): React.ReactNode {
   const [selectedTab, setSelectedTab] = useState<EnrollmentLogAction>(() => {
     const saved = sessionStorage.getItem(window.location.pathname + '_tab');
-    return saved ? (saved as EnrollmentLogAction) : EnrollmentLogAction.enroll;
+    return saved ? (saved as EnrollmentLogAction) : EnrollmentLogAction.program_chair_approved;
   });
 
   useEffect(() => {
@@ -18,16 +18,16 @@ export default function ProgramChairEnrollment(): React.ReactNode {
   const tabs = useMemo(
     () => [
       {
-        label: 'Pending Enrollment',
-        value: EnrollmentLogAction.enroll,
+        label: 'Pending Enrollment Approval',
+        value: EnrollmentLogAction.program_chair_approved,
       },
       {
-        label: 'Pending Drop',
-        value: EnrollmentLogAction.dropped,
+        label: 'Pending Drop Approval',
+        value: EnrollmentLogAction.program_chair_dropped_approved,
       },
       {
         label: 'Recently Approved',
-        value: EnrollmentLogAction.program_chair_approved,
+        value: EnrollmentLogAction.registrar_approved,
       },
       {
         label: 'Rejected',
@@ -37,7 +37,7 @@ export default function ProgramChairEnrollment(): React.ReactNode {
     []
   );
   return (
-    <TitledPage title="Enrollment" description="Manage student enrollments">
+    <TitledPage title="Enrollment Approval" description="Manage student enrollments">
       <Tabs
         value={selectedTab}
         onValueChange={(value: string) => setSelectedTab(value as EnrollmentLogAction)}
@@ -57,11 +57,11 @@ export default function ProgramChairEnrollment(): React.ReactNode {
         {tabs.map((tab) => (
           <TabsContent key={tab.value} value={tab.value}>
             <EnrollmentGenericTab
-              role={UserRoleEnum.PROGRAM_CHAIR}
+              role={UserRoleEnum.CAMPUS_REGISTRAR}
               status={tab.value}
               needsAction={
-                tab.value === EnrollmentLogAction.enroll ||
-                tab.value === EnrollmentLogAction.dropped
+                tab.value === EnrollmentLogAction.program_chair_approved ||
+                tab.value === EnrollmentLogAction.program_chair_dropped_approved
               }
             />
           </TabsContent>

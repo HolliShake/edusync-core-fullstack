@@ -26,6 +26,7 @@ use App\Http\Controllers\AdmissionApplicationController;
 use App\Http\Controllers\AdmissionApplicationLogController;
 use App\Http\Controllers\AdmissionApplicationScoreController;
 use App\Http\Controllers\CourseRequisiteController;
+use App\Http\Controllers\CurriculumTaggingController;
 use App\Http\Controllers\DocumentRequestController;
 use App\Http\Controllers\DocumentRequestLogController;
 use App\Http\Controllers\DocumentTypeController;
@@ -236,7 +237,9 @@ Route::controller(AdmissionApplicationScoreController::class)->group(function() 
 
 Route::controller(EnrollmentController::class)->group(function() {
     Route::get('/Enrollment', 'index');
-    Route::get('/Enrollment/academic-program/scholastic-filter/{academic_program_id}', 'getScholasticFilter');
+    Route::get('/Enrollment/campus/scholastic-filter/{campus_id}', 'getScholasticFilterByCampusId');
+    Route::get('/Enrollment/academic-program/scholastic-filter/{academic_program_id}', 'getScholasticFilterByProgramId');
+    Route::get('/Enrollment/campus/grouped-by-user-name/{campus_id}', 'getEnrollmentsByCampusIdGroupedByUser');
     Route::get('/Enrollment/academic-program/grouped-by-user-name/{academic_program_id}', 'getEnrollmentsByAcademicProgramIdGroupedByUser');
     Route::get('/Enrollment/{id}', 'show');
     Route::post('/Enrollment', 'store');
@@ -275,4 +278,12 @@ Route::controller(DocumentTypeController::class)->group(function() {
     Route::post('/DocumentType', 'store');
     Route::put('/DocumentType/{id}', 'update');
     Route::delete('/DocumentType/{id}', 'destroy');
+});
+
+Route::controller(CurriculumTaggingController::class)->group(function() {
+    Route::get('/CurriculumTagging', 'index');
+    Route::get('/CurriculumTagging/{id}', 'show');
+    Route::post('/CurriculumTagging', 'store');
+    Route::put('/CurriculumTagging/{id}', 'update');
+    Route::delete('/CurriculumTagging/{id}', 'destroy');
 });
