@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { DocumentRequestLatestStatus } from './documentRequestLatestStatus';
+import type { DocumentRequestLog } from './documentRequestLog';
 import type { User } from './user';
 import type { Campus } from './campus';
 import type { DocumentType } from './documentType';
@@ -20,6 +21,8 @@ export interface DocumentRequest {
   updated_at?: string;
   readonly latest_status?: DocumentRequestLatestStatus;
   readonly latest_status_label?: string;
+  logs?: DocumentRequestLog[];
+  readonly is_cancellable?: boolean;
   user?: User;
   campus?: Campus;
   document_type?: DocumentType;

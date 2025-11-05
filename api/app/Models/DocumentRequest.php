@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enum\DocumentRequestLogActionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use OpenApi\Attributes as OA;
 
@@ -31,6 +32,8 @@ use OpenApi\Attributes as OA;
         // Computed
         new OA\Property(property: "latest_status", type: "string", enum: DocumentRequestLogActionEnum::class, readOnly: true),
         new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
+        new OA\Property(property: "logs", type: "array", items: new OA\Items(ref: "#/components/schemas/DocumentRequestLog")),
+        new OA\Property(property: "is_cancellable", type: "boolean", readOnly: true),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "campus", ref: "#/components/schemas/Campus"),
@@ -122,7 +125,29 @@ class DocumentRequest extends Model
         'campus',
         'latest_status',
         'latest_status_label',
+        'logs',
+        'is_cancellable'
     ];
+
+    /**
+     * Get the is cancellable attribute.
+     *
+     * @return bool
+     */
+    public function getIsCancellableAttribute(): bool
+    {
+        return $this->latestStatus()->first()->action === DocumentRequestLogActionEnum::SUBMITTED->value;
+    }
+
+    /**
+     * Get the logs of the document request.
+     *
+     * @return array
+     */
+    public function getLogsAttribute(): array
+    {
+        return $this->logs()->get()->makeHidden(['document_request', 'user'])->toArray();
+    }
 
     /**
      * Get the latest status of the document request.
@@ -141,7 +166,18 @@ class DocumentRequest extends Model
      */
     public function getLatestStatusLabelAttribute(): string
     {
-        return $this->latestStatus()->first()->action->value;
+        $action = $this->latestStatus()->first()->action->value;
+
+        $labels = [
+            'submitted'  => 'Submitted',
+            'processing' => 'Processing',
+            'completed'  => 'Completed',
+            'rejected'   => 'Rejected',
+            'cancelled'  => 'Cancelled',
+            'pickup'     => 'Ready for Pickup',
+        ];
+
+        return $labels[strtolower($action)] ?? $action;
     }
 
     /**
@@ -192,5 +228,15 @@ class DocumentRequest extends Model
     public function latestStatus(): HasOne
     {
         return $this->hasOne(DocumentRequestLog::class)->latestOfMany();
+    }
+
+    /**
+     * Get the logs of the document request.
+     *
+     * @return HasMany
+     */
+    public function logs(): HasMany
+    {
+        return $this->hasMany(DocumentRequestLog::class)->latest();
     }
 }

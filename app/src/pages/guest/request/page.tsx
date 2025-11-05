@@ -14,10 +14,24 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { useGetDocumentRequestPaginated } from '@rest/api';
-import type { DocumentRequest } from '@rest/models';
+import { DocumentRequestLogAction, type DocumentRequest } from '@rest/models';
 import { AlertCircle, Calendar, Clock, FileText } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
@@ -26,7 +40,8 @@ export default function GuestRequestDocument(): React.ReactNode {
   const { session } = useAuth();
   const documentRequestModal = useModal<DocumentRequest>();
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [viewingStatus, setViewingStatus] = useState<DocumentRequest | null>(null);
 
   const {
     data: documentRequestResponse,
@@ -50,7 +65,7 @@ export default function GuestRequestDocument(): React.ReactNode {
 
   const totalPages = useMemo(
     () => Math.ceil((documentRequestResponse?.data?.total ?? 0) / rowsPerPage),
-    [documentRequestResponse]
+    [documentRequestResponse, rowsPerPage]
   );
 
   const getStatusBadge = (status: string) => {
@@ -58,14 +73,20 @@ export default function GuestRequestDocument(): React.ReactNode {
       string,
       { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }
     > = {
-      pending: { variant: 'outline', label: 'Pending' },
-      processing: { variant: 'secondary', label: 'Processing' },
-      completed: { variant: 'default', label: 'Completed' },
-      rejected: { variant: 'destructive', label: 'Rejected' },
+      [DocumentRequestLogAction.submitted]: { variant: 'outline', label: 'Submitted' },
+      [DocumentRequestLogAction.processing]: { variant: 'secondary', label: 'Processing' },
+      [DocumentRequestLogAction.completed]: { variant: 'default', label: 'Completed' },
+      [DocumentRequestLogAction.rejected]: { variant: 'destructive', label: 'Rejected' },
+      [DocumentRequestLogAction.cancelled]: { variant: 'destructive', label: 'Cancelled' },
+      [DocumentRequestLogAction.pickup]: { variant: 'secondary', label: 'Ready for Pickup' },
     };
 
     const config = statusConfig[status?.toLowerCase()] || { variant: 'outline', label: status };
-    return <Badge variant={config.variant}>{config.label}</Badge>;
+    return (
+      <Badge variant={config.variant} className="text-xs px-2 py-0">
+        {config.label}
+      </Badge>
+    );
   };
 
   const formatDate = (dateString: string | undefined) => {
@@ -81,8 +102,17 @@ export default function GuestRequestDocument(): React.ReactNode {
     refetch();
   };
 
+  const handleViewStatus = (request: DocumentRequest) => {
+    setViewingStatus(request);
+  };
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (value: string) => {
+    setRowsPerPage(Number(value));
+    setPage(1);
   };
 
   const renderPaginationItems = () => {
@@ -138,17 +168,36 @@ export default function GuestRequestDocument(): React.ReactNode {
     return items;
   };
 
+  const getStatusColor = (action: string) => {
+    switch (action) {
+      case DocumentRequestLogAction.completed:
+        return 'bg-green-500';
+      case DocumentRequestLogAction.rejected:
+        return 'bg-red-500';
+      case DocumentRequestLogAction.cancelled:
+        return 'bg-gray-500';
+      case DocumentRequestLogAction.submitted:
+        return 'bg-blue-500';
+      case DocumentRequestLogAction.processing:
+        return 'bg-yellow-500';
+      case DocumentRequestLogAction.pickup:
+        return 'bg-purple-500';
+      default:
+        return 'bg-gray-400';
+    }
+  };
+
   if (isLoading) {
     return (
       <TitledPage title="Request a Document" description="Request a document from the school">
         <div className="space-y-2">
           {[1, 2, 3].map((i) => (
-            <Card key={i}>
-              <CardHeader className="py-3">
-                <Skeleton className="h-5 w-3/4" />
+            <Card key={i} className="py-2">
+              <CardHeader className="py-2 px-4">
+                <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-3 w-1/2 mt-1" />
               </CardHeader>
-              <CardContent className="py-2">
+              <CardContent className="py-2 px-4">
                 <Skeleton className="h-3 w-full" />
               </CardContent>
             </Card>
@@ -160,10 +209,25 @@ export default function GuestRequestDocument(): React.ReactNode {
 
   return (
     <TitledPage title="Request a Document" description="Request a document from the school">
-      <div className="space-y-4">
-        <div className="flex justify-end items-end">
-          <Button onClick={() => documentRequestModal.openFn()} size="sm">
-            <FileText className="mr-2 h-4 w-4" />
+      <div className="space-y-3">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Show</span>
+            <Select value={rowsPerPage.toString()} onValueChange={handleRowsPerPageChange}>
+              <SelectTrigger className="w-[60px] h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
+            <span className="text-xs text-muted-foreground">per page</span>
+          </div>
+          <Button onClick={() => documentRequestModal.openFn()} size="sm" className="h-8">
+            <FileText className="mr-1.5 h-3.5 w-3.5" />
             New Request
           </Button>
         </div>
@@ -179,32 +243,67 @@ export default function GuestRequestDocument(): React.ReactNode {
           <>
             <div className="grid gap-2">
               {allDocumentRequests.map((request: DocumentRequest) => (
-                <Card key={request.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="py-3">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-0.5">
-                        <CardTitle className="flex items-center gap-2 text-base">
-                          <FileText className="h-4 w-4" />
-                          {request.document_type?.document_type_name ?? 'Document Request'}
-                        </CardTitle>
-                        <CardDescription className="text-xs">
-                          Request ID: #{request.id}
-                        </CardDescription>
+                <Card key={request.id} className="hover:shadow-sm transition-all duration-200">
+                  <CardHeader className="py-1.5 px-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <FileText className="h-3 w-3 text-primary shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <CardTitle className="text-xs font-semibold truncate">
+                            {request.document_type?.document_type_name ?? 'Document Request'}
+                          </CardTitle>
+                          <CardDescription className="text-[10px] flex items-center gap-1">
+                            <span className="font-mono">#{request.id}</span>
+                            <span className="text-muted-foreground/50">•</span>
+                            <span className="truncate">{request.campus?.name ?? 'Campus'}</span>
+                          </CardDescription>
+                        </div>
                       </div>
                       {getStatusBadge(request.latest_status_label || 'pending')}
                     </div>
                   </CardHeader>
-                  <CardContent className="py-2">
-                    <div className="grid gap-2 md:grid-cols-2">
-                      <div className="flex items-center gap-2 text-xs">
-                        <Calendar className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-muted-foreground">Requested:</span>
-                        <span className="font-medium">{formatDate(request.created_at)}</span>
+                  <CardContent className="py-1.5 px-3 space-y-1.5">
+                    <div className="text-[10px]">
+                      <span className="text-muted-foreground">Purpose: </span>
+                      <span className="line-clamp-1">
+                        {request.purpose || 'No purpose specified'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-2.5 w-2.5" />
+                          <span>{formatDate(request.created_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-2.5 w-2.5" />
+                          <span>{formatDate(request.updated_at)}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 text-xs">
-                        <Clock className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-muted-foreground">Last Updated:</span>
-                        <span className="font-medium">{formatDate(request.updated_at)}</span>
+                      <div className="flex gap-1.5">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-6 text-[10px] px-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewStatus(request);
+                          }}
+                        >
+                          Status
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="h-6 text-[10px] px-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            documentRequestModal.openFn(request);
+                          }}
+                        >
+                          Edit
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -238,6 +337,77 @@ export default function GuestRequestDocument(): React.ReactNode {
       </div>
 
       <DocumentRequestUserModal controller={documentRequestModal} onSubmit={handleModalSubmit} />
+
+      <Sheet open={viewingStatus != null} onOpenChange={() => setViewingStatus(null)}>
+        <SheetContent className="w-full sm:max-w-lg">
+          <SheetHeader className="space-y-3 pb-6 border-b">
+            <SheetTitle className="text-2xl font-bold">Request Status</SheetTitle>
+            <SheetDescription className="text-base">
+              Track the progress of your document request
+            </SheetDescription>
+          </SheetHeader>
+          {viewingStatus && (
+            <div className="mt-6 space-y-6">
+              <div className="grid gap-4">
+                <div className="group rounded-lg border bg-card p-2 transition-all hover:shadow-md">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                    Document Type
+                  </h3>
+                  <p className="text-lg font-medium">
+                    {viewingStatus.document_type?.document_type_name}
+                  </p>
+                </div>
+                <div className="group rounded-lg border bg-card p-2 transition-all hover:shadow-md">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                    Campus
+                  </h3>
+                  <p className="text-lg font-medium">{viewingStatus.campus?.name}</p>
+                </div>
+                <div className="group rounded-lg border bg-card p-2 transition-all hover:shadow-md">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                    Purpose
+                  </h3>
+                  <p className="text-base leading-relaxed">{viewingStatus.purpose}</p>
+                </div>
+                <div className="group rounded-lg border bg-card p-2 transition-all hover:shadow-md">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                    Current Status
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    {getStatusBadge(viewingStatus.latest_status_label || 'pending')}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  Status History
+                </h3>
+                <div className="relative">
+                  <div className="absolute left-[15px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary/50 via-primary/30 to-transparent" />
+                  <div className="space-y-4">
+                    {viewingStatus.logs?.map((log, index) => (
+                      <div key={index} className="relative pl-10">
+                        <div
+                          className={`absolute left-2 top-1 w-4 h-4 rounded-full border-2 border-background ${getStatusColor(log.action)}`}
+                        />
+                        <div className="p-3 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-medium">{log.action}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground block mt-1">
+                            {new Date(log.created_at ?? '').toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </TitledPage>
   );
 }

@@ -14768,6 +14768,16 @@
                         "type": "string",
                         "readOnly": true
                     },
+                    "logs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/DocumentRequestLog"
+                        }
+                    },
+                    "is_cancellable": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
                     "user": {
                         "$ref": "#\/components\/schemas\/User"
                     },
