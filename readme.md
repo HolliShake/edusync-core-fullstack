@@ -35,6 +35,9 @@ EduSync Core is a full-stack educational management system designed to streamlin
 - **Infrastructure**: Campuses, buildings, and rooms
 - **Academic Structure**: Programs, curricula, courses, and sections
 - **Scheduling**: Academic terms, school years, and calendars
+- **Admission**: Application processing, evaluation, and scoring
+- **Enrollment**: Student enrollment with approval workflows
+- **Document Management**: Document requests and tracking
 - **Administration**: Requirements, users, and role-based access control
 
 The system follows clean architecture principles with a clear separation between frontend and backend, making it scalable, maintainable, and testable.
@@ -53,6 +56,10 @@ The system follows clean architecture principles with a clear separation between
 - Academic program creation and management
 - Curriculum design and versioning
 - Course catalog management
+- Course prerequisites and co-requisites
+- Academic program criteria for admission evaluation
+- Academic program requirements management
+- Curriculum tagging
 
 ### 📅 Scheduling & Calendar
 
@@ -80,6 +87,36 @@ The system follows clean architecture principles with a clear separation between
 - Define program requirements
 - Track enrollment requirements
 - Manage prerequisites
+
+### 🎓 Admission System
+
+- Multi-step admission application process
+- Application pool numbering and tracking
+- Admission schedule management per campus
+- Application evaluation and scoring
+- Program-specific admission criteria
+- Application status tracking (Submitted, Approved, Rejected, Accepted, Cancelled)
+- Application logs and history
+- File upload support for application requirements
+
+### 📝 Enrollment System
+
+- Student enrollment management
+- Multi-level approval workflow (Program Chair → Campus Registrar)
+- Enrollment status tracking
+- Drop enrollment functionality
+- Enrollment validation and verification
+- Scholastic record filtering by campus and school year
+- Enrollment logs and audit trail
+
+### 📄 Document Request System
+
+- Document request submission and tracking
+- Document type management
+- Request status workflow (Submitted, Processing, Completed, Rejected, Cancelled, Pickup, Paid)
+- Request cancellation support
+- Document request logs and history
+- Campus-specific document requests
 
 ### 🔍 Advanced Features
 
@@ -452,14 +489,27 @@ DELETE /api/{resource}/delete/{id}  # Delete by ID
 - `College` - College/department management
 - `ProgramType` - Program type definitions
 - `AcademicProgram` - Academic programs
+- `AcademicProgramCriteria` - Admission evaluation criteria
+- `AcademicProgramRequirement` - Program-specific requirements
 - `Curriculum` - Curricula
 - `CurriculumDetail` - Curriculum courses
+- `CurriculumTagging` - Curriculum tagging
 - `Course` - Course catalog
+- `CourseRequisite` - Course prerequisites and co-requisites
 - `SchoolYear` - School years
 - `AcademicTerm` - Academic terms/semesters
 - `AcademicCalendar` - Calendar events
 - `Section` - Course sections
 - `Requirement` - Requirements
+- `AdmissionApplication` - Admission applications
+- `AdmissionApplicationLog` - Application status logs
+- `AdmissionApplicationScore` - Application evaluation scores
+- `AdmissionSchedule` - Admission schedules
+- `Enrollment` - Student enrollments
+- `EnrollmentLog` - Enrollment status logs
+- `DocumentRequest` - Document requests
+- `DocumentRequestLog` - Document request status logs
+- `DocumentType` - Document type definitions
 
 #### Query Parameters
 
@@ -485,6 +535,7 @@ The application provides different interfaces based on user roles:
 - **Campus Management**: `/admin/campuses`
 - **Program Management**: `/admin/program-type`
 - **Course Management**: `/admin/courses`
+- **Course Requisites**: `/admin/courses/requisite`
 - **Section Management**: `/admin/sections`
 - **Academic Term**: `/admin/academic-term`
 - **School Year**: `/admin/school-year`
@@ -493,14 +544,32 @@ The application provides different interfaces based on user roles:
 #### Program Chair
 
 - **Curriculum Management**: `/program-chair/curriculum`
+- **Admission Evaluation**: `/program-chair/admission/evaluation`
+- **Admission Applications**: `/program-chair/admission/application`
+- **Program Criteria**: `/program-chair/program-criteria`
+- **Program Requirements**: `/program-chair/program-requirement`
+- **Enrollment Management**: `/program-chair/enrollment`
 
-#### College Dean
+#### Campus Registrar
 
-- Role-specific views and permissions
+- **Document Requests**: `/campus-registrar/document-request`
+- **Enrollment Management**: `/campus-registrar/enrollment`
+
+#### Guest (Public)
+
+- **Admission Application**: `/guest/admission`
+- **My Applications**: `/guest/admission-applications`
+- **Application Status**: `/guest/admission-applications/:id`
+- **Enrollment**: `/guest/enrollment`
+- **Accepted Applications**: `/guest/enrollment/accepted`
+- **Document Requests**: `/guest/request`
 
 #### Student
 
-- Student-specific views (enrollment, grades, etc.)
+- **Enrollment**: `/student`
+- **Evaluation**: `/student/evaluation`
+- **Gradebook**: `/student/gradebook`
+- **Document Requests**: `/student/request`
 
 ## 🔧 Development
 
@@ -722,7 +791,6 @@ For support, please open an issue on the GitHub repository or contact the develo
 
 ### Upcoming Features
 
-- [ ] Student enrollment management
 - [ ] Grade management system
 - [ ] Faculty workload management
 - [ ] Class scheduling automation
@@ -735,9 +803,9 @@ For support, please open an issue on the GitHub repository or contact the develo
 
 ### In Progress
 
-- [ ] User authentication and authorization
-- [ ] Role-based access control implementation
 - [ ] Advanced search and filtering
+- [ ] Student gradebook completion
+- [ ] Student evaluation system
 
 ### Completed
 
@@ -745,15 +813,25 @@ For support, please open an issue on the GitHub repository or contact the develo
 - [x] Academic program management
 - [x] Curriculum management
 - [x] Course catalog
+- [x] Course prerequisites and co-requisites
+- [x] Academic program criteria and requirements
 - [x] Calendar and scheduling
+- [x] User authentication and authorization
+- [x] Role-based access control implementation
+- [x] Admission application system
+- [x] Admission evaluation and scoring
+- [x] Student enrollment management
+- [x] Enrollment approval workflow
+- [x] Document request system
+- [x] Document tracking and status management
 - [x] OpenAPI documentation
 - [x] Docker containerization
 - [x] Modern React UI with Tailwind CSS
 
 ---
 
-**Last Updated**: October 19, 2025  
-**Version**: 1.0.0  
+**Last Updated**: October 24, 2025  
+**Version**: 1.1.0  
 **Status**: Active Development
 
 Made with ❤️ by HolliShake
