@@ -8028,7 +8028,7 @@ export function useGetDocumentRequestLogPaginated<TData = Awaited<ReturnType<typ
  * @summary Create a new DocumentRequestLog
  */
 export const createDocumentRequestLog = (
-    documentRequestLog: NonReadonly<DocumentRequestLog>,
+    documentRequestLog: DocumentRequestLog,
  signal?: AbortSignal
 ) => {
       
@@ -8044,8 +8044,8 @@ export const createDocumentRequestLog = (
 
 
 export const getCreateDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: NonReadonly<DocumentRequestLog>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: NonReadonly<DocumentRequestLog>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext> => {
 
 const mutationKey = ['createDocumentRequestLog'];
 const {mutation: mutationOptions} = options ?
@@ -8057,7 +8057,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequestLog>>, {data: NonReadonly<DocumentRequestLog>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequestLog>>, {data: DocumentRequestLog}> = (props) => {
           const {data} = props ?? {};
 
           return  createDocumentRequestLog(data,)
@@ -8069,18 +8069,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof createDocumentRequestLog>>>
-    export type CreateDocumentRequestLogMutationBody = NonReadonly<DocumentRequestLog>
+    export type CreateDocumentRequestLogMutationBody = DocumentRequestLog
     export type CreateDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new DocumentRequestLog
  */
 export const useCreateDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: NonReadonly<DocumentRequestLog>}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequestLog>>, TError,{data: DocumentRequestLog}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createDocumentRequestLog>>,
         TError,
-        {data: NonReadonly<DocumentRequestLog>},
+        {data: DocumentRequestLog},
         TContext
       > => {
 
@@ -8184,7 +8184,7 @@ export function useGetDocumentRequestLogById<TData = Awaited<ReturnType<typeof g
  */
 export const updateDocumentRequestLog = (
     id: number,
-    documentRequestLog: NonReadonly<DocumentRequestLog>,
+    documentRequestLog: DocumentRequestLog,
  ) => {
       
       
@@ -8199,8 +8199,8 @@ export const updateDocumentRequestLog = (
 
 
 export const getUpdateDocumentRequestLogMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: NonReadonly<DocumentRequestLog>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: NonReadonly<DocumentRequestLog>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext> => {
 
 const mutationKey = ['updateDocumentRequestLog'];
 const {mutation: mutationOptions} = options ?
@@ -8212,7 +8212,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequestLog>>, {id: number;data: NonReadonly<DocumentRequestLog>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequestLog>>, {id: number;data: DocumentRequestLog}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateDocumentRequestLog(id,data,)
@@ -8224,18 +8224,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateDocumentRequestLogMutationResult = NonNullable<Awaited<ReturnType<typeof updateDocumentRequestLog>>>
-    export type UpdateDocumentRequestLogMutationBody = NonReadonly<DocumentRequestLog>
+    export type UpdateDocumentRequestLogMutationBody = DocumentRequestLog
     export type UpdateDocumentRequestLogMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a DocumentRequestLog
  */
 export const useUpdateDocumentRequestLog = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: NonReadonly<DocumentRequestLog>}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequestLog>>, TError,{id: number;data: DocumentRequestLog}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateDocumentRequestLog>>,
         TError,
-        {id: number;data: NonReadonly<DocumentRequestLog>},
+        {id: number;data: DocumentRequestLog},
         TContext
       > => {
 

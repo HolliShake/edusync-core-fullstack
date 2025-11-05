@@ -13,6 +13,7 @@ export type DocumentRequestLatestStatus = typeof DocumentRequestLatestStatus[key
 export const DocumentRequestLatestStatus = {
   submitted: 'submitted',
   cancelled: 'cancelled',
+  paid: 'paid',
   rejected: 'rejected',
   processing: 'processing',
   pickup: 'pickup',

@@ -13,7 +13,7 @@ export interface DocumentRequestLog {
   id?: number;
   document_request_id: number;
   user_id: number;
-  readonly action: DocumentRequestLogAction;
+  action: DocumentRequestLogAction;
   note: string;
   created_at?: string;
   updated_at?: string;

@@ -136,7 +136,7 @@ class DocumentRequest extends Model
      */
     public function getIsCancellableAttribute(): bool
     {
-        return $this->latestStatus()->first()->action === DocumentRequestLogActionEnum::SUBMITTED->value;
+        return $this->latestStatus()->first()->action === DocumentRequestLogActionEnum::SUBMITTED;
     }
 
     /**
@@ -175,6 +175,7 @@ class DocumentRequest extends Model
             'rejected'   => 'Rejected',
             'cancelled'  => 'Cancelled',
             'pickup'     => 'Ready for Pickup',
+            'paid'       => 'Payment not required (free document)',
         ];
 
         return $labels[strtolower($action)] ?? $action;

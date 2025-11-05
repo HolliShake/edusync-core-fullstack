@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\DocumentRequestLogActionEnum;
 use App\Http\Controllers\Controller;
 use App\Service\DocumentRequestLogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -158,7 +159,10 @@ class DocumentRequestLogController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'document_request_id' => 'required|exists:document_request,id',
+                'user_id' => 'required|exists:user,id',
+                'action' => 'required|in:' . implode(',', array_column(DocumentRequestLogActionEnum::cases(), 'value')),
+                'note' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -226,7 +230,10 @@ class DocumentRequestLogController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'document_request_id' => 'required|exists:document_request,id',
+                'user_id' => 'required|exists:user,id',
+                'action' => 'required|in:' . implode(',', array_column(DocumentRequestLogActionEnum::cases(), 'value')),
+                'note' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {

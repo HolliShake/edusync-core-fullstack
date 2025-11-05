@@ -17,8 +17,22 @@ return new class extends Migration
             AFTER INSERT ON document_request
             FOR EACH ROW
             BEGIN
+                DECLARE document_price DECIMAL(10,2);
+
+                -- Get the price of the document type
+                SELECT price INTO document_price
+                FROM document_type
+                WHERE id = NEW.document_type_id;
+
+                -- Insert submitted log
                 INSERT INTO document_request_log (document_request_id, user_id, action, note, created_at, updated_at)
                 VALUES (NEW.id, NEW.user_id, "submitted", "Document request submitted", NOW(), NOW());
+
+                -- If price is 0, also insert paid log
+                IF document_price = 0 THEN
+                    INSERT INTO document_request_log (document_request_id, user_id, action, note, created_at, updated_at)
+                    VALUES (NEW.id, NEW.user_id, "paid", "Payment not required (free document)", NOW(), NOW());
+                END IF;
             END
         ');
     }

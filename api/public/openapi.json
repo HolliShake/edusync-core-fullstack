@@ -14757,6 +14757,7 @@
                         "enum": [
                             "submitted",
                             "cancelled",
+                            "paid",
                             "rejected",
                             "processing",
                             "pickup",
@@ -14920,12 +14921,12 @@
                         "enum": [
                             "submitted",
                             "cancelled",
+                            "paid",
                             "rejected",
                             "processing",
                             "pickup",
                             "completed"
-                        ],
-                        "readOnly": true
+                        ]
                     },
                     "note": {
                         "type": "string",

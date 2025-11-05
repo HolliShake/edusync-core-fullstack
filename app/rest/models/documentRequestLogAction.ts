@@ -13,6 +13,7 @@ export type DocumentRequestLogAction = typeof DocumentRequestLogAction[keyof typ
 export const DocumentRequestLogAction = {
   submitted: 'submitted',
   cancelled: 'cancelled',
+  paid: 'paid',
   rejected: 'rejected',
   processing: 'processing',
   pickup: 'pickup',
