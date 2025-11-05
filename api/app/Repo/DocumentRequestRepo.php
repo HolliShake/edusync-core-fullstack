@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\IDocumentRequestRepo;
 use App\Models\DocumentRequest;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class DocumentRequestRepo extends GenericRepo implements IDocumentRequestRepo
 {
@@ -21,7 +22,7 @@ class DocumentRequestRepo extends GenericRepo implements IDocumentRequestRepo
         return [
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
-            // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('user_id'),
         ];
     }
 

@@ -11,14 +11,16 @@ use OpenApi\Attributes as OA;
     type: "object",
     required: [
         // Override required
-        'name',
+        'document_type_name',
         'description',
+        'price',
     ],
     properties: [
         // Override fillables
         new OA\Property(property: "id", type: "integer", example: 1),
-        new OA\Property(property: "name", type: "string", example: "Transcript"),
+        new OA\Property(property: "document_type_name", type: "string", example: "Transcript"),
         new OA\Property(property: "description", type: "string", example: "Transcript of records"),
+        new OA\Property(property: "price", type: "number", example: 100.00),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00.000000Z"),
     ]
@@ -97,7 +99,12 @@ class DocumentType extends Model
     protected $table = 'document_type';
 
     protected $fillable = [
-        'name',
+        'document_type_name',
         'description',
+        'price',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
     ];
 }

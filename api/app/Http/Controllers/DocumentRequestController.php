@@ -48,6 +48,13 @@ class DocumentRequestController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[user_id]",
+        in: "query",
+        description: "Filter by user ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
@@ -158,7 +165,10 @@ class DocumentRequestController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'user_id' => 'required|integer|exists:user,id',
+                'campus_id' => 'required|integer|exists:campus,id',
+                'document_type_id' => 'required|integer|exists:document_type,id',
+                'purpose' => 'required|string|max:255',
             ]);
 
             if ($validator->fails()) {
@@ -226,7 +236,10 @@ class DocumentRequestController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'user_id' => 'required|integer|exists:user,id',
+                'campus_id' => 'required|integer|exists:campus,id',
+                'document_type_id' => 'required|integer|exists:document_type,id',
+                'purpose' => 'required|string|max:255',
             ]);
 
             if ($validator->fails()) {

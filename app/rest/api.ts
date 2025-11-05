@@ -7654,7 +7654,7 @@ export function useGetDocumentRequestPaginated<TData = Awaited<ReturnType<typeof
  * @summary Create a new DocumentRequest
  */
 export const createDocumentRequest = (
-    documentRequest: DocumentRequest,
+    documentRequest: NonReadonly<DocumentRequest>,
  signal?: AbortSignal
 ) => {
       
@@ -7670,8 +7670,8 @@ export const createDocumentRequest = (
 
 
 export const getCreateDocumentRequestMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: DocumentRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: DocumentRequest}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: NonReadonly<DocumentRequest>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: NonReadonly<DocumentRequest>}, TContext> => {
 
 const mutationKey = ['createDocumentRequest'];
 const {mutation: mutationOptions} = options ?
@@ -7683,7 +7683,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequest>>, {data: DocumentRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDocumentRequest>>, {data: NonReadonly<DocumentRequest>}> = (props) => {
           const {data} = props ?? {};
 
           return  createDocumentRequest(data,)
@@ -7695,18 +7695,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateDocumentRequestMutationResult = NonNullable<Awaited<ReturnType<typeof createDocumentRequest>>>
-    export type CreateDocumentRequestMutationBody = DocumentRequest
+    export type CreateDocumentRequestMutationBody = NonReadonly<DocumentRequest>
     export type CreateDocumentRequestMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new DocumentRequest
  */
 export const useCreateDocumentRequest = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: DocumentRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDocumentRequest>>, TError,{data: NonReadonly<DocumentRequest>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createDocumentRequest>>,
         TError,
-        {data: DocumentRequest},
+        {data: NonReadonly<DocumentRequest>},
         TContext
       > => {
 
@@ -7810,7 +7810,7 @@ export function useGetDocumentRequestById<TData = Awaited<ReturnType<typeof getD
  */
 export const updateDocumentRequest = (
     id: number,
-    documentRequest: DocumentRequest,
+    documentRequest: NonReadonly<DocumentRequest>,
  ) => {
       
       
@@ -7825,8 +7825,8 @@ export const updateDocumentRequest = (
 
 
 export const getUpdateDocumentRequestMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: DocumentRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: DocumentRequest}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: NonReadonly<DocumentRequest>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: NonReadonly<DocumentRequest>}, TContext> => {
 
 const mutationKey = ['updateDocumentRequest'];
 const {mutation: mutationOptions} = options ?
@@ -7838,7 +7838,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequest>>, {id: number;data: DocumentRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDocumentRequest>>, {id: number;data: NonReadonly<DocumentRequest>}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateDocumentRequest(id,data,)
@@ -7850,18 +7850,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateDocumentRequestMutationResult = NonNullable<Awaited<ReturnType<typeof updateDocumentRequest>>>
-    export type UpdateDocumentRequestMutationBody = DocumentRequest
+    export type UpdateDocumentRequestMutationBody = NonReadonly<DocumentRequest>
     export type UpdateDocumentRequestMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a DocumentRequest
  */
 export const useUpdateDocumentRequest = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: DocumentRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDocumentRequest>>, TError,{id: number;data: NonReadonly<DocumentRequest>}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateDocumentRequest>>,
         TError,
-        {id: number;data: DocumentRequest},
+        {id: number;data: NonReadonly<DocumentRequest>},
         TContext
       > => {
 

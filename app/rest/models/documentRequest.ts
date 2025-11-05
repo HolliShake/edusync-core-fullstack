@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { DocumentRequestLatestStatus } from './documentRequestLatestStatus';
 import type { User } from './user';
 import type { Campus } from './campus';
 import type { DocumentType } from './documentType';
@@ -17,6 +18,8 @@ export interface DocumentRequest {
   purpose: string;
   created_at?: string;
   updated_at?: string;
+  readonly latest_status?: DocumentRequestLatestStatus;
+  readonly latest_status_label?: string;
   user?: User;
   campus?: Campus;
   document_type?: DocumentType;

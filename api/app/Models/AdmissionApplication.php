@@ -179,10 +179,10 @@ class AdmissionApplication extends Model
      *
      * @return string
      */
-    public function getLatestStatusAttribute(): string
+    public function getLatestStatusAttribute(): AdmissionApplicationLogTypeEnum
     {
         $latestLog = $this->latestStatus()->first();
-        return $latestLog ? $latestLog->type : AdmissionApplicationLogTypeEnum::SUBMITTED->value;
+        return $latestLog ? $latestLog->type : AdmissionApplicationLogTypeEnum::SUBMITTED;
     }
 
     /**

@@ -17,6 +17,8 @@ return new class extends Migration
             // Fields
             $table->string('document_type_name');
             $table->text('description')->nullable();
+            // price
+            $table->decimal('price', 10, 2)->default(0);
         });
     }
 

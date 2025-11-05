@@ -6971,6 +6971,15 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[user_id]",
+                        "in": "query",
+                        "description": "Filter by user ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -14743,6 +14752,22 @@
                         "format": "date-time",
                         "example": "2025-01-01T00:00:00.000000Z"
                     },
+                    "latest_status": {
+                        "type": "string",
+                        "enum": [
+                            "submitted",
+                            "cancelled",
+                            "rejected",
+                            "processing",
+                            "pickup",
+                            "completed"
+                        ],
+                        "readOnly": true
+                    },
+                    "latest_status_label": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "user": {
                         "$ref": "#\/components\/schemas\/User"
                     },
@@ -15022,21 +15047,26 @@
             "DocumentType": {
                 "title": "DocumentType",
                 "required": [
-                    "name",
-                    "description"
+                    "document_type_name",
+                    "description",
+                    "price"
                 ],
                 "properties": {
                     "id": {
                         "type": "integer",
                         "example": 1
                     },
-                    "name": {
+                    "document_type_name": {
                         "type": "string",
                         "example": "Transcript"
                     },
                     "description": {
                         "type": "string",
                         "example": "Transcript of records"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 100
                     },
                     "created_at": {
                         "type": "string",

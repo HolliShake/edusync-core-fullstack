@@ -158,7 +158,9 @@ class DocumentTypeController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'document_type_name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
             ]);
 
             if ($validator->fails()) {
@@ -226,7 +228,9 @@ class DocumentTypeController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'document_type_name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
             ]);
 
             if ($validator->fails()) {

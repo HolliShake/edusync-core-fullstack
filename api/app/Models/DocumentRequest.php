@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enum\DocumentRequestLogActionEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -26,7 +28,10 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "purpose", type: "string", example: "For employment purposes"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-01T00:00:00.000000Z"),
-        // Relationships
+        // Computed
+        new OA\Property(property: "latest_status", type: "string", enum: DocumentRequestLogActionEnum::class, readOnly: true),
+        new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
+        // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "campus", ref: "#/components/schemas/Campus"),
         new OA\Property(property: "document_type", ref: "#/components/schemas/DocumentType"),
@@ -115,7 +120,29 @@ class DocumentRequest extends Model
     protected $appends = [
         'user',
         'campus',
+        'latest_status',
+        'latest_status_label',
     ];
+
+    /**
+     * Get the latest status of the document request.
+     *
+     * @return DocumentRequestLogActionEnum
+     */
+    public function getLatestStatusAttribute(): DocumentRequestLogActionEnum
+    {
+        return $this->latestStatus()->first()->action;
+    }
+
+    /**
+     * Get the latest status label of the document request.
+     *
+     * @return string
+     */
+    public function getLatestStatusLabelAttribute(): string
+    {
+        return $this->latestStatus()->first()->action->value;
+    }
 
     /**
      * Get the user that owns the document request.
@@ -157,4 +184,13 @@ class DocumentRequest extends Model
         return $this->belongsTo(Campus::class);
     }
 
+    /**
+     * Get the latest status of the document request.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function latestStatus(): HasOne
+    {
+        return $this->hasOne(DocumentRequestLog::class)->latestOfMany();
+    }
 }

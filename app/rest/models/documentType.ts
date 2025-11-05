@@ -8,8 +8,9 @@
 
 export interface DocumentType {
   id?: number;
-  name: string;
+  document_type_name: string;
   description: string;
+  price: number;
   created_at?: string;
   updated_at?: string;
 }

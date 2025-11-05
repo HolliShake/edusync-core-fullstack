@@ -5,6 +5,7 @@ import GuestAdmissionPage from '@/pages/guest/admission/page';
 import GuestEnrollment from '@/pages/guest/enrollment/accepted/application/page';
 import GuestAcceptedAdmission from '@/pages/guest/enrollment/accepted/page';
 import { default as GuestEnrollmentApplications } from '@/pages/guest/enrollment/applications/page';
+import GuestRequestDocument from '@/pages/guest/request/page';
 import type { Route } from '@/types/route';
 import {
   BookOpenIcon,
@@ -103,6 +104,16 @@ const GUEST: Route[] = [
       },
     ],
     icon: <GraduationCapIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.GUEST],
+  },
+  {
+    key: 'guest.settings',
+    title: 'Request A Document',
+    path: '/guest/settings',
+    component: <GuestRequestDocument />,
+    icon: <FileTextIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
     roles: [UserRoleEnum.GUEST],

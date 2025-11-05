@@ -125,6 +125,7 @@ export * from './deleteUserRequirementResponse200';
 export * from './deleteUserResponse200';
 export * from './designition';
 export * from './documentRequest';
+export * from './documentRequestLatestStatus';
 export * from './documentRequestLog';
 export * from './documentRequestLogAction';
 export * from './documentType';
