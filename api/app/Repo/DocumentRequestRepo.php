@@ -22,7 +22,13 @@ class DocumentRequestRepo extends GenericRepo implements IDocumentRequestRepo
         return [
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
+            AllowedFilter::callback('latest_status', function ($query, $value) {
+                $query->whereHas('latestStatus', function ($q) use ($value) {
+                    $q->where('action', $value);
+                });
+            }),
             AllowedFilter::exact('user_id'),
+            AllowedFilter::exact('campus_id'),
         ];
     }
 

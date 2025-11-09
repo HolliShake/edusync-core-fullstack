@@ -17,12 +17,13 @@ export interface DocumentRequest {
   campus_id: number;
   document_type_id: number;
   purpose: string;
-  created_at?: string;
-  updated_at?: string;
+  readonly created_at?: string;
+  readonly updated_at?: string;
   readonly latest_status?: DocumentRequestLatestStatus;
   readonly latest_status_label?: string;
   logs?: DocumentRequestLog[];
   readonly is_cancellable?: boolean;
+  readonly is_actionable?: boolean;
   user?: User;
   campus?: Campus;
   document_type?: DocumentType;

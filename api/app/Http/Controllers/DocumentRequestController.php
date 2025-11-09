@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\DocumentRequestLogActionEnum;
 use App\Http\Controllers\Controller;
 use App\Service\DocumentRequestService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -54,6 +55,24 @@ class DocumentRequestController extends Controller
         description: "Filter by user ID",
         required: false,
         schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[campus_id]",
+        in: "query",
+        description: "Filter by campus ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[latest_status]",
+        in: "query",
+        description: "Filter by latest status",
+        required: false,
+        schema: new OA\Schema(
+            type: "string",
+            enum: DocumentRequestLogActionEnum::class,
+            example: DocumentRequestLogActionEnum::PAID->value
+        )
     )]
     #[OA\Response(
         response: 200,

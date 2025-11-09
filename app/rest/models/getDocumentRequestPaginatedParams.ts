@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { GetDocumentRequestPaginatedFilterLatestStatus } from './getDocumentRequestPaginatedFilterLatestStatus';
 
 export type GetDocumentRequestPaginatedParams = {
 /**
@@ -23,4 +24,12 @@ rows?: number;
  * Filter by user ID
  */
 'filter[user_id]'?: number;
+/**
+ * Filter by campus ID
+ */
+'filter[campus_id]'?: number;
+/**
+ * Filter by latest status
+ */
+'filter[latest_status]'?: GetDocumentRequestPaginatedFilterLatestStatus;
 };

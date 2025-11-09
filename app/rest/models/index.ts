@@ -204,6 +204,7 @@ export * from './getDesignitionsResponse200';
 export * from './getDocumentRequestLogPaginatedParams';
 export * from './getDocumentRequestLogResponse200';
 export * from './getDocumentRequestLogsResponse200';
+export * from './getDocumentRequestPaginatedFilterLatestStatus';
 export * from './getDocumentRequestPaginatedParams';
 export * from './getDocumentRequestResponse200';
 export * from './getDocumentRequestsResponse200';

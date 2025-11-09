@@ -1,7 +1,8 @@
 import { UserRoleEnum } from '@/enums/role-enum';
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
+import CampusRegistrarRequest from '@/pages/campus-registrar/request/page';
 import type { Route } from '@/types/route';
-import { ClipboardListIcon } from 'lucide-react';
+import { ClipboardListIcon, FileTextIcon } from 'lucide-react';
 
 const CAMPUS_REGISTRAR: Route[] = [
   {
@@ -22,6 +23,16 @@ const CAMPUS_REGISTRAR: Route[] = [
     sidebar: true,
     roles: [UserRoleEnum.CAMPUS_REGISTRAR],
   },
+  {
+    key: 'campus-registrar.request',
+    title: 'Request',
+    path: '/campus-registrar/request',
+    component: <CampusRegistrarRequest />,
+    icon: <FileTextIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+  }
 ];
 
 export default CAMPUS_REGISTRAR;
