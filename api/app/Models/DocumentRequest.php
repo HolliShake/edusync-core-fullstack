@@ -145,7 +145,15 @@ class DocumentRequest extends Model
 
     public function getIsActionableAttribute(): bool
     {
-        return $this->latestStatus()->first()->action === DocumentRequestLogActionEnum::PAID;
+        switch ($this->latestStatus()->first()->action) {
+            case DocumentRequestLogActionEnum::SUBMITTED:
+            case DocumentRequestLogActionEnum::PAID:
+            case DocumentRequestLogActionEnum::PROCESSING:
+            case DocumentRequestLogActionEnum::PICKUP:
+                return true;
+            default:
+                return false;
+        };
     }
 
     /**
@@ -165,7 +173,7 @@ class DocumentRequest extends Model
      */
     public function getLogsAttribute(): array
     {
-        return $this->logs()->get()->makeHidden(['document_request', 'user'])->toArray();
+        return $this->logs()->get()->makeHidden(['document_request'])->toArray();
     }
 
     /**

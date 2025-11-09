@@ -421,15 +421,15 @@ export default function RequestDocumentView(): React.ReactNode {
       <DocumentRequestUserModal controller={documentRequestModal} onSubmit={handleModalSubmit} />
 
       <Sheet open={viewingStatus != null} onOpenChange={() => setViewingStatus(null)}>
-        <SheetContent className="w-full sm:max-w-lg">
-          <SheetHeader className="space-y-3 pb-6 border-b">
+        <SheetContent className="w-full sm:max-w-lg flex flex-col p-0">
+          <SheetHeader className="space-y-3 pb-6 border-b px-6 pt-6">
             <SheetTitle className="text-2xl font-bold">Request Status</SheetTitle>
             <SheetDescription className="text-base">
               Track the progress of your document request
             </SheetDescription>
           </SheetHeader>
           {viewingStatus && (
-            <div className="mt-6 space-y-6">
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 pt-6 mt-0 space-y-6">
               <div className="grid gap-4">
                 <div className="group rounded-lg border bg-card p-2 transition-all hover:shadow-md">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
@@ -475,7 +475,11 @@ export default function RequestDocumentView(): React.ReactNode {
                         />
                         <div className="p-3 rounded-lg">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-sm font-medium">{log.action}</span>
+                            <span className="text-sm font-medium uppercase">{log.action}</span>
+                            {/* Display log user name */}
+                            <span className="text-xs text-muted-foreground">
+                              {log.user?.name ? `by ${log.user?.name}` : ""}
+                            </span>
                           </div>
                           <span className="text-xs text-muted-foreground block mt-1">
                             {new Date(log.created_at ?? '').toLocaleString()}
