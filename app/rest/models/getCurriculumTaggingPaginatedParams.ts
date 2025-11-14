@@ -23,4 +23,20 @@ rows?: number;
  * Filter by curriculum ID
  */
 'filter[curriculum_id]'?: number;
+/**
+ * Filter by academic program ID
+ */
+'filter[academic_program_id]'?: number;
+/**
+ * Filter by college ID
+ */
+'filter[college_id]'?: number;
+/**
+ * Filter by campus ID
+ */
+'filter[campus_id]'?: number;
+/**
+ * Filter by search term
+ */
+'filter[search]'?: string;
 };

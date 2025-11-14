@@ -3,6 +3,7 @@ import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
+import GradebookModal from '@/components/program-chair-only/gradebook/gradebook.modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth.context';
@@ -13,7 +14,6 @@ import { DeleteIcon, EditIcon, EllipsisIcon, EyeIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import GradebookModal from './gradebook.modal';
 
 export default function ProgramChairGradebookPage() {
   const { session } = useAuth();

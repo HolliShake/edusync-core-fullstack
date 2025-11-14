@@ -1,6 +1,8 @@
 import { useConfirm } from '@/components/confirm.provider';
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
+import GradebookItemDetailModal from '@/components/gradebook/gradebook-item-detail.modal';
+import GradebookItemModal from '@/components/gradebook/gradebook-item.modal';
 import TitledPage from '@/components/pages/titled.page';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,8 +19,6 @@ import { DeleteIcon, EditIcon, EllipsisIcon, PlusIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import GradebookItemDetailModal from './gradebook-item-detail.modal';
-import GradebookItemModal from './gradebook-item.modal';
 
 export default function GradebookDetailPage() {
   const { gradebookId } = useParams<{ gradebookId: string }>();

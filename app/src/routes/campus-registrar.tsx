@@ -1,8 +1,9 @@
 import { UserRoleEnum } from '@/enums/role-enum';
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
 import CampusRegistrarRequest from '@/pages/campus-registrar/request/page';
+import CampusRegistrarCommunityStudent from '@/pages/campus-registrar/student/page';
 import type { Route } from '@/types/route';
-import { ClipboardListIcon, FileTextIcon } from 'lucide-react';
+import { ClipboardListIcon, FileTextIcon, GraduationCapIcon, Users2Icon } from 'lucide-react';
 
 const CAMPUS_REGISTRAR: Route[] = [
   {
@@ -32,7 +33,38 @@ const CAMPUS_REGISTRAR: Route[] = [
     layout: 'dashboard',
     sidebar: true,
     roles: [UserRoleEnum.CAMPUS_REGISTRAR],
-  }
+  },
+  {
+    key: 'campus-registrar.community',
+    title: 'Community',
+    path: '/campus-registrar/community',
+    icon: <Users2Icon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    children: [
+      {
+        key: 'campus-registrar.community.student',
+        title: 'Students',
+        path: '/campus-registrar/community/students',
+        component: <CampusRegistrarCommunityStudent />,
+        icon: <GraduationCapIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+      },
+      {
+        key: 'campus-registrar.community.faculty',
+        title: 'Faculties',
+        path: '/campus-registrar/community/faculties',
+        component: <CampusRegistrarCommunityStudent />,
+        icon: <Users2Icon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+      },
+    ],
+    roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+  },
 ];
 
 export default CAMPUS_REGISTRAR;

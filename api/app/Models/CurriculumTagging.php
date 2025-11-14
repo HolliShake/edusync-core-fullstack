@@ -129,7 +129,7 @@ class CurriculumTagging extends Model
      *
      * @return bool
      */
-    public function getIsInternalStudenttAttribute(): bool
+    public function getIsInternalStudentAttribute(): bool
     {
         // True if not enrolled to other program and curriculum is active
         // Or simply it shifts to other program or college?
@@ -137,7 +137,7 @@ class CurriculumTagging extends Model
             ->where('is_active', true)
             // Enrolled in a different program
             ->whereHas('curriculum', function ($query) {
-                $query->where('program_id', '!=', $this->curriculum->program_id);
+                $query->where('academic_program_id', '!=', $this->curriculum->academic_program_id);
             })
             ->exists();
 

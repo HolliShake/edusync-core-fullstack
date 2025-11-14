@@ -55,6 +55,34 @@ class CurriculumTaggingController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer")
     )]
+    #[OA\Parameter(
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Filter by academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[college_id]",
+        in: "query",
+        description: "Filter by college ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[campus_id]",
+        in: "query",
+        description: "Filter by campus ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[search]",
+        in: "query",
+        description: "Filter by search term",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { College } from './college';
 import type { ProgramType } from './programType';
 import type { AcademicProgramRequirement } from './academicProgramRequirement';
 
@@ -17,6 +18,7 @@ export interface AcademicProgram {
   program_type_id: number;
   created_at?: string;
   updated_at?: string;
+  college?: College;
   program_type?: ProgramType;
   requirements?: AcademicProgramRequirement[];
 }

@@ -28,6 +28,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2025-01-07T10:30:14.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-07T10:30:14.000000Z"),
         // Relations
+        new OA\Property(property: "college", type: "object", ref: "#/components/schemas/College"),
         new OA\Property(property: "program_type", type: "object", ref: "#/components/schemas/ProgramType"),
         new OA\Property(property: "requirements", type: "array", items: new OA\Items(ref: "#/components/schemas/AcademicProgramRequirement")),
     ]
@@ -111,9 +112,19 @@ class AcademicProgram extends Model
     ];
 
     protected $appends = [
-
+        'college',
         'program_type',
     ];
+
+    /**
+     * Get the college that owns the academic program.
+     *
+     * @return College
+     */
+    public function getCollegeAttribute(): College
+    {
+        return $this->college()->first();
+    }
 
     /**
      * Get the program type for the academic program.
