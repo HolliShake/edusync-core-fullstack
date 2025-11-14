@@ -68,6 +68,9 @@ export default function EnrollmentGenericTab({
   const { mutateAsync: programChairApproveSingle, isPending: isApprovingSingle } =
     useCreateEnrollmentLog();
 
+  const { mutateAsync: registrarRejectSingle, isPending: isRejectingSingle } =
+    useCreateEnrollmentLog();
+
   const { data: schoolYearResponse, isLoading: isLoadingSchoolYears } = useGetSchoolYearPaginated({
     sort: '-start_date',
     page: 1,
@@ -253,11 +256,12 @@ export default function EnrollmentGenericTab({
     }
   };
 
-  const getStudentStatusLabel = (enrollmentList: any[]) => {
+  const getStudentStatusLabel = (enrollmentList: Enrollment[]) => {
     if (!enrollmentList || enrollmentList.length === 0) return 'No Enrollments';
+  
 
-    const hasValidated = enrollmentList.some((e: any) => e.validated && !e.is_dropped);
-    const hasPending = enrollmentList.some((e: any) => !e.validated && !e.is_dropped);
+    const hasValidated = enrollmentList.some((e: Enrollment) => e.validated && e.section?.curriculum_detail?.term_order == termId && e.section?.curriculum_detail?.year_order == yearId && !e.is_dropped);
+    const hasPending = enrollmentList.some((e: Enrollment) => !e.validated && !e.is_dropped && e.section?.curriculum_detail?.term_order == termId && e.section?.curriculum_detail?.year_order == yearId);
 
     if (hasValidated && hasPending) {
       return 'Partial';
@@ -355,12 +359,6 @@ export default function EnrollmentGenericTab({
     )
       return EnrollmentLogActionEnum.registrar_dropped_approved;
 
-    if (
-      role === UserRoleEnum.CAMPUS_REGISTRAR &&
-      // Program Chair approved the drop request
-      status === EnrollmentLogActionEnum.registrar_dropped_approved
-    )
-      return EnrollmentLogActionEnum.registrar_dropped_approved;
     throw new Error('Invalid status');
   };
 
@@ -380,6 +378,25 @@ export default function EnrollmentGenericTab({
     } catch (error) {
       console.error('Error approving enrollment:', error);
       toast.error('Failed to approve enrollment');
+    }
+  };
+
+  const registrarRejectSingleCallback = async (enrollment: Enrollment) => {
+    if (!enrollment.is_enrollment_valid) return toast.error('Enrollment is not valid');
+    try {
+      await registrarRejectSingle({
+        data: {
+          enrollment_id: enrollment.id!,
+          user_id: session?.id!,
+          action: getApprovalAction(),
+          note: 'Rejected by registrar',
+        },
+      });
+      toast.success('Enrollment rejected successfully');
+      refetchEnrollments();
+    } catch (error) {
+      console.error('Error rejecting enrollment:', error);
+      toast.error('Failed to reject enrollment');
     }
   };
 
@@ -649,6 +666,25 @@ export default function EnrollmentGenericTab({
                                       <>
                                         <CheckCircle2Icon className="h-3.5 w-3.5" />
                                         <span className="text-xs">Approve</span>
+                                      </>
+                                    )}
+                                  </Button>
+                                  <Button
+                                    onClick={() => registrarRejectSingleCallback(enrollment)}
+                                    disabled={isRejectingSingle || !enrollment.is_enrollment_valid}
+                                    size="sm"
+                                    variant="destructive"
+                                    className="gap-1.5 h-8 px-3"
+                                  >
+                                    {isRejectingSingle ? (
+                                      <>
+                                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                        <span className="text-xs">Rejecting...</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <XCircleIcon className="h-3.5 w-3.5" />
+                                        <span className="text-xs">Reject</span>
                                       </>
                                     )}
                                   </Button>

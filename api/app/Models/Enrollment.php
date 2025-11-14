@@ -184,8 +184,9 @@ class Enrollment extends Model
             ->get()
             ->makeHidden(['enrollment', 'user'])
             ->pluck('action');
-        return $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value)
-            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED->value);
+        return $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED)
+            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED)
+            && !$this->is_dropped;
     }
 
     /**

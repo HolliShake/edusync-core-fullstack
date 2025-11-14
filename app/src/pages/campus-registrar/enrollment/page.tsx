@@ -30,6 +30,10 @@ export default function CampusRegistrarEnrollment(): React.ReactNode {
         value: EnrollmentLogAction.registrar_approved,
       },
       {
+        label: 'Recently Dropped',
+        value: EnrollmentLogAction.registrar_dropped_approved,
+      },
+      {
         label: 'Rejected',
         value: EnrollmentLogAction.rejected,
       },
