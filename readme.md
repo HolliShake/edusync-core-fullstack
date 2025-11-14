@@ -38,7 +38,9 @@ EduSync Core is a full-stack educational management system designed to streamlin
 - **Admission**: Application processing, evaluation, and scoring
 - **Enrollment**: Student enrollment with approval workflows
 - **Document Management**: Document requests and tracking
-- **Administration**: Requirements, users, and role-based access control
+- **Grade Management**: Gradebook system with grading items and student tracking
+- **User Management**: Role-based access control with designation system
+- **Administration**: Requirements, users, and comprehensive role management
 
 The system follows clean architecture principles with a clear separation between frontend and backend, making it scalable, maintainable, and testable.
 
@@ -81,6 +83,9 @@ The system follows clean architecture principles with a clear separation between
   - Faculty
   - Student
   - Guest
+- Role designation system (Designition)
+- Specialized role assignment workflows for Program Chair, College Dean, and Campus Registrar
+- User profile management
 
 ### 📊 Requirements Management
 
@@ -118,6 +123,15 @@ The system follows clean architecture principles with a clear separation between
 - Document request logs and history
 - Campus-specific document requests
 
+### 📊 Gradebook System
+
+- Gradebook management for sections
+- Grade item creation with configurable weights
+- Grade item detail tracking for individual students
+- Hierarchical grade structure (Gradebook → Items → Item Details)
+- Support for various grading criteria
+- Student performance tracking and evaluation
+
 ### 🔍 Advanced Features
 
 - Filtering, sorting, and pagination
@@ -125,6 +139,10 @@ The system follows clean architecture principles with a clear separation between
 - RESTful API with OpenAPI documentation
 - Real-time data synchronization
 - Responsive modern UI with dark mode
+- Automated database triggers for workflow management
+- Batch operations for bulk data processing
+- Rate limiting on high-traffic endpoints
+- Type-safe API client generation with Orval
 
 ## 🛠️ Tech Stack
 
@@ -138,6 +156,7 @@ The system follows clean architecture principles with a clear separation between
 - **Query Builder**: Spatie Laravel Query Builder
 - **Media Management**: Spatie Laravel Media Library
 - **ORM**: Eloquent
+- **Database Triggers**: Automated workflow triggers for admission, enrollment, and document requests
 
 ### Frontend
 
@@ -469,7 +488,34 @@ Before you begin, ensure you have the following installed:
 
 ## 💻 Usage
 
+### Authentication
+
+The application uses Laravel Sanctum for API authentication with token-based authorization.
+
+**Authentication Flow**:
+
+1. User submits credentials to `/api/Auth/login`
+2. Server validates and returns a bearer token
+3. Client includes token in `Authorization` header for subsequent requests
+4. Token can be revoked via `/api/Auth/logout`
+
+**Protected Routes**: Most endpoints require authentication. Include the token in the header:
+
+```
+Authorization: Bearer {your-token-here}
+```
+
 ### API Endpoints
+
+#### Authentication Endpoints
+
+```
+POST /api/Auth/login      # User login (returns token)
+POST /api/Auth/logout     # User logout (requires authentication)
+GET  /api/Auth/session    # Get current session (requires authentication)
+```
+
+#### Resource Endpoints
 
 The API follows RESTful conventions. Common endpoints for each resource:
 
@@ -501,6 +547,8 @@ DELETE /api/{resource}/delete/{id}  # Delete by ID
 - `AcademicCalendar` - Calendar events
 - `Section` - Course sections
 - `Requirement` - Requirements
+- `Designition` - Role designations
+- `User` - User management
 - `AdmissionApplication` - Admission applications
 - `AdmissionApplicationLog` - Application status logs
 - `AdmissionApplicationScore` - Application evaluation scores
@@ -510,6 +558,9 @@ DELETE /api/{resource}/delete/{id}  # Delete by ID
 - `DocumentRequest` - Document requests
 - `DocumentRequestLog` - Document request status logs
 - `DocumentType` - Document type definitions
+- `GradeBook` - Gradebook management
+- `GradeBookItem` - Grade items
+- `GradeBookItemDetail` - Grade item details
 
 #### Query Parameters
 
@@ -526,34 +577,69 @@ All list endpoints support:
 GET /api/Campus?page=1&rows=20&sort=-created_at&include=buildings,colleges
 ```
 
+#### Special Endpoints
+
+Some resources have additional specialized endpoints:
+
+- **Section Generation**: `POST /api/Section/generate` - Bulk generate sections
+- **Section by Code**: `DELETE /api/Section/code/{section_code}` - Delete by section code
+- **Curriculum Multiple**: `POST /api/CurriculumDetail/multiple` - Create multiple curriculum details
+- **Admission Score Batch**: `POST /api/AdmissionApplicationScore/createOrUpdateMultiple` - Batch create/update scores
+- **Enrollment Filters**:
+  - `GET /api/Enrollment/campus/scholastic-filter/{campus_id}` - Filter by campus
+  - `GET /api/Enrollment/academic-program/scholastic-filter/{academic_program_id}` - Filter by program
+  - `GET /api/Enrollment/campus/grouped-by-user-name/{campus_id}` - Grouped by user (campus)
+  - `GET /api/Enrollment/academic-program/grouped-by-user-name/{academic_program_id}` - Grouped by user (program)
+- **Enrollment Actions**: `POST /api/Enrollment/enroll` - Process enrollment
+- **Designition Role Creation**:
+  - `POST /api/Designition/create-program-chair` - Assign Program Chair role
+  - `POST /api/Designition/create-college-dean` - Assign College Dean role
+  - `POST /api/Designition/create-campus-registrar` - Assign Campus Registrar role
+
 ### Frontend Pages
 
 The application provides different interfaces based on user roles:
 
 #### Admin Dashboard
 
+- **Dashboard**: `/admin/dashboard`
 - **Campus Management**: `/admin/campuses`
+- **Campus Detail**: `/admin/campuses/:campusId`
+- **Building Rooms**: `/admin/campuses/:campusId/buildings/:buildingId/rooms`
+- **College Programs**: `/admin/campuses/:campusId/colleges/:collegeId/programs`
+- **Curriculum**: `/admin/campuses/:campusId/colleges/:collegeId/programs/:programId/curriculum/:curriculumId`
 - **Program Management**: `/admin/program-type`
 - **Course Management**: `/admin/courses`
-- **Course Requisites**: `/admin/courses/requisite`
+- **Course Requisites**: `/admin/courses/:courseId`
 - **Section Management**: `/admin/sections`
 - **Academic Term**: `/admin/academic-term`
 - **School Year**: `/admin/school-year`
+- **Academic Calendar**: `/admin/school-year/:schoolYearId`
 - **Requirements**: `/admin/requirements`
+- **Users**: `/admin/users`
 
 #### Program Chair
 
 - **Curriculum Management**: `/program-chair/curriculum`
+- **Curriculum Detail**: `/program-chair/curriculum/:curriculumId`
+- **Curriculum Students**: `/program-chair/curriculum/:curriculumId/student`
 - **Admission Evaluation**: `/program-chair/admission/evaluation`
 - **Admission Applications**: `/program-chair/admission/application`
+- **Application Status**: `/program-chair/admission/application/:admissionApplicationId`
 - **Program Criteria**: `/program-chair/program-criteria`
 - **Program Requirements**: `/program-chair/program-requirement`
 - **Enrollment Management**: `/program-chair/enrollment`
+- **Gradebook**: `/program-chair/gradebook`
+- **Gradebook Detail**: `/program-chair/gradebook/:gradebookId`
+- **Community Students**: `/program-chair/community/students`
+- **Community Faculties**: `/program-chair/community/faculties`
 
 #### Campus Registrar
 
 - **Document Requests**: `/campus-registrar/document-request`
+- **Document Request Detail**: `/campus-registrar/request/:documentRequestId`
 - **Enrollment Management**: `/campus-registrar/enrollment`
+- **Students**: `/campus-registrar/student`
 
 #### Guest (Public)
 
@@ -593,7 +679,17 @@ php artisan test
 
 See the detailed guide in `/api/app/README.md` for step-by-step instructions on adding new entities to the system.
 
-#### Generate OpenAPI Spec
+This guide covers:
+
+- Creating models with relationships
+- Implementing repository and service layers
+- Adding controllers with OpenAPI documentation
+- Registering dependencies in the service provider
+- Best practices for maintaining the layered architecture
+
+#### Generate API Documentation
+
+To generate the API documentation (OpenAPI specification):
 
 ```bash
 php artisan swagger:generate
@@ -626,8 +722,10 @@ The frontend uses Orval to generate type-safe API clients from the OpenAPI speci
 
 ```bash
 # Ensure backend is running and openapi.json is up to date
-npm run generate:api
+npm run orval
 ```
+
+This command reads the OpenAPI specification from the backend and generates TypeScript types and API client functions in the `rest/` directory.
 
 ### Docker Commands
 
@@ -673,16 +771,16 @@ The API is fully documented using OpenAPI 3.0 specification.
 4. **Insomnia**:
    - Import the OpenAPI JSON file into Insomnia
 
-### Generating Documentation
+### Generating API Documentation
 
-After making changes to controllers or models:
+To generate the API documentation, use:
 
 ```bash
 cd api
 php artisan swagger:generate
 ```
 
-This scans all controllers and models for OpenAPI attributes and generates the specification.
+This command scans all controllers and models for OpenAPI attributes and generates the specification. Run this after making changes to controllers or models.
 
 ## 🧪 Testing
 
@@ -791,7 +889,6 @@ For support, please open an issue on the GitHub repository or contact the develo
 
 ### Upcoming Features
 
-- [ ] Grade management system
 - [ ] Faculty workload management
 - [ ] Class scheduling automation
 - [ ] Report generation
@@ -803,35 +900,45 @@ For support, please open an issue on the GitHub repository or contact the develo
 
 ### In Progress
 
+- [ ] Self-enrollment system
+- [ ] Faculty module enhancements
+- [ ] Student module enhancements
+- [ ] Bulk approve for campus registrar validation
+- [ ] Bulk approve for program chair approval
+- [ ] Reject actions for program chair and campus registrar
 - [ ] Advanced search and filtering
-- [ ] Student gradebook completion
-- [ ] Student evaluation system
+- [ ] Student evaluation system completion
 
 ### Completed
 
 - [x] Core infrastructure management
 - [x] Academic program management
 - [x] Curriculum management
+- [x] Curriculum tagging system
 - [x] Course catalog
 - [x] Course prerequisites and co-requisites
 - [x] Academic program criteria and requirements
 - [x] Calendar and scheduling
+- [x] Section management and generation
 - [x] User authentication and authorization
 - [x] Role-based access control implementation
+- [x] User designation system (Designition)
 - [x] Admission application system
 - [x] Admission evaluation and scoring
 - [x] Student enrollment management
 - [x] Enrollment approval workflow
 - [x] Document request system
 - [x] Document tracking and status management
+- [x] Gradebook system
+- [x] Grade items and grading criteria
 - [x] OpenAPI documentation
 - [x] Docker containerization
 - [x] Modern React UI with Tailwind CSS
 
 ---
 
-**Last Updated**: October 24, 2025  
-**Version**: 1.1.0  
+**Last Updated**: November 14, 2025  
+**Version**: 1.2.0  
 **Status**: Active Development
 
 Made with ❤️ by HolliShake
