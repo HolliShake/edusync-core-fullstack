@@ -121,6 +121,7 @@ class CurriculumTagging extends Model
     protected $appends = [
         'curriculum',
         'user',
+        'is_internal_student',
     ];
 
     /**

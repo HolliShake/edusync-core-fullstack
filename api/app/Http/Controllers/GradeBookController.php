@@ -48,6 +48,20 @@ class GradeBookController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
+    #[OA\Parameter(
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Filter by academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[is_template]",
+        in: "query",
+        description: "Filter by is template",
+        required: false,
+        schema: new OA\Schema(type: "boolean")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

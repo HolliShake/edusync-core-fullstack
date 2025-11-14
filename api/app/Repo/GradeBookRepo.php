@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\IGradeBookRepo;
 use App\Models\GradeBook;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class GradeBookRepo extends GenericRepo implements IGradeBookRepo
 {
@@ -22,6 +23,8 @@ class GradeBookRepo extends GenericRepo implements IGradeBookRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('academic_program_id'),
+            AllowedFilter::exact('is_template'),
         ];
     }
 

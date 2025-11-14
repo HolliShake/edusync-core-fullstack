@@ -9285,6 +9285,24 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Filter by academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[is_template]",
+                        "in": "query",
+                        "description": "Filter by is template",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 ],
                 "responses": {
@@ -16621,6 +16639,10 @@
                     "title": {
                         "type": "string",
                         "example": "Gradebook 1"
+                    },
+                    "fully_setup": {
+                        "type": "boolean",
+                        "example": false
                     },
                     "section": {
                         "$ref": "#\/components\/schemas\/Section"

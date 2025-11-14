@@ -19,4 +19,12 @@ page?: number;
  * Number of items per page
  */
 rows?: number;
+/**
+ * Filter by academic program ID
+ */
+'filter[academic_program_id]'?: number;
+/**
+ * Filter by is template
+ */
+'filter[is_template]'?: boolean;
 };

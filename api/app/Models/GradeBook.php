@@ -24,6 +24,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "academic_program_id", type: "integer", nullable: true),
         new OA\Property(property: "is_template", type: "boolean", default: false),
         new OA\Property(property: "title", type: "string", example: "Gradebook 1"),
+        // Computed
+        new OA\Property(property: "fully_setup", type: "boolean", example: false),
         // Relations
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
         new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
@@ -118,7 +120,52 @@ class GradeBook extends Model
         'section',
         'academic_program',
         'gradebook_items',
+        'fully_setup',
     ];
+
+    /**
+     * Get the fully setup attribute.
+     *
+     * @return bool
+     */
+    public function getFullySetupAttribute(): bool
+    {
+        // Fully setup if all gradebook->items->total_weight == 100
+        // and all gradebook->items->item_details->total_weight == 100
+        $items = $this->gradebookItems()->get();
+        
+        if ($items->isEmpty()) {
+            return false;
+        }
+        
+        $totalWeight = 0;
+        foreach ($items as $item) {
+            $totalWeight += $item->weight ?? 0;
+        }
+        
+        if ($totalWeight != 100) {
+            return false;
+        }
+        
+        foreach ($items as $item) {
+            $itemDetails = $item->gradebookItemDetails()->get();
+            
+            if ($itemDetails->isEmpty()) {
+                return false;
+            }
+            
+            $detailTotalWeight = 0;
+            foreach ($itemDetails as $detail) {
+                $detailTotalWeight += $detail->weight ?? 0;
+            }
+            
+            if ($detailTotalWeight != 100) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
     /**
      * Get the section that owns the gradebook.

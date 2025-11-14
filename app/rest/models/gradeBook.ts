@@ -17,6 +17,7 @@ export interface GradeBook {
   academic_program_id: number | null;
   is_template: boolean;
   title: string;
+  fully_setup?: boolean;
   section?: Section;
   academic_program?: AcademicProgram;
   gradebook_items?: GradeBookItem[];

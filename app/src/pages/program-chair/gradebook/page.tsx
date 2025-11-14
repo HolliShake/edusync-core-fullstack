@@ -3,7 +3,9 @@ import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/auth.context';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteGradeBook, useGetGradeBookPaginated } from '@rest/api';
 import type { GradeBook } from '@rest/models';
@@ -14,6 +16,7 @@ import { toast } from 'sonner';
 import GradebookModal from './gradebook.modal';
 
 export default function ProgramChairGradebookPage() {
+  const { session } = useAuth();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
@@ -25,10 +28,15 @@ export default function ProgramChairGradebookPage() {
     data: gradebooksResponse,
     isLoading,
     refetch,
-  } = useGetGradeBookPaginated({
-    page,
-    rows,
-  });
+  } = useGetGradeBookPaginated(
+    {
+      'filter[academic_program_id]': session?.active_academic_program ?? 0,
+      'filter[is_template]': true,
+      page,
+      rows,
+    },
+    { query: { enabled: !!session?.active_academic_program } }
+  );
 
   const { mutateAsync: deleteGradeBook } = useDeleteGradeBook();
 
@@ -73,6 +81,15 @@ export default function ProgramChairGradebookPage() {
         title: 'Items',
         render: (_, row) => (
           <span className="text-sm">{row.gradebook_items?.length ?? 0} item(s)</span>
+        ),
+      },
+      {
+        key: 'fully_setup',
+        title: 'Status',
+        render: (_, row) => (
+          <Badge variant={row.fully_setup ? 'default' : 'secondary'}>
+            {row.fully_setup ? 'Complete' : 'Incomplete'}
+          </Badge>
         ),
       },
       {
