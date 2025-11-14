@@ -21,12 +21,12 @@ import GradebookItemDetailModal from './gradebook-item-detail.modal';
 import GradebookItemModal from './gradebook-item.modal';
 
 export default function GradebookDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const { gradebookId } = useParams<{ gradebookId: string }>();
   const navigate = useNavigate();
-  const gradebookId = useMemo(() => {
-    if (!id) return null;
-    return decryptIdFromUrl(id);
-  }, [id]);
+  const parsedGradebookId = useMemo(() => {
+    if (!gradebookId) return null;
+    return decryptIdFromUrl(gradebookId);
+  }, [gradebookId]);
 
   const itemController = useModal<GradeBookItem>();
   const itemDetailController = useModal<GradeBookItemDetail & { gradebook_item_id?: number }>();
@@ -36,9 +36,9 @@ export default function GradebookDetailPage() {
     data: gradebookResponse,
     isLoading,
     refetch,
-  } = useGetGradeBookById(gradebookId ?? 0, {
+  } = useGetGradeBookById(parsedGradebookId ?? 0, {
     query: {
-      enabled: !!gradebookId,
+      enabled: !!parsedGradebookId,
     },
   });
 
@@ -348,7 +348,7 @@ export default function GradebookDetailPage() {
 
       <GradebookItemModal
         controller={itemController}
-        gradebookId={gradebookId ?? 0}
+        gradebookId={parsedGradebookId ?? 0}
         onSubmit={() => refetch()}
       />
 

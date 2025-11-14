@@ -30,6 +30,10 @@ export default function ProgramChairEnrollment(): React.ReactNode {
         value: EnrollmentLogAction.program_chair_approved,
       },
       {
+        label: 'Recently Dropped',
+        value: EnrollmentLogAction.program_chair_dropped_approved,
+      },
+      {
         label: 'Rejected',
         value: EnrollmentLogAction.rejected,
       },

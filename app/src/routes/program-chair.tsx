@@ -6,10 +6,12 @@ import ProgramChairCurriculumDetail from '@/pages/program-chair/curriculum/curri
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
 import ProgramChairCurriculumStudent from '@/pages/program-chair/curriculum/student/page';
 import ProgramChairEnrollment from '@/pages/program-chair/enrollment/page';
+import ProgramChairCommunityFaculty from '@/pages/program-chair/faculty/page';
 import GradebookDetailPage from '@/pages/program-chair/gradebook/[id]/page';
 import ProgramChairGradebookPage from '@/pages/program-chair/gradebook/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
+import ProgramChairCommunityStudent from '@/pages/program-chair/student/page';
 import type { Route } from '@/types/route';
 import {
   BarChartIcon,
@@ -18,6 +20,7 @@ import {
   ClipboardListIcon,
   FileTextIcon,
   GraduationCapIcon,
+  Users2Icon,
 } from 'lucide-react';
 
 const PROGRAM_CHAIR: Route[] = [
@@ -143,11 +146,42 @@ const PROGRAM_CHAIR: Route[] = [
   {
     key: 'program-chair.gradebook-detail',
     title: 'Gradebook Detail',
-    path: '/program-chair/gradebook/:id',
+    path: '/program-chair/gradebook/:gradebookId',
     component: <GradebookDetailPage />,
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
+    roles: [UserRoleEnum.PROGRAM_CHAIR],
+  },
+  {
+    key: 'program-chair.community',
+    title: 'Community',
+    path: '/program-chair/community',
+    icon: <Users2Icon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    children: [
+      {
+        key: 'program-chair.community.student',
+        title: 'Students',
+        path: '/program-chair/community/students',
+        component: <ProgramChairCommunityStudent />,
+        icon: <GraduationCapIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.PROGRAM_CHAIR],
+      },
+      {
+        key: 'program-chair.community.faculty',
+        title: 'Faculties',
+        path: '/program-chair/community/faculties',
+        component: <ProgramChairCommunityFaculty />,
+        icon: <Users2Icon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.PROGRAM_CHAIR],
+      },
+    ],
     roles: [UserRoleEnum.PROGRAM_CHAIR],
   },
 ];
