@@ -6,6 +6,8 @@ import ProgramChairCurriculumDetail from '@/pages/program-chair/curriculum/curri
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
 import ProgramChairCurriculumStudent from '@/pages/program-chair/curriculum/student/page';
 import ProgramChairEnrollment from '@/pages/program-chair/enrollment/page';
+import GradebookDetailPage from '@/pages/program-chair/gradebook/[id]/page';
+import ProgramChairGradebookPage from '@/pages/program-chair/gradebook/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
 import type { Route } from '@/types/route';
@@ -126,6 +128,26 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <BarChartIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
+    roles: [UserRoleEnum.PROGRAM_CHAIR],
+  },
+  {
+    key: 'program-chair.gradebook',
+    title: 'Gradebook',
+    path: '/program-chair/gradebook',
+    component: <ProgramChairGradebookPage />,
+    icon: <ClipboardListIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.PROGRAM_CHAIR],
+  },
+  {
+    key: 'program-chair.gradebook-detail',
+    title: 'Gradebook Detail',
+    path: '/program-chair/gradebook/:id',
+    component: <GradebookDetailPage />,
+    icon: <ClipboardListIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
     roles: [UserRoleEnum.PROGRAM_CHAIR],
   },
 ];

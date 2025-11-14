@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('min_score', 10, 2);
             $table->decimal('max_score', 10, 2);
+            $table->decimal('weight', 10, 2);
 
             // Unique
             $table->unique(['gradebook_item_id', 'title'], 'gradebook_item_detail_unique');

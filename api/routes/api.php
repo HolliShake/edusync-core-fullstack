@@ -32,6 +32,9 @@ use App\Http\Controllers\DocumentRequestLogController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EnrollmentLogController;
+use App\Http\Controllers\GradeBookController;
+use App\Http\Controllers\GradeBookItemController;
+use App\Http\Controllers\GradeBookItemDetailController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -286,4 +289,28 @@ Route::controller(CurriculumTaggingController::class)->group(function() {
     Route::post('/CurriculumTagging', 'store');
     Route::put('/CurriculumTagging/{id}', 'update');
     Route::delete('/CurriculumTagging/{id}', 'destroy');
+});
+
+Route::controller(GradeBookController::class)->group(function() {
+    Route::get('/GradeBook', 'index');
+    Route::get('/GradeBook/{id}', 'show');
+    Route::post('/GradeBook', 'store');
+    Route::put('/GradeBook/{id}', 'update');
+    Route::delete('/GradeBook/{id}', 'destroy');
+});
+
+Route::controller(GradeBookItemController::class)->group(function() {
+    Route::get('/GradeBookItem', 'index');
+    Route::get('/GradeBookItem/{id}', 'show');
+    Route::post('/GradeBookItem', 'store');
+    Route::put('/GradeBookItem/{id}', 'update');
+    Route::delete('/GradeBookItem/{id}', 'destroy');
+});
+
+Route::controller(GradeBookItemDetailController::class)->group(function() {
+    Route::get('/GradeBookItemDetail', 'index');
+    Route::get('/GradeBookItemDetail/{id}', 'show');
+    Route::post('/GradeBookItemDetail', 'store');
+    Route::put('/GradeBookItemDetail/{id}', 'update');
+    Route::delete('/GradeBookItemDetail/{id}', 'destroy');
 });

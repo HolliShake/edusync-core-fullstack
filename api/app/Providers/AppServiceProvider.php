@@ -24,6 +24,9 @@ use App\Interface\IRepo\IDocumentRequestRepo;
 use App\Interface\IRepo\IDocumentTypeRepo;
 use App\Interface\IRepo\IEnrollmentLogRepo;
 use App\Interface\IRepo\IEnrollmentRepo;
+use App\Interface\IRepo\IGradeBookItemDetailRepo;
+use App\Interface\IRepo\IGradeBookItemRepo;
+use App\Interface\IRepo\IGradeBookRepo;
 use App\Interface\IRepo\IProgramTypeRepo;
 use App\Interface\IRepo\IRequirementRepo;
 use App\Interface\IRepo\IRoomRepo;
@@ -52,6 +55,9 @@ use App\Interface\IService\IDocumentRequestService;
 use App\Interface\IService\IDocumentTypeService;
 use App\Interface\IService\IEnrollmentLogService;
 use App\Interface\IService\IEnrollmentService;
+use App\Interface\IService\IGradeBookItemDetailService;
+use App\Interface\IService\IGradeBookItemService;
+use App\Interface\IService\IGradeBookService;
 use App\Interface\IService\IProgramTypeService;
 use App\Interface\IService\IRequirementService;
 use App\Interface\IService\IRoomService;
@@ -80,6 +86,9 @@ use App\Repo\DocumentRequestRepo;
 use App\Repo\DocumentTypeRepo;
 use App\Repo\EnrollmentLogRepo;
 use App\Repo\EnrollmentRepo;
+use App\Repo\GradeBookItemDetailRepo;
+use App\Repo\GradeBookItemRepo;
+use App\Repo\GradeBookRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RequirementRepo;
 use App\Repo\RoomRepo;
@@ -108,6 +117,9 @@ use App\Service\DocumentRequestService;
 use App\Service\DocumentTypeService;
 use App\Service\EnrollmentLogService;
 use App\Service\EnrollmentService;
+use App\Service\GradeBookItemDetailService;
+use App\Service\GradeBookItemService;
+use App\Service\GradeBookService;
 use App\Service\ProgramTypeService;
 use App\Service\RequirementService;
 use App\Service\RoomService;
@@ -152,6 +164,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICourseRequisiteRepo::class, CourseRequisiteRepo::class);
         $this->app->bind(IEnrollmentLogRepo::class, EnrollmentLogRepo::class);
         $this->app->bind(ICurriculumTaggingRepo::class, CurriculumTaggingRepo::class);
+        $this->app->bind(IGradeBookRepo::class, GradeBookRepo::class);
+        $this->app->bind(IGradeBookItemRepo::class, GradeBookItemRepo::class);
+        $this->app->bind(IGradeBookItemDetailRepo::class, GradeBookItemDetailRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -181,6 +196,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ICourseRequisiteService::class, CourseRequisiteService::class);
         $this->app->bind(IEnrollmentLogService::class, EnrollmentLogService::class);
         $this->app->bind(ICurriculumTaggingService::class, CurriculumTaggingService::class);
+        $this->app->bind(IGradeBookService::class, GradeBookService::class);
+        $this->app->bind(IGradeBookItemService::class, GradeBookItemService::class);
+        $this->app->bind(IGradeBookItemDetailService::class, GradeBookItemDetailService::class);
     }
 
     /**
