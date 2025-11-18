@@ -176,21 +176,25 @@ class User extends Authenticatable
             ->pluck('designitionable_type')
             ->toArray();
 
-        $hasDesignation = false;
+        $teachers = $this->sectionTeachers()
+            ->get()
+            ->makeHidden(['user', 'section'])
+            ->toArray();
+
+        if (count($teachers) > 0) {
+            $roles[] = UserRoleEnum::FACULTY->value;
+        }
 
         if (in_array(Campus::class, $designations)) {
             $roles[] = UserRoleEnum::CAMPUS_REGISTRAR->value;
-            $hasDesignation = true;
         }
 
         if (in_array(College::class, $designations)) {
             $roles[] = UserRoleEnum::COLLEGE_DEAN->value;
-            $hasDesignation = true;
         }
 
         if (in_array(AcademicProgram::class, $designations)) {
             $roles[] = UserRoleEnum::PROGRAM_CHAIR->value;
-            $hasDesignation = true;
         }
 
         // Check student role - commented out to prevent recursion
@@ -244,6 +248,16 @@ class User extends Authenticatable
     public function designitions(): HasMany
     {
         return $this->hasMany(Designition::class);
+    }
+
+    /**
+     * Get the faculty for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sectionTeachers(): HasMany
+    {
+        return $this->hasMany(SectionTeacher::class);
     }
 
     /**
