@@ -1,20 +1,19 @@
-import TitledPage from '@/components/pages/titled.page';
-import { useAuth } from '@/context/auth.context';
-import { useCreateDocumentRequestLog, useGetDocumentRequestPaginated } from '@rest/api';
-import type { DocumentRequest } from '@rest/models/documentRequest';
-import { DocumentRequestLogAction } from '@rest/models';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import type React from 'react';
-import { useMemo } from 'react';
-import { CalendarIcon, UserIcon, FileTextIcon, InfoIcon } from 'lucide-react';
-import type { DocumentType } from '@rest/models/documentType';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/context/auth.context';
+import { useCreateDocumentRequestLog, useGetDocumentRequestPaginated } from '@rest/api';
+import { DocumentRequestLogAction } from '@rest/models';
+import type { DocumentRequest } from '@rest/models/documentRequest';
+import type { DocumentType } from '@rest/models/documentType';
+import { CalendarIcon, FileTextIcon, InfoIcon, UserIcon } from 'lucide-react';
+import type React from 'react';
+import { useMemo } from 'react';
 
 // For demonstration, use Button from shadcn or your own button component
 import { Button } from '@/components/ui/button';
@@ -22,26 +21,26 @@ import { toast } from 'sonner';
 
 // Compact status indicator, tighter layout
 function StatusIndicator({ status }: { status?: string }) {
-  let color = "bg-muted";
+  let color = 'bg-muted';
   let label = status ?? 'Unknown';
   switch (status?.toLowerCase()) {
-    case "paid":
-      color = "bg-green-500";
+    case 'paid':
+      color = 'bg-green-500';
       break;
-    case "processing":
-      color = "bg-yellow-400";
+    case 'processing':
+      color = 'bg-yellow-400';
       break;
-    case "completed":
-      color = "bg-blue-600";
+    case 'completed':
+      color = 'bg-blue-600';
       break;
-    case "rejected":
-      color = "bg-red-500";
+    case 'rejected':
+      color = 'bg-red-500';
       break;
-    case "cancelled":
-      color = "bg-gray-400";
+    case 'cancelled':
+      color = 'bg-gray-400';
       break;
-    case "pickup":
-      color = "bg-purple-500";
+    case 'pickup':
+      color = 'bg-purple-500';
       break;
     default:
       break;
@@ -55,7 +54,15 @@ function StatusIndicator({ status }: { status?: string }) {
 }
 
 // More compact InfoRow
-function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: React.ReactNode }) {
+function InfoRow({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <span className="flex items-center gap-1 text-xs">
       <Icon className="w-3.5 h-3.5 text-muted-foreground" />
@@ -65,14 +72,13 @@ function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType, label:
   );
 }
 
-export default function RequestGenericTab({ filter }: { filter: DocumentRequestLogAction }): React.ReactNode {
+export default function RequestGenericTab({
+  filter,
+}: {
+  filter: DocumentRequestLogAction;
+}): React.ReactNode {
   const { session } = useAuth();
-  const {
-    data,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetDocumentRequestPaginated(
+  const { data, isLoading, isError, refetch } = useGetDocumentRequestPaginated(
     {
       'filter[campus_id]': session?.active_campus ?? 0,
       'filter[latest_status]': filter,
@@ -86,7 +92,8 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
     }
   );
 
-  const { mutateAsync: createDocumentRequest, isPending: isCreatingLogs } = useCreateDocumentRequestLog();
+  const { mutateAsync: createDocumentRequest, isPending: isCreatingLogs } =
+    useCreateDocumentRequestLog();
 
   const requests = useMemo<DocumentRequest[]>(() => data?.data?.data ?? [], [data]);
 
@@ -104,7 +111,6 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
         return 'Done';
     }
   }, [filter]);
-
 
   const positiveActionNextValue = useMemo(() => {
     switch (filter) {
@@ -126,16 +132,16 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
     const nextValue = positiveActionNextValue;
     if (!nextValue) return toast.error('No next value found');
     try {
-        await createDocumentRequest({
-            data: {
-                document_request_id: reqId,
-                action: nextValue,
-                user_id: session?.id ?? 0,
-                note: `Document request ${nextValue.toLowerCase()}`,
-            },
-        });
-        refetch();
-        toast.success('Document request approved successfully');
+      await createDocumentRequest({
+        data: {
+          document_request_id: reqId,
+          action: nextValue,
+          user_id: session?.id ?? 0,
+          note: `Document request ${nextValue.toLowerCase()}`,
+        },
+      });
+      refetch();
+      toast.success('Document request approved successfully');
     } catch (error) {
       console.error(error);
       toast.error('Failed to approve document request');
@@ -143,16 +149,16 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
   };
   const handleReject = async (reqId: number) => {
     try {
-        await createDocumentRequest({
-            data: {
-                document_request_id: reqId,
-                action: DocumentRequestLogAction.rejected,
-                user_id: session?.id ?? 0,
-                note: 'Document request rejected',
-            },
-        });
-        refetch();
-        toast.success('Document request rejected successfully');
+      await createDocumentRequest({
+        data: {
+          document_request_id: reqId,
+          action: DocumentRequestLogAction.rejected,
+          user_id: session?.id ?? 0,
+          note: 'Document request rejected',
+        },
+      });
+      refetch();
+      toast.success('Document request rejected successfully');
     } catch (error) {
       console.error(error);
       toast.error('Failed to reject document request');
@@ -182,7 +188,11 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
             {requests.map((req) => {
               const documentType: DocumentType | undefined = req.document_type;
               return (
-                <AccordionItem key={req.id} value={String(req.id)} className="rounded-lg border bg-white dark:bg-card transition-all">
+                <AccordionItem
+                  key={req.id}
+                  value={String(req.id)}
+                  className="rounded-lg border bg-white dark:bg-card transition-all"
+                >
                   <AccordionTrigger className="p-2 flex items-center gap-2 rounded-lg w-full hover:bg-muted/50 transition min-h-0">
                     <div className="bg-primary/10 rounded-full p-1 flex items-center justify-center">
                       <FileTextIcon className="w-4 h-4 text-primary" />
@@ -213,7 +223,7 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
                           {req.created_at ? new Date(req.created_at).toLocaleString() : '-'}
                         </span>
                       </span>
-                      {typeof documentType?.price === "number" && (
+                      {typeof documentType?.price === 'number' && (
                         <span className="ml-1 font-medium bg-accent text-accent-foreground px-1.5 py-0.5 rounded text-[10px]">
                           {documentType.price === 0 ? (
                             <>FREE</>
@@ -227,12 +237,20 @@ export default function RequestGenericTab({ filter }: { filter: DocumentRequestL
                       <InfoRow
                         icon={UserIcon}
                         label="Requested by"
-                        value={req.user?.name || <span className="italic text-muted-foreground">Unknown</span>}
+                        value={
+                          req.user?.name || (
+                            <span className="italic text-muted-foreground">Unknown</span>
+                          )
+                        }
                       />
                       <InfoRow
                         icon={InfoIcon}
                         label="Purpose"
-                        value={req.purpose || <span className="italic text-muted-foreground">None specified</span>}
+                        value={
+                          req.purpose || (
+                            <span className="italic text-muted-foreground">None specified</span>
+                          )
+                        }
                       />
                     </div>
                     {req.is_actionable && (

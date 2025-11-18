@@ -71,6 +71,7 @@ import type {
   CreateRoomResponse200,
   CreateSchoolYearResponse200,
   CreateSectionResponse200,
+  CreateSectionTeacherResponse200,
   CreateUserResponse200,
   Curriculum,
   CurriculumDetail,
@@ -106,6 +107,7 @@ import type {
   DeleteRoomResponse200,
   DeleteSchoolYearResponse200,
   DeleteSectionResponse200,
+  DeleteSectionTeacherResponse200,
   DeleteUserResponse200,
   Designition,
   DocumentRequest,
@@ -163,7 +165,9 @@ import type {
   GetEnrollmentLogResponse200,
   GetEnrollmentPaginatedParams,
   GetEnrollmentResponse200,
+  GetEnrollmentsByAcademicProgramIdGroupedByUser200,
   GetEnrollmentsByAcademicProgramIdGroupedByUserParams,
+  GetEnrollmentsByCampusIdGroupedByUser200,
   GetEnrollmentsByCampusIdGroupedByUserParams,
   GetGradeBookItemDetailPaginatedParams,
   GetGradeBookItemDetailResponse200,
@@ -185,6 +189,12 @@ import type {
   GetSchoolYearResponse200,
   GetSectionPaginatedParams,
   GetSectionResponse200,
+  GetSectionTeacherPaginatedParams,
+  GetSectionTeacherResponse200,
+  GetSectionTeachersByCampusId200,
+  GetSectionTeachersByCampusIdParams,
+  GetSectionTeachersByProgramIdGroupedByTeacherName200,
+  GetSectionTeachersByProgramIdGroupedByTeacherNameParams,
   GetSectionsResponse200,
   GetUserPaginatedParams,
   GetUserResponse200,
@@ -225,12 +235,14 @@ import type {
   PaginatedRoomResponse200,
   PaginatedSchoolYearResponse200,
   PaginatedSectionResponse200,
+  PaginatedSectionTeacherResponse200,
   PaginatedUserResponse200,
   ProgramType,
   Requirement,
   Room,
   SchoolYear,
   Section,
+  SectionTeacher,
   SessionResponse200,
   SuccessResponse,
   UnauthenticatedResponse,
@@ -266,6 +278,7 @@ import type {
   UpdateRoomResponse200,
   UpdateSchoolYearResponse200,
   UpdateSectionResponse200,
+  UpdateSectionTeacherResponse200,
   UpdateUserResponse200,
   User,
   ValidationErrorResponse
@@ -9063,7 +9076,7 @@ export const getEnrollmentsByCampusIdGroupedByUser = (
 ) => {
       
       
-      return fetchData<PaginatedEnrollmentResponse200>(
+      return fetchData<GetEnrollmentsByCampusIdGroupedByUser200>(
       {url: `/api/Enrollment/campus/grouped-by-user-name/${campusId}`, method: 'GET',
         params, signal
     },
@@ -9160,7 +9173,7 @@ export const getEnrollmentsByAcademicProgramIdGroupedByUser = (
 ) => {
       
       
-      return fetchData<PaginatedEnrollmentResponse200>(
+      return fetchData<GetEnrollmentsByAcademicProgramIdGroupedByUser200>(
       {url: `/api/Enrollment/academic-program/grouped-by-user-name/${academicProgramId}`, method: 'GET',
         params, signal
     },
@@ -13021,6 +13034,574 @@ export const useDeleteSectionBySectionCode = <TError = UnauthenticatedResponse |
       > => {
 
       const mutationOptions = getDeleteSectionBySectionCodeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of SectionTeacher with optional search
+ * @summary Get paginated list of SectionTeacher
+ */
+export const getSectionTeacherPaginated = (
+    params?: GetSectionTeacherPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedSectionTeacherResponse200>(
+      {url: `/api/SectionTeacher`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetSectionTeacherPaginatedQueryKey = (params?: GetSectionTeacherPaginatedParams,) => {
+    return [`/api/SectionTeacher`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSectionTeacherPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetSectionTeacherPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSectionTeacherPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSectionTeacherPaginated>>> = ({ signal }) => getSectionTeacherPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSectionTeacherPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionTeacherPaginated>>>
+export type GetSectionTeacherPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetSectionTeacherPaginated<TData = Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetSectionTeacherPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeacherPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeacherPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeacherPaginated<TData = Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetSectionTeacherPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeacherPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeacherPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeacherPaginated<TData = Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetSectionTeacherPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of SectionTeacher
+ */
+
+export function useGetSectionTeacherPaginated<TData = Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetSectionTeacherPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSectionTeacherPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new SectionTeacher with the provided details
+ * @summary Create a new SectionTeacher
+ */
+export const createSectionTeacher = (
+    sectionTeacher: SectionTeacher,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateSectionTeacherResponse200>(
+      {url: `/api/SectionTeacher`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sectionTeacher, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateSectionTeacherMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSectionTeacher>>, TError,{data: SectionTeacher}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createSectionTeacher>>, TError,{data: SectionTeacher}, TContext> => {
+
+const mutationKey = ['createSectionTeacher'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSectionTeacher>>, {data: SectionTeacher}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSectionTeacher(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSectionTeacherMutationResult = NonNullable<Awaited<ReturnType<typeof createSectionTeacher>>>
+    export type CreateSectionTeacherMutationBody = SectionTeacher
+    export type CreateSectionTeacherMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new SectionTeacher
+ */
+export const useCreateSectionTeacher = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSectionTeacher>>, TError,{data: SectionTeacher}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createSectionTeacher>>,
+        TError,
+        {data: SectionTeacher},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateSectionTeacherMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve SectionTeachers by Campus ID
+ * @summary Get SectionTeachers by Campus ID
+ */
+export const getSectionTeachersByCampusId = (
+    campusId: number,
+    params?: GetSectionTeachersByCampusIdParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSectionTeachersByCampusId200>(
+      {url: `/api/SectionTeacher/campus/${campusId}`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetSectionTeachersByCampusIdQueryKey = (campusId?: number,
+    params?: GetSectionTeachersByCampusIdParams,) => {
+    return [`/api/SectionTeacher/campus/${campusId}`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSectionTeachersByCampusIdQueryOptions = <TData = Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(campusId: number,
+    params?: GetSectionTeachersByCampusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSectionTeachersByCampusIdQueryKey(campusId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>> = ({ signal }) => getSectionTeachersByCampusId(campusId,params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(campusId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSectionTeachersByCampusIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>>
+export type GetSectionTeachersByCampusIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetSectionTeachersByCampusId<TData = Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ campusId: number,
+    params: undefined |  GetSectionTeachersByCampusIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeachersByCampusId>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeachersByCampusId>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeachersByCampusId<TData = Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ campusId: number,
+    params?: GetSectionTeachersByCampusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeachersByCampusId>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeachersByCampusId>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeachersByCampusId<TData = Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ campusId: number,
+    params?: GetSectionTeachersByCampusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get SectionTeachers by Campus ID
+ */
+
+export function useGetSectionTeachersByCampusId<TData = Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ campusId: number,
+    params?: GetSectionTeachersByCampusIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByCampusId>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSectionTeachersByCampusIdQueryOptions(campusId,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve SectionTeachers by Program ID grouped by teacher name
+ * @summary Get SectionTeachers by Program ID grouped by teacher name
+ */
+export const getSectionTeachersByProgramIdGroupedByTeacherName = (
+    academicProgramId: number,
+    params?: GetSectionTeachersByProgramIdGroupedByTeacherNameParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSectionTeachersByProgramIdGroupedByTeacherName200>(
+      {url: `/api/SectionTeacher/program/${academicProgramId}`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetSectionTeachersByProgramIdGroupedByTeacherNameQueryKey = (academicProgramId?: number,
+    params?: GetSectionTeachersByProgramIdGroupedByTeacherNameParams,) => {
+    return [`/api/SectionTeacher/program/${academicProgramId}`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSectionTeachersByProgramIdGroupedByTeacherNameQueryOptions = <TData = Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(academicProgramId: number,
+    params?: GetSectionTeachersByProgramIdGroupedByTeacherNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSectionTeachersByProgramIdGroupedByTeacherNameQueryKey(academicProgramId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>> = ({ signal }) => getSectionTeachersByProgramIdGroupedByTeacherName(academicProgramId,params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(academicProgramId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSectionTeachersByProgramIdGroupedByTeacherNameQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>>
+export type GetSectionTeachersByProgramIdGroupedByTeacherNameQueryError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+
+export function useGetSectionTeachersByProgramIdGroupedByTeacherName<TData = Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params: undefined |  GetSectionTeachersByProgramIdGroupedByTeacherNameParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeachersByProgramIdGroupedByTeacherName<TData = Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetSectionTeachersByProgramIdGroupedByTeacherNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeachersByProgramIdGroupedByTeacherName<TData = Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetSectionTeachersByProgramIdGroupedByTeacherNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get SectionTeachers by Program ID grouped by teacher name
+ */
+
+export function useGetSectionTeachersByProgramIdGroupedByTeacherName<TData = Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ academicProgramId: number,
+    params?: GetSectionTeachersByProgramIdGroupedByTeacherNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeachersByProgramIdGroupedByTeacherName>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSectionTeachersByProgramIdGroupedByTeacherNameQueryOptions(academicProgramId,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a SectionTeacher by its ID
+ * @summary Get a specific SectionTeacher
+ */
+export const getSectionTeacherById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSectionTeacherResponse200>(
+      {url: `/api/SectionTeacher/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetSectionTeacherByIdQueryKey = (id?: number,) => {
+    return [`/api/SectionTeacher/${id}`] as const;
+    }
+
+    
+export const getGetSectionTeacherByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSectionTeacherById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSectionTeacherByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSectionTeacherById>>> = ({ signal }) => getSectionTeacherById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSectionTeacherByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSectionTeacherById>>>
+export type GetSectionTeacherByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetSectionTeacherById<TData = Awaited<ReturnType<typeof getSectionTeacherById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeacherById>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeacherById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeacherById<TData = Awaited<ReturnType<typeof getSectionTeacherById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSectionTeacherById>>,
+          TError,
+          Awaited<ReturnType<typeof getSectionTeacherById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSectionTeacherById<TData = Awaited<ReturnType<typeof getSectionTeacherById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific SectionTeacher
+ */
+
+export function useGetSectionTeacherById<TData = Awaited<ReturnType<typeof getSectionTeacherById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSectionTeacherById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSectionTeacherByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing SectionTeacher with the provided details
+ * @summary Update a SectionTeacher
+ */
+export const updateSectionTeacher = (
+    id: number,
+    sectionTeacher: SectionTeacher,
+ ) => {
+      
+      
+      return fetchData<UpdateSectionTeacherResponse200>(
+      {url: `/api/SectionTeacher/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: sectionTeacher
+    },
+      );
+    }
+  
+
+
+export const getUpdateSectionTeacherMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSectionTeacher>>, TError,{id: number;data: SectionTeacher}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateSectionTeacher>>, TError,{id: number;data: SectionTeacher}, TContext> => {
+
+const mutationKey = ['updateSectionTeacher'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSectionTeacher>>, {id: number;data: SectionTeacher}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateSectionTeacher(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSectionTeacherMutationResult = NonNullable<Awaited<ReturnType<typeof updateSectionTeacher>>>
+    export type UpdateSectionTeacherMutationBody = SectionTeacher
+    export type UpdateSectionTeacherMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a SectionTeacher
+ */
+export const useUpdateSectionTeacher = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSectionTeacher>>, TError,{id: number;data: SectionTeacher}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateSectionTeacher>>,
+        TError,
+        {id: number;data: SectionTeacher},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSectionTeacherMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a SectionTeacher by its ID
+ * @summary Delete a SectionTeacher
+ */
+export const deleteSectionTeacher = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteSectionTeacherResponse200>(
+      {url: `/api/SectionTeacher/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteSectionTeacherMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSectionTeacher>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSectionTeacher>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteSectionTeacher'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSectionTeacher>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteSectionTeacher(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSectionTeacherMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSectionTeacher>>>
+    
+    export type DeleteSectionTeacherMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a SectionTeacher
+ */
+export const useDeleteSectionTeacher = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSectionTeacher>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSectionTeacher>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSectionTeacherMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

@@ -288,7 +288,55 @@ class EnrollmentController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedEnrollmentResponse200")
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(property: "data", type: "object", properties: [
+                    new OA\Property(property: "current_page", type: "integer", example: 1),
+                    new OA\Property(
+                        property: "data",
+                        type: "object",
+                        additionalProperties: new OA\AdditionalProperties(
+                            type: "array",
+                            items: new OA\Items(ref: "#/components/schemas/Enrollment")
+                        ),
+                        example: [
+                            "Maria Clara Reyes" => [
+                                ["id" => 158, "user_id" => 4, "section_id" => 961],
+                                ["id" => 167, "user_id" => 4, "section_id" => 966]
+                            ],
+                            "Pedro Santiago" => [
+                                ["id" => 168, "user_id" => 5, "section_id" => 966]
+                            ]
+                        ]
+                    ),
+                    new OA\Property(property: "first_page_url", type: "string", example: "/?page=1"),
+                    new OA\Property(property: "from", type: "integer", example: 1),
+                    new OA\Property(property: "last_page", type: "integer", example: 1),
+                    new OA\Property(property: "last_page_url", type: "string", example: "/?page=1"),
+                    new OA\Property(
+                        property: "links",
+                        type: "array",
+                        items: new OA\Items(
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "url", type: "string", nullable: true),
+                                new OA\Property(property: "label", type: "string"),
+                                new OA\Property(property: "page", type: "integer", nullable: true),
+                                new OA\Property(property: "active", type: "boolean")
+                            ]
+                        )
+                    ),
+                    new OA\Property(property: "next_page_url", type: "string", nullable: true),
+                    new OA\Property(property: "path", type: "string", example: "/"),
+                    new OA\Property(property: "per_page", type: "integer", example: 10),
+                    new OA\Property(property: "prev_page_url", type: "string", nullable: true),
+                    new OA\Property(property: "to", type: "integer", example: 3),
+                    new OA\Property(property: "total", type: "integer", example: 1)
+                ])
+            ]
+        )
     )]
     #[OA\Response(
         response: 401,
@@ -389,7 +437,55 @@ class EnrollmentController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedEnrollmentResponse200")
+        content: new OA\JsonContent(
+            type: "object",
+            properties: [
+                new OA\Property(property: "status", type: "string", example: "success"),
+                new OA\Property(property: "data", type: "object", properties: [
+                    new OA\Property(property: "current_page", type: "integer", example: 1),
+                    new OA\Property(
+                        property: "data",
+                        type: "object",
+                        additionalProperties: new OA\AdditionalProperties(
+                            type: "array",
+                            items: new OA\Items(ref: "#/components/schemas/Enrollment")
+                        ),
+                        example: [
+                            "Maria Clara Reyes" => [
+                                ["id" => 158, "user_id" => 4, "section_id" => 961],
+                                ["id" => 167, "user_id" => 4, "section_id" => 966]
+                            ],
+                            "Pedro Santiago" => [
+                                ["id" => 168, "user_id" => 5, "section_id" => 966]
+                            ]
+                        ]
+                    ),
+                    new OA\Property(property: "first_page_url", type: "string", example: "/?page=1"),
+                    new OA\Property(property: "from", type: "integer", example: 1),
+                    new OA\Property(property: "last_page", type: "integer", example: 1),
+                    new OA\Property(property: "last_page_url", type: "string", example: "/?page=1"),
+                    new OA\Property(
+                        property: "links",
+                        type: "array",
+                        items: new OA\Items(
+                            type: "object",
+                            properties: [
+                                new OA\Property(property: "url", type: "string", nullable: true),
+                                new OA\Property(property: "label", type: "string"),
+                                new OA\Property(property: "page", type: "integer", nullable: true),
+                                new OA\Property(property: "active", type: "boolean")
+                            ]
+                        )
+                    ),
+                    new OA\Property(property: "next_page_url", type: "string", nullable: true),
+                    new OA\Property(property: "path", type: "string", example: "/"),
+                    new OA\Property(property: "per_page", type: "integer", example: 10),
+                    new OA\Property(property: "prev_page_url", type: "string", nullable: true),
+                    new OA\Property(property: "to", type: "integer", example: 3),
+                    new OA\Property(property: "total", type: "integer", example: 1)
+                ])
+            ]
+        )
     )]
     #[OA\Response(
         response: 401,

@@ -1,24 +1,26 @@
 import Select from '@/components/custom/select.component';
 import type { TableColumn } from '@/components/custom/table.component';
 import Table from '@/components/custom/table.component';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { UserRoleEnum } from '@/enums/role-enum';
-import { useGetCurriculumTaggingPaginated, useGetSchoolYearPaginated } from '@rest/api';
-import { UserRole, type CurriculumTagging } from '@rest/models';
+import {
+  useGetSchoolYearPaginated,
+  useGetSectionTeachersByProgramIdGroupedByTeacherName,
+} from '@rest/api';
+import { UserRole, type SectionTeacher } from '@rest/models';
 import { Building2, GraduationCap, Mail, Search, User, Users } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-export default function CommunityStudentView({ role }: { role: UserRole }): React.ReactNode {
+export default function CommunityFacultyView({ role }: { role: UserRole }): React.ReactNode {
   const { session } = useAuth();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [_, setDebouncedSearchTerm] = useState('');
   const [selectedSchoolYear, setSelectedSchoolYear] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
@@ -35,10 +37,10 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
   const { data: schoolYears } = useGetSchoolYearPaginated(
     {
       sort: '-start_date',
-      page,
+      page: 1,
       rows: Number.MAX_SAFE_INTEGER,
     },
-    { query: { enabled: !!session?.active_academic_program } }
+    { query: { enabled: !!session?.active_academic_program || !!session?.active_campus } }
   );
 
   const schoolYearOptions = useMemo(() => {
@@ -69,22 +71,53 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
     []
   );
 
-  const { data: students, isLoading } = useGetCurriculumTaggingPaginated(
-    {
-      ...(role === UserRoleEnum.PROGRAM_CHAIR
-        ? { 'filter[academic_program_id]': session?.active_academic_program ?? 0 }
-        : role === UserRoleEnum.COLLEGE_DEAN
-          ? { 'filter[college_id]': session?.active_college ?? 0 }
-          : role === UserRoleEnum.CAMPUS_REGISTRAR
-            ? { 'filter[campus_id]': session?.active_campus ?? 0 }
-            : {}),
-      ...(debouncedSearchTerm ? { 'filter[search]': debouncedSearchTerm } : {}),
-      ...(selectedSchoolYear ? { 'filter[school_year_id]': selectedSchoolYear } : {}),
-      page,
-      rows: itemsPerPage,
-    },
-    { query: { enabled: !!role && !!session?.active_academic_program } }
-  );
+  const { data: programChairFacultyResponse, isLoading: isLoadingProgramChairFaculty } =
+    useGetSectionTeachersByProgramIdGroupedByTeacherName(
+      Number(session?.active_academic_program),
+      {
+        page,
+        rows: itemsPerPage,
+        'filter[school_year_id]': Number(selectedSchoolYear),
+      },
+      {
+        query: {
+          enabled:
+            role === UserRoleEnum.PROGRAM_CHAIR &&
+            !!selectedSchoolYear &&
+            !!session?.active_academic_program,
+        },
+      }
+    );
+
+  const { data: campusRegistrarFacultyResponse, isLoading: isLoadingCampusRegistrarFaculty } =
+    useGetSectionTeachersByProgramIdGroupedByTeacherName(
+      Number(session?.active_academic_program),
+      {
+        page,
+        rows: itemsPerPage,
+        'filter[school_year_id]': Number(selectedSchoolYear),
+      },
+      {
+        query: {
+          enabled:
+            role === UserRoleEnum.CAMPUS_REGISTRAR &&
+            !!selectedSchoolYear &&
+            !!session?.active_academic_program,
+        },
+      }
+    );
+
+  const facultyResponse = useMemo(() => {
+    if (role === UserRoleEnum.PROGRAM_CHAIR) return programChairFacultyResponse;
+    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return campusRegistrarFacultyResponse;
+    return undefined;
+  }, [role, programChairFacultyResponse, campusRegistrarFacultyResponse]);
+
+  const isLoading = useMemo(() => {
+    if (role === UserRoleEnum.PROGRAM_CHAIR) return isLoadingProgramChairFaculty;
+    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return isLoadingCampusRegistrarFaculty;
+    return false;
+  }, [role, isLoadingProgramChairFaculty, isLoadingCampusRegistrarFaculty]);
 
   const itemsPerPageOptions = useMemo(
     () => [
@@ -116,14 +149,14 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
     setPage(1); // Reset to first page when filtering
   };
 
-  const columns = useMemo<TableColumn<CurriculumTagging>[]>(
+  const columns = useMemo<TableColumn<SectionTeacher>[]>(
     () => [
       {
         key: 'user.name',
-        title: 'Student',
+        title: 'Faculty',
         render: (_, row) => (
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 text-white">
               <User className="h-3.5 w-3.5" />
             </div>
             <div className="flex flex-col">
@@ -137,10 +170,10 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
         ),
       },
       {
-        key: 'curriculum.academic_program',
+        key: 'section.academic_program',
         title: 'College & Program',
         render: (_, row) => {
-          const program = row.curriculum?.academic_program;
+          const program = row.section?.curriculum_detail?.curriculum?.academic_program;
           return (
             <div className="flex flex-col gap-0.5">
               <div className="flex items-center gap-1.5">
@@ -163,51 +196,109 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
         },
       },
       {
-        key: 'is_active',
-        title: 'Status',
-        render: (_, row) =>
-          row.is_active ? (
-            <Badge className="bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 border-emerald-500/20 text-[10px] font-medium px-1.5 py-0">
-              Active
-            </Badge>
-          ) : (
-            <Badge
-              variant="secondary"
-              className="bg-slate-500/10 text-slate-700 dark:bg-slate-500/20 dark:text-slate-400 border-slate-500/20 text-[10px] font-medium px-1.5 py-0"
-            >
-              Inactive
-            </Badge>
-          ),
+        key: 'sections',
+        title: 'Sections',
+        render: (_, row) => {
+          // Get all sections for this faculty member from the grouped data
+          const groupedData = facultyResponse?.data?.data;
+          const facultyName = row.user?.name;
+          const sections =
+            facultyName && groupedData?.[facultyName]
+              ? groupedData[facultyName]
+                  .map((st) => ({
+                    sectionName: st.section?.section_name,
+                    courseTitle: st.section?.curriculum_detail?.course?.course_title,
+                  }))
+                  .filter((s) => s.sectionName || s.courseTitle)
+              : [];
+
+          // Group courses by section name
+          const groupedSections = sections.reduce(
+            (acc, section) => {
+              const sectionName = section.sectionName || 'Unknown Section';
+              if (!acc[sectionName]) {
+                acc[sectionName] = [];
+              }
+              if (section.courseTitle) {
+                acc[sectionName].push(section.courseTitle);
+              }
+              return acc;
+            },
+            {} as Record<string, string[]>
+          );
+
+          return (
+            <div className="flex flex-col gap-2">
+              {Object.keys(groupedSections).length > 0 ? (
+                Object.entries(groupedSections).map(([sectionName, courses], index) => (
+                  <div key={index} className="flex flex-col gap-1">
+                    <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border border-indigo-200/50 dark:border-indigo-800/50">
+                      <div className="h-1 w-1 rounded-full bg-indigo-500" />
+                      <span className="text-[10px] font-medium text-indigo-700 dark:text-indigo-300">
+                        {sectionName}
+                      </span>
+                    </div>
+                    {courses.length > 0 && (
+                      <div className="flex flex-col gap-0.5 pl-4">
+                        {courses.map((course, courseIndex) => (
+                          <div key={courseIndex} className="flex items-center gap-1">
+                            <span className="text-[10px] text-muted-foreground">-</span>
+                            <span className="text-[10px] text-muted-foreground">{course}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <span className="text-[10px] text-muted-foreground italic">
+                  No sections assigned
+                </span>
+              )}
+            </div>
+          );
+        },
       },
     ],
-    []
+    [facultyResponse]
   );
 
+  // Transform the grouped data structure into a flat array for the table
   const tableItems = useMemo(() => {
-    const items = students?.data?.data ?? [];
+    const groupedData = facultyResponse?.data?.data;
+    if (!groupedData || typeof groupedData !== 'object') return [];
+
+    // Flatten the grouped structure: { "Teacher Name": [SectionTeacher[]] } -> SectionTeacher[]
+    const flattenedItems: SectionTeacher[] = [];
+    Object.values(groupedData).forEach((teacherSections) => {
+      if (Array.isArray(teacherSections)) {
+        // For each teacher, we'll just take the first section to represent them in the table
+        // since we're showing faculty members, not individual section assignments
+        if (teacherSections.length > 0) {
+          flattenedItems.push(teacherSections[0]);
+        }
+      }
+    });
 
     // Apply status filter on client side
     if (statusFilter === 'active') {
-      return items.filter((student) => student.is_active);
+      return flattenedItems;
     }
-    if (statusFilter === 'inactive') {
-      return items.filter((student) => !student.is_active);
-    }
-
-    return items;
-  }, [students, statusFilter]);
+    return flattenedItems;
+  }, [facultyResponse, statusFilter]);
 
   const paginationMeta = useMemo(() => {
-    return students?.data;
-  }, [students]);
+    return facultyResponse?.data;
+  }, [facultyResponse]);
 
-  const totalStudents = useMemo(() => paginationMeta?.total ?? 0, [paginationMeta]);
-  const activeStudents = useMemo(
-    () => tableItems.filter((student) => student.is_active).length,
-    [tableItems]
-  );
+  const totalFaculties = useMemo(() => {
+    // Count unique faculty members from the grouped data
+    const groupedData = facultyResponse?.data?.data;
+    if (!groupedData || typeof groupedData !== 'object') return 0;
+    return Object.keys(groupedData).length;
+  }, [facultyResponse]);
 
-  const isInitialLoading = isLoading && !students;
+  const isInitialLoading = isLoading && !facultyResponse;
 
   if (isInitialLoading) {
     return (
@@ -268,10 +359,10 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
         <Card className="border-border/50 hover:border-border transition-colors">
           <CardHeader className="pb-1.5 pt-2.5 px-3">
             <CardDescription className="text-[10px] text-muted-foreground font-medium">
-              Total Students
+              Total Faculties
             </CardDescription>
             <CardTitle className="text-xl font-bold bg-gradient-to-br from-slate-900 to-slate-600 dark:from-slate-100 dark:to-slate-400 bg-clip-text text-transparent">
-              {totalStudents}
+              {totalFaculties}
             </CardTitle>
           </CardHeader>
         </Card>
@@ -279,10 +370,10 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
         <Card className="border-border/50 hover:border-emerald-500/30 transition-colors">
           <CardHeader className="pb-1.5 pt-2.5 px-3">
             <CardDescription className="text-[10px] text-muted-foreground font-medium">
-              Active Students
+              Active Faculties
             </CardDescription>
             <CardTitle className="text-xl font-bold bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
-              {activeStudents}
+              {totalFaculties}
             </CardTitle>
           </CardHeader>
         </Card>
@@ -290,10 +381,10 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
         <Card className="border-border/50 hover:border-slate-500/30 transition-colors">
           <CardHeader className="pb-1.5 pt-2.5 px-3">
             <CardDescription className="text-[10px] text-muted-foreground font-medium">
-              Inactive Students
+              Inactive Faculties
             </CardDescription>
             <CardTitle className="text-xl font-bold bg-gradient-to-br from-slate-600 to-slate-500 dark:from-slate-400 dark:to-slate-500 bg-clip-text text-transparent">
-              {totalStudents - activeStudents}
+              0
             </CardTitle>
           </CardHeader>
         </Card>
@@ -306,11 +397,11 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
               <div className="flex items-center gap-1.5">
                 <Users className="h-3.5 w-3.5 text-muted-foreground" />
                 <CardTitle className="text-sm font-semibold text-foreground">
-                  Student Directory
+                  Faculty Directory
                 </CardTitle>
               </div>
               <CardDescription className="text-[10px] text-muted-foreground mt-0.5">
-                View and manage students in your program
+                View and manage faculties in your program
               </CardDescription>
             </div>
             <div className="flex items-center gap-1.5">
@@ -330,7 +421,7 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
               <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Search by student name, email, program, or college..."
+                placeholder="Search by faculty name, email, program, or college..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="pl-8 h-8 text-xs"
@@ -355,7 +446,7 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
           </div>
           <Table
             columns={columns}
-            rows={tableItems}
+            rows={tableItems as SectionTeacher[]}
             itemsPerPage={itemsPerPage}
             pagination={paginationMeta}
             showPagination={true}

@@ -124,8 +124,6 @@ class EnrollmentService extends GenericService implements IEnrollmentService
             'year' => array_values($years),
             'term' => array_values($terms)
         ];
-
-        return [];
     }
 
     public function getEnrollmentsByCampusId(int $campusId, ?string $latestStatus, int $schoolYearId, int $yearId, int $termId, int $page = 1, int $rows = 10): LengthAwarePaginator

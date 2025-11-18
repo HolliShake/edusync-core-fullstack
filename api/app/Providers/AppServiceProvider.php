@@ -32,6 +32,7 @@ use App\Interface\IRepo\IRequirementRepo;
 use App\Interface\IRepo\IRoomRepo;
 use App\Interface\IRepo\ISchoolYearRepo;
 use App\Interface\IRepo\ISectionRepo;
+use App\Interface\IRepo\ISectionTeacherRepo;
 use App\Interface\IRepo\IUserRepo;
 use App\Interface\IService\IAcademicCalendarService;
 use App\Interface\IService\IAcademicProgramCriteriaService;
@@ -63,6 +64,7 @@ use App\Interface\IService\IRequirementService;
 use App\Interface\IService\IRoomService;
 use App\Interface\IService\ISchoolYearService;
 use App\Interface\IService\ISectionService;
+use App\Interface\IService\ISectionTeacherService;
 use App\Interface\IService\IUserService;
 use App\Repo\AcademicCalendarRepo;
 use App\Repo\AcademicProgramCriteriaRepo;
@@ -94,6 +96,7 @@ use App\Repo\RequirementRepo;
 use App\Repo\RoomRepo;
 use App\Repo\SchoolYearRepo;
 use App\Repo\SectionRepo;
+use App\Repo\SectionTeacherRepo;
 use App\Repo\UserRepo;
 use App\Service\AcademicCalendarService;
 use App\Service\AcademicProgramCriteriaService;
@@ -125,6 +128,7 @@ use App\Service\RequirementService;
 use App\Service\RoomService;
 use App\Service\SchoolYearService;
 use App\Service\SectionService;
+use App\Service\SectionTeacherService;
 use App\Service\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -167,6 +171,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IGradeBookRepo::class, GradeBookRepo::class);
         $this->app->bind(IGradeBookItemRepo::class, GradeBookItemRepo::class);
         $this->app->bind(IGradeBookItemDetailRepo::class, GradeBookItemDetailRepo::class);
+        $this->app->bind(ISectionTeacherRepo::class, SectionTeacherRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -199,6 +204,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IGradeBookService::class, GradeBookService::class);
         $this->app->bind(IGradeBookItemService::class, GradeBookItemService::class);
         $this->app->bind(IGradeBookItemDetailService::class, GradeBookItemDetailService::class);
+        $this->app->bind(ISectionTeacherService::class, SectionTeacherService::class);
     }
 
     /**

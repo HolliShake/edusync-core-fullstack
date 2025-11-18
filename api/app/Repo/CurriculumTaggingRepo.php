@@ -42,6 +42,13 @@ class CurriculumTaggingRepo extends GenericRepo implements ICurriculumTaggingRep
                     });
                 });
             }),
+            AllowedFilter::callback('school_year_id', function ($query, $value) {
+                $query->whereHas('curriculum', function ($q) use ($value) {
+                    $q->whereHas('schoolYear', function ($q) use ($value) {
+                        $q->where('id', $value);
+                    });
+                });
+            }),
             AllowedFilter::callback('search', function ($query, $value) {
                 $query->where(function ($q) use ($value) {
                     $q->whereHas('user', function ($userQuery) use ($value) {

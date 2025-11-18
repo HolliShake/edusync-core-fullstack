@@ -241,11 +241,11 @@ export default function EnrollmentGenericTab({
     setTermId(undefined);
   }, [schoolYearId]);
 
-  const getStudentStatus = (enrollmentList: any[]) => {
+  const getStudentStatus = (enrollmentList: Enrollment[]) => {
     if (!enrollmentList || enrollmentList.length === 0) return 'secondary';
 
-    const hasValidated = enrollmentList.some((e: any) => e.validated && !e.is_dropped);
-    const hasPending = enrollmentList.some((e: any) => !e.validated && !e.is_dropped);
+    const hasValidated = enrollmentList.some((e: Enrollment) => e.validated && !e.is_dropped);
+    const hasPending = enrollmentList.some((e: Enrollment) => !e.validated && !e.is_dropped);
 
     if (hasValidated && hasPending) {
       return 'secondary'; // Partial
@@ -258,10 +258,21 @@ export default function EnrollmentGenericTab({
 
   const getStudentStatusLabel = (enrollmentList: Enrollment[]) => {
     if (!enrollmentList || enrollmentList.length === 0) return 'No Enrollments';
-  
 
-    const hasValidated = enrollmentList.some((e: Enrollment) => e.validated && e.section?.curriculum_detail?.term_order == termId && e.section?.curriculum_detail?.year_order == yearId && !e.is_dropped);
-    const hasPending = enrollmentList.some((e: Enrollment) => !e.validated && !e.is_dropped && e.section?.curriculum_detail?.term_order == termId && e.section?.curriculum_detail?.year_order == yearId);
+    const hasValidated = enrollmentList.some(
+      (e: Enrollment) =>
+        e.validated &&
+        e.section?.curriculum_detail?.term_order == termId &&
+        e.section?.curriculum_detail?.year_order == yearId &&
+        !e.is_dropped
+    );
+    const hasPending = enrollmentList.some(
+      (e: Enrollment) =>
+        !e.validated &&
+        !e.is_dropped &&
+        e.section?.curriculum_detail?.term_order == termId &&
+        e.section?.curriculum_detail?.year_order == yearId
+    );
 
     if (hasValidated && hasPending) {
       return 'Partial';
@@ -502,204 +513,214 @@ export default function EnrollmentGenericTab({
       {/* Student List */}
       <div className="space-y-3">
         <Accordion type="single" collapsible className="w-full space-y-3">
-          {Object.entries(groupedData).map(([studentName, enrollmentList]: [string, any]) => {
-            const firstEnrollment = enrollmentList[0];
-            const user = firstEnrollment?.user;
+          {Object.entries(groupedData).map(
+            ([studentName, enrollmentList]: [string, Enrollment[]]) => {
+              const firstEnrollment = enrollmentList[0];
+              const user = firstEnrollment?.user;
 
-            return (
-              <AccordionItem
-                key={studentName}
-                value={studentName}
-                className="border-2 rounded-xl overflow-hidden bg-card hover:border-primary/50 transition-all duration-200"
-              >
-                <AccordionTrigger className="hover:no-underline px-6 py-5 [&[data-state=open]]:border-b">
-                  <div className="flex items-center justify-between w-full pr-4">
-                    <div className="flex items-center gap-4">
-                      {/* Avatar */}
-                      <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 border-2 border-primary/20">
-                        <UserIcon className="h-6 w-6 text-primary" />
-                      </div>
-                      {/* Student Info */}
-                      <div className="flex flex-col gap-1.5 text-left">
-                        <span className="font-semibold text-base">{user?.name || studentName}</span>
-                        {user?.email && (
-                          <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                            <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
-                            {user.email}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    {/* Stats */}
-                    <div className="flex items-center gap-6">
-                      <div className="flex flex-col items-end gap-2">
-                        <div className="flex items-center gap-2 text-sm font-medium">
-                          <BookOpenIcon className="h-4 w-4 text-muted-foreground" />
-                          <span>{enrollmentList?.length || 0} courses</span>
+              return (
+                <AccordionItem
+                  key={studentName}
+                  value={studentName}
+                  className="border-2 rounded-xl overflow-hidden bg-card hover:border-primary/50 transition-all duration-200"
+                >
+                  <AccordionTrigger className="hover:no-underline px-6 py-5 [&[data-state=open]]:border-b">
+                    <div className="flex items-center justify-between w-full pr-4">
+                      <div className="flex items-center gap-4">
+                        {/* Avatar */}
+                        <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 border-2 border-primary/20">
+                          <UserIcon className="h-6 w-6 text-primary" />
                         </div>
-                        <Badge variant={getStudentStatus(enrollmentList)} className="font-medium">
-                          {getStudentStatusLabel(enrollmentList)}
-                        </Badge>
+                        {/* Student Info */}
+                        <div className="flex flex-col gap-1.5 text-left">
+                          <span className="font-semibold text-base">
+                            {user?.name || studentName}
+                          </span>
+                          {user?.email && (
+                            <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                              <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
+                              {user.email}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {/* Stats */}
+                      <div className="flex items-center gap-6">
+                        <div className="flex flex-col items-end gap-2">
+                          <div className="flex items-center gap-2 text-sm font-medium">
+                            <BookOpenIcon className="h-4 w-4 text-muted-foreground" />
+                            <span>{enrollmentList?.length || 0} courses</span>
+                          </div>
+                          <Badge variant={getStudentStatus(enrollmentList)} className="font-medium">
+                            {getStudentStatusLabel(enrollmentList)}
+                          </Badge>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="px-6 py-5 bg-muted/30">
-                    {/* Action Menu */}
-                    <div className="flex justify-end mb-4">
-                      <Menu
-                        items={[
-                          {
-                            label: 'View Details',
-                            icon: <EditIcon className="h-4 w-4" />,
-                            variant: 'default',
-                            onClick: () => {
-                              controller.openFn({ user, enrollments: enrollmentList });
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="px-6 py-5 bg-muted/30">
+                      {/* Action Menu */}
+                      <div className="flex justify-end mb-4">
+                        <Menu
+                          items={[
+                            {
+                              label: 'View Details',
+                              icon: <EditIcon className="h-4 w-4" />,
+                              variant: 'default',
+                              onClick: () => {
+                                controller.openFn({ user, enrollments: enrollmentList });
+                              },
                             },
-                          },
-                          {
-                            label: 'Delete',
-                            icon: <DeleteIcon className="h-4 w-4" />,
-                            variant: 'destructive',
-                            onClick: () => {
-                              console.log('Delete', { user, enrollments: enrollmentList });
+                            {
+                              label: 'Delete',
+                              icon: <DeleteIcon className="h-4 w-4" />,
+                              variant: 'destructive',
+                              onClick: () => {
+                                console.log('Delete', { user, enrollments: enrollmentList });
+                              },
                             },
-                          },
-                        ]}
-                        trigger={
-                          <Button variant="outline" size="sm" className="gap-2">
-                            <EllipsisIcon className="h-4 w-4" />
-                            <span className="text-xs">Actions</span>
-                          </Button>
-                        }
-                      />
-                    </div>
+                          ]}
+                          trigger={
+                            <Button variant="outline" size="sm" className="gap-2">
+                              <EllipsisIcon className="h-4 w-4" />
+                              <span className="text-xs">Actions</span>
+                            </Button>
+                          }
+                        />
+                      </div>
 
-                    {/* Course Cards */}
-                    <div className="space-y-3">
-                      {enrollmentList?.map((enrollment: Enrollment, index: number) => (
-                        <Card
-                          key={enrollment.id || index}
-                          className={`overflow-hidden transition-all duration-200 hover:shadow-md ${
-                            !enrollment.is_enrollment_valid
-                              ? 'border-destructive/50 bg-destructive/5'
-                              : 'hover:border-primary/30'
-                          }`}
-                        >
-                          <CardContent className="p-5">
-                            <div className="flex items-start justify-between gap-4">
-                              {/* Course Info */}
-                              <div className="flex-1 space-y-3">
-                                {/* Course Title */}
-                                <div className="flex items-start gap-2">
-                                  <BookOpenIcon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                                  <div className="flex-1 space-y-2">
-                                    <div className="flex items-center gap-2 flex-wrap">
-                                      <h4 className="font-semibold text-base leading-tight">
-                                        {enrollment.section?.curriculum_detail?.course
-                                          ?.course_title ||
-                                          enrollment.section?.curriculum_detail?.course
-                                            ?.course_code ||
-                                          'Unknown Course'}
-                                      </h4>
-                                      {enrollment.is_enrollment_valid ? (
-                                        <CheckCircle2Icon className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />
-                                      ) : (
-                                        <AlertCircleIcon className="h-4 w-4 text-destructive flex-shrink-0" />
-                                      )}
-                                    </div>
+                      {/* Course Cards */}
+                      <div className="space-y-3">
+                        {enrollmentList?.map((enrollment: Enrollment, index: number) => (
+                          <Card
+                            key={enrollment.id || index}
+                            className={`overflow-hidden transition-all duration-200 hover:shadow-md ${
+                              !enrollment.is_enrollment_valid
+                                ? 'border-destructive/50 bg-destructive/5'
+                                : 'hover:border-primary/30'
+                            }`}
+                          >
+                            <CardContent className="p-5">
+                              <div className="flex items-start justify-between gap-4">
+                                {/* Course Info */}
+                                <div className="flex-1 space-y-3">
+                                  {/* Course Title */}
+                                  <div className="flex items-start gap-2">
+                                    <BookOpenIcon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                                    <div className="flex-1 space-y-2">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <h4 className="font-semibold text-base leading-tight">
+                                          {enrollment.section?.curriculum_detail?.course
+                                            ?.course_title ||
+                                            enrollment.section?.curriculum_detail?.course
+                                              ?.course_code ||
+                                            'Unknown Course'}
+                                        </h4>
+                                        {enrollment.is_enrollment_valid ? (
+                                          <CheckCircle2Icon className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                                        ) : (
+                                          <AlertCircleIcon className="h-4 w-4 text-destructive flex-shrink-0" />
+                                        )}
+                                      </div>
 
-                                    {/* Course Details */}
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2">
-                                      <span className="text-xs bg-muted px-2.5 py-1 rounded-md font-medium">
-                                        {enrollment.section?.curriculum_detail?.course
-                                          ?.course_code || 'N/A'}
-                                      </span>
-                                      <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                                        <span className="font-medium text-foreground">
-                                          Section:
+                                      {/* Course Details */}
+                                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2">
+                                        <span className="text-xs bg-muted px-2.5 py-1 rounded-md font-medium">
+                                          {enrollment.section?.curriculum_detail?.course
+                                            ?.course_code || 'N/A'}
                                         </span>
-                                        {enrollment.section?.section_name || 'N/A'}
-                                      </span>
-                                      <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                                        {enrollment.section?.curriculum_detail?.year_label || 'N/A'}
-                                        <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
-                                        {enrollment.section?.curriculum_detail?.term_label || 'N/A'}
-                                      </span>
-                                    </div>
-
-                                    {/* Validation Warning */}
-                                    {!enrollment.is_enrollment_valid && (
-                                      <div className="flex items-center gap-2 mt-3 p-2.5 bg-destructive/10 border border-destructive/20 rounded-md">
-                                        <AlertCircleIcon className="h-4 w-4 text-destructive flex-shrink-0" />
-                                        <span className="text-xs text-destructive font-medium">
-                                          This enrollment does not meet the requirements
+                                        <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                          <span className="font-medium text-foreground">
+                                            Section:
+                                          </span>
+                                          {enrollment.section?.section_name || 'N/A'}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                          {enrollment.section?.curriculum_detail?.year_label ||
+                                            'N/A'}
+                                          <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
+                                          {enrollment.section?.curriculum_detail?.term_label ||
+                                            'N/A'}
                                         </span>
                                       </div>
-                                    )}
-                                    <Badge
-                                      variant={getEnrollmentBadgeVariant(enrollment)}
-                                      className="whitespace-nowrap text-xs px-2 py-0.5 font-medium"
-                                    >
-                                      {enrollment.latest_status_label}
-                                    </Badge>
+
+                                      {/* Validation Warning */}
+                                      {!enrollment.is_enrollment_valid && (
+                                        <div className="flex items-center gap-2 mt-3 p-2.5 bg-destructive/10 border border-destructive/20 rounded-md">
+                                          <AlertCircleIcon className="h-4 w-4 text-destructive flex-shrink-0" />
+                                          <span className="text-xs text-destructive font-medium">
+                                            This enrollment does not meet the requirements
+                                          </span>
+                                        </div>
+                                      )}
+                                      <Badge
+                                        variant={getEnrollmentBadgeVariant(enrollment)}
+                                        className="whitespace-nowrap text-xs px-2 py-0.5 font-medium"
+                                      >
+                                        {enrollment.latest_status_label}
+                                      </Badge>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              {/* Actions */}
-                              {needsAction === true && (
-                                <div className="flex items-center gap-2 min-w-[120px]">
-                                  <Button
-                                    onClick={() => programChairApproveSingleCallback(enrollment)}
-                                    disabled={isApprovingSingle || !enrollment.is_enrollment_valid}
-                                    size="sm"
-                                    className="gap-1.5 h-8 px-3"
-                                  >
-                                    {isApprovingSingle ? (
-                                      <>
-                                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                        <span className="text-xs">Approving...</span>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <CheckCircle2Icon className="h-3.5 w-3.5" />
-                                        <span className="text-xs">Approve</span>
-                                      </>
-                                    )}
-                                  </Button>
-                                  <Button
-                                    onClick={() => registrarRejectSingleCallback(enrollment)}
-                                    disabled={isRejectingSingle || !enrollment.is_enrollment_valid}
-                                    size="sm"
-                                    variant="destructive"
-                                    className="gap-1.5 h-8 px-3"
-                                  >
-                                    {isRejectingSingle ? (
-                                      <>
-                                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                        <span className="text-xs">Rejecting...</span>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <XCircleIcon className="h-3.5 w-3.5" />
-                                        <span className="text-xs">Reject</span>
-                                      </>
-                                    )}
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
+                                {/* Actions */}
+                                {needsAction === true && (
+                                  <div className="flex items-center gap-2 min-w-[120px]">
+                                    <Button
+                                      onClick={() => programChairApproveSingleCallback(enrollment)}
+                                      disabled={
+                                        isApprovingSingle || !enrollment.is_enrollment_valid
+                                      }
+                                      size="sm"
+                                      className="gap-1.5 h-8 px-3"
+                                    >
+                                      {isApprovingSingle ? (
+                                        <>
+                                          <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                          <span className="text-xs">Approving...</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <CheckCircle2Icon className="h-3.5 w-3.5" />
+                                          <span className="text-xs">Approve</span>
+                                        </>
+                                      )}
+                                    </Button>
+                                    <Button
+                                      onClick={() => registrarRejectSingleCallback(enrollment)}
+                                      disabled={
+                                        isRejectingSingle || !enrollment.is_enrollment_valid
+                                      }
+                                      size="sm"
+                                      variant="destructive"
+                                      className="gap-1.5 h-8 px-3"
+                                    >
+                                      {isRejectingSingle ? (
+                                        <>
+                                          <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                          <span className="text-xs">Rejecting...</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <XCircleIcon className="h-3.5 w-3.5" />
+                                          <span className="text-xs">Reject</span>
+                                        </>
+                                      )}
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            }
+          )}
         </Accordion>
 
         {/* Empty State */}

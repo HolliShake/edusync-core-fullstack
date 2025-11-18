@@ -1,5 +1,6 @@
 import { UserRoleEnum } from '@/enums/role-enum';
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
+import CampusRegistrarCommunityFaculty from '@/pages/campus-registrar/faculty/page';
 import CampusRegistrarRequest from '@/pages/campus-registrar/request/page';
 import CampusRegistrarCommunityStudent from '@/pages/campus-registrar/student/page';
 import type { Route } from '@/types/route';
@@ -56,7 +57,7 @@ const CAMPUS_REGISTRAR: Route[] = [
         key: 'campus-registrar.community.faculty',
         title: 'Faculties',
         path: '/campus-registrar/community/faculties',
-        component: <CampusRegistrarCommunityStudent />,
+        component: <CampusRegistrarCommunityFaculty />,
         icon: <Users2Icon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,

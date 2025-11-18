@@ -35,6 +35,7 @@ use App\Http\Controllers\EnrollmentLogController;
 use App\Http\Controllers\GradeBookController;
 use App\Http\Controllers\GradeBookItemController;
 use App\Http\Controllers\GradeBookItemDetailController;
+use App\Http\Controllers\SectionTeacherController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -313,4 +314,14 @@ Route::controller(GradeBookItemDetailController::class)->group(function() {
     Route::post('/GradeBookItemDetail', 'store');
     Route::put('/GradeBookItemDetail/{id}', 'update');
     Route::delete('/GradeBookItemDetail/{id}', 'destroy');
+});
+
+Route::controller(SectionTeacherController::class)->group(function() {
+    Route::get('/SectionTeacher', 'index');
+    Route::get('/SectionTeacher/campus/{campus_id}', 'getSectionTeachersByCampusIdGroupedByTeacherName');
+    Route::get('/SectionTeacher/program/{academic_program_id}', 'getSectionTeachersByProgramIdGroupedByTeacherName');
+    Route::get('/SectionTeacher/{id}', 'show');
+    Route::post('/SectionTeacher', 'store');
+    Route::put('/SectionTeacher/{id}', 'update');
+    Route::delete('/SectionTeacher/{id}', 'destroy');
 });

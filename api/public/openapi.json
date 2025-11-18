@@ -8499,7 +8499,114 @@
                         "content": {
                             "application\/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/PaginatedEnrollmentResponse200"
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "Maria Clara Reyes": [
+                                                            {
+                                                                "id": 158,
+                                                                "user_id": 4,
+                                                                "section_id": 961
+                                                            },
+                                                            {
+                                                                "id": 167,
+                                                                "user_id": 4,
+                                                                "section_id": 966
+                                                            }
+                                                        ],
+                                                        "Pedro Santiago": [
+                                                            {
+                                                                "id": 168,
+                                                                "user_id": 5,
+                                                                "section_id": 966
+                                                            }
+                                                        ]
+                                                    },
+                                                    "additionalProperties": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#\/components\/schemas\/Enrollment"
+                                                        }
+                                                    }
+                                                },
+                                                "first_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "from": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "links": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            },
+                                                            "page": {
+                                                                "type": "integer",
+                                                                "nullable": true
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "next_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "example": "\/"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "prev_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "to": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -8623,7 +8730,114 @@
                         "content": {
                             "application\/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/PaginatedEnrollmentResponse200"
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "Maria Clara Reyes": [
+                                                            {
+                                                                "id": 158,
+                                                                "user_id": 4,
+                                                                "section_id": 961
+                                                            },
+                                                            {
+                                                                "id": 167,
+                                                                "user_id": 4,
+                                                                "section_id": 966
+                                                            }
+                                                        ],
+                                                        "Pedro Santiago": [
+                                                            {
+                                                                "id": 168,
+                                                                "user_id": 5,
+                                                                "section_id": 966
+                                                            }
+                                                        ]
+                                                    },
+                                                    "additionalProperties": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#\/components\/schemas\/Enrollment"
+                                                        }
+                                                    }
+                                                },
+                                                "first_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "from": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "links": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            },
+                                                            "page": {
+                                                                "type": "integer",
+                                                                "nullable": true
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "next_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "example": "\/"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "prev_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "to": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -12278,6 +12492,750 @@
                     },
                     "404": {
                         "description": "Section not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/SectionTeacher": {
+            "get": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Get paginated list of SectionTeacher",
+                "description": "Retrieve a paginated list of SectionTeacher with optional search",
+                "operationId": "getSectionTeacherPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Filter by academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedSectionTeacherResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Create a new SectionTeacher",
+                "description": " Create a new SectionTeacher with the provided details",
+                "operationId": "createSectionTeacher",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/SectionTeacher"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SectionTeacher created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateSectionTeacherResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/SectionTeacher\/campus\/{campusId}": {
+            "get": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Get SectionTeachers by Campus ID",
+                "description": "Retrieve SectionTeachers by Campus ID",
+                "operationId": "getSectionTeachersByCampusId",
+                "parameters": [
+                    {
+                        "name": "campusId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "Maria Clara Reyes": [
+                                                            {
+                                                                "id": 158,
+                                                                "user_id": 4,
+                                                                "section_id": 961
+                                                            }
+                                                        ],
+                                                        "Pedro Santiago": [
+                                                            {
+                                                                "id": 168,
+                                                                "user_id": 5,
+                                                                "section_id": 966
+                                                            }
+                                                        ]
+                                                    },
+                                                    "additionalProperties": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#\/components\/schemas\/SectionTeacher"
+                                                        }
+                                                    }
+                                                },
+                                                "first_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "from": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "links": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            },
+                                                            "page": {
+                                                                "type": "integer",
+                                                                "nullable": true
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "next_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "example": "\/"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "prev_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "to": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SectionTeacher not found"
+                    }
+                }
+            }
+        },
+        "\/api\/SectionTeacher\/program\/{academicProgramId}": {
+            "get": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Get SectionTeachers by Program ID grouped by teacher name",
+                "description": "Retrieve SectionTeachers by Program ID grouped by teacher name",
+                "operationId": "getSectionTeachersByProgramIdGroupedByTeacherName",
+                "parameters": [
+                    {
+                        "name": "academicProgramId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "Maria Clara Reyes": [
+                                                            {
+                                                                "id": 158,
+                                                                "user_id": 4,
+                                                                "section_id": 961
+                                                            }
+                                                        ],
+                                                        "Pedro Santiago": [
+                                                            {
+                                                                "id": 168,
+                                                                "user_id": 5,
+                                                                "section_id": 966
+                                                            }
+                                                        ]
+                                                    },
+                                                    "additionalProperties": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#\/components\/schemas\/SectionTeacher"
+                                                        }
+                                                    }
+                                                },
+                                                "first_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "from": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "last_page_url": {
+                                                    "type": "string",
+                                                    "example": "\/?page=1"
+                                                },
+                                                "links": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "url": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            },
+                                                            "page": {
+                                                                "type": "integer",
+                                                                "nullable": true
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "next_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "example": "\/"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "prev_page_url": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "to": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SectionTeacher not found"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/SectionTeacher\/{id}": {
+            "get": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Get a specific SectionTeacher",
+                "description": "Retrieve a SectionTeacher by its ID",
+                "operationId": "getSectionTeacherById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSectionTeacherResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SectionTeacher not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Update a SectionTeacher",
+                "description": "Update an existing SectionTeacher with the provided details",
+                "operationId": "updateSectionTeacher",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/SectionTeacher"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SectionTeacher updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateSectionTeacherResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SectionTeacher not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "SectionTeacher"
+                ],
+                "summary": "Delete a SectionTeacher",
+                "description": "Delete a SectionTeacher by its ID",
+                "operationId": "deleteSectionTeacher",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "SectionTeacher deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteSectionTeacherResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "SectionTeacher not found"
                     },
                     "500": {
                         "description": " Internal server error",
@@ -17840,6 +18798,132 @@
                 },
                 "type": "object"
             },
+            "SectionTeacher": {
+                "title": "SectionTeacher",
+                "required": [
+                    "section_id",
+                    "user_id"
+                ],
+                "properties": {
+                    "section_id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "section": {
+                        "$ref": "#\/components\/schemas\/Section"
+                    },
+                    "user": {
+                        "$ref": "#\/components\/schemas\/User"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedSectionTeacher": {
+                "title": "PaginatedSectionTeacher",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/SectionTeacher"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedSectionTeacherResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedSectionTeacher"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSectionTeacherResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/SectionTeacher"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSectionTeachersResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/SectionTeacher"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateSectionTeacherResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/SectionTeacher"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSectionTeacherResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/SectionTeacher"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteSectionTeacherResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "required": [
@@ -18249,6 +19333,10 @@
         {
             "name": "Section",
             "description": "Section"
+        },
+        {
+            "name": "SectionTeacher",
+            "description": "SectionTeacher"
         },
         {
             "name": "User",
