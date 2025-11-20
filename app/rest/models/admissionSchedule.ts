@@ -6,16 +6,17 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SchoolYear } from './schoolYear';
-import type { Campus } from './campus';
+import type { AcademicProgram } from './academicProgram';
 
 export interface AdmissionSchedule {
   readonly id?: number;
   school_year_id: number;
-  campus_id: number;
+  academic_program_id: number;
+  intake_limit: number;
   start_date: string;
   end_date: string;
   readonly created_at?: string;
   readonly updated_at?: string;
   school_year?: SchoolYear;
-  campus?: Campus;
+  academic_program?: AcademicProgram;
 }

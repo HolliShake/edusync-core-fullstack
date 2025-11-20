@@ -177,13 +177,13 @@ class AcademicProgram extends Model
     }
 
     /**
-     * Get the admission applications for the academic program.
+     * Get the admission schedules for the academic program.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function admissionApplications(): HasMany
+    public function admissionSchedules(): HasMany
     {
-        return $this->hasMany(AdmissionApplication::class);
+        return $this->hasMany(AdmissionSchedule::class);
     }
 
     /*****************************************************************/

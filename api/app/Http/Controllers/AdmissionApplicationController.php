@@ -200,8 +200,7 @@ class AdmissionApplicationController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|integer|exists:user,id',
-                'school_year_id' => 'required|integer|exists:school_year,id',
-                'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'admission_schedule_id' => 'required|integer|exists:admission_schedule,id',
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
@@ -275,8 +274,7 @@ class AdmissionApplicationController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|integer|exists:user,id',
-                'school_year_id' => 'required|integer|exists:school_year,id',
-                'academic_program_id' => 'required|integer|exists:academic_program,id',
+                'admission_schedule_id' => 'required|integer|exists:admission_schedule,id',
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',

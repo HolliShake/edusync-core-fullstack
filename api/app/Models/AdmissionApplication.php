@@ -18,8 +18,7 @@ use OpenApi\Attributes as OA;
     required: [
         // Override required
         'user_id',
-        'school_year_id',
-        'academic_program_id',
+        'admission_schedule_id',
         'first_name',
         'last_name',
         'email',
@@ -30,8 +29,7 @@ use OpenApi\Attributes as OA;
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "user_id", type: "integer"),
-        new OA\Property(property: "school_year_id", type: "integer"),
-        new OA\Property(property: "academic_program_id", type: "integer"),
+        new OA\Property(property: "admission_schedule_id", type: "integer"),
         new OA\Property(property: "year", type: "integer"),
         new OA\Property(property: "pool_no", type: "integer"),
         new OA\Property(property: "first_name", type: "string"),
@@ -47,8 +45,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_open_for_enrollment", type: "boolean"),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
-        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
-        new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
+        new OA\Property(property: "admission_schedule", ref: "#/components/schemas/AdmissionSchedule"),
         new OA\Property(property: "logs", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationLog")),
     ]
 )]
@@ -129,8 +126,7 @@ class AdmissionApplication extends Model
 
     protected $fillable = [
         'user_id',
-        'school_year_id',
-        'academic_program_id',
+        'admission_schedule_id',
         // 'year',
         // 'pool_no',
         'first_name',
@@ -142,19 +138,17 @@ class AdmissionApplication extends Model
     ];
 
     protected $casts = [
-        'user_id'             => 'integer',
-        'school_year_id'      => 'integer',
-        'academic_program_id' => 'integer',
-        'year'                => 'integer',
-        'pool_no'             => 'integer',
+        'user_id'               => 'integer',
+        'admission_schedule_id' => 'integer',
+        'year'                  => 'integer',
+        'pool_no'               => 'integer',
     ];
 
     protected $appends = [
         'latest_status',
         'latest_status_label',
         'user',
-        'school_year',
-        'academic_program',
+        'admission_schedule',
         'is_open_for_enrollment',
         'logs',
     ];
@@ -166,12 +160,24 @@ class AdmissionApplication extends Model
      */
     public function getIsOpenForEnrollmentAttribute(): bool
     {
-        return $this->schoolYear
+        $now = now();
+        return $this->admission_schedule
+            ->schoolYear()
             ->academicCalendars()
             ->where('event', CalendarEventEnum::ENROLLMENT->value)
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
+            ->where('start_date', '<=', $now)
+            ->where('end_date', '>=', $now)
             ->exists();
+    }
+
+    /**
+     * Get the admission schedule that owns the admission application.
+     *
+     * @return AdmissionSchedule
+     */
+    public function getAdmissionScheduleAttribute(): AdmissionSchedule
+    {
+        return $this->admissionSchedule()->first();
     }
 
     /**
@@ -220,26 +226,6 @@ class AdmissionApplication extends Model
     }
 
     /**
-     * Get the school year that owns the admission application.
-     *
-     * @return SchoolYear
-     */
-    public function getSchoolYearAttribute(): SchoolYear
-    {
-        return $this->schoolYear()->first()->makeHidden(['academic_calendars']);
-    }
-
-    /**
-     * Get the academic program that owns the admission application.
-     *
-     * @return AcademicProgram
-     */
-    public function getAcademicProgramAttribute(): AcademicProgram
-    {
-        return $this->academicProgram()->first();
-    }
-
-    /**
      * Get the logs for the admission application.
      *
      * @return array<AdmissionApplicationLog>
@@ -253,6 +239,16 @@ class AdmissionApplication extends Model
     }
 
     /**
+     * Get the admission schedule that owns the admission application.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function admissionSchedule(): BelongsTo
+    {
+        return $this->belongsTo(AdmissionSchedule::class);
+    }
+
+    /**
      * Get the user that owns the admission application.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -260,26 +256,6 @@ class AdmissionApplication extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the school year that owns the admission application.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function schoolYear(): BelongsTo
-    {
-        return $this->belongsTo(SchoolYear::class);
-    }
-
-    /**
-     * Get the academic program that owns the admission application.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function academicProgram(): BelongsTo
-    {
-        return $this->belongsTo(AcademicProgram::class);
     }
 
     /**

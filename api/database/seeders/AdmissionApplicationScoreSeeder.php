@@ -17,7 +17,7 @@ class AdmissionApplicationScoreSeeder extends Seeder
     public function run(): void
     {
         // Get required data
-        $applications = AdmissionApplication::with(['academicProgram'])->get();
+        $applications = AdmissionApplication::with(['admissionSchedule.academicProgram'])->get();
         $criteria = AcademicProgramCriteria::with(['academicProgram'])->get();
 
         // Get users with dynamic roles (based on designations)
@@ -35,7 +35,8 @@ class AdmissionApplicationScoreSeeder extends Seeder
 
         foreach ($applications as $application) {
             // Get criteria for this application's academic program
-            $programCriteria = $criteria->where('academic_program_id', $application->academic_program_id);
+            $academicProgramId = $application->admissionSchedule->academic_program_id;
+            $programCriteria = $criteria->where('academic_program_id', $academicProgramId);
 
             if ($programCriteria->isEmpty()) {
                 continue;

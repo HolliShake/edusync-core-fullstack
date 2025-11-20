@@ -75,6 +75,17 @@ class AdmissionScheduleController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer")
     )]
+    #[OA\Parameter(
+        name: "sort",
+        in: "query",
+        description: "Sort by start date and direction. Example: ?sort[start_date]=-start_date (descending), ?sort[start_date]=start_date (ascending)",
+        required: false,
+        schema: new OA\Schema(
+            type: "string",
+            example: "-start_date",
+            default: "start_date"
+        )
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

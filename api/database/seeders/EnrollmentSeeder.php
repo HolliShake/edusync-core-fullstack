@@ -7,7 +7,6 @@ use App\Models\Enrollment;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\AdmissionApplication;
-use App\Models\SchoolYear;
 use App\Models\AcademicCalendar;
 use App\Enum\UserRoleEnum;
 use App\Enum\AdmissionApplicationLogTypeEnum;
@@ -111,11 +110,14 @@ class EnrollmentSeeder extends Seeder
     /**
      * Check if student has accepted application for specific program
      * OPTIMIZED: Use direct database query to prevent N+1
+     * Note: admission_application -> admission_schedule -> academic_program
      */
     private function hasAcceptedApplicationForProgram($student, $academicProgramId): bool
     {
         return AdmissionApplication::where('user_id', $student->id)
-            ->where('academic_program_id', $academicProgramId)
+            ->whereHas('admissionSchedule', function ($query) use ($academicProgramId) {
+                $query->where('academic_program_id', $academicProgramId);
+            })
             ->whereHas('logs', function ($query) {
                 $query->where('type', AdmissionApplicationLogTypeEnum::ACCEPTED->value);
             })

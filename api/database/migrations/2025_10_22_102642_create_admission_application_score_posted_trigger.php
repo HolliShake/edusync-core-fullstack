@@ -28,10 +28,11 @@ return new class extends Migration
 
                 -- Only proceed if the new score is posted
                 IF NEW.is_posted = 1 THEN
-                    -- Get the academic program and school year from the admission application
-                    SELECT aa.academic_program_id, aa.school_year_id
+                    -- Get the academic program and school year from the admission application via admission schedule
+                    SELECT asch.academic_program_id, asch.school_year_id
                     INTO @program_id, @school_year_id
                     FROM admission_application aa
+                    INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
                     WHERE aa.id = NEW.admission_application_id;
 
                     -- Count total criteria for this program and school year
@@ -148,10 +149,11 @@ return new class extends Migration
                 DECLARE is_passing BOOLEAN;
                 DECLARE log_exists INT;
 
-                -- Get the academic program and school year from the admission application
-                SELECT aa.academic_program_id, aa.school_year_id
+                -- Get the academic program and school year from the admission application via admission schedule
+                SELECT asch.academic_program_id, asch.school_year_id
                 INTO @program_id, @school_year_id
                 FROM admission_application aa
+                INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
                 WHERE aa.id = NEW.admission_application_id;
 
                 -- Count total criteria for this program and school year

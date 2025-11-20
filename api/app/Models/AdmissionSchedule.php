@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -167,5 +168,15 @@ class AdmissionSchedule extends Model
     public function academicProgram(): BelongsTo
     {
         return $this->belongsTo(AcademicProgram::class);
+    }
+
+    /**
+     * Get the admission applications for the admission schedule.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function admissionApplications(): HasMany
+    {
+        return $this->hasMany(AdmissionApplication::class);
     }
 }

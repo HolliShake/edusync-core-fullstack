@@ -4,6 +4,8 @@ namespace App\Repo;
 
 use App\Interface\IRepo\IAdmissionScheduleRepo;
 use App\Models\AdmissionSchedule;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 
 class AdmissionScheduleRepo extends GenericRepo implements IAdmissionScheduleRepo
 {
@@ -22,6 +24,8 @@ class AdmissionScheduleRepo extends GenericRepo implements IAdmissionScheduleRep
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('academic_program_id'),
+            AllowedFilter::exact('school_year_id'),
         ];
     }
 
@@ -32,9 +36,9 @@ class AdmissionScheduleRepo extends GenericRepo implements IAdmissionScheduleRep
     protected function getAllowedSorts(): array
     {
         return [
-            'created_at',
-            'updated_at',
-            // Add other campus-specific sortable fields
+            // 'created_at',
+            // 'updated_at',
+            AllowedSort::field('start_date', 'start_date'),
         ];
     }
 

@@ -3022,6 +3022,53 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[campus_id]",
+                        "in": "query",
+                        "description": "Filter by campus ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[college_id]",
+                        "in": "query",
+                        "description": "Filter by college ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Filter by academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by start date and direction. Example: ?sort[start_date]=-start_date (descending), ?sort[start_date]=start_date (ascending)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "start_date",
+                            "example": "-start_date"
+                        }
                     }
                 ],
                 "responses": {
@@ -14915,8 +14962,7 @@
                 "title": "AdmissionApplication",
                 "required": [
                     "user_id",
-                    "school_year_id",
-                    "academic_program_id",
+                    "admission_schedule_id",
                     "first_name",
                     "last_name",
                     "email",
@@ -14931,10 +14977,7 @@
                     "user_id": {
                         "type": "integer"
                     },
-                    "school_year_id": {
-                        "type": "integer"
-                    },
-                    "academic_program_id": {
+                    "admission_schedule_id": {
                         "type": "integer"
                     },
                     "year": {
@@ -14991,11 +15034,8 @@
                     "user": {
                         "$ref": "#\/components\/schemas\/User"
                     },
-                    "school_year": {
-                        "$ref": "#\/components\/schemas\/SchoolYear"
-                    },
-                    "academic_program": {
-                        "$ref": "#\/components\/schemas\/AcademicProgram"
+                    "admission_schedule": {
+                        "$ref": "#\/components\/schemas\/AdmissionSchedule"
                     },
                     "logs": {
                         "type": "array",
@@ -15436,7 +15476,8 @@
                 "title": "AdmissionSchedule",
                 "required": [
                     "school_year_id",
-                    "campus_id",
+                    "academic_program_id",
+                    "intake_limit",
                     "start_date",
                     "end_date"
                 ],
@@ -15448,7 +15489,10 @@
                     "school_year_id": {
                         "type": "integer"
                     },
-                    "campus_id": {
+                    "academic_program_id": {
+                        "type": "integer"
+                    },
+                    "intake_limit": {
                         "type": "integer"
                     },
                     "start_date": {
@@ -15472,8 +15516,8 @@
                     "school_year": {
                         "$ref": "#\/components\/schemas\/SchoolYear"
                     },
-                    "campus": {
-                        "$ref": "#\/components\/schemas\/Campus"
+                    "academic_program": {
+                        "$ref": "#\/components\/schemas\/AcademicProgram"
                     }
                 },
                 "type": "object"

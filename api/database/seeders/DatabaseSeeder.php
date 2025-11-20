@@ -66,7 +66,8 @@ class DatabaseSeeder extends Seeder
             // Sections (needs CurriculumDetail, SchoolYear)
             SectionSeeder::class,
 
-            // Admission applications (needs SchoolYear, AcademicProgram, Users)
+            // Schedules (needs AcademicProgram, Users)
+            AdmissionScheduleSeeder::class,
             AdmissionApplicationSeeder::class,
             AdmissionApplicationLogSeeder::class,
             AdmissionApplicationScoreSeeder::class,
@@ -74,9 +75,6 @@ class DatabaseSeeder extends Seeder
             // Enrollments (needs Sections, Users)
             EnrollmentSeeder::class,
             EnrollmentLogSeeder::class,
-
-            // Schedules (needs other data)
-            AdmissionScheduleSeeder::class,
         ]);
     }
 }

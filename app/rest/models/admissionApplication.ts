@@ -7,15 +7,13 @@
  */
 import type { AdmissionApplicationLatestStatus } from './admissionApplicationLatestStatus';
 import type { User } from './user';
-import type { SchoolYear } from './schoolYear';
-import type { AcademicProgram } from './academicProgram';
+import type { AdmissionSchedule } from './admissionSchedule';
 import type { AdmissionApplicationLog } from './admissionApplicationLog';
 
 export interface AdmissionApplication {
   readonly id?: number;
   user_id: number;
-  school_year_id: number;
-  academic_program_id: number;
+  admission_schedule_id: number;
   year?: number;
   pool_no?: number;
   first_name: string;
@@ -31,7 +29,6 @@ export interface AdmissionApplication {
   readonly latest_status_label?: string;
   is_open_for_enrollment?: boolean;
   user?: User;
-  school_year?: SchoolYear;
-  academic_program?: AcademicProgram;
+  admission_schedule?: AdmissionSchedule;
   logs?: AdmissionApplicationLog[];
 }

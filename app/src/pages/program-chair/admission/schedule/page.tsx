@@ -1,68 +1,186 @@
+import Menu from '@/components/custom/menu.component';
+import { useModal } from '@/components/custom/modal.component';
+import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
+import AdmissionScheduleModal from '@/components/program-chair-only/admission/admission-schedule.modal';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useAuth } from '@/context/auth.context';
+import { dateToWord } from '@/lib/formatter';
+import {
+  useDeleteAdmissionSchedule,
+  useGetAdmissionSchedulePaginated,
+  useGetSchoolYearPaginated,
+} from '@rest/api';
+import type { AdmissionSchedule } from '@rest/models/admissionSchedule';
+import type { SchoolYear } from '@rest/models/schoolYear';
+import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function ProgramChairAdmissionSchedule(): React.ReactNode {
+  const { session } = useAuth();
+  const [page, setPage] = useState(1);
+  const [rows] = useState(10);
+  const [schoolYearId, setSchoolYearId] = useState<number | undefined>(undefined);
+
+  const { data: schoolYearResponse } = useGetSchoolYearPaginated({
+    sort: '-start_date',
+    page: 1,
+    rows: Number.MAX_SAFE_INTEGER,
+  });
+
+  const schoolYearsList = useMemo<SchoolYear[]>(
+    () => schoolYearResponse?.data?.data ?? [],
+    [schoolYearResponse]
+  );
+
+  useEffect(() => {
+    if (schoolYearsList.length > 0 && schoolYearId === undefined) {
+      setSchoolYearId(schoolYearsList[0].id);
+    }
+  }, [schoolYearsList, schoolYearId]);
+
+  const { data: admissionSchedules, refetch } = useGetAdmissionSchedulePaginated(
+    {
+      'filter[academic_program_id]': Number(session?.active_academic_program),
+      ...(schoolYearId && { 'filter[school_year_id]': schoolYearId }),
+      sort: '-start_date',
+      page,
+      rows,
+    },
+    { query: { enabled: !!session?.active_academic_program && schoolYearId !== undefined } }
+  );
+
+  const { mutateAsync: deleteAdmissionSchedule } = useDeleteAdmissionSchedule();
+
+  const controller = useModal<AdmissionSchedule>();
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAdmissionSchedule({ id });
+      toast.success('Admission schedule deleted successfully');
+      refetch();
+    } catch (error) {
+      toast.error('Failed to delete admission schedule');
+    }
+  };
+
+  const columns = useMemo<TableColumn<AdmissionSchedule>[]>(
+    () => [
+      {
+        key: 'school_year',
+        title: 'School Year',
+        render: (_, row) => row.school_year?.name ?? 'N/A',
+      },
+      {
+        key: 'academic_program',
+        title: 'Academic Program',
+        render: (_, row) => row.academic_program?.program_name ?? 'Unknown',
+      },
+      {
+        key: 'intake_limit',
+        title: 'Intake Limit',
+      },
+      {
+        key: 'start_date',
+        title: 'Start Date',
+        render: (_, row) => dateToWord(row.start_date),
+      },
+      {
+        key: 'end_date',
+        title: 'End Date',
+        render: (_, row) => dateToWord(row.end_date),
+      },
+      {
+        key: 'actions',
+        title: 'Actions',
+        render: (_, row) => (
+          <Menu
+            items={[
+              {
+                label: 'Edit',
+                icon: <EditIcon />,
+                variant: 'default',
+                onClick: () => {
+                  controller.openFn(row);
+                },
+              },
+              {
+                label: 'Delete',
+                icon: <DeleteIcon />,
+                variant: 'destructive',
+                onClick: () => {
+                  if (row.id) {
+                    handleDelete(row.id);
+                  }
+                },
+              },
+            ]}
+            trigger={
+              <Button variant="outline" size="icon">
+                <EllipsisIcon />
+              </Button>
+            }
+          />
+        ),
+      },
+    ],
+    [controller]
+  );
+
+  const tableItems = useMemo(() => admissionSchedules?.data?.data ?? [], [admissionSchedules]);
+  const paginationMeta = useMemo(() => {
+    return admissionSchedules?.data;
+  }, [admissionSchedules]);
+
   return (
     <TitledPage
       title="Admission Schedule"
       description="View and manage admission schedules and events"
     >
-      <div className="space-y-6">
-        {/* Schedule Overview Card */}
-        <Card className="border-2 shadow-lg">
-          <CardHeader className="bg-muted/50">
-            <CardTitle className="flex items-center gap-3">
-              <Calendar className="h-6 w-6 text-primary" />
-              <span>Upcoming Events</span>
-            </CardTitle>
-            <CardDescription>Track important admission dates and schedules</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              {/* Sample Schedule Item */}
-              <div className="flex items-start gap-4 p-4 rounded-lg border-2 hover:bg-muted/50 transition-colors">
-                <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Calendar className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1 space-y-2">
-                  <h3 className="font-semibold text-lg">Entrance Examination</h3>
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="h-4 w-4" />
-                      <span>9:00 AM - 12:00 PM</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="h-4 w-4" />
-                      <span>Main Campus</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Users className="h-4 w-4" />
-                      <span>150 Applicants</span>
-                    </div>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm">
-                  View Details
-                </Button>
-              </div>
-
-              {/* Empty State */}
-              <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-lg">
-                <div className="h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-                  <Calendar className="h-8 w-8 text-primary" />
-                </div>
-                <p className="text-lg font-semibold mb-2">No upcoming schedules</p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Schedule events will appear here
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex gap-4 items-center mb-4">
+        <Select
+          value={schoolYearId ? String(schoolYearId) : undefined}
+          onValueChange={(value) => {
+            setSchoolYearId(Number(value));
+            setPage(1);
+          }}
+        >
+          <SelectTrigger className="w-[250px]">
+            <SelectValue placeholder="Filter by School Year" />
+          </SelectTrigger>
+          <SelectContent>
+            {schoolYearsList.map((schoolYear) => (
+              <SelectItem key={schoolYear.id} value={String(schoolYear.id)}>
+                {schoolYear.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button onClick={() => controller.openFn()}>Add Admission Schedule</Button>
       </div>
+      <Table
+        columns={columns}
+        rows={tableItems}
+        itemsPerPage={rows}
+        pagination={paginationMeta}
+        onPageChange={setPage}
+        showPagination={true}
+      />
+      <AdmissionScheduleModal
+        controller={controller}
+        onSubmit={() => {
+          refetch();
+        }}
+      />
     </TitledPage>
   );
 }

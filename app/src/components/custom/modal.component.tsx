@@ -82,9 +82,7 @@ export default function Modal({
   }, [size]);
 
   const handlePointerDownOutside = (e: Event) => {
-    if (!closable) {
-      e.preventDefault();
-    }
+    e.preventDefault();
   };
 
   const handleEscapeKeyDown = (e: KeyboardEvent) => {

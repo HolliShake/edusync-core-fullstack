@@ -6,12 +6,9 @@ use Illuminate\Database\Seeder;
 use App\Models\AdmissionApplication;
 use App\Models\AdmissionApplicationLog;
 use App\Models\User;
-use App\Models\SchoolYear;
-use App\Models\AcademicProgram;
-use App\Models\AcademicCalendar;
+use App\Models\AdmissionSchedule;
 use App\Enum\AdmissionApplicationLogTypeEnum;
 use App\Enum\UserRoleEnum;
-use App\Enum\CalendarEventEnum;
 
 class AdmissionApplicationSeeder extends Seeder
 {
@@ -20,13 +17,12 @@ class AdmissionApplicationSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get required data - find school year with active enrollment period
-        $schoolYear = $this->getSchoolYearWithActiveEnrollment();
-        $academicPrograms = AcademicProgram::take(4)->get(); // Get first 4 programs
+        // Get required data - find admission schedules
+        $admissionSchedules = AdmissionSchedule::all();
         $students = User::where('role', UserRoleEnum::STUDENT)->get();
 
-        if (!$schoolYear || $academicPrograms->isEmpty() || $students->isEmpty()) {
-            $this->command->warn('Required data not found. Make sure SchoolYearSeeder, AcademicProgramSeeder, and UserSeeder have been run.');
+        if ($admissionSchedules->isEmpty() || $students->isEmpty()) {
+            $this->command->warn('Required data not found. Make sure AdmissionScheduleSeeder and UserSeeder have been run.');
             return;
         }
 
@@ -35,17 +31,19 @@ class AdmissionApplicationSeeder extends Seeder
         $applicationCount = 0;
 
         foreach ($students as $student) {
-            // Check if student already has an application
+            // Get a random admission schedule
+            $admissionSchedule = $admissionSchedules->random();
+
+            // Check if student already has an application for this admission schedule
             $existingApplication = AdmissionApplication::where('user_id', $student->id)
-                ->where('school_year_id', $schoolYear->id)
+                ->where('admission_schedule_id', $admissionSchedule->id)
                 ->first();
 
             if (!$existingApplication) {
                 // Create admission application
                 $application = AdmissionApplication::create([
                     'user_id' => $student->id,
-                    'school_year_id' => $schoolYear->id,
-                    'academic_program_id' => $academicPrograms->random()->id,
+                    'admission_schedule_id' => $admissionSchedule->id,
                     'first_name' => $this->extractFirstName($student->name),
                     'last_name' => $this->extractLastName($student->name),
                     'middle_name' => $this->generateMiddleName(),
@@ -126,25 +124,5 @@ class AdmissionApplicationSeeder extends Seeder
         $number = rand(100, 9999);
 
         return "{$number} {$street}, {$city}, Metro Manila";
-    }
-
-    /**
-     * Get school year with active enrollment period for today's date
-     */
-    private function getSchoolYearWithActiveEnrollment(): ?SchoolYear
-    {
-        // First try to find a school year with active enrollment period
-        $schoolYearWithEnrollment = SchoolYear::whereHas('academicCalendars', function ($query) {
-            $query->where('event', CalendarEventEnum::ENROLLMENT->value)
-                  ->where('start_date', '<=', now())
-                  ->where('end_date', '>=', now());
-        })->first();
-
-        if ($schoolYearWithEnrollment) {
-            return $schoolYearWithEnrollment;
-        }
-
-        // Fallback: use any active school year
-        return SchoolYear::where('is_active', true)->first();
     }
 }

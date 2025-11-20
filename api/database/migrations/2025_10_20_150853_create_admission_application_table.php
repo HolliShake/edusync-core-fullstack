@@ -19,12 +19,8 @@ return new class extends Migration
                 ->constrained('user')
                 ->onDelete('cascade');
             // Fk
-            $table->foreignId('school_year_id')
-                ->constrained('school_year')
-                ->onDelete('cascade');
-            // Fk
-            $table->foreignId('academic_program_id')
-                ->constrained('academic_program')
+            $table->foreignId('admission_schedule_id')
+                ->constrained('admission_schedule')
                 ->onDelete('cascade');
             // Auto
             $table->year('year')
@@ -39,7 +35,7 @@ return new class extends Migration
             $table->text('address');
 
             // Unique
-            $table->unique(['user_id', 'school_year_id', 'academic_program_id'], 'admission_application_unique');
+            $table->unique(['user_id', 'admission_schedule_id'], 'admission_application_unique');
         });
     }
 

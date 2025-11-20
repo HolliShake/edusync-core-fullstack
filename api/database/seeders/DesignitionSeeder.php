@@ -98,12 +98,12 @@ class DesignitionSeeder extends Seeder
      */
     private function findProgramWithMostActivity(): ?AcademicProgram
     {
-        // Get programs with their admission counts
+        // Get programs with their admission application counts through admission schedules
         $programs = AcademicProgram::withCount([
-            'admissionApplications' => function ($query) {
-                $query->whereHas('logs', function ($logQuery) {
-                    $logQuery->where('type', AdmissionApplicationLogTypeEnum::ACCEPTED->value);
-                });
+            'admissionSchedules as admission_applications_count' => function ($query) {
+                $query->whereHas('schoolYear', function ($schoolYearQuery) {
+                    $schoolYearQuery->where('is_active', true);
+                })->withCount('admissionApplications');
             }
         ])->get();
 
@@ -114,7 +114,8 @@ class DesignitionSeeder extends Seeder
 
         // Calculate total activity score for each program
         $programScores = $programs->map(function ($program) {
-            $admissionCount = $program->admission_applications_count ?? 0;
+            // Get admission count through: AcademicProgram → AdmissionSchedule → AdmissionApplication
+            $admissionCount = $this->getAdmissionCountForProgram($program);
 
             // Get enrollment count through the relationship chain:
             // AcademicProgram → Curriculum → CurriculumDetail → Section → Enrollment
@@ -141,6 +142,21 @@ class DesignitionSeeder extends Seeder
         }
 
         return $topProgram['program'] ?? AcademicProgram::first();
+    }
+
+    /**
+     * Get admission count for a program through the relationship chain
+     */
+    private function getAdmissionCountForProgram(AcademicProgram $program): int
+    {
+        // Get admissions through: AcademicProgram → AdmissionSchedule → AdmissionApplication
+        return $program->admissionSchedules()
+            ->whereHas('schoolYear', function ($query) {
+                $query->where('is_active', true);
+            })
+            ->withCount('admissionApplications')
+            ->get()
+            ->sum('admission_applications_count');
     }
 
     /**
