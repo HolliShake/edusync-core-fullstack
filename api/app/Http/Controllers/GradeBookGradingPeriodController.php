@@ -3,29 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Service\GradeBookItemService;
+use App\Service\GradeBookGradingPeriodService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/GradeBookItem"
+    path: "/GradeBookGradingPeriod"
 )]
-class GradeBookItemController extends Controller
+class GradeBookGradingPeriodController extends Controller
 {
-    public function __construct(protected GradeBookItemService $service) {
+    public function __construct(protected GradeBookGradingPeriodService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/GradeBookItem",
-        summary: "Get paginated list of GradeBookItem",
-        tags: ["GradeBookItem"],
-        description: "Retrieve a paginated list of GradeBookItem with optional search",
-        operationId:"getGradeBookItemPaginated",
+        path: "/api/GradeBookGradingPeriod",
+        summary: "Get paginated list of GradeBookGradingPeriod",
+        tags: ["GradeBookGradingPeriod"],
+        description: "Retrieve a paginated list of GradeBookGradingPeriod with optional search",
+        operationId:"getGradeBookGradingPeriodPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -51,7 +51,7 @@ class GradeBookItemController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedGradeBookItemResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedGradeBookGradingPeriodResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -75,11 +75,11 @@ class GradeBookItemController extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/GradeBookItem/{id}",
-        summary: "Get a specific GradeBookItem",
-        tags: ["GradeBookItem"],
-        description: "Retrieve a GradeBookItem by its ID",
-        operationId: "getGradeBookItemById",
+        path: "/api/GradeBookGradingPeriod/{id}",
+        summary: "Get a specific GradeBookGradingPeriod",
+        tags: ["GradeBookGradingPeriod"],
+        description: "Retrieve a GradeBookGradingPeriod by its ID",
+        operationId: "getGradeBookGradingPeriodById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -90,7 +90,7 @@ class GradeBookItemController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetGradeBookItemResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetGradeBookGradingPeriodResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -104,14 +104,14 @@ class GradeBookItemController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "GradeBookItem not found"
+        description: "GradeBookGradingPeriod not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('GradeBookItem not found');
+            return $this->notFound('GradeBookGradingPeriod not found');
         }
     }
 
@@ -119,20 +119,20 @@ class GradeBookItemController extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/GradeBookItem",
-        summary: "Create a new GradeBookItem",
-        tags: ["GradeBookItem"],
-        description:" Create a new GradeBookItem with the provided details",
-        operationId: "createGradeBookItem",
+        path: "/api/GradeBookGradingPeriod",
+        summary: "Create a new GradeBookGradingPeriod",
+        tags: ["GradeBookGradingPeriod"],
+        description:" Create a new GradeBookGradingPeriod with the provided details",
+        operationId: "createGradeBookGradingPeriod",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/GradeBookItem")
+        content: new OA\JsonContent(ref: "#/components/schemas/GradeBookGradingPeriod")
     )]
     #[OA\Response(
         response: 200,
-        description: "GradeBookItem created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateGradeBookItemResponse200")
+        description: "GradeBookGradingPeriod created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateGradeBookGradingPeriodResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -158,7 +158,7 @@ class GradeBookItemController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'gradebook_grading_period_id' => 'required|exists:gradebook_grading_period,id',
+                'gradebook_id' => 'required|exists:gradebook,id',
                 'title' => 'required|string|max:255',
                 'weight' => 'required|numeric|min:0|max:100',
             ]);
@@ -179,11 +179,11 @@ class GradeBookItemController extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/GradeBookItem/{id}",
-        summary: "Update a GradeBookItem",
-        tags: ["GradeBookItem"],
-        description: "Update an existing GradeBookItem with the provided details",
-        operationId: "updateGradeBookItem",
+        path: "/api/GradeBookGradingPeriod/{id}",
+        summary: "Update a GradeBookGradingPeriod",
+        tags: ["GradeBookGradingPeriod"],
+        description: "Update an existing GradeBookGradingPeriod with the provided details",
+        operationId: "updateGradeBookGradingPeriod",
     )]
     #[OA\Parameter(
         name: "id",
@@ -193,12 +193,12 @@ class GradeBookItemController extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/GradeBookItem")
+        content: new OA\JsonContent(ref: "#/components/schemas/GradeBookGradingPeriod")
     )]
     #[OA\Response(
         response: 200,
-        description: "GradeBookItem updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateGradeBookItemResponse200")
+        description: "GradeBookGradingPeriod updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateGradeBookGradingPeriodResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -212,7 +212,7 @@ class GradeBookItemController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "GradeBookItem not found"
+        description: "GradeBookGradingPeriod not found"
     )]
     #[OA\Response(
         response: 422,
@@ -228,7 +228,7 @@ class GradeBookItemController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'gradebook_grading_period_id' => 'required|exists:gradebook_grading_period,id',
+                'gradebook_id' => 'required|exists:gradebook,id',
                 'title' => 'required|string|max:255',
                 'weight' => 'required|numeric|min:0|max:100',
             ]);
@@ -241,7 +241,7 @@ class GradeBookItemController extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('GradeBookItem not found');
+            return $this->notFound('GradeBookGradingPeriod not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -251,11 +251,11 @@ class GradeBookItemController extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/GradeBookItem/{id}",
-        summary: "Delete a GradeBookItem",
-        tags: ["GradeBookItem"],
-        description: "Delete a GradeBookItem by its ID",
-        operationId: "deleteGradeBookItem",
+        path: "/api/GradeBookGradingPeriod/{id}",
+        summary: "Delete a GradeBookGradingPeriod",
+        tags: ["GradeBookGradingPeriod"],
+        description: "Delete a GradeBookGradingPeriod by its ID",
+        operationId: "deleteGradeBookGradingPeriod",
     )]
     #[OA\Parameter(
         name: "id",
@@ -265,8 +265,8 @@ class GradeBookItemController extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "GradeBookItem deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteGradeBookItemResponse200")
+        description: "GradeBookGradingPeriod deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteGradeBookGradingPeriodResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -280,7 +280,7 @@ class GradeBookItemController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "GradeBookItem not found"
+        description: "GradeBookGradingPeriod not found"
     )]
     #[OA\Response(
         response: 500,
@@ -293,7 +293,7 @@ class GradeBookItemController extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('GradeBookItem not found');
+            return $this->notFound('GradeBookGradingPeriod not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

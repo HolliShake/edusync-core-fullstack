@@ -17,6 +17,7 @@ return new class extends Migration
             BEGIN
                 DECLARE v_curriculum_id BIGINT DEFAULT NULL;
                 DECLARE v_user_id BIGINT DEFAULT NULL;
+                DECLARE v_has_active_tagging INT DEFAULT 0;
 
                 IF NEW.action = "registrar_approved" THEN
                     -- get the curriculum_id and user_id via joins
@@ -29,17 +30,30 @@ return new class extends Migration
                     LIMIT 1;
 
                     IF v_curriculum_id IS NOT NULL AND v_user_id IS NOT NULL THEN
-                        -- Deactivate all existing active taggings for this user
-                        UPDATE curriculum_tagging
-                        SET is_active = FALSE, updated_at = NOW()
+                        -- Check if user already has an active curriculum_tagging
+                        SELECT COUNT(*) INTO v_has_active_tagging
+                        FROM curriculum_tagging
                         WHERE user_id = v_user_id AND is_active = TRUE;
 
-                        -- Insert or update the curriculum tagging
-                        INSERT INTO curriculum_tagging (curriculum_id, user_id, is_active, created_at, updated_at)
-                        VALUES (v_curriculum_id, v_user_id, TRUE, NOW(), NOW())
-                        ON DUPLICATE KEY UPDATE
-                            is_active = TRUE,
-                            updated_at = NOW();
+                        -- If user has an active, SKIP
+                        IF v_has_active_tagging = 0 THEN
+                            -- Deactivate all existing active taggings for this user (safety, in case uniqueness is violated)
+                            UPDATE curriculum_tagging
+                            SET is_active = FALSE, updated_at = NOW()
+                            WHERE user_id = v_user_id AND is_active = TRUE;
+
+                            -- Try to update an existing inactive record for this (curriculum_id, user_id)
+                            UPDATE curriculum_tagging
+                            SET is_active = TRUE, updated_at = NOW()
+                            WHERE curriculum_id = v_curriculum_id
+                              AND user_id = v_user_id;
+
+                            -- If no record was updated (ROW_COUNT() = 0), insert it
+                            IF ROW_COUNT() = 0 THEN
+                                INSERT INTO curriculum_tagging (curriculum_id, user_id, is_active, created_at, updated_at)
+                                VALUES (v_curriculum_id, v_user_id, TRUE, NOW(), NOW());
+                            END IF;
+                        END IF;
                     END IF;
                 END IF;
             END;
@@ -52,6 +66,7 @@ return new class extends Migration
             BEGIN
                 DECLARE v_curriculum_id BIGINT DEFAULT NULL;
                 DECLARE v_user_id BIGINT DEFAULT NULL;
+                DECLARE v_has_active_tagging INT DEFAULT 0;
 
                 IF NEW.action = "registrar_approved" AND (OLD.action <> "registrar_approved" OR OLD.action IS NULL) THEN
                     SELECT cd.curriculum_id, e.user_id
@@ -63,17 +78,30 @@ return new class extends Migration
                     LIMIT 1;
 
                     IF v_curriculum_id IS NOT NULL AND v_user_id IS NOT NULL THEN
-                        -- Deactivate all existing active taggings for this user
-                        UPDATE curriculum_tagging
-                        SET is_active = FALSE, updated_at = NOW()
+                        -- Check if user already has an active curriculum_tagging
+                        SELECT COUNT(*) INTO v_has_active_tagging
+                        FROM curriculum_tagging
                         WHERE user_id = v_user_id AND is_active = TRUE;
 
-                        -- Insert or update the curriculum tagging
-                        INSERT INTO curriculum_tagging (curriculum_id, user_id, is_active, created_at, updated_at)
-                        VALUES (v_curriculum_id, v_user_id, TRUE, NOW(), NOW())
-                        ON DUPLICATE KEY UPDATE
-                            is_active = TRUE,
-                            updated_at = NOW();
+                        -- If user has an active, SKIP
+                        IF v_has_active_tagging = 0 THEN
+                            -- Deactivate all existing active taggings for this user (safety, in case uniqueness is violated)
+                            UPDATE curriculum_tagging
+                            SET is_active = FALSE, updated_at = NOW()
+                            WHERE user_id = v_user_id AND is_active = TRUE;
+
+                            -- Try to update an existing inactive record for this (curriculum_id, user_id)
+                            UPDATE curriculum_tagging
+                            SET is_active = TRUE, updated_at = NOW()
+                            WHERE curriculum_id = v_curriculum_id
+                              AND user_id = v_user_id;
+
+                            -- If no record was updated (ROW_COUNT() = 0), insert it
+                            IF ROW_COUNT() = 0 THEN
+                                INSERT INTO curriculum_tagging (curriculum_id, user_id, is_active, created_at, updated_at)
+                                VALUES (v_curriculum_id, v_user_id, TRUE, NOW(), NOW());
+                            END IF;
+                        END IF;
                     END IF;
                 END IF;
             END;

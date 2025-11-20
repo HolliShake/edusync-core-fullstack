@@ -29,7 +29,7 @@ use OpenApi\Attributes as OA;
         // Relations
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
         new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
-        new OA\Property(property: "gradebook_items", type: "array", items: new OA\Items(ref: "#/components/schemas/GradeBookItem")),
+        new OA\Property(property: "gradebook_grading_periods", type: "array", items: new OA\Items(ref: "#/components/schemas/GradeBookGradingPeriod")),
     ]
 )]
 
@@ -119,7 +119,7 @@ class GradeBook extends Model
     protected $appends = [
         'section',
         'academic_program',
-        'gradebook_items',
+        'gradebook_grading_periods',
         'fully_setup',
     ];
 
@@ -130,40 +130,56 @@ class GradeBook extends Model
      */
     public function getFullySetupAttribute(): bool
     {
-        // Fully setup if all gradebook->items->total_weight == 100
-        // and all gradebook->items->item_details->total_weight == 100
-        $items = $this->gradebookItems()->get();
-        
-        if ($items->isEmpty()) {
+        // Fully setup if all gradebook->grading_periods->total_weight == 100
+        // and all gradebook->grading_periods->items->total_weight == 100
+        // and all gradebook->grading_periods->items->details->total_weight == 100
+
+        $gradingPeriods = $this->gradeBookGradingPeriods()->get();
+
+        if ($gradingPeriods->isEmpty()) {
             return false;
         }
-        
-        $totalWeight = 0;
-        foreach ($items as $item) {
-            $totalWeight += $item->weight ?? 0;
-        }
-        
-        if ($totalWeight != 100) {
+
+        // 1. All grading periods' weights must sum to 100
+        $gradingPeriodTotalWeight = $gradingPeriods->sum(function ($period) {
+            return $period->weight ?? 0;
+        });
+
+        if ($gradingPeriodTotalWeight != 100) {
             return false;
         }
-        
-        foreach ($items as $item) {
-            $itemDetails = $item->gradebookItemDetails()->get();
-            
-            if ($itemDetails->isEmpty()) {
+
+        foreach ($gradingPeriods as $period) {
+            // 2. Each grading period must have items and their weights sum to 100
+            $items = $period->gradeBookItems()->get();
+
+            if ($items->isEmpty()) {
                 return false;
             }
-            
-            $detailTotalWeight = 0;
-            foreach ($itemDetails as $detail) {
-                $detailTotalWeight += $detail->weight ?? 0;
-            }
-            
-            if ($detailTotalWeight != 100) {
+
+            $itemsTotalWeight = $items->sum(function ($item) {
+                return $item->weight ?? 0;
+            });
+            if ($itemsTotalWeight != 100) {
                 return false;
+            }
+
+            foreach ($items as $item) {
+                // 3. Each item must have details and their weights sum to 100
+                $details = $item->gradeBookItemDetails()->get();
+                if ($details->isEmpty()) {
+                    return false;
+                }
+
+                $detailsTotalWeight = $details->sum(function ($detail) {
+                    return $detail->weight ?? 0;
+                });
+                if ($detailsTotalWeight != 100) {
+                    return false;
+                }
             }
         }
-        
+
         return true;
     }
 
@@ -188,13 +204,13 @@ class GradeBook extends Model
     }
 
     /**
-     * Get the gradebook items for the gradebook.
+     * Get the gradebook grading periods for the gradebook.
      *
      * @return array
      */
-    public function getGradebookItemsAttribute(): array
+    public function getGradebookGradingPeriodsAttribute(): array
     {
-        return $this->gradebookItems()->get()->makeHidden(['gradebook'])->toArray();
+        return $this->gradebookGradingPeriods()->get()->makeHidden(['gradebook'])->toArray();
     }
 
     /**
@@ -218,13 +234,13 @@ class GradeBook extends Model
     }
 
     /**
-     * Get the gradebook items for the gradebook.
+     * Get the gradebook grading periods for the gradebook.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function gradebookItems(): HasMany
+    public function gradeBookGradingPeriods(): HasMany
     {
-        return $this->hasMany(GradeBookItem::class, 'gradebook_id')
+        return $this->hasMany(GradeBookGradingPeriod::class, 'gradebook_id')
             ->orderBy('id', 'asc');
     }
 }

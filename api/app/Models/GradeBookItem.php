@@ -15,16 +15,16 @@ use OpenApi\Attributes as OA;
         // Override required
         'title',
         'weight',
-        'gradebook_id',
+        'gradebook_grading_period_id',
     ],
     properties: [
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
-        new OA\Property(property: "gradebook_id", type: "integer"),
+        new OA\Property(property: "gradebook_grading_period_id", type: "integer"),
         new OA\Property(property: "title", type: "string", example: "Gradebook Item 1"),
         new OA\Property(property: "weight", type: "number", example: 100),
         // Relations
-        new OA\Property(property: "gradebook", ref: "#/components/schemas/GradeBook"),
+        new OA\Property(property: "gradebook_grading_period", ref: "#/components/schemas/GradeBookGradingPeriod"),
         new OA\Property(property: "gradebook_item_details", type: "array", items: new OA\Items(ref: "#/components/schemas/GradeBookItemDetail")),
     ]
 )]
@@ -102,24 +102,24 @@ class GradeBookItem extends Model
     protected $table = 'gradebook_item';
 
     protected $fillable = [
-        'gradebook_id',
+        'gradebook_grading_period_id',
         'title',
         'weight',
     ];
 
     protected $appends = [
-        'gradebook',
+        'gradebook_grading_period',
         'gradebook_item_details',
     ];
 
     /**
      * Get the gradebook that owns the gradebook item.
      *
-     * @return GradeBook
+     * @return GradeBookGradingPeriod
      */
-    public function getGradebookAttribute(): GradeBook
+    public function getGradebookGradingPeriodAttribute(): GradeBookGradingPeriod
     {
-        return $this->gradebook()->first();
+        return $this->gradebookGradingPeriod()->first();
     }
 
     /**
@@ -133,13 +133,13 @@ class GradeBookItem extends Model
     }
 
     /**
-     * Get the gradebook that owns the gradebook item.
+     * Get the gradebook grading period that owns the gradebook item.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function gradebook(): BelongsTo
+    public function gradebookGradingPeriod(): BelongsTo
     {
-        return $this->belongsTo(GradeBook::class, 'gradebook_id');
+        return $this->belongsTo(GradeBookGradingPeriod::class, 'gradebook_grading_period_id');
     }
 
     /**

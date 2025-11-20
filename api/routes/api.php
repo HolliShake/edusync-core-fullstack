@@ -25,6 +25,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdmissionApplicationController;
 use App\Http\Controllers\AdmissionApplicationLogController;
 use App\Http\Controllers\AdmissionApplicationScoreController;
+use App\Http\Controllers\AdmissionScheduleController;
 use App\Http\Controllers\CourseRequisiteController;
 use App\Http\Controllers\CurriculumTaggingController;
 use App\Http\Controllers\DocumentRequestController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EnrollmentLogController;
 use App\Http\Controllers\GradeBookController;
+use App\Http\Controllers\GradeBookGradingPeriodController;
 use App\Http\Controllers\GradeBookItemController;
 use App\Http\Controllers\GradeBookItemDetailController;
 use App\Http\Controllers\SectionTeacherController;
@@ -212,6 +214,13 @@ Route::controller(AdmissionApplicationController::class)->group(function() {
     Route::delete('/AdmissionApplication/{id}', 'destroy');
 });
 
+Route::controller(AdmissionScheduleController::class)->group(function() {
+    Route::get('/AdmissionSchedule', 'index');
+    Route::get('/AdmissionSchedule/{id}', 'show');
+    Route::post('/AdmissionSchedule', 'store');
+    Route::put('/AdmissionSchedule/{id}', 'update');
+    Route::delete('/AdmissionSchedule/{id}', 'destroy');
+});
 
 Route::controller(AdmissionApplicationLogController::class)->group(function() {
     Route::get('/AdmissionApplicationLog', 'index');
@@ -324,4 +333,12 @@ Route::controller(SectionTeacherController::class)->group(function() {
     Route::post('/SectionTeacher', 'store');
     Route::put('/SectionTeacher/{id}', 'update');
     Route::delete('/SectionTeacher/{id}', 'destroy');
+});
+
+Route::controller(GradeBookGradingPeriodController::class)->group(function() {
+    Route::get('/GradeBookGradingPeriod', 'index');
+    Route::get('/GradeBookGradingPeriod/{id}', 'show');
+    Route::post('/GradeBookGradingPeriod', 'store');
+    Route::put('/GradeBookGradingPeriod/{id}', 'update');
+    Route::delete('/GradeBookGradingPeriod/{id}', 'destroy');
 });

@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
 #[OA\PathItem(
     path: "/AdmissionSchedule"
 )]
-class AdmissionSchedule extends Controller
+class AdmissionScheduleController extends Controller
 {
     public function __construct(protected AdmissionScheduleService $service) {
     }
@@ -46,6 +46,34 @@ class AdmissionSchedule extends Controller
         description: "Number of items per page",
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "Filter by school year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[campus_id]",
+        in: "query",
+        description: "Filter by campus ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[college_id]",
+        in: "query",
+        description: "Filter by college ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[academic_program_id]",
+        in: "query",
+        description: "Filter by academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
     )]
     #[OA\Response(
         response: 200,
@@ -157,7 +185,11 @@ class AdmissionSchedule extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'school_year_id' => 'required|exists:school_year,id',
+                'academic_program_id' => 'required|exists:academic_program,id',
+                'intake_limit' => 'required|integer',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
             ]);
 
             if ($validator->fails()) {
@@ -225,7 +257,11 @@ class AdmissionSchedule extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'school_year_id' => 'required|exists:school_year,id',
+                'academic_program_id' => 'required|exists:academic_program,id',
+                'intake_limit' => 'required|integer',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
             ]);
 
             if ($validator->fails()) {

@@ -1,9 +1,16 @@
 import { useConfirm } from '@/components/confirm.provider';
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
+import GradebookGradingPeriodModal from '@/components/gradebook/gradebook-grading-period.modal';
 import GradebookItemDetailModal from '@/components/gradebook/gradebook-item-detail.modal';
 import GradebookItemModal from '@/components/gradebook/gradebook-item.modal';
 import TitledPage from '@/components/pages/titled.page';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -14,13 +21,29 @@ import {
   useDeleteGradeBookItemDetail,
   useGetGradeBookById,
 } from '@rest/api';
-import type { GradeBookItem, GradeBookItemDetail } from '@rest/models';
-import { DeleteIcon, EditIcon, EllipsisIcon, PlusIcon } from 'lucide-react';
-import { useMemo } from 'react';
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle2,
+  ChevronLeft,
+  DeleteIcon,
+  EditIcon,
+  EllipsisIcon,
+  FileText,
+  PlusIcon,
+  TrendingUp,
+} from 'lucide-react';
+import type React from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-export default function GradebookDetailPage() {
+import type { GradeBook } from '@rest/models/gradeBook';
+import type { GradeBookGradingPeriod } from '@rest/models/gradeBookGradingPeriod';
+import type { GradeBookItem } from '@rest/models/gradeBookItem';
+import type { GradeBookItemDetail } from '@rest/models/gradeBookItemDetail';
+
+export default function GradebookDetailPage(): React.ReactNode {
   const { gradebookId } = useParams<{ gradebookId: string }>();
   const navigate = useNavigate();
   const parsedGradebookId = useMemo(() => {
@@ -28,7 +51,17 @@ export default function GradebookDetailPage() {
     return decryptIdFromUrl(gradebookId);
   }, [gradebookId]);
 
-  const itemController = useModal<GradeBookItem>();
+  const defaultGradingPeriod: GradeBookGradingPeriod = useMemo(
+    () => ({
+      gradebook_id: parsedGradebookId!,
+      title: '',
+      weight: 0,
+    }),
+    [parsedGradebookId]
+  );
+
+  const gradingPeriodController = useModal<GradeBookGradingPeriod>();
+  const itemController = useModal<GradeBookItem & { gradebook_grading_period_id?: number }>();
   const itemDetailController = useModal<GradeBookItemDetail & { gradebook_item_id?: number }>();
   const confirm = useConfirm();
 
@@ -45,7 +78,40 @@ export default function GradebookDetailPage() {
   const { mutateAsync: deleteGradeBookItem } = useDeleteGradeBookItem();
   const { mutateAsync: deleteGradeBookItemDetail } = useDeleteGradeBookItemDetail();
 
-  const gradebook = useMemo(() => gradebookResponse?.data, [gradebookResponse]);
+  const gradebook: GradeBook | undefined = useMemo(
+    () => gradebookResponse?.data as GradeBook,
+    [gradebookResponse]
+  );
+
+  // Get all grading periods in this gradebook
+  const gradingPeriods = useMemo(
+    () => (gradebook?.gradebook_grading_periods as GradeBookGradingPeriod[] | undefined) || [],
+    [gradebook]
+  );
+
+  // Functions for weight computations:
+  const getGradingPeriodTotalWeight = (gradingPeriod: GradeBookGradingPeriod) => {
+    const weight =
+      (gradingPeriod.gradebook_items as GradeBookItem[] | undefined)?.reduce(
+        (sum, item) => sum + (Number(item.weight) || 0),
+        0
+      ) || 0;
+    return Number(weight);
+  };
+
+  const getItemDetailsTotalWeight = (item: GradeBookItem) => {
+    const weight =
+      (item.gradebook_item_details as GradeBookItemDetail[] | undefined)?.reduce(
+        (sum, detail) => sum + (Number(detail.weight) || 0),
+        0
+      ) || 0;
+    return Number(weight);
+  };
+
+  // Gradebook-level: sum over all periods' item weights
+  const totalWeight = useMemo(() => {
+    return gradingPeriods.reduce((sum, gp) => sum + getGradingPeriodTotalWeight(gp), 0);
+  }, [gradingPeriods]);
 
   const handleDeleteItem = async (item: GradeBookItem) => {
     confirm.confirm(async () => {
@@ -73,24 +139,42 @@ export default function GradebookDetailPage() {
     });
   };
 
-  const totalWeight = useMemo(() => {
-    const weight =
-      gradebook?.gradebook_items?.reduce((sum, item) => sum + (Number(item.weight) || 0), 0) || 0;
-    return Number(weight);
-  }, [gradebook]);
+  // Use Accordion (shadcn UI) instead of manual panel logic
+  const [accordionValue, setAccordionValue] = useState<string[]>([]);
+  // Store active item tab for each grading period
+  const [activeTabPerGradingPeriod, setActiveTabPerGradingPeriod] = useState<
+    Record<number, string>
+  >({});
 
-  const getItemDetailsTotalWeight = (item: GradeBookItem) => {
-    const weight =
-      item.gradebook_item_details?.reduce((sum, detail) => sum + (Number(detail.weight) || 0), 0) ||
-      0;
-    return Number(weight);
-  };
+  function handleOpenGradingPeriodModal(preset?: any) {
+    gradingPeriodController.openFn(preset);
+  }
+
+  function handleOpenItemModal(gradingPeriod: GradeBookGradingPeriod, preset?: any) {
+    itemController.openFn({ gradebook_grading_period_id: gradingPeriod.id, ...preset });
+    setAccordionValue([gradingPeriod.id?.toString() || ''] as string[]); // expand this accordion item
+  }
+
+  function handleTabChange(periodId: number, itemId: string) {
+    setActiveTabPerGradingPeriod((tabs) => ({
+      ...tabs,
+      [periodId]: itemId,
+    }));
+  }
 
   if (isLoading) {
     return (
-      <TitledPage title="Loading..." description="Loading gradebook details">
-        <div className="space-y-4">
-          <Skeleton className="h-10 w-48" />
+      <TitledPage
+        title={
+          <div className="flex gap-2 items-center">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <Skeleton className="h-8 w-48" />
+          </div>
+        }
+        description="Loading gradebook details"
+      >
+        <div className="space-y-6">
+          <Skeleton className="h-10 w-full" />
           <Skeleton className="h-64 w-full" />
         </div>
       </TitledPage>
@@ -103,6 +187,7 @@ export default function GradebookDetailPage() {
         <div className="text-center py-8">
           <p className="text-muted-foreground">Gradebook not found</p>
           <Button className="mt-4" onClick={() => navigate('/program-chair/gradebook')}>
+            <ChevronLeft className="mr-2 h-4 w-4" />
             Back to Gradebooks
           </Button>
         </div>
@@ -111,246 +196,532 @@ export default function GradebookDetailPage() {
   }
 
   return (
-    <TitledPage title={gradebook.title} description={`Manage items for ${gradebook.title}`}>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <Button onClick={() => itemController.openFn()} disabled={totalWeight >= 100}>
-              <PlusIcon className="w-4 h-4 mr-2" />
-              Add Item
-            </Button>
-          </div>
-        </div>
-
-        {/* Summary Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Summary</CardTitle>
-            <CardDescription>Overview of gradebook items and weights</CardDescription>
+    <TitledPage
+      title={gradebook.title}
+      description={`Comprehensive grading management for ${gradebook.title}`}
+    >
+      <div className="space-y-8">
+        {/* Enhanced Summary Card */}
+        <Card className="border-2 shadow-xl overflow-hidden">
+          <CardHeader className="bg-muted/50 pb-4">
+            <CardTitle className="flex items-center gap-3 text-xl">
+              <TrendingUp className="h-6 w-6 text-primary" />
+              <span>Gradebook Overview</span>
+              {totalWeight === 100 ? (
+                <span className="text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400 ml-auto px-3 py-1.5 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Complete
+                </span>
+              ) : (
+                <span className="text-amber-700 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 ml-auto px-3 py-1.5 rounded-full text-sm font-bold flex items-center gap-1.5 shadow-sm">
+                  <AlertCircle className="h-4 w-4" />
+                  Needs Adjustment
+                </span>
+              )}
+            </CardTitle>
+            <CardDescription className="mt-2 text-base">
+              Track your grading structure and ensure proper weight distribution
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Total Item(s)</p>
-                <p className="text-2xl font-bold">{gradebook.gradebook_items?.length || 0}</p>
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-blue-500/10 rounded-2xl" />
+                <div className="relative space-y-2 p-6 rounded-2xl border-2 border-blue-200/50 dark:border-blue-800/50 bg-background shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                      Grading Periods
+                    </p>
+                    <Calendar className="h-5 w-5 text-blue-500" />
+                  </div>
+                  <p className="text-4xl font-black text-blue-600 dark:text-blue-400">
+                    {gradingPeriods.length}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Active periods</p>
+                </div>
               </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Total Weight</p>
-                <p className="text-2xl font-bold">{totalWeight.toFixed(2)}%</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Status</p>
-                <p
-                  className={`text-2xl font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-orange-600'}`}
+
+              <div className="relative overflow-hidden">
+                <div
+                  className={`absolute inset-0 rounded-2xl ${totalWeight === 100 ? 'bg-green-500/10' : 'bg-amber-500/10'}`}
+                />
+                <div
+                  className="relative space-y-2 p-6 rounded-2xl border-2 bg-background shadow-lg"
+                  style={{
+                    borderColor:
+                      totalWeight === 100 ? 'rgb(134 239 172 / 0.5)' : 'rgb(252 211 77 / 0.5)',
+                  }}
                 >
-                  {totalWeight === 100 ? 'Complete' : 'Incomplete'}
-                </p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                      Total Weight
+                    </p>
+                    <TrendingUp
+                      className={`h-5 w-5 ${totalWeight === 100 ? 'text-green-500' : 'text-amber-500'}`}
+                    />
+                  </div>
+                  <p
+                    className={`text-4xl font-black ${totalWeight === 100 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}
+                  >
+                    {totalWeight.toFixed(1)}%
+                  </p>
+                  <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${totalWeight === 100 ? 'bg-green-500' : 'bg-amber-500'}`}
+                      style={{ width: `${Math.min(totalWeight, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative overflow-hidden">
+                <div
+                  className={`absolute inset-0 rounded-2xl ${totalWeight === 100 ? 'bg-green-500/10' : 'bg-amber-500/10'}`}
+                />
+                <div
+                  className="relative space-y-2 p-6 rounded-2xl border-2 bg-background shadow-lg"
+                  style={{
+                    borderColor:
+                      totalWeight === 100 ? 'rgb(134 239 172 / 0.5)' : 'rgb(252 211 77 / 0.5)',
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                      Status
+                    </p>
+                    {totalWeight === 100 ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-amber-500" />
+                    )}
+                  </div>
+                  <p
+                    className={`text-3xl font-black ${totalWeight === 100 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}
+                  >
+                    {totalWeight === 100 ? 'Complete' : 'Incomplete'}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {totalWeight === 100
+                      ? 'All weights balanced'
+                      : `${(100 - totalWeight).toFixed(1)}% remaining`}
+                  </p>
+                </div>
               </div>
             </div>
+
             {totalWeight !== 100 && (
-              <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded-md">
-                <p className="text-sm text-orange-800 dark:text-orange-300">
-                  ⚠️ Total weight should equal 100%. Current total: {totalWeight.toFixed(2)}%
-                </p>
+              <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-950/40 rounded-xl border-2 border-amber-200 dark:border-amber-800 flex items-start gap-3 shadow-sm">
+                <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-semibold text-amber-900 dark:text-amber-300 mb-1">
+                    Weight Adjustment Needed
+                  </p>
+                  <p className="text-sm text-amber-800 dark:text-amber-400">
+                    Total weight should equal 100%. Current total:{' '}
+                    <span className="font-bold">{totalWeight.toFixed(2)}%</span>
+                    {totalWeight < 100 && (
+                      <span className="ml-1">({(100 - totalWeight).toFixed(2)}% remaining)</span>
+                    )}
+                    {totalWeight > 100 && (
+                      <span className="ml-1">({(totalWeight - 100).toFixed(2)}% over limit)</span>
+                    )}
+                  </p>
+                </div>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Items List */}
-        <div className="space-y-4">
-          {!gradebook.gradebook_items || gradebook.gradebook_items.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <p className="text-muted-foreground mb-4">No gradebook items yet</p>
-                <Button onClick={() => itemController.openFn()}>
-                  <PlusIcon className="w-4 h-4 mr-2" />
-                  Add Your First Item
+        {/* Enhanced Grading Periods Section */}
+        <div className="space-y-5">
+          {gradingPeriods.length === 0 ? (
+            <Card className="border-2 border-dashed border-muted-foreground/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-primary/30">
+              <CardContent className="flex flex-col items-center justify-center py-16">
+                <div className="h-20 w-20 rounded-full bg-primary/20 flex items-center justify-center mb-6">
+                  <Calendar className="h-10 w-10 text-primary" />
+                </div>
+                <p className="text-muted-foreground mb-2 text-xl font-semibold">
+                  No grading periods yet
+                </p>
+                <p className="text-sm text-muted-foreground mb-6 max-w-md text-center">
+                  Get started by creating your first grading period to organize your gradebook
+                </p>
+                <Button
+                  size="lg"
+                  onClick={() => handleOpenGradingPeriodModal(defaultGradingPeriod)}
+                  className="font-semibold gap-2 shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                  <PlusIcon className="w-5 h-5" />
+                  Create First Grading Period
                 </Button>
               </CardContent>
             </Card>
           ) : (
-            <Tabs
-              defaultValue={gradebook.gradebook_items?.[0]?.id?.toString() || ''}
-              className="w-full"
+            <Accordion
+              type="single"
+              collapsible
+              value={accordionValue[0] || ''}
+              onValueChange={(val) => setAccordionValue(typeof val === 'string' ? [val] : [])}
+              className="space-y-4"
             >
-              <TabsList className="w-full justify-start overflow-x-auto flex-wrap h-auto">
-                {gradebook.gradebook_items?.map((item) => (
-                  <TabsTrigger
-                    key={item.id}
-                    value={item.id?.toString() || ''}
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                  >
-                    {item.title} ({item.weight}%)
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {gradebook.gradebook_items?.map((item) => {
-                const itemDetailsTotalWeight = getItemDetailsTotalWeight(item);
-                const isItemDetailsWeightComplete = itemDetailsTotalWeight === 100;
+              {gradingPeriods.map((gradingPeriod) => {
+                const gpItems = (gradingPeriod.gradebook_items || []) as GradeBookItem[];
+                const periodTotalWeight = getGradingPeriodTotalWeight(gradingPeriod);
+                const periodActiveTab =
+                  activeTabPerGradingPeriod[gradingPeriod.id as number] ||
+                  gpItems[0]?.id?.toString() ||
+                  '';
 
                 return (
-                  <TabsContent key={item.id} value={item.id?.toString() || ''}>
-                    <Card>
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <CardTitle className="flex items-center gap-2">
-                              {item.title}
-                              <span className="text-sm font-normal text-muted-foreground">
-                                ({item.weight}%)
+                  <AccordionItem
+                    value={gradingPeriod.id?.toString() || ''}
+                    key={gradingPeriod.id}
+                    className="rounded-2xl shadow-lg border-2 bg-background overflow-hidden hover:shadow-xl transition-all duration-300"
+                  >
+                    <AccordionTrigger className="!no-underline px-6 py-5 bg-muted/80 hover:bg-muted rounded-t-2xl min-h-[72px] transition-all duration-200">
+                      <div className="flex flex-1 items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center shadow-md">
+                            <Calendar className="h-6 w-6 text-primary-foreground" />
+                          </div>
+                          <div className="flex flex-col gap-1 items-start">
+                            <div className="flex items-center gap-3">
+                              <span className="truncate max-w-xs md:max-w-lg font-bold text-lg">
+                                {gradingPeriod.title}
                               </span>
-                            </CardTitle>
-                            <CardDescription>
-                              {item.gradebook_item_details?.length || 0} detail(s)
-                            </CardDescription>
+                              <span
+                                title={`Total Item Weight: ${periodTotalWeight.toFixed(2)}%`}
+                                className={`text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm
+                                  ${
+                                    periodTotalWeight === 100
+                                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                      : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                  }`}
+                              >
+                                {periodTotalWeight === 100 ? (
+                                  <CheckCircle2 className="h-3 w-3" />
+                                ) : (
+                                  <AlertCircle className="h-3 w-3" />
+                                )}
+                                {periodTotalWeight.toFixed(1)}%
+                              </span>
+                            </div>
+                            <span className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
+                              <FileText className="h-3 w-3" />
+                              {gpItems?.length || 0} item{gpItems?.length !== 1 ? 's' : ''}
+                            </span>
                           </div>
-                          <Menu
-                            items={[
-                              {
-                                label: 'Add Detail',
-                                icon: <PlusIcon />,
-                                variant: 'default',
-                                onClick: () => {
-                                  itemDetailController.openFn({
-                                    gradebook_item_id: item.id,
-                                  } as any);
-                                },
-                                disabled: itemDetailsTotalWeight >= 100,
-                              },
-                              {
-                                label: 'Edit',
-                                icon: <EditIcon />,
-                                variant: 'default',
-                                onClick: () => {
-                                  itemController.openFn(item);
-                                },
-                              },
-                              {
-                                label: 'Delete',
-                                icon: <DeleteIcon />,
-                                variant: 'destructive',
-                                onClick: () => {
-                                  handleDeleteItem(item);
-                                },
-                              },
-                            ]}
-                            trigger={
-                              <Button variant="outline" size="icon">
-                                <EllipsisIcon />
-                              </Button>
-                            }
-                          />
                         </div>
-                      </CardHeader>
-                      {item.gradebook_item_details && item.gradebook_item_details.length > 0 ? (
-                        <CardContent>
-                          <div className="space-y-4">
-                            {/* Details Weight Summary */}
-                            <div className="p-3 border rounded-md bg-muted/50">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="text-sm font-medium">Details Total Weight</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    Sum of all detail weights
-                                  </p>
-                                </div>
-                                <div className="text-right">
-                                  <p
-                                    className={`text-lg font-bold ${
-                                      isItemDetailsWeightComplete
-                                        ? 'text-green-600'
-                                        : 'text-orange-600'
-                                    }`}
-                                  >
-                                    {itemDetailsTotalWeight.toFixed(2)}%
-                                  </p>
-                                  <p
-                                    className={`text-xs ${
-                                      isItemDetailsWeightComplete
-                                        ? 'text-green-600'
-                                        : 'text-orange-600'
-                                    }`}
-                                  >
-                                    {isItemDetailsWeightComplete ? 'Complete' : 'Incomplete'}
-                                  </p>
-                                </div>
+                        <div className="flex items-center gap-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            title="Add Item"
+                            className="rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
+                            disabled={periodTotalWeight >= 100}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenItemModal(gradingPeriod);
+                            }}
+                          >
+                            <PlusIcon className="w-4 h-4 mr-1" />
+                            <span className="hidden sm:inline">Add Item</span>
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            title="Edit Grading Period"
+                            className="rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              gradingPeriodController.openFn(gradingPeriod);
+                            }}
+                          >
+                            <EditIcon className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <Card className="!shadow-none !border-0 rounded-t-none bg-transparent">
+                        <CardContent className="pb-8 pt-6 px-6">
+                          {gpItems.length === 0 ? (
+                            <div className="flex flex-col items-center py-12 text-muted-foreground border-2 border-dashed rounded-xl bg-muted/20">
+                              <div className="h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                                <FileText className="h-8 w-8 text-primary" />
                               </div>
-                              {!isItemDetailsWeightComplete && (
-                                <div className="mt-2 p-2 bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded">
-                                  <p className="text-xs text-orange-800 dark:text-orange-300">
-                                    ⚠️ Details weight should equal 100%
-                                  </p>
-                                </div>
-                              )}
+                              <p className="mb-1 text-lg font-semibold">No items added yet</p>
+                              <p className="text-sm text-muted-foreground mb-4">
+                                Start by adding your first gradebook item
+                              </p>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="font-semibold shadow-sm hover:shadow-md transition-all"
+                                onClick={() => handleOpenItemModal(gradingPeriod)}
+                              >
+                                <PlusIcon className="w-4 h-4 mr-2" />
+                                Add First Item
+                              </Button>
                             </div>
-
-                            {/* Details List */}
-                            <div className="space-y-2">
-                              {item.gradebook_item_details.map((detail) => (
-                                <div
-                                  key={detail.id}
-                                  className="flex items-center justify-between p-3 border rounded-md bg-muted/30"
-                                >
-                                  <div className="flex-1">
-                                    <p className="font-medium">{detail.title}</p>
-                                    <p className="text-sm text-muted-foreground">
-                                      Score Range: {detail.min_score} - {detail.max_score} | Weight:{' '}
-                                      {detail.weight}%
-                                    </p>
-                                  </div>
-                                  <div className="flex gap-1">
-                                    <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      onClick={() => itemDetailController.openFn(detail)}
-                                    >
-                                      <EditIcon className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      onClick={() => handleDeleteItemDetail(detail)}
-                                    >
-                                      <DeleteIcon className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </CardContent>
-                      ) : (
-                        <CardContent>
-                          <div className="text-center py-8 text-muted-foreground">
-                            <p className="mb-2">No details added yet</p>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                itemDetailController.openFn({ gradebook_item_id: item.id } as any);
-                              }}
+                          ) : (
+                            <Tabs
+                              defaultValue={periodActiveTab}
+                              value={periodActiveTab}
+                              className="w-full"
+                              onValueChange={(val) =>
+                                handleTabChange(gradingPeriod.id as number, val)
+                              }
                             >
-                              <PlusIcon className="w-4 h-4 mr-2" />
-                              Add Detail
-                            </Button>
-                          </div>
+                              <TabsList className="w-full flex-wrap overflow-x-auto h-auto gap-2 flex bg-muted/80 rounded-xl p-2 shadow-inner">
+                                {gpItems.map((item) => (
+                                  <TabsTrigger
+                                    key={item.id}
+                                    value={item.id?.toString() || ''}
+                                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg text-sm px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 hover:bg-muted"
+                                  >
+                                    <span className="truncate">{item.title}</span>
+                                    <span className="ml-2 text-xs opacity-80 font-bold">
+                                      {item.weight}%
+                                    </span>
+                                  </TabsTrigger>
+                                ))}
+                              </TabsList>
+                              {gpItems.map((item) => {
+                                const itemDetails = (item.gradebook_item_details ||
+                                  []) as GradeBookItemDetail[];
+                                const itemDetailsTotalWeight = getItemDetailsTotalWeight(item);
+                                const isItemDetailsWeightComplete = itemDetailsTotalWeight === 100;
+
+                                return (
+                                  <TabsContent
+                                    key={item.id}
+                                    value={item.id?.toString() || ''}
+                                    className="mt-6"
+                                  >
+                                    <Card className="!shadow-none !border-2 p-0 bg-muted/20 rounded-xl">
+                                      <CardHeader className="flex flex-row items-start justify-between pb-4 px-6 pt-6">
+                                        <div className="flex-1">
+                                          <CardTitle className="flex items-center gap-3 text-lg font-bold">
+                                            <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                                              <FileText className="h-4 w-4 text-primary" />
+                                            </div>
+                                            <span>{item.title}</span>
+                                            <span className="text-sm font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                                              {item.weight}%
+                                            </span>
+                                          </CardTitle>
+                                          <CardDescription className="text-sm mt-2 ml-11 flex items-center gap-1.5">
+                                            <FileText className="h-3.5 w-3.5" />
+                                            {itemDetails?.length || 0} detail
+                                            {itemDetails?.length !== 1 ? 's' : ''}
+                                          </CardDescription>
+                                        </div>
+                                        <Menu
+                                          items={[
+                                            {
+                                              label: 'Add Detail',
+                                              icon: <PlusIcon />,
+                                              variant: 'default',
+                                              onClick: () => {
+                                                itemDetailController.openFn({
+                                                  gradebook_item_id: item.id,
+                                                } as any);
+                                              },
+                                              disabled: itemDetailsTotalWeight >= 100,
+                                            },
+                                            {
+                                              label: 'Edit Item',
+                                              icon: <EditIcon />,
+                                              variant: 'default',
+                                              onClick: () => itemController.openFn(item),
+                                            },
+                                            {
+                                              label: 'Delete Item',
+                                              icon: <DeleteIcon />,
+                                              variant: 'destructive',
+                                              onClick: () => handleDeleteItem(item),
+                                            },
+                                          ]}
+                                          trigger={
+                                            <Button
+                                              variant="ghost"
+                                              size="icon"
+                                              className="rounded-xl hover:bg-primary/10 transition-colors"
+                                            >
+                                              <EllipsisIcon />
+                                            </Button>
+                                          }
+                                        />
+                                      </CardHeader>
+
+                                      {itemDetails.length > 0 ? (
+                                        <CardContent className="px-6 pb-6">
+                                          <div className="mb-6 rounded-xl bg-muted/80 p-5 shadow-md border-2 border-muted">
+                                            <div className="flex items-center justify-between gap-4 mb-3">
+                                              <div>
+                                                <p className="text-base font-bold flex items-center gap-2">
+                                                  <TrendingUp className="h-4 w-4 text-primary" />
+                                                  Details Weight Summary
+                                                </p>
+                                                <p className="text-xs text-muted-foreground mt-1">
+                                                  Combined weight of all details
+                                                </p>
+                                              </div>
+                                              <div className="text-right">
+                                                <span
+                                                  className={`text-2xl font-black px-3 py-1.5 rounded-xl inline-flex items-center gap-2 shadow-sm
+                                                  ${
+                                                    isItemDetailsWeightComplete
+                                                      ? 'text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-400'
+                                                      : 'text-amber-700 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400'
+                                                  }`}
+                                                >
+                                                  {isItemDetailsWeightComplete ? (
+                                                    <CheckCircle2 className="h-5 w-5" />
+                                                  ) : (
+                                                    <AlertCircle className="h-5 w-5" />
+                                                  )}
+                                                  {itemDetailsTotalWeight.toFixed(1)}%
+                                                </span>
+                                                <div className="text-xs mt-2 font-semibold">
+                                                  {isItemDetailsWeightComplete ? (
+                                                    <span className="text-green-700 dark:text-green-400">
+                                                      ✓ Complete
+                                                    </span>
+                                                  ) : (
+                                                    <span className="text-amber-700 dark:text-amber-400">
+                                                      {(100 - itemDetailsTotalWeight).toFixed(1)}%
+                                                      remaining
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div className="w-full bg-background/50 rounded-full h-2.5 overflow-hidden shadow-inner">
+                                              <div
+                                                className={`h-full rounded-full transition-all duration-500 ${isItemDetailsWeightComplete ? 'bg-green-500' : 'bg-amber-500'}`}
+                                                style={{
+                                                  width: `${Math.min(itemDetailsTotalWeight, 100)}%`,
+                                                }}
+                                              />
+                                            </div>
+                                            {!isItemDetailsWeightComplete && (
+                                              <div className="mt-3 flex items-center gap-2 p-2.5 bg-amber-50 dark:bg-amber-950/40 rounded-lg text-amber-800 dark:text-amber-300 text-xs border border-amber-200 dark:border-amber-800">
+                                                <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                                                <span className="font-medium">
+                                                  Details weight should equal 100%
+                                                </span>
+                                              </div>
+                                            )}
+                                          </div>
+
+                                          <div className="space-y-3">
+                                            {itemDetails.map((detail) => (
+                                              <div
+                                                key={detail.id}
+                                                className="flex items-center justify-between p-4 rounded-xl bg-background border-2 shadow-md hover:shadow-lg transition-all duration-200 hover:border-primary/30"
+                                              >
+                                                <div className="flex-1">
+                                                  <p className="font-bold truncate max-w-xs text-base mb-1.5">
+                                                    {detail.title}
+                                                  </p>
+                                                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                                                    <span className="flex items-center gap-1.5 bg-muted px-2.5 py-1 rounded-lg">
+                                                      <span className="text-xs font-medium">
+                                                        Range:
+                                                      </span>
+                                                      <span className="font-bold text-foreground">
+                                                        {detail.min_score} - {detail.max_score}
+                                                      </span>
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5 bg-primary/10 px-2.5 py-1 rounded-lg">
+                                                      <span className="text-xs font-medium">
+                                                        Weight:
+                                                      </span>
+                                                      <span className="font-bold text-primary">
+                                                        {detail.weight}%
+                                                      </span>
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <div className="flex gap-2 ml-3">
+                                                  <Button
+                                                    variant="outline"
+                                                    size="icon"
+                                                    title="Edit Detail"
+                                                    className="rounded-xl hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors"
+                                                    onClick={() =>
+                                                      itemDetailController.openFn(detail)
+                                                    }
+                                                  >
+                                                    <EditIcon className="w-4 h-4" />
+                                                  </Button>
+                                                  <Button
+                                                    variant="outline"
+                                                    size="icon"
+                                                    title="Delete Detail"
+                                                    className="rounded-xl hover:bg-destructive/10 hover:text-destructive hover:border-destructive transition-colors"
+                                                    onClick={() => handleDeleteItemDetail(detail)}
+                                                  >
+                                                    <DeleteIcon className="w-4 h-4" />
+                                                  </Button>
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </CardContent>
+                                      ) : (
+                                        <CardContent className="px-6 pb-6">
+                                          <div className="flex flex-col items-center py-12 text-muted-foreground border-2 border-dashed rounded-xl bg-muted/20">
+                                            <div className="h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                                              <FileText className="h-8 w-8 text-primary" />
+                                            </div>
+                                            <p className="mb-1 text-lg font-semibold">
+                                              No details added yet
+                                            </p>
+                                            <p className="text-sm text-muted-foreground mb-4">
+                                              Add details to break down this item
+                                            </p>
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              className="font-semibold shadow-sm hover:shadow-md transition-all"
+                                              onClick={() =>
+                                                itemDetailController.openFn({
+                                                  gradebook_item_id: item.id,
+                                                } as any)
+                                              }
+                                            >
+                                              <PlusIcon className="w-4 h-4 mr-2" />
+                                              Add First Detail
+                                            </Button>
+                                          </div>
+                                        </CardContent>
+                                      )}
+                                    </Card>
+                                  </TabsContent>
+                                );
+                              })}
+                            </Tabs>
+                          )}
                         </CardContent>
-                      )}
-                    </Card>
-                  </TabsContent>
+                      </Card>
+                    </AccordionContent>
+                  </AccordionItem>
                 );
               })}
-            </Tabs>
+            </Accordion>
           )}
         </div>
       </div>
 
-      <GradebookItemModal
-        controller={itemController}
-        gradebookId={parsedGradebookId ?? 0}
+      <GradebookGradingPeriodModal
+        controller={gradingPeriodController}
         onSubmit={() => refetch()}
       />
+
+      <GradebookItemModal controller={itemController} onSubmit={() => refetch()} />
 
       <GradebookItemDetailModal controller={itemDetailController} onSubmit={() => refetch()} />
     </TitledPage>

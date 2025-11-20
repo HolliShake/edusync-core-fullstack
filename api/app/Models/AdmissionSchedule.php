@@ -13,7 +13,8 @@ use OpenApi\Attributes as OA;
     required: [
         // Override required
         'school_year_id',
-        'campus_id',
+        'academic_program_id',
+        'intake_limit',
         'start_date',
         'end_date',
     ],
@@ -21,14 +22,15 @@ use OpenApi\Attributes as OA;
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "school_year_id", type: "integer"),
-        new OA\Property(property: "campus_id", type: "integer"),
+        new OA\Property(property: "academic_program_id", type: "integer"),
+        new OA\Property(property: "intake_limit", type: "integer"),
         new OA\Property(property: "start_date", type: "string", format: "date"),
         new OA\Property(property: "end_date", type: "string", format: "date"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Relationships
         new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
-        new OA\Property(property: "campus", ref: "#/components/schemas/Campus"),
+        new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
     ]
 )]
 
@@ -108,7 +110,8 @@ class AdmissionSchedule extends Model
 
     protected $fillable = [
         'school_year_id',
-        'campus_id',
+        'academic_program_id',
+        'intake_limit',
         'start_date',
         'end_date',
     ];
@@ -117,18 +120,19 @@ class AdmissionSchedule extends Model
         'start_date'     => 'date',
         'end_date'       => 'date',
         'school_year_id' => 'integer',
-        'campus_id'      => 'integer',
+        'academic_program_id' => 'integer',
+        'intake_limit' => 'integer',
     ];
 
     protected $appends = [
         'school_year',
-        'campus',
+        'academic_program',
     ];
 
     /**
      * Get the school year that owns the admission schedule.
      *
-     * @return Campus
+     * @return SchoolYear
      */
     public function getSchoolYearAttribute(): SchoolYear
     {
@@ -136,13 +140,13 @@ class AdmissionSchedule extends Model
     }
 
     /**
-     * Get the campus that owns the admission schedule.
+     * Get the academic program that owns the admission schedule.
      *
-     * @return Campus
+     * @return AcademicProgram
      */
-    public function getCampusAttribute(): Campus
+    public function getAcademicProgramAttribute(): AcademicProgram
     {
-        return $this->campus()->first();
+        return $this->academicProgram()->first();
     }
 
     /**
@@ -156,12 +160,12 @@ class AdmissionSchedule extends Model
     }
 
     /**
-     * Get the campus that owns the admission schedule.
+     * Get the academic program that owns the admission schedule.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function campus(): BelongsTo
+    public function academicProgram(): BelongsTo
     {
-        return $this->belongsTo(Campus::class);
+        return $this->belongsTo(AcademicProgram::class);
     }
 }

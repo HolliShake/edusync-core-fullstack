@@ -2,6 +2,7 @@ import { UserRoleEnum } from '@/enums/role-enum';
 import ProgramChairAdmissionApplication from '@/pages/program-chair/admission/application/page';
 import ProgramChairAdmissionApplicationStatus from '@/pages/program-chair/admission/application/status/page';
 import ProgramChairAdmissionEvaluation from '@/pages/program-chair/admission/evaluation/page';
+import ProgramChairAdmissionSchedule from '@/pages/program-chair/admission/schedule/page';
 import ProgramChairCurriculumDetail from '@/pages/program-chair/curriculum/curriculum-detail/page';
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
 import ProgramChairCurriculumStudent from '@/pages/program-chair/curriculum/student/page';
@@ -16,6 +17,7 @@ import type { Route } from '@/types/route';
 import {
   BarChartIcon,
   BookOpenIcon,
+  CalendarIcon,
   CheckCircleIcon,
   ClipboardListIcon,
   FileTextIcon,
@@ -38,6 +40,16 @@ const PROGRAM_CHAIR: Route[] = [
     path: '/program-chair/admission',
     icon: <GraduationCapIcon className="h-4 w-4" />,
     children: [
+      {
+        key: 'program-chair.admission.schedule',
+        title: 'Schedule',
+        path: '/program-chair/admission/schedule',
+        component: <ProgramChairAdmissionSchedule />,
+        icon: <CalendarIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.PROGRAM_CHAIR],
+      },
       {
         key: 'program-chair.admission.application',
         title: 'Application',

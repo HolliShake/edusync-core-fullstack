@@ -5,14 +5,14 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { GradeBook } from './gradeBook';
+import type { GradeBookGradingPeriod } from './gradeBookGradingPeriod';
 import type { GradeBookItemDetail } from './gradeBookItemDetail';
 
 export interface GradeBookItem {
   readonly id?: number;
-  gradebook_id: number;
+  gradebook_grading_period_id: number;
   title: string;
   weight: number;
-  gradebook?: GradeBook;
+  gradebook_grading_period?: GradeBookGradingPeriod;
   gradebook_item_details?: GradeBookItemDetail[];
 }

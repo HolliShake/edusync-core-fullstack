@@ -4,91 +4,98 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCreateGradeBookItem, useUpdateGradeBookItem } from '@rest/api';
-import type { GradeBookItem } from '@rest/models';
+import { useCreateGradeBookGradingPeriod, useUpdateGradeBookGradingPeriod } from '@rest/api';
+import type { GradeBookGradingPeriod } from '@rest/models';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const gradebookItemSchema = z.object({
+const gradingPeriodSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  weight: z.number().min(0, 'Weight must be at least 0').max(100, 'Weight cannot exceed 100'),
+  weight: z
+    .number({ error: 'Weight must be a number' })
+    .min(0, 'Weight must be at least 0')
+    .max(100, 'Weight cannot exceed 100'),
 });
 
-type GradebookItemFormData = z.infer<typeof gradebookItemSchema>;
+type GradingPeriodFormData = z.infer<typeof gradingPeriodSchema>;
 
-interface GradebookItemModalProps {
-  controller: ModalState<GradeBookItem>;
+interface GradebookGradingPeriodModalProps {
+  controller: ModalState<GradeBookGradingPeriod>;
   onSubmit: () => void;
 }
 
-export default function GradebookItemModal({ controller, onSubmit }: GradebookItemModalProps) {
+export default function GradebookGradingPeriodModal({
+  controller,
+  onSubmit,
+}: GradebookGradingPeriodModalProps) {
   const {
     register,
     handleSubmit,
     reset,
     setError,
     formState: { errors },
-  } = useForm<GradebookItemFormData>({
-    resolver: zodResolver(gradebookItemSchema),
+  } = useForm<GradingPeriodFormData>({
+    resolver: zodResolver(gradingPeriodSchema),
     defaultValues: {
       title: '',
       weight: 0,
     },
   });
 
-  const { mutateAsync: createGradeBookItem, isPending } = useCreateGradeBookItem();
-  const { mutateAsync: updateGradeBookItem, isPending: isUpdating } = useUpdateGradeBookItem();
+  const { mutateAsync: createGradingPeriod, isPending } = useCreateGradeBookGradingPeriod();
+  const { mutateAsync: updateGradingPeriod, isPending: isUpdating } =
+    useUpdateGradeBookGradingPeriod();
 
-  const isSaving = useMemo(() => isPending || isUpdating, [isPending, isUpdating]);
   const isEdit = useMemo(() => !!controller.data?.id, [controller.data]);
+  const isSaving = useMemo(() => isPending || isUpdating, [isPending, isUpdating]);
 
-  const onFormSubmit = async (data: GradebookItemFormData) => {
+  const onFormSubmit = async (data: GradingPeriodFormData) => {
     try {
-      const payload: GradeBookItem = {
+      const payload: GradeBookGradingPeriod = {
         title: data.title,
         weight: data.weight,
-        gradebook_grading_period_id: controller.data?.gradebook_grading_period_id || 0,
+        gradebook_id: controller.data?.gradebook_id || 0,
       };
-
       if (isEdit && controller.data?.id) {
-        await updateGradeBookItem({
+        await updateGradingPeriod({
           id: controller.data.id,
           data: payload,
         });
-        toast.success('Gradebook item updated successfully');
+        toast.success('Grading period updated successfully');
       } else {
-        await createGradeBookItem({
+        await createGradingPeriod({
           data: payload,
         });
-        toast.success('Gradebook item created successfully');
+        toast.success('Grading period created successfully');
       }
       controller.closeFn();
       onSubmit();
     } catch (error) {
       renderError(error, setError);
-      toast.error(`Failed to ${isEdit ? 'update' : 'create'} gradebook item`);
+      toast.error(`Failed to ${isEdit ? 'update' : 'create'} grading period`);
     }
   };
 
   useEffect(() => {
     if (!controller.data) {
-      return reset({
+      reset({
         title: '',
         weight: 0,
       });
+      return;
     }
     reset({
-      title: controller.data.title || '',
-      weight: controller.data.weight || 0,
+      title: controller.data.title ?? '',
+      weight: Number(controller.data.weight ?? 0),
     });
   }, [controller.isOpen, controller.data, reset]);
 
   return (
     <Modal
       controller={controller}
-      title={`${isEdit ? 'Edit' : 'Add'} Gradebook Item`}
+      title={`${isEdit ? 'Edit' : 'Create'} Grading Period`}
       size="md"
       closable
     >
@@ -97,35 +104,32 @@ export default function GradebookItemModal({ controller, onSubmit }: GradebookIt
           <Label htmlFor="title">Title</Label>
           <Input
             id="title"
-            placeholder="e.g., Midterm Exam, Quizzes, Projects"
+            placeholder="Enter grading period title"
             {...register('title')}
-            disabled={isSaving}
+            autoFocus
+            autoComplete="off"
           />
           {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
         </div>
-
         <div className="space-y-2">
           <Label htmlFor="weight">Weight (%)</Label>
           <Input
             id="weight"
             type="number"
-            step="0.01"
-            placeholder="e.g., 30"
+            min={0}
+            max={100}
+            step={0.01}
+            placeholder="E.g., 20"
             {...register('weight', { valueAsNumber: true })}
-            disabled={isSaving}
           />
           {errors.weight && <p className="text-sm text-destructive">{errors.weight.message}</p>}
-          <p className="text-xs text-muted-foreground">
-            Total weight of all items should equal 100%
-          </p>
         </div>
-
-        <div className="flex justify-end gap-2 pt-4">
-          <Button type="button" variant="outline" onClick={controller.closeFn} disabled={isSaving}>
+        <div className="flex justify-end space-x-2 pt-4">
+          <Button type="button" variant="outline" onClick={controller.closeFn}>
             Cancel
           </Button>
           <Button type="submit" disabled={isSaving}>
-            {isSaving ? 'Saving...' : isEdit ? 'Update' : 'Add'}
+            {isSaving ? 'Saving...' : isEdit ? 'Update Grading Period' : 'Create Grading Period'}
           </Button>
         </div>
       </form>

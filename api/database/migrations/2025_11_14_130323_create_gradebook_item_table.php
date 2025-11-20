@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             // Fk
-            $table->foreignId('gradebook_id')
-                ->constrained('gradebook')
+            $table->foreignId('gradebook_grading_period_id')
+                ->constrained('gradebook_grading_period')
                 ->onDelete('cascade');
             // Field
             $table->string('title');
             $table->decimal('weight', 10, 2);
 
             // Unique
-            $table->unique(['gradebook_id', 'title'], 'gradebook_item_unique');
+            $table->unique(['gradebook_grading_period_id', 'title'], 'gradebook_item_unique');
         });
     }
 

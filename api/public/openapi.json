@@ -9860,6 +9860,350 @@
                 }
             }
         },
+        "\/api\/GradeBookGradingPeriod": {
+            "get": {
+                "tags": [
+                    "GradeBookGradingPeriod"
+                ],
+                "summary": "Get paginated list of GradeBookGradingPeriod",
+                "description": "Retrieve a paginated list of GradeBookGradingPeriod with optional search",
+                "operationId": "getGradeBookGradingPeriodPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedGradeBookGradingPeriodResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "GradeBookGradingPeriod"
+                ],
+                "summary": "Create a new GradeBookGradingPeriod",
+                "description": " Create a new GradeBookGradingPeriod with the provided details",
+                "operationId": "createGradeBookGradingPeriod",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "GradeBookGradingPeriod created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateGradeBookGradingPeriodResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/GradeBookGradingPeriod\/{id}": {
+            "get": {
+                "tags": [
+                    "GradeBookGradingPeriod"
+                ],
+                "summary": "Get a specific GradeBookGradingPeriod",
+                "description": "Retrieve a GradeBookGradingPeriod by its ID",
+                "operationId": "getGradeBookGradingPeriodById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetGradeBookGradingPeriodResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "GradeBookGradingPeriod not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "GradeBookGradingPeriod"
+                ],
+                "summary": "Update a GradeBookGradingPeriod",
+                "description": "Update an existing GradeBookGradingPeriod with the provided details",
+                "operationId": "updateGradeBookGradingPeriod",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "GradeBookGradingPeriod updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateGradeBookGradingPeriodResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "GradeBookGradingPeriod not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "GradeBookGradingPeriod"
+                ],
+                "summary": "Delete a GradeBookGradingPeriod",
+                "description": "Delete a GradeBookGradingPeriod by its ID",
+                "operationId": "deleteGradeBookGradingPeriod",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "GradeBookGradingPeriod deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteGradeBookGradingPeriodResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "GradeBookGradingPeriod not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/GradeBookItem": {
             "get": {
                 "tags": [
@@ -17647,10 +17991,10 @@
                     "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
                     },
-                    "gradebook_items": {
+                    "gradebook_grading_periods": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/components\/schemas\/GradeBookItem"
+                            "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
                         }
                     }
                 },
@@ -17760,8 +18104,8 @@
                 },
                 "type": "object"
             },
-            "GradeBookItem": {
-                "title": "GradeBookItem",
+            "GradeBookGradingPeriod": {
+                "title": "GradeBookGradingPeriod",
                 "required": [
                     "title",
                     "weight",
@@ -17777,7 +18121,7 @@
                     },
                     "title": {
                         "type": "string",
-                        "example": "Gradebook Item 1"
+                        "example": "Grading Period 1"
                     },
                     "weight": {
                         "type": "number",
@@ -17785,6 +18129,145 @@
                     },
                     "gradebook": {
                         "$ref": "#\/components\/schemas\/GradeBook"
+                    },
+                    "gradebook_items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/GradeBookItem"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedGradeBookGradingPeriod": {
+                "title": "PaginatedGradeBookGradingPeriod",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedGradeBookGradingPeriodResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedGradeBookGradingPeriod"
+                    }
+                },
+                "type": "object"
+            },
+            "GetGradeBookGradingPeriodResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                    }
+                },
+                "type": "object"
+            },
+            "GetGradeBookGradingPeriodsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateGradeBookGradingPeriodResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateGradeBookGradingPeriodResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteGradeBookGradingPeriodResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "GradeBookItem": {
+                "title": "GradeBookItem",
+                "required": [
+                    "title",
+                    "weight",
+                    "gradebook_grading_period_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "gradebook_grading_period_id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Gradebook Item 1"
+                    },
+                    "weight": {
+                        "type": "number",
+                        "example": 100
+                    },
+                    "gradebook_grading_period": {
+                        "$ref": "#\/components\/schemas\/GradeBookGradingPeriod"
                     },
                     "gradebook_item_details": {
                         "type": "array",
@@ -19305,6 +19788,10 @@
         {
             "name": "GradeBook",
             "description": "GradeBook"
+        },
+        {
+            "name": "GradeBookGradingPeriod",
+            "description": "GradeBookGradingPeriod"
         },
         {
             "name": "GradeBookItem",

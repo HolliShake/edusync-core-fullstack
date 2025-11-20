@@ -11,21 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admission_schedule', function (Blueprint $table) {
+        Schema::create('gradebook_grading_period', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             // Fk
-            $table->foreignId('school_year_id')
-                ->constrained('school_year')
-                ->onDelete('cascade');
-            // Fk
-            $table->foreignId('academic_program_id')
-                ->constrained('academic_program')
+            $table->foreignId('gradebook_id')
+                ->constrained('gradebook')
                 ->onDelete('cascade');
             // Field
-            $table->integer('intake_limit');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->string('title');
+            $table->decimal('weight', 10, 2);
+
+            // Unique
+            $table->unique(['gradebook_id', 'title'], 'gradebook_grading_period_unique');
         });
     }
 
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admission_schedule');
+        Schema::dropIfExists('gradebook_grading_period');
     }
 };

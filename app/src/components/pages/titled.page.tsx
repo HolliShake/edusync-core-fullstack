@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 interface TitledPagedProps {
-  title: string;
+  title: string | React.ReactNode;
   description?: string;
   breadcrumb?: BreadcrumbProps[];
   children: React.ReactNode;

@@ -7,7 +7,7 @@
  */
 import type { Section } from './section';
 import type { AcademicProgram } from './academicProgram';
-import type { GradeBookItem } from './gradeBookItem';
+import type { GradeBookGradingPeriod } from './gradeBookGradingPeriod';
 
 export interface GradeBook {
   readonly id?: number;
@@ -20,5 +20,5 @@ export interface GradeBook {
   fully_setup?: boolean;
   section?: Section;
   academic_program?: AcademicProgram;
-  gradebook_items?: GradeBookItem[];
+  gradebook_grading_periods?: GradeBookGradingPeriod[];
 }
