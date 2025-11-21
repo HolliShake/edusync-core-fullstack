@@ -35,7 +35,11 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "effective_year", type: "integer", example: 2024),
         new OA\Property(property: "total_units", type: "integer", example: 120),
         new OA\Property(property: "total_hours", type: "integer", example: 2400),
-        new OA\Property(property: "status", type: "string", enum: CurriculumStateEnum::class, readOnly: true),
+        new OA\Property(
+            property: "status",
+            ref: "#/components/schemas/CurriculumStateEnum",
+            readOnly: true,
+        ),
         new OA\Property(property: "approved_date", type: "string", format: "date", nullable: true, example: "2024-01-15"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T12:00:00Z"),

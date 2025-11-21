@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { decryptIdFromUrl } from '@/lib/hash';
 import { useDeleteCourseRequisite, useGetCourseRequisitePaginated } from '@rest/api';
-import { CourseRequisiteRequisiteType, type CourseRequisite } from '@rest/models';
+import { CourseRequisiteTypeEnum, type CourseRequisite } from '@rest/models';
 import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
@@ -131,7 +131,7 @@ export default function AdminCourseRequisites(): React.ReactNode {
           controller.openFn({
             course_id: decryptedCourseId as number,
             requisite_course_id: 0,
-            requisite_type: CourseRequisiteRequisiteType.co,
+            requisite_type: CourseRequisiteTypeEnum.co,
           })
         }
       >

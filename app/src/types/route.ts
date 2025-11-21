@@ -1,4 +1,4 @@
-import type { UserRole } from '@/enums/role-enum';
+import { UserRoleEnum } from '@rest/models';
 import type React from 'react';
 
 export interface Route {
@@ -12,5 +12,5 @@ export interface Route {
   sidebar?: boolean;
   children?: Route[];
   type?: 'menu' | 'label';
-  roles?: UserRole[] | undefined;
+  roles?: UserRoleEnum[] | undefined;
 }

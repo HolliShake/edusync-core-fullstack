@@ -2,6 +2,14 @@
 
 namespace App\Enum;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "RequirementTypeEnum",
+    title: "RequirementTypeEnum",
+    type: "string",
+    enum: RequirementTypeEnum::class,
+)]
 enum RequirementTypeEnum: string
 {
     case ADMISSION = 'admission';

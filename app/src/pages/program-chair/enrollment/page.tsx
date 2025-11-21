@@ -1,14 +1,13 @@
 import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserRoleEnum } from '@/enums/role-enum';
 import EnrollmentGenericTab from '@/views/shared/enrollment-generic.tab';
-import { EnrollmentLogAction } from '@rest/models';
+import { EnrollmentLogActionEnum, UserRoleEnum } from '@rest/models';
 import React, { useEffect, useMemo, useState } from 'react';
 
 export default function ProgramChairEnrollment(): React.ReactNode {
-  const [selectedTab, setSelectedTab] = useState<EnrollmentLogAction>(() => {
+  const [selectedTab, setSelectedTab] = useState<EnrollmentLogActionEnum>(() => {
     const saved = sessionStorage.getItem(window.location.pathname + '_tab');
-    return saved ? (saved as EnrollmentLogAction) : EnrollmentLogAction.enroll;
+    return saved ? (saved as EnrollmentLogActionEnum) : EnrollmentLogActionEnum.enroll;
   });
 
   useEffect(() => {
@@ -19,23 +18,23 @@ export default function ProgramChairEnrollment(): React.ReactNode {
     () => [
       {
         label: 'Pending Enrollment',
-        value: EnrollmentLogAction.enroll,
+        value: EnrollmentLogActionEnum.enroll,
       },
       {
         label: 'Pending Drop',
-        value: EnrollmentLogAction.dropped,
+        value: EnrollmentLogActionEnum.dropped,
       },
       {
         label: 'Recently Approved',
-        value: EnrollmentLogAction.program_chair_approved,
+        value: EnrollmentLogActionEnum.program_chair_approved,
       },
       {
         label: 'Recently Dropped',
-        value: EnrollmentLogAction.program_chair_dropped_approved,
+        value: EnrollmentLogActionEnum.program_chair_dropped_approved,
       },
       {
         label: 'Rejected',
-        value: EnrollmentLogAction.rejected,
+        value: EnrollmentLogActionEnum.rejected,
       },
     ],
     []
@@ -44,7 +43,7 @@ export default function ProgramChairEnrollment(): React.ReactNode {
     <TitledPage title="Enrollment" description="Manage student enrollments">
       <Tabs
         value={selectedTab}
-        onValueChange={(value: string) => setSelectedTab(value as EnrollmentLogAction)}
+        onValueChange={(value: string) => setSelectedTab(value as EnrollmentLogActionEnum)}
       >
         <TabsList>
           {tabs.map((tab) => (
@@ -61,11 +60,11 @@ export default function ProgramChairEnrollment(): React.ReactNode {
         {tabs.map((tab) => (
           <TabsContent key={tab.value} value={tab.value}>
             <EnrollmentGenericTab
-              role={UserRoleEnum.PROGRAM_CHAIR}
+              role={UserRoleEnum.program_chair}
               status={tab.value}
               needsAction={
-                tab.value === EnrollmentLogAction.enroll ||
-                tab.value === EnrollmentLogAction.dropped
+                tab.value === EnrollmentLogActionEnum.enroll ||
+                tab.value === EnrollmentLogActionEnum.dropped
               }
             />
           </TabsContent>

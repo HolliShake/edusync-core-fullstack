@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enum\CalendarEventEnum;
+use App\Enum\AcademicCalendarEventEnum;
 use Illuminate\Database\Eloquent\Model;
 use OpenApi\Attributes as OA;
 
@@ -27,8 +27,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "school_year_id", type: "integer"),
         new OA\Property(
             property: "event",
-            type: "string",
-            enum: CalendarEventEnum::class,
+            ref: "#/components/schemas/AcademicCalendarEventEnum",
             readOnly: true
         ),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
@@ -123,7 +122,7 @@ class AcademicCalendar extends Model
 
     protected $casts = [
         'school_year_id' => 'integer',
-        'event'          => CalendarEventEnum::class,
+        'event'          => AcademicCalendarEventEnum::class,
     ];
 
     protected $appends = [

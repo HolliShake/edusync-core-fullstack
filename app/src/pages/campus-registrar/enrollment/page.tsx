@@ -1,14 +1,15 @@
 import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserRoleEnum } from '@/enums/role-enum';
 import EnrollmentGenericTab from '@/views/shared/enrollment-generic.tab';
-import { EnrollmentLogAction } from '@rest/models';
+import { EnrollmentLogActionEnum, UserRoleEnum } from '@rest/models';
 import React, { useEffect, useMemo, useState } from 'react';
 
 export default function CampusRegistrarEnrollment(): React.ReactNode {
-  const [selectedTab, setSelectedTab] = useState<EnrollmentLogAction>(() => {
+  const [selectedTab, setSelectedTab] = useState<EnrollmentLogActionEnum>(() => {
     const saved = sessionStorage.getItem(window.location.pathname + '_tab');
-    return saved ? (saved as EnrollmentLogAction) : EnrollmentLogAction.program_chair_approved;
+    return saved
+      ? (saved as EnrollmentLogActionEnum)
+      : EnrollmentLogActionEnum.program_chair_approved;
   });
 
   useEffect(() => {
@@ -19,23 +20,23 @@ export default function CampusRegistrarEnrollment(): React.ReactNode {
     () => [
       {
         label: 'Pending Enrollment Approval',
-        value: EnrollmentLogAction.program_chair_approved,
+        value: EnrollmentLogActionEnum.program_chair_approved,
       },
       {
         label: 'Pending Drop Approval',
-        value: EnrollmentLogAction.program_chair_dropped_approved,
+        value: EnrollmentLogActionEnum.program_chair_dropped_approved,
       },
       {
         label: 'Recently Approved',
-        value: EnrollmentLogAction.registrar_approved,
+        value: EnrollmentLogActionEnum.registrar_approved,
       },
       {
         label: 'Recently Dropped',
-        value: EnrollmentLogAction.registrar_dropped_approved,
+        value: EnrollmentLogActionEnum.registrar_dropped_approved,
       },
       {
         label: 'Rejected',
-        value: EnrollmentLogAction.rejected,
+        value: EnrollmentLogActionEnum.rejected,
       },
     ],
     []
@@ -44,7 +45,7 @@ export default function CampusRegistrarEnrollment(): React.ReactNode {
     <TitledPage title="Enrollment Approval" description="Manage student enrollments">
       <Tabs
         value={selectedTab}
-        onValueChange={(value: string) => setSelectedTab(value as EnrollmentLogAction)}
+        onValueChange={(value: string) => setSelectedTab(value as EnrollmentLogActionEnum)}
       >
         <TabsList>
           {tabs.map((tab) => (
@@ -61,11 +62,11 @@ export default function CampusRegistrarEnrollment(): React.ReactNode {
         {tabs.map((tab) => (
           <TabsContent key={tab.value} value={tab.value}>
             <EnrollmentGenericTab
-              role={UserRoleEnum.CAMPUS_REGISTRAR}
+              role={UserRoleEnum.campus_registrar}
               status={tab.value}
               needsAction={
-                tab.value === EnrollmentLogAction.program_chair_approved ||
-                tab.value === EnrollmentLogAction.program_chair_dropped_approved
+                tab.value === EnrollmentLogActionEnum.program_chair_approved ||
+                tab.value === EnrollmentLogActionEnum.program_chair_dropped_approved
               }
             />
           </TabsContent>

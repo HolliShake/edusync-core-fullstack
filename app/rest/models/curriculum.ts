@@ -5,7 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { CurriculumStatus } from './curriculumStatus';
+import type { CurriculumStateEnum } from './curriculumStateEnum';
 import type { SchoolYear } from './schoolYear';
 import type { AcademicProgram } from './academicProgram';
 import type { AcademicTerm } from './academicTerm';
@@ -22,7 +22,7 @@ export interface Curriculum {
   effective_year: number;
   total_units: number;
   total_hours: number;
-  readonly status: CurriculumStatus;
+  status: CurriculumStateEnum;
   /** @nullable */
   approved_date: string | null;
   created_at?: string;

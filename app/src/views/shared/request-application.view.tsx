@@ -74,7 +74,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { useCreateDocumentRequestLog, useGetDocumentRequestPaginated } from '@rest/api';
-import { DocumentRequestLogAction, type DocumentRequest } from '@rest/models';
+import { DocumentRequestLogActionEnum, type DocumentRequest } from '@rest/models';
 import { AlertCircle, Calendar, Clock, FileText } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
@@ -120,13 +120,13 @@ export default function RequestDocumentView(): React.ReactNode {
       string,
       { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }
     > = {
-      [DocumentRequestLogAction.submitted]: { variant: 'outline', label: 'Submitted' },
-      [DocumentRequestLogAction.paid]: { variant: 'default', label: 'Paid' },
-      [DocumentRequestLogAction.processing]: { variant: 'secondary', label: 'Processing' },
-      [DocumentRequestLogAction.completed]: { variant: 'default', label: 'Completed' },
-      [DocumentRequestLogAction.rejected]: { variant: 'destructive', label: 'Rejected' },
-      [DocumentRequestLogAction.cancelled]: { variant: 'destructive', label: 'Cancelled' },
-      [DocumentRequestLogAction.pickup]: { variant: 'secondary', label: 'Ready for Pickup' },
+      [DocumentRequestLogActionEnum.submitted]: { variant: 'outline', label: 'Submitted' },
+      [DocumentRequestLogActionEnum.paid]: { variant: 'default', label: 'Paid' },
+      [DocumentRequestLogActionEnum.processing]: { variant: 'secondary', label: 'Processing' },
+      [DocumentRequestLogActionEnum.completed]: { variant: 'default', label: 'Completed' },
+      [DocumentRequestLogActionEnum.rejected]: { variant: 'destructive', label: 'Rejected' },
+      [DocumentRequestLogActionEnum.cancelled]: { variant: 'destructive', label: 'Cancelled' },
+      [DocumentRequestLogActionEnum.pickup]: { variant: 'secondary', label: 'Ready for Pickup' },
     };
 
     const config = statusConfig[status?.toLowerCase()] || { variant: 'outline', label: status };
@@ -157,7 +157,7 @@ export default function RequestDocumentView(): React.ReactNode {
           document_request_id: request.id!,
           user_id: session?.id ?? 0,
           note: 'Request cancelled',
-          action: DocumentRequestLogAction.cancelled,
+          action: DocumentRequestLogActionEnum.cancelled,
         },
       });
       refetch();
@@ -236,19 +236,19 @@ export default function RequestDocumentView(): React.ReactNode {
 
   const getStatusColor = (action: string) => {
     switch (action) {
-      case DocumentRequestLogAction.completed:
+      case DocumentRequestLogActionEnum.completed:
         return 'bg-green-500';
-      case DocumentRequestLogAction.paid:
+      case DocumentRequestLogActionEnum.paid:
         return 'bg-emerald-500';
-      case DocumentRequestLogAction.rejected:
+      case DocumentRequestLogActionEnum.rejected:
         return 'bg-red-500';
-      case DocumentRequestLogAction.cancelled:
+      case DocumentRequestLogActionEnum.cancelled:
         return 'bg-gray-500';
-      case DocumentRequestLogAction.submitted:
+      case DocumentRequestLogActionEnum.submitted:
         return 'bg-blue-500';
-      case DocumentRequestLogAction.processing:
+      case DocumentRequestLogActionEnum.processing:
         return 'bg-yellow-500';
-      case DocumentRequestLogAction.pickup:
+      case DocumentRequestLogActionEnum.pickup:
         return 'bg-purple-500';
       default:
         return 'bg-gray-400';
@@ -478,7 +478,7 @@ export default function RequestDocumentView(): React.ReactNode {
                             <span className="text-sm font-medium uppercase">{log.action}</span>
                             {/* Display log user name */}
                             <span className="text-xs text-muted-foreground">
-                              {log.user?.name ? `by ${log.user?.name}` : ""}
+                              {log.user?.name ? `by ${log.user?.name}` : ''}
                             </span>
                           </div>
                           <span className="text-xs text-muted-foreground block mt-1">

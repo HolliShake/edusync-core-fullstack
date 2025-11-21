@@ -15,7 +15,7 @@ class SwaggerGenerate extends Command
         $this->info("Generating Swagger for {$apiType}...");
 
         // Decide which directories to include
-        $directories = 'app/Http/Controllers app/Models';
+        $directories = 'app/Http/Controllers app/Models app/Enum';
         $outputJson = 'public/openapi.json';
         $outputYaml = $apiType === 'mobile' ? 'public/openapi.mobile.yaml' : 'public/openapi.yaml';
 

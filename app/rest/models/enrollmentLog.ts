@@ -5,7 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { EnrollmentLogAction } from './enrollmentLogAction';
+import type { EnrollmentLogActionEnum } from './enrollmentLogActionEnum';
 import type { Enrollment } from './enrollment';
 import type { User } from './user';
 
@@ -13,7 +13,7 @@ export interface EnrollmentLog {
   readonly id?: number;
   enrollment_id: number;
   user_id: number;
-  action: EnrollmentLogAction;
+  action: EnrollmentLogActionEnum;
   /** @nullable */
   note?: string | null;
   readonly created_at?: string;

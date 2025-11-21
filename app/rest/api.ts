@@ -6209,7 +6209,7 @@ export function useGetCurriculumPaginated<TData = Awaited<ReturnType<typeof getC
  * @summary Create a new Curriculum
  */
 export const createCurriculum = (
-    curriculum: NonReadonly<Curriculum>,
+    curriculum: Curriculum,
  signal?: AbortSignal
 ) => {
       
@@ -6225,8 +6225,8 @@ export const createCurriculum = (
 
 
 export const getCreateCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: NonReadonly<Curriculum>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: NonReadonly<Curriculum>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext> => {
 
 const mutationKey = ['createCurriculum'];
 const {mutation: mutationOptions} = options ?
@@ -6238,7 +6238,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCurriculum>>, {data: NonReadonly<Curriculum>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCurriculum>>, {data: Curriculum}> = (props) => {
           const {data} = props ?? {};
 
           return  createCurriculum(data,)
@@ -6250,18 +6250,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof createCurriculum>>>
-    export type CreateCurriculumMutationBody = NonReadonly<Curriculum>
+    export type CreateCurriculumMutationBody = Curriculum
     export type CreateCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Create a new Curriculum
  */
 export const useCreateCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: NonReadonly<Curriculum>}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCurriculum>>, TError,{data: Curriculum}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createCurriculum>>,
         TError,
-        {data: NonReadonly<Curriculum>},
+        {data: Curriculum},
         TContext
       > => {
 
@@ -6365,7 +6365,7 @@ export function useGetCurriculumById<TData = Awaited<ReturnType<typeof getCurric
  */
 export const updateCurriculum = (
     id: number,
-    curriculum: NonReadonly<Curriculum>,
+    curriculum: Curriculum,
  ) => {
       
       
@@ -6380,8 +6380,8 @@ export const updateCurriculum = (
 
 
 export const getUpdateCurriculumMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: NonReadonly<Curriculum>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: NonReadonly<Curriculum>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext> => {
 
 const mutationKey = ['updateCurriculum'];
 const {mutation: mutationOptions} = options ?
@@ -6393,7 +6393,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCurriculum>>, {id: number;data: NonReadonly<Curriculum>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCurriculum>>, {id: number;data: Curriculum}> = (props) => {
           const {id,data} = props ?? {};
 
           return  updateCurriculum(id,data,)
@@ -6405,18 +6405,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof updateCurriculum>>>
-    export type UpdateCurriculumMutationBody = NonReadonly<Curriculum>
+    export type UpdateCurriculumMutationBody = Curriculum
     export type UpdateCurriculumMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Update a Curriculum
  */
 export const useUpdateCurriculum = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: NonReadonly<Curriculum>}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCurriculum>>, TError,{id: number;data: Curriculum}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateCurriculum>>,
         TError,
-        {id: number;data: NonReadonly<Curriculum>},
+        {id: number;data: Curriculum},
         TContext
       > => {
 

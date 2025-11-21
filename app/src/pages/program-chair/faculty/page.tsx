@@ -1,12 +1,12 @@
 import TitledPage from '@/components/pages/titled.page';
-import { UserRoleEnum } from '@/enums/role-enum';
 import CommunityFacultyView from '@/views/shared/community-faculty.view';
+import { UserRoleEnum } from '@rest/models';
 import type React from 'react';
 
 export default function ProgramChairCommunityFaculty(): React.ReactNode {
   return (
     <TitledPage title="Faculties" description="View faculty assignments">
-      <CommunityFacultyView role={UserRoleEnum.PROGRAM_CHAIR} />
+      <CommunityFacultyView role={UserRoleEnum.program_chair} />
     </TitledPage>
   );
 }

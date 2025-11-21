@@ -1,4 +1,3 @@
-import { UserRoleEnum } from '@/enums/role-enum';
 import GuestAdmissionApplications from '@/pages/guest/admission-applications/page';
 import GuestAdmissionApplicationStatus from '@/pages/guest/admission-applications/status/page';
 import GuestAdmissionPage from '@/pages/guest/admission/page';
@@ -7,6 +6,7 @@ import GuestAcceptedAdmission from '@/pages/guest/enrollment/accepted/page';
 import { default as GuestEnrollmentApplications } from '@/pages/guest/enrollment/applications/page';
 import GuestRequestDocument from '@/pages/guest/request/page';
 import type { Route } from '@/types/route';
+import { UserRoleEnum } from '@rest/models';
 import {
   BookOpenIcon,
   ClipboardListIcon,
@@ -24,7 +24,7 @@ const GUEST: Route[] = [
     path: '#',
     layout: 'default',
     type: 'label',
-    roles: [UserRoleEnum.GUEST],
+    roles: [UserRoleEnum.guest],
   },
   {
     key: 'guest.admission',
@@ -39,7 +39,7 @@ const GUEST: Route[] = [
         icon: <MapPinnedIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.GUEST],
+        roles: [UserRoleEnum.guest],
       },
       {
         key: 'guest.admission.applications',
@@ -49,7 +49,7 @@ const GUEST: Route[] = [
         icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.GUEST],
+        roles: [UserRoleEnum.guest],
       },
       {
         key: 'guest.admission.application.status',
@@ -59,13 +59,13 @@ const GUEST: Route[] = [
         icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: false,
-        roles: [UserRoleEnum.GUEST],
+        roles: [UserRoleEnum.guest],
       },
     ],
     icon: <BookOpenIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.GUEST],
+    roles: [UserRoleEnum.guest],
   },
   {
     key: 'guest.enrollment',
@@ -80,7 +80,7 @@ const GUEST: Route[] = [
         icon: <ClipboardListIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.GUEST],
+        roles: [UserRoleEnum.guest],
       },
       {
         key: 'guest.enrollment.accepted.application',
@@ -90,7 +90,7 @@ const GUEST: Route[] = [
         icon: <ScrollIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: false,
-        roles: [UserRoleEnum.GUEST],
+        roles: [UserRoleEnum.guest],
       },
       {
         key: 'guest.enrollment.list',
@@ -100,13 +100,13 @@ const GUEST: Route[] = [
         icon: <ListIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.GUEST],
+        roles: [UserRoleEnum.guest],
       },
     ],
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.GUEST],
+    roles: [UserRoleEnum.guest],
   },
   {
     key: 'guest.settings',
@@ -116,7 +116,7 @@ const GUEST: Route[] = [
     icon: <FileTextIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.GUEST],
+    roles: [UserRoleEnum.guest],
   },
 ];
 

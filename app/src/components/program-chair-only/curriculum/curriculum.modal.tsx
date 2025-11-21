@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
-import { CurriculumStateEnum } from '@/enums/curriculum-state-enum';
 import { renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -14,7 +13,12 @@ import {
   useGetSchoolYearPaginated,
   useUpdateCurriculum,
 } from '@rest/api';
-import type { AcademicTerm, Curriculum, CurriculumStatus, SchoolYear } from '@rest/models';
+import {
+  CurriculumStateEnum,
+  type AcademicTerm,
+  type Curriculum,
+  type SchoolYear,
+} from '@rest/models';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -31,9 +35,9 @@ const curriculumSchema = z.object({
   total_units: z.number().min(0, 'Total units must be non-negative'),
   total_hours: z.number().min(0, 'Total hours must be non-negative'),
   status: z.enum([
-    CurriculumStateEnum.ACTIVE,
-    CurriculumStateEnum.INACTIVE,
-    CurriculumStateEnum.ARCHIVED,
+    CurriculumStateEnum.active,
+    CurriculumStateEnum.inactive,
+    CurriculumStateEnum.archived,
   ]),
   approved_date: z.string().nullable(),
 });
@@ -115,9 +119,9 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
   const schoolYearId = watch('school_year_id');
 
   const statusOptions = [
-    { label: 'Active', value: CurriculumStateEnum.ACTIVE },
-    { label: 'Inactive', value: CurriculumStateEnum.INACTIVE },
-    { label: 'Archived', value: CurriculumStateEnum.ARCHIVED },
+    { label: 'Active', value: CurriculumStateEnum.active },
+    { label: 'Inactive', value: CurriculumStateEnum.inactive },
+    { label: 'Archived', value: CurriculumStateEnum.archived },
   ];
 
   const onFormSubmit = async (data: CurriculumFormData) => {
@@ -159,7 +163,7 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
     }
     reset({
       ...controller.data,
-      status: controller.data?.status as CurriculumStatus,
+      status: controller.data?.status as CurriculumStateEnum,
     } as CurriculumFormData);
   }, [controller.isOpen, controller.data, reset, active_academic_program]);
 
@@ -255,7 +259,7 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
             <Label htmlFor="status">Status</Label>
             <Select
               value={status}
-              onValueChange={(value) => setValue('status', value as any)}
+              onValueChange={(value) => setValue('status', value as CurriculumStateEnum)}
               options={statusOptions}
               placeholder="Select status"
             />

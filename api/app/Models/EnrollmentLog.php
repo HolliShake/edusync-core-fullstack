@@ -24,8 +24,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "user_id", type: "integer"),
         new OA\Property(
             property: "action",
-            type: "string",
-            enum: EnrollmentLogActionEnum::class,
+            ref: "#/components/schemas/EnrollmentLogActionEnum",
         ),
         new OA\Property(property: "note", type: "string", nullable: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),

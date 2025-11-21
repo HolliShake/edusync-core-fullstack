@@ -5,17 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
-import { UserRoleEnum } from '@/enums/role-enum';
 import {
   useGetSchoolYearPaginated,
   useGetSectionTeachersByProgramIdGroupedByTeacherName,
 } from '@rest/api';
-import { UserRole, type SectionTeacher } from '@rest/models';
+import { UserRoleEnum, type SectionTeacher } from '@rest/models';
 import { Building2, GraduationCap, Mail, Search, User, Users } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-export default function CommunityFacultyView({ role }: { role: UserRole }): React.ReactNode {
+export default function CommunityFacultyView({ role }: { role: UserRoleEnum }): React.ReactNode {
   const { session } = useAuth();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -82,7 +81,7 @@ export default function CommunityFacultyView({ role }: { role: UserRole }): Reac
       {
         query: {
           enabled:
-            role === UserRoleEnum.PROGRAM_CHAIR &&
+            role === UserRoleEnum.program_chair &&
             !!selectedSchoolYear &&
             !!session?.active_academic_program,
         },
@@ -100,7 +99,7 @@ export default function CommunityFacultyView({ role }: { role: UserRole }): Reac
       {
         query: {
           enabled:
-            role === UserRoleEnum.CAMPUS_REGISTRAR &&
+            role === UserRoleEnum.campus_registrar &&
             !!selectedSchoolYear &&
             !!session?.active_academic_program,
         },
@@ -108,14 +107,14 @@ export default function CommunityFacultyView({ role }: { role: UserRole }): Reac
     );
 
   const facultyResponse = useMemo(() => {
-    if (role === UserRoleEnum.PROGRAM_CHAIR) return programChairFacultyResponse;
-    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return campusRegistrarFacultyResponse;
+    if (role === UserRoleEnum.program_chair) return programChairFacultyResponse;
+    if (role === UserRoleEnum.campus_registrar) return campusRegistrarFacultyResponse;
     return undefined;
   }, [role, programChairFacultyResponse, campusRegistrarFacultyResponse]);
 
   const isLoading = useMemo(() => {
-    if (role === UserRoleEnum.PROGRAM_CHAIR) return isLoadingProgramChairFaculty;
-    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return isLoadingCampusRegistrarFaculty;
+    if (role === UserRoleEnum.program_chair) return isLoadingProgramChairFaculty;
+    if (role === UserRoleEnum.campus_registrar) return isLoadingCampusRegistrarFaculty;
     return false;
   }, [role, isLoadingProgramChairFaculty, isLoadingCampusRegistrarFaculty]);
 

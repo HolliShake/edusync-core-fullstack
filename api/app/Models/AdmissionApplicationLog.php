@@ -22,7 +22,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "admission_application_id", type: "integer"),
         new OA\Property(property: "user_id", type: "integer"),
-        new OA\Property(property: "type", type: "string", enum: AdmissionApplicationLogTypeEnum::class, readOnly: true),
+        new OA\Property(property: "type", ref: "#/components/schemas/AdmissionApplicationLogTypeEnum", readOnly: true),
         new OA\Property(property: "note", type: "string", nullable: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),

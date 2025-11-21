@@ -6,14 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
-import { UserRoleEnum } from '@/enums/role-enum';
 import { useGetCurriculumTaggingPaginated, useGetSchoolYearPaginated } from '@rest/api';
-import { UserRole, type CurriculumTagging } from '@rest/models';
+import { UserRoleEnum, type CurriculumTagging } from '@rest/models';
 import { Building2, GraduationCap, Mail, Search, User, Users } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-export default function CommunityStudentView({ role }: { role: UserRole }): React.ReactNode {
+export default function CommunityStudentView({ role }: { role: UserRoleEnum }): React.ReactNode {
   const { session } = useAuth();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -71,11 +70,11 @@ export default function CommunityStudentView({ role }: { role: UserRole }): Reac
 
   const { data: students, isLoading } = useGetCurriculumTaggingPaginated(
     {
-      ...(role === UserRoleEnum.PROGRAM_CHAIR
+      ...(role === UserRoleEnum.program_chair
         ? { 'filter[academic_program_id]': session?.active_academic_program ?? 0 }
-        : role === UserRoleEnum.COLLEGE_DEAN
+        : role === UserRoleEnum.college_dean
           ? { 'filter[college_id]': session?.active_college ?? 0 }
-          : role === UserRoleEnum.CAMPUS_REGISTRAR
+          : role === UserRoleEnum.campus_registrar
             ? { 'filter[campus_id]': session?.active_campus ?? 0 }
             : {}),
       ...(debouncedSearchTerm ? { 'filter[search]': debouncedSearchTerm } : {}),

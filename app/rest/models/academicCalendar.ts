@@ -5,7 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { AcademicCalendarEvent } from './academicCalendarEvent';
+import type { AcademicCalendarEventEnum } from './academicCalendarEventEnum';
 import type { SchoolYear } from './schoolYear';
 
 export interface AcademicCalendar {
@@ -16,7 +16,7 @@ export interface AcademicCalendar {
   start_date: string;
   end_date: string;
   school_year_id: number;
-  readonly event: AcademicCalendarEvent;
+  event: AcademicCalendarEventEnum;
   readonly created_at?: string;
   readonly updated_at?: string;
   school_year?: SchoolYear;

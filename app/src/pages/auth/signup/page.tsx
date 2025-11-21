@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UserRoleEnum, type UserRole } from '@/enums/role-enum';
 import { useCreateUser } from '@rest/api';
+import { UserRoleEnum } from '@rest/models';
 import {
   AlertCircle,
   ArrowRight,
@@ -35,7 +35,7 @@ export default function SignupPage(): React.ReactNode {
   const [email, setEmail] = useState('marcusdwaight@gmail.com');
   const [password, setPassword] = useState('test@password');
   const [confirmPassword, setConfirmPassword] = useState('test@password');
-  const [role, setRole] = useState<UserRole | ''>('');
+  const [role, setRole] = useState<UserRoleEnum | ''>('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: signupAttempt } = useCreateUser();
@@ -44,37 +44,37 @@ export default function SignupPage(): React.ReactNode {
   const roleOptions = [
     {
       label: 'Student',
-      value: UserRoleEnum.STUDENT,
+      value: UserRoleEnum.student,
       description: 'Access courses, submit assignments, and track your progress',
     },
     {
       label: 'Faculty',
-      value: UserRoleEnum.FACULTY,
+      value: UserRoleEnum.faculty,
       description: 'Teach courses, grade assignments, and manage student progress',
     },
     {
       label: 'Program Chair',
-      value: UserRoleEnum.PROGRAM_CHAIR,
+      value: UserRoleEnum.program_chair,
       description: 'Oversee program curriculum and coordinate with faculty',
     },
     {
       label: 'College Dean',
-      value: UserRoleEnum.COLLEGE_DEAN,
+      value: UserRoleEnum.college_dean,
       description: 'Manage college operations and academic policies',
     },
     {
       label: 'Specialization Chair',
-      value: UserRoleEnum.SPECIALIZATION_CHAIR,
+      value: UserRoleEnum.specialization_chair,
       description: 'Lead specialized academic programs and initiatives',
     },
     {
       label: 'Campus Scheduler',
-      value: UserRoleEnum.CAMPUS_SCHEDULER,
+      value: UserRoleEnum.campus_scheduler,
       description: 'Coordinate class schedules and room assignments',
     },
     {
       label: 'Campus Registrar',
-      value: UserRoleEnum.CAMPUS_REGISTRAR,
+      value: UserRoleEnum.campus_registrar,
       description: 'Manage student records and enrollment processes',
     },
     // {
@@ -84,12 +84,12 @@ export default function SignupPage(): React.ReactNode {
     // },
     {
       label: 'Guest',
-      value: UserRoleEnum.GUEST,
+      value: UserRoleEnum.guest,
       description: 'Limited access to explore the platform',
     },
   ];
 
-  const handleRoleSelect = (selectedRole: UserRole): void => {
+  const handleRoleSelect = (selectedRole: UserRoleEnum): void => {
     setRole(selectedRole);
     setError(null);
   };
@@ -132,7 +132,7 @@ export default function SignupPage(): React.ReactNode {
           email,
           password,
           confirm_password: confirmPassword,
-          role: role as UserRole,
+          role: role as UserRoleEnum,
         } as any,
       });
 
@@ -232,7 +232,7 @@ export default function SignupPage(): React.ReactNode {
                       <button
                         key={option.value}
                         type="button"
-                        onClick={() => handleRoleSelect(option.value as UserRole)}
+                        onClick={() => handleRoleSelect(option.value as UserRoleEnum)}
                         className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                           role === option.value
                             ? 'border-primary bg-primary/5 shadow-sm'

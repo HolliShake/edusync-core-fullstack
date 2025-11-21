@@ -13,11 +13,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import {
-  EnrollmentLogActionEnum,
-  type EnrollmentLogAction,
-} from '@/enums/enrollment-log-action-enum';
-import { UserRoleEnum } from '@/enums/role-enum';
-import {
   useCreateEnrollmentLog,
   useGetEnrollmentsByAcademicProgramIdGroupedByUser,
   useGetEnrollmentsByCampusIdGroupedByUser,
@@ -26,7 +21,8 @@ import {
   useGetSchoolYearPaginated,
 } from '@rest/api';
 import {
-  UserRole,
+  EnrollmentLogActionEnum,
+  UserRoleEnum,
   type Enrollment,
   type GetScholasticFilterByCampusId200,
   type GetScholasticFilterByProgramId200,
@@ -54,8 +50,8 @@ export default function EnrollmentGenericTab({
   status,
   needsAction = true,
 }: {
-  role: UserRole;
-  status: EnrollmentLogAction;
+  role: UserRoleEnum;
+  status: EnrollmentLogActionEnum;
   needsAction?: boolean;
 }): React.ReactNode {
   const { session } = useAuth();
@@ -86,7 +82,7 @@ export default function EnrollmentGenericTab({
     {
       query: {
         enabled:
-          role === UserRoleEnum.PROGRAM_CHAIR &&
+          role === UserRoleEnum.program_chair &&
           !!schoolYearId &&
           !!session?.active_academic_program,
       },
@@ -102,7 +98,7 @@ export default function EnrollmentGenericTab({
     {
       query: {
         enabled:
-          role === UserRoleEnum.CAMPUS_REGISTRAR && !!schoolYearId && !!session?.active_campus,
+          role === UserRoleEnum.campus_registrar && !!schoolYearId && !!session?.active_campus,
       },
     }
   );
@@ -110,8 +106,8 @@ export default function EnrollmentGenericTab({
   const scholasticFilterResponse = useMemo<
     (GetScholasticFilterByCampusId200 | GetScholasticFilterByProgramId200) | undefined
   >(() => {
-    if (role === UserRoleEnum.PROGRAM_CHAIR) return programChairScholasticFilterResponse;
-    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return campusScholasticFilterResponse;
+    if (role === UserRoleEnum.program_chair) return programChairScholasticFilterResponse;
+    if (role === UserRoleEnum.campus_registrar) return campusScholasticFilterResponse;
     return undefined;
   }, [role, programChairScholasticFilterResponse, campusScholasticFilterResponse]);
 
@@ -132,7 +128,7 @@ export default function EnrollmentGenericTab({
     {
       query: {
         enabled:
-          role === UserRoleEnum.PROGRAM_CHAIR &&
+          role === UserRoleEnum.program_chair &&
           !!schoolYearId &&
           !!session?.active_academic_program &&
           !!yearId &&
@@ -158,7 +154,7 @@ export default function EnrollmentGenericTab({
     {
       query: {
         enabled:
-          role === UserRoleEnum.CAMPUS_REGISTRAR &&
+          role === UserRoleEnum.campus_registrar &&
           !!schoolYearId &&
           !!session?.active_campus &&
           !!yearId &&
@@ -170,8 +166,8 @@ export default function EnrollmentGenericTab({
   const controller = useModal<any>();
 
   const enrollmentResponse = useMemo(() => {
-    if (role === UserRoleEnum.PROGRAM_CHAIR) return programChairEnrollmentResponse;
-    if (role === UserRoleEnum.CAMPUS_REGISTRAR) return campusRegistrarEnrollmentResponse;
+    if (role === UserRoleEnum.program_chair) return programChairEnrollmentResponse;
+    if (role === UserRoleEnum.campus_registrar) return campusRegistrarEnrollmentResponse;
     return undefined;
   }, [role, programChairEnrollmentResponse, campusRegistrarEnrollmentResponse]);
 
@@ -180,8 +176,8 @@ export default function EnrollmentGenericTab({
   }, [isLoadingProgramChairEnrollments, isLoadingCampusRegistrarEnrollments]);
 
   const refetchEnrollments = useCallback(() => {
-    if (role === UserRoleEnum.PROGRAM_CHAIR) refetchProgramChairEnrollments();
-    if (role === UserRoleEnum.CAMPUS_REGISTRAR) refetchCampusRegistrarEnrollments();
+    if (role === UserRoleEnum.program_chair) refetchProgramChairEnrollments();
+    if (role === UserRoleEnum.campus_registrar) refetchCampusRegistrarEnrollments();
   }, [role, refetchProgramChairEnrollments, refetchCampusRegistrarEnrollments]);
 
   const groupedData = useMemo(() => {
@@ -338,17 +334,17 @@ export default function EnrollmentGenericTab({
     }
   };
 
-  const getApprovalAction = (): EnrollmentLogAction => {
+  const getApprovalAction = (): EnrollmentLogActionEnum => {
     // Program Chair only
     if (
-      role == UserRoleEnum.PROGRAM_CHAIR &&
+      role == UserRoleEnum.program_chair &&
       // User applied for enrollment
       status == EnrollmentLogActionEnum.enroll
     )
       return EnrollmentLogActionEnum.program_chair_approved;
 
     if (
-      role == UserRoleEnum.PROGRAM_CHAIR &&
+      role == UserRoleEnum.program_chair &&
       // User requested to drop the course
       status == EnrollmentLogActionEnum.dropped
     )
@@ -358,13 +354,13 @@ export default function EnrollmentGenericTab({
 
     // Campus Registrar only
     if (
-      role == UserRoleEnum.CAMPUS_REGISTRAR &&
+      role == UserRoleEnum.campus_registrar &&
       // Must be approved by program chair first
       status == EnrollmentLogActionEnum.program_chair_approved
     )
       return EnrollmentLogActionEnum.registrar_approved;
     if (
-      role == UserRoleEnum.CAMPUS_REGISTRAR &&
+      role == UserRoleEnum.campus_registrar &&
       // Must be approved by program chair first
       status == EnrollmentLogActionEnum.program_chair_dropped_approved
     )

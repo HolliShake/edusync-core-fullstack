@@ -14166,6 +14166,109 @@
     },
     "components": {
         "schemas": {
+            "AcademicCalendarEventEnum": {
+                "title": "AcademicCalendarEventEnum",
+                "description": "Enum representing key event types in a university academic calendar.\nAdd or refine cases as needed for your institution's requirements.",
+                "type": "string",
+                "enum": [
+                    "REGISTRATION",
+                    "ENROLLMENT",
+                    "ORIENTATION",
+                    "START_OF_CLASSES",
+                    "ACADEMIC_TRANSITION",
+                    "PERIODIC_EXAM",
+                    "END_OF_CLASSES",
+                    "FACULTY_EVALUATION",
+                    "GRADE_SUBMISSION",
+                    "DEADLINE",
+                    "GRADUATION",
+                    "UNIVERSITY_EVENT",
+                    "HOLIDAY",
+                    "OTHER"
+                ]
+            },
+            "AdmissionApplicationLogTypeEnum": {
+                "title": "AdmissionApplicationLogTypeEnum",
+                "type": "string",
+                "enum": [
+                    "submitted",
+                    "cancelled",
+                    "approved",
+                    "rejected",
+                    "accepted"
+                ]
+            },
+            "CourseRequisiteTypeEnum": {
+                "title": "CourseRequisiteTypeEnum",
+                "type": "string",
+                "enum": [
+                    "co",
+                    "pre",
+                    "equivalent"
+                ]
+            },
+            "CurriculumStateEnum": {
+                "title": "CurriculumStateEnum",
+                "type": "string",
+                "enum": [
+                    "active",
+                    "inactive",
+                    "archived"
+                ]
+            },
+            "DocumentRequestLogActionEnum": {
+                "title": "DocumentRequestLogActionEnum",
+                "type": "string",
+                "enum": [
+                    "submitted",
+                    "cancelled",
+                    "paid",
+                    "rejected",
+                    "processing",
+                    "pickup",
+                    "completed"
+                ]
+            },
+            "EnrollmentLogActionEnum": {
+                "title": "EnrollmentLogActionEnum",
+                "type": "string",
+                "enum": [
+                    "enroll",
+                    "program_chair_approved",
+                    "registrar_approved",
+                    "program_chair_dropped_approved",
+                    "registrar_dropped_approved",
+                    "dropped",
+                    "rejected"
+                ]
+            },
+            "RequirementTypeEnum": {
+                "title": "RequirementTypeEnum",
+                "type": "string",
+                "enum": [
+                    "admission",
+                    "graduation",
+                    "enrollment",
+                    "scholarship",
+                    "transfer",
+                    "general"
+                ]
+            },
+            "UserRoleEnum": {
+                "title": "UserRoleEnum",
+                "type": "string",
+                "enum": [
+                    "admin",
+                    "program_chair",
+                    "college_dean",
+                    "specialization_chair",
+                    "campus_scheduler",
+                    "campus_registrar",
+                    "student",
+                    "faculty",
+                    "guest"
+                ]
+            },
             "UnauthenticatedResponse": {
                 "required": [
                     "message"
@@ -14363,24 +14466,7 @@
                         "type": "integer"
                     },
                     "event": {
-                        "type": "string",
-                        "enum": [
-                            "REGISTRATION",
-                            "ENROLLMENT",
-                            "ORIENTATION",
-                            "START_OF_CLASSES",
-                            "ACADEMIC_TRANSITION",
-                            "PERIODIC_EXAM",
-                            "END_OF_CLASSES",
-                            "FACULTY_EVALUATION",
-                            "GRADE_SUBMISSION",
-                            "DEADLINE",
-                            "GRADUATION",
-                            "UNIVERSITY_EVENT",
-                            "HOLIDAY",
-                            "OTHER"
-                        ],
-                        "readOnly": true
+                        "$ref": "#\/components\/schemas\/AcademicCalendarEventEnum"
                     },
                     "created_at": {
                         "type": "string",
@@ -15338,15 +15424,7 @@
                         "type": "integer"
                     },
                     "type": {
-                        "type": "string",
-                        "enum": [
-                            "submitted",
-                            "cancelled",
-                            "approved",
-                            "rejected",
-                            "accepted"
-                        ],
-                        "readOnly": true
+                        "$ref": "#\/components\/schemas\/AdmissionApplicationLogTypeEnum"
                     },
                     "note": {
                         "type": "string",
@@ -16525,13 +16603,7 @@
                         "example": 2
                     },
                     "requisite_type": {
-                        "type": "string",
-                        "enum": [
-                            "co",
-                            "pre",
-                            "equivalent"
-                        ],
-                        "example": "pre"
+                        "$ref": "#\/components\/schemas\/CourseRequisiteTypeEnum"
                     },
                     "created_at": {
                         "type": "string",
@@ -16710,13 +16782,7 @@
                         "example": 2400
                     },
                     "status": {
-                        "type": "string",
-                        "enum": [
-                            "active",
-                            "inactive",
-                            "archived"
-                        ],
-                        "readOnly": true
+                        "$ref": "#\/components\/schemas\/CurriculumStateEnum"
                     },
                     "approved_date": {
                         "type": "string",
@@ -17585,16 +17651,7 @@
                         "example": 1
                     },
                     "action": {
-                        "type": "string",
-                        "enum": [
-                            "submitted",
-                            "cancelled",
-                            "paid",
-                            "rejected",
-                            "processing",
-                            "pickup",
-                            "completed"
-                        ]
+                        "$ref": "#\/components\/schemas\/DocumentRequestLogActionEnum"
                     },
                     "note": {
                         "type": "string",
@@ -18058,16 +18115,7 @@
                         "type": "integer"
                     },
                     "action": {
-                        "type": "string",
-                        "enum": [
-                            "enroll",
-                            "program_chair_approved",
-                            "registrar_approved",
-                            "program_chair_dropped_approved",
-                            "registrar_dropped_approved",
-                            "dropped",
-                            "rejected"
-                        ]
+                        "$ref": "#\/components\/schemas\/EnrollmentLogActionEnum"
                     },
                     "note": {
                         "type": "string",
@@ -18905,16 +18953,7 @@
                         "nullable": true
                     },
                     "requirement_type": {
-                        "type": "string",
-                        "enum": [
-                            "admission",
-                            "graduation",
-                            "enrollment",
-                            "scholarship",
-                            "transfer",
-                            "general"
-                        ],
-                        "readOnly": true
+                        "$ref": "#\/components\/schemas\/RequirementTypeEnum"
                     },
                     "is_mandatory": {
                         "type": "boolean",
@@ -19674,19 +19713,7 @@
                         "format": "password"
                     },
                     "role": {
-                        "type": "string",
-                        "enum": [
-                            "admin",
-                            "program-chair",
-                            "college-dean",
-                            "specialization-chair",
-                            "campus-scheduler",
-                            "campus-registrar",
-                            "student",
-                            "faculty",
-                            "guest"
-                        ],
-                        "readOnly": true
+                        "$ref": "#\/components\/schemas\/UserRoleEnum"
                     },
                     "email_verified_at": {
                         "type": "string",

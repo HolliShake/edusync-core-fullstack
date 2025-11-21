@@ -5,7 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { DocumentRequestLogAction } from './documentRequestLogAction';
+import type { DocumentRequestLogActionEnum } from './documentRequestLogActionEnum';
 import type { DocumentRequest } from './documentRequest';
 import type { User } from './user';
 
@@ -13,7 +13,7 @@ export interface DocumentRequestLog {
   id?: number;
   document_request_id: number;
   user_id: number;
-  action: DocumentRequestLogAction;
+  action: DocumentRequestLogActionEnum;
   note: string;
   created_at?: string;
   updated_at?: string;

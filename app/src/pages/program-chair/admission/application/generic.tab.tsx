@@ -4,10 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
-import { type AdmissionApplicationLogType } from '@/enums/admission-application-log-type-enum';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useGetAdmissionApplicationPaginated, useGetSchoolYearPaginated } from '@rest/api';
-import type { SchoolYear } from '@rest/models';
+import { AdmissionApplicationLogTypeEnum, type SchoolYear } from '@rest/models';
 import type { AdmissionApplication } from '@rest/models/admissionApplication';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
@@ -16,7 +15,7 @@ import { useNavigate } from 'react-router';
 export default function ProgramChairAdmissionApplicationGenericTab({
   status,
 }: {
-  status: AdmissionApplicationLogType;
+  status: AdmissionApplicationLogTypeEnum;
 }): React.ReactNode {
   const [page, setPage] = useState(1);
   const [rows] = useState(10);

@@ -5,10 +5,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { RequirementTypeEnum, RequirementTypeLabels } from '@/enums/requirement-type-enum';
 import { renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateRequirement, useUpdateRequirement } from '@rest/api';
+import { RequirementTypeEnum } from '@rest/models';
 import type { Requirement } from '@rest/models/requirement';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -20,12 +20,12 @@ const requirementSchema = z.object({
   description: z.string().nullable().optional(),
   requirement_type: z.enum(
     [
-      RequirementTypeEnum.ADMISSION,
-      RequirementTypeEnum.GRADUATION,
-      RequirementTypeEnum.ENROLLMENT,
-      RequirementTypeEnum.SCHOLARSHIP,
-      RequirementTypeEnum.TRANSFER,
-      RequirementTypeEnum.GENERAL,
+      RequirementTypeEnum.admission,
+      RequirementTypeEnum.graduation,
+      RequirementTypeEnum.enrollment,
+      RequirementTypeEnum.scholarship,
+      RequirementTypeEnum.transfer,
+      RequirementTypeEnum.general,
     ],
     {
       message: 'Requirement type is required',
@@ -55,7 +55,7 @@ export default function RequirementModal({ controller, onSubmit }: RequirementMo
     defaultValues: {
       requirement_name: '',
       description: '',
-      requirement_type: RequirementTypeEnum.GENERAL,
+      requirement_type: RequirementTypeEnum.general,
       is_mandatory: false,
       is_active: true,
     },
@@ -94,7 +94,7 @@ export default function RequirementModal({ controller, onSubmit }: RequirementMo
       return reset({
         requirement_name: '',
         description: '',
-        requirement_type: RequirementTypeEnum.GENERAL,
+        requirement_type: RequirementTypeEnum.general,
         is_mandatory: false,
         is_active: true,
       });
@@ -148,7 +148,7 @@ export default function RequirementModal({ controller, onSubmit }: RequirementMo
             control={control}
             render={({ field }) => (
               <Select
-                options={Object.entries(RequirementTypeLabels).map(([value, label]) => ({
+                options={Object.entries(RequirementTypeEnum).map(([value, label]) => ({
                   label,
                   value,
                 }))}

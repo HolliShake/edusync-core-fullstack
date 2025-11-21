@@ -1,44 +1,59 @@
 import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RequestGenericTab from './request-generic-tab';
+import { DocumentRequestLogActionEnum } from '@rest/models';
 import { useEffect, useMemo, useState } from 'react';
-import { DocumentRequestLogAction } from '@rest/models';
+import RequestGenericTab from './request-generic-tab';
 
 export default function CampusRegistrarRequest(): React.ReactNode {
-  const [selectedTab, setSelectedTab] = useState<DocumentRequestLogAction>(() => {
+  const [selectedTab, setSelectedTab] = useState<DocumentRequestLogActionEnum>(() => {
     const saved = sessionStorage.getItem(window.location.pathname + '_tab');
-    return saved ? (saved as DocumentRequestLogAction) : DocumentRequestLogAction.paid;
+    return saved ? (saved as DocumentRequestLogActionEnum) : DocumentRequestLogActionEnum.paid;
   });
 
   useEffect(() => {
     sessionStorage.setItem(window.location.pathname + '_tab', selectedTab);
   }, [selectedTab]);
 
-  const tabs = useMemo(() => [
-    {
-      label: 'Pending Approval',
-      value: DocumentRequestLogAction.paid,
-    },
-    {
+  const tabs = useMemo(
+    () => [
+      {
+        label: 'Pending Approval',
+        value: DocumentRequestLogActionEnum.paid,
+      },
+      {
         label: 'Processing',
-        value: DocumentRequestLogAction.processing,
-    },
-    {
-      label: 'Pending Pickup',
-      value: DocumentRequestLogAction.pickup,
-    },
-    {
-      label: 'Completed',
-      value: DocumentRequestLogAction.completed,
-    },
-  ], []);
+        value: DocumentRequestLogActionEnum.processing,
+      },
+      {
+        label: 'Pending Pickup',
+        value: DocumentRequestLogActionEnum.pickup,
+      },
+      {
+        label: 'Completed',
+        value: DocumentRequestLogActionEnum.completed,
+      },
+    ],
+    []
+  );
 
   return (
-    <TitledPage title="Document Requests" description="All document requests that are marked as 'Paid'.">
-      <Tabs value={selectedTab} onValueChange={(value: string) => setSelectedTab(value as DocumentRequestLogAction)}>
+    <TitledPage
+      title="Document Requests"
+      description="All document requests that are marked as 'Paid'."
+    >
+      <Tabs
+        value={selectedTab}
+        onValueChange={(value: string) => setSelectedTab(value as DocumentRequestLogActionEnum)}
+      >
         <TabsList>
           {tabs.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value} className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">{tab.label}</TabsTrigger>
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              {tab.label}
+            </TabsTrigger>
           ))}
         </TabsList>
         {tabs.map((tab) => (

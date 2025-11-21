@@ -5,14 +5,14 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { UserRole } from './userRole';
+import type { UserRoleEnum } from './userRoleEnum';
 
 export interface User {
   readonly id?: number;
   name: string;
   email: string;
   password: string;
-  readonly role?: UserRole;
+  role?: UserRoleEnum;
   /** @nullable */
   email_verified_at?: string | null;
   created_at?: string;

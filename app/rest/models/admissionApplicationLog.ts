@@ -5,7 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { AdmissionApplicationLogType } from './admissionApplicationLogType';
+import type { AdmissionApplicationLogTypeEnum } from './admissionApplicationLogTypeEnum';
 import type { AdmissionApplication } from './admissionApplication';
 import type { User } from './user';
 
@@ -13,7 +13,7 @@ export interface AdmissionApplicationLog {
   readonly id?: number;
   admission_application_id: number;
   user_id: number;
-  readonly type: AdmissionApplicationLogType;
+  type: AdmissionApplicationLogTypeEnum;
   /** @nullable */
   note?: string | null;
   created_at?: string;

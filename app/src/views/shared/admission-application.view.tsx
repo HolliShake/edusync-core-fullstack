@@ -41,12 +41,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth.context';
-import { AdmissionApplicationLogTypeEnum } from '@/enums/admission-application-log-type-enum';
-import { UserRoleEnum, type UserRole } from '@/enums/role-enum';
 import { decryptIdFromUrl } from '@/lib/hash';
 import { can } from '@/lib/role';
 import { useCreateAdmissionApplicationLog, useGetAdmissionApplicationById } from '@rest/api';
-import { type AdmissionApplicationLog } from '@rest/models';
+import {
+  AdmissionApplicationLogTypeEnum,
+  UserRoleEnum,
+  type AdmissionApplicationLog,
+} from '@rest/models';
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -94,11 +96,11 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
 
   const actionEnabled = useMemo(() => {
     if (!application) return false;
-    if (application.latest_status !== AdmissionApplicationLogTypeEnum.SUBMITTED) return false;
+    if (application.latest_status !== AdmissionApplicationLogTypeEnum.submitted) return false;
     return (
       can(
-        UserRoleEnum.PROGRAM_CHAIR /* only program chair can action */,
-        (session?.roles ?? []) as UserRole[]
+        UserRoleEnum.program_chair /* only program chair can action */,
+        (session?.roles ?? []) as UserRoleEnum[]
       ) && session?.is_program_chair
     );
   }, [application, session]);
@@ -274,7 +276,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                         controller.openFn({
                           admission_application_id: application?.id as number,
                           user_id: session?.id as number,
-                          type: AdmissionApplicationLogTypeEnum.APPROVED,
+                          type: AdmissionApplicationLogTypeEnum.approved,
                           note: 'Application accepted',
                         })
                       }
@@ -290,7 +292,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                         controller.openFn({
                           admission_application_id: application?.id as number,
                           user_id: session?.id as number,
-                          type: AdmissionApplicationLogTypeEnum.REJECTED,
+                          type: AdmissionApplicationLogTypeEnum.rejected,
                           note: 'Application rejected',
                         })
                       }

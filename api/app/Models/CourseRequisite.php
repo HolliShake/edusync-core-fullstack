@@ -22,7 +22,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "course_id", type: "integer", example: 1),
         new OA\Property(property: "requisite_course_id", type: "integer", example: 2),
-        new OA\Property(property: "requisite_type", type: "string", enum: CourseRequisiteTypeEnum::class, example: "pre"),
+        new OA\Property(property: "requisite_type", ref: "#/components/schemas/CourseRequisiteTypeEnum", example: "pre"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2024-01-01T00:00:00.000000Z"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2024-01-01T00:00:00.000000Z"),
         // Relations

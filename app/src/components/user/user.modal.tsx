@@ -3,11 +3,10 @@ import Select from '@/components/custom/select.component';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UserRoleEnum } from '@/enums/role-enum';
 import { renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateUser, useUpdateUser } from '@rest/api';
-import type { User } from '@rest/models';
+import { UserRoleEnum, type User } from '@rest/models';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -18,15 +17,15 @@ const userSchema = z
     name: z.string().min(1, 'Name is required').max(255, 'Name must not exceed 255 characters'),
     email: z.string().email('Invalid email address'),
     role: z.enum([
-      UserRoleEnum.ADMIN,
-      UserRoleEnum.PROGRAM_CHAIR,
-      UserRoleEnum.COLLEGE_DEAN,
-      UserRoleEnum.SPECIALIZATION_CHAIR,
-      UserRoleEnum.CAMPUS_SCHEDULER,
-      UserRoleEnum.CAMPUS_REGISTRAR,
-      UserRoleEnum.STUDENT,
-      UserRoleEnum.FACULTY,
-      UserRoleEnum.GUEST,
+      UserRoleEnum.admin,
+      UserRoleEnum.program_chair,
+      UserRoleEnum.college_dean,
+      UserRoleEnum.specialization_chair,
+      UserRoleEnum.campus_scheduler,
+      UserRoleEnum.campus_registrar,
+      UserRoleEnum.student,
+      UserRoleEnum.faculty,
+      UserRoleEnum.guest,
     ]),
     password: z
       .string()
@@ -60,15 +59,15 @@ interface UserModalProps {
 }
 
 const roleOptions = [
-  { label: 'Admin', value: UserRoleEnum.ADMIN },
-  { label: 'Program Chair', value: UserRoleEnum.PROGRAM_CHAIR },
-  { label: 'College Dean', value: UserRoleEnum.COLLEGE_DEAN },
-  { label: 'Specialization Chair', value: UserRoleEnum.SPECIALIZATION_CHAIR },
-  { label: 'Campus Scheduler', value: UserRoleEnum.CAMPUS_SCHEDULER },
-  { label: 'Campus Registrar', value: UserRoleEnum.CAMPUS_REGISTRAR },
-  { label: 'Student', value: UserRoleEnum.STUDENT },
-  { label: 'Faculty', value: UserRoleEnum.FACULTY },
-  { label: 'Guest', value: UserRoleEnum.GUEST },
+  { label: 'Admin', value: UserRoleEnum.admin },
+  { label: 'Program Chair', value: UserRoleEnum.program_chair },
+  { label: 'College Dean', value: UserRoleEnum.college_dean },
+  { label: 'Specialization Chair', value: UserRoleEnum.specialization_chair },
+  { label: 'Campus Scheduler', value: UserRoleEnum.campus_scheduler },
+  { label: 'Campus Registrar', value: UserRoleEnum.campus_registrar },
+  { label: 'Student', value: UserRoleEnum.student },
+  { label: 'Faculty', value: UserRoleEnum.faculty },
+  { label: 'Guest', value: UserRoleEnum.guest },
 ];
 
 export default function UserModal({ controller, onSubmit }: UserModalProps) {
@@ -87,7 +86,7 @@ export default function UserModal({ controller, onSubmit }: UserModalProps) {
     defaultValues: {
       name: '',
       email: '',
-      role: UserRoleEnum.GUEST,
+      role: UserRoleEnum.guest,
       password: '',
       confirmPassword: '',
     },
@@ -126,7 +125,7 @@ export default function UserModal({ controller, onSubmit }: UserModalProps) {
       return reset({
         name: '',
         email: '',
-        role: UserRoleEnum.GUEST,
+        role: UserRoleEnum.guest,
         password: '',
         confirmPassword: '',
       });
@@ -161,7 +160,7 @@ export default function UserModal({ controller, onSubmit }: UserModalProps) {
             options={roleOptions}
             placeholder="Select a role"
             value={roleValue}
-            onValueChange={(value) => setValue('role', value as UserFormData['role'])}
+            onValueChange={(value) => setValue('role', value as UserRoleEnum)}
           />
           {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
         </div>

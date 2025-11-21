@@ -1,38 +1,35 @@
 import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  AdmissionApplicationLogTypeEnum,
-  type AdmissionApplicationLogType,
-} from '@/enums/admission-application-log-type-enum';
+import { AdmissionApplicationLogTypeEnum } from '@rest/models';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import ProgramChairAdmissionApplicationGenericTab from './generic.tab';
 
 export default function ProgramChairAdmissionApplication(): React.ReactNode {
-  const [selectedTab, setSelectedTab] = useState<AdmissionApplicationLogType>(() => {
+  const [selectedTab, setSelectedTab] = useState<AdmissionApplicationLogTypeEnum>(() => {
     const saved = localStorage.getItem(window.location.pathname + '_tab');
     return saved
-      ? (saved as AdmissionApplicationLogType)
-      : AdmissionApplicationLogTypeEnum.SUBMITTED;
+      ? (saved as AdmissionApplicationLogTypeEnum)
+      : AdmissionApplicationLogTypeEnum.submitted;
   });
 
   const tabs = useMemo(
     () => [
       {
         label: 'Pending', // Show as "Pending", if already submitted by applicant
-        value: AdmissionApplicationLogTypeEnum.SUBMITTED,
+        value: AdmissionApplicationLogTypeEnum.submitted,
       },
       {
         label: 'Approved',
-        value: AdmissionApplicationLogTypeEnum.APPROVED,
+        value: AdmissionApplicationLogTypeEnum.approved,
       },
       {
         label: 'Rejected',
-        value: AdmissionApplicationLogTypeEnum.REJECTED,
+        value: AdmissionApplicationLogTypeEnum.rejected,
       },
       {
         label: 'Accepted',
-        value: AdmissionApplicationLogTypeEnum.ACCEPTED,
+        value: AdmissionApplicationLogTypeEnum.accepted,
       },
     ],
     []
@@ -40,13 +37,13 @@ export default function ProgramChairAdmissionApplication(): React.ReactNode {
 
   const handleTabChange = (value: string): void => {
     localStorage.setItem(window.location.pathname + '_tab', value);
-    setSelectedTab(value as AdmissionApplicationLogType);
+    setSelectedTab(value as AdmissionApplicationLogTypeEnum);
   };
 
   useEffect(() => {
     const tab = localStorage.getItem(window.location.pathname + '_tab');
     if (tabs.some((t) => t.value === tab)) {
-      setSelectedTab(tab as AdmissionApplicationLogType);
+      setSelectedTab(tab as AdmissionApplicationLogTypeEnum);
     }
   }, [tabs]);
 

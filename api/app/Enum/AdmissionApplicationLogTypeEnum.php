@@ -2,6 +2,14 @@
 
 namespace App\Enum;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "AdmissionApplicationLogTypeEnum",
+    title: "AdmissionApplicationLogTypeEnum",
+    type: "string",
+    enum: AdmissionApplicationLogTypeEnum::class,
+)]
 enum AdmissionApplicationLogTypeEnum: string
 {
     case SUBMITTED = 'submitted'; // default, auto inserted by trigger

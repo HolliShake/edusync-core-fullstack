@@ -9,7 +9,7 @@ import {
   useGetCoursePaginated,
   useUpdateCourseRequisite,
 } from '@rest/api';
-import { type CourseRequisite, CourseRequisiteRequisiteType } from '@rest/models';
+import { type CourseRequisite, CourseRequisiteTypeEnum } from '@rest/models';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -18,7 +18,7 @@ import { z } from 'zod';
 const courseRequisiteSchema = z.object({
   course_id: z.number().min(1, 'Course is required'),
   requisite_course_id: z.number().min(1, 'Requisite course is required'),
-  requisite_type: z.enum(Object.values(CourseRequisiteRequisiteType), {
+  requisite_type: z.enum(Object.values(CourseRequisiteTypeEnum), {
     message: 'Requisite type is required',
   }),
 });
@@ -32,9 +32,9 @@ interface CourseRequisiteModalProps {
 }
 
 const requisiteTypeOptions: SelectOption[] = [
-  { label: 'Pre-requisite', value: 'pre' },
-  { label: 'Co-requisite', value: 'co' },
-  { label: 'Equivalent', value: 'equivalent' },
+  { label: 'Pre-requisite', value: CourseRequisiteTypeEnum.pre },
+  { label: 'Co-requisite', value: CourseRequisiteTypeEnum.co },
+  { label: 'Equivalent', value: CourseRequisiteTypeEnum.equivalent },
 ];
 
 export default function CourseRequisiteModal({
@@ -53,7 +53,7 @@ export default function CourseRequisiteModal({
     defaultValues: {
       course_id: courseId || 0,
       requisite_course_id: 0,
-      requisite_type: 'pre',
+      requisite_type: CourseRequisiteTypeEnum.pre,
     },
   });
 
@@ -105,7 +105,7 @@ export default function CourseRequisiteModal({
       return reset({
         course_id: courseId || 0,
         requisite_course_id: 0,
-        requisite_type: 'pre',
+        requisite_type: CourseRequisiteTypeEnum.pre,
       });
     }
     reset({

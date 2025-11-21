@@ -1,4 +1,3 @@
-import { UserRoleEnum } from '@/enums/role-enum';
 import ProgramChairAdmissionApplication from '@/pages/program-chair/admission/application/page';
 import ProgramChairAdmissionApplicationStatus from '@/pages/program-chair/admission/application/status/page';
 import ProgramChairAdmissionEvaluation from '@/pages/program-chair/admission/evaluation/page';
@@ -14,6 +13,7 @@ import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
 import ProgramChairCommunityStudent from '@/pages/program-chair/student/page';
 import type { Route } from '@/types/route';
+import { UserRoleEnum } from '@rest/models';
 import {
   BarChartIcon,
   BookOpenIcon,
@@ -32,7 +32,7 @@ const PROGRAM_CHAIR: Route[] = [
     path: '#',
     layout: 'default',
     type: 'label',
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.admission',
@@ -48,7 +48,7 @@ const PROGRAM_CHAIR: Route[] = [
         icon: <CalendarIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.PROGRAM_CHAIR],
+        roles: [UserRoleEnum.program_chair],
       },
       {
         key: 'program-chair.admission.application',
@@ -58,7 +58,7 @@ const PROGRAM_CHAIR: Route[] = [
         icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.PROGRAM_CHAIR],
+        roles: [UserRoleEnum.program_chair],
       },
       {
         key: 'program-chair.admission.application.status',
@@ -68,7 +68,7 @@ const PROGRAM_CHAIR: Route[] = [
         icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: false,
-        roles: [UserRoleEnum.PROGRAM_CHAIR],
+        roles: [UserRoleEnum.program_chair],
       },
       {
         key: 'program-chair.admission.evaluation',
@@ -78,12 +78,12 @@ const PROGRAM_CHAIR: Route[] = [
         icon: <CheckCircleIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.PROGRAM_CHAIR],
+        roles: [UserRoleEnum.program_chair],
       },
     ],
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.enrollment',
@@ -93,7 +93,7 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.curriculum',
@@ -103,7 +103,7 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <BookOpenIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   // curriculum detail
   {
@@ -133,7 +133,7 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.program-criteria',
@@ -143,7 +143,7 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <BarChartIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.gradebook',
@@ -153,7 +153,7 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.gradebook-detail',
@@ -163,7 +163,7 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.community',
@@ -181,7 +181,7 @@ const PROGRAM_CHAIR: Route[] = [
         icon: <GraduationCapIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.PROGRAM_CHAIR],
+        roles: [UserRoleEnum.program_chair],
       },
       {
         key: 'program-chair.community.faculty',
@@ -191,10 +191,10 @@ const PROGRAM_CHAIR: Route[] = [
         icon: <Users2Icon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.PROGRAM_CHAIR],
+        roles: [UserRoleEnum.program_chair],
       },
     ],
-    roles: [UserRoleEnum.PROGRAM_CHAIR],
+    roles: [UserRoleEnum.program_chair],
   },
 ];
 

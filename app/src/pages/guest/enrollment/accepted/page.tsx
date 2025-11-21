@@ -4,10 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth.context';
-import { AdmissionApplicationLogTypeEnum } from '@/enums/admission-application-log-type-enum';
 import { formatId } from '@/lib/formatter';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useGetAdmissionApplicationPaginated } from '@rest/api';
+import { AdmissionApplicationLogTypeEnum } from '@rest/models';
 import {
   AlertCircle,
   ArrowRight,
@@ -29,7 +29,7 @@ export default function GuestAcceptedAdmission(): React.ReactNode {
   const { data: applicationResponse, isLoading } = useGetAdmissionApplicationPaginated(
     {
       'filter[user_id]': Number(session?.id),
-      'filter[latest_status]': AdmissionApplicationLogTypeEnum.ACCEPTED,
+      'filter[latest_status]': AdmissionApplicationLogTypeEnum.accepted,
       'filter[open_enrollment]': true,
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
@@ -39,11 +39,11 @@ export default function GuestAcceptedAdmission(): React.ReactNode {
 
   const applications = useMemo(() => applicationResponse?.data?.data ?? [], [applicationResponse]);
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: AdmissionApplicationLogTypeEnum) => {
     switch (status.toLowerCase()) {
-      case 'approved':
+      case AdmissionApplicationLogTypeEnum.approved:
         return <CheckCircle2 className="h-4 w-4" />;
-      case 'pending':
+      case AdmissionApplicationLogTypeEnum.submitted:
         return <Clock className="h-4 w-4" />;
       default:
         return <FileText className="h-4 w-4" />;

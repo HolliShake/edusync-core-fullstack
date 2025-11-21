@@ -133,9 +133,8 @@ class SchoolYear extends Model
      */
     public function getIsLockedAttribute(): bool
     {
-        // Locked if not active or today is not within the date range
-        return $this->is_active === false ||
-            (!(now()->between($this->start_date, $this->end_date)) && now()->year < $this->end_date->year);
+        // Locked if not active or if the school year has ended
+        return $this->is_active === false || now()->isAfter($this->end_date);
     }
 
     /**

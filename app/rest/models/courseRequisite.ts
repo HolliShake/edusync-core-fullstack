@@ -5,14 +5,14 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { CourseRequisiteRequisiteType } from './courseRequisiteRequisiteType';
+import type { CourseRequisiteTypeEnum } from './courseRequisiteTypeEnum';
 import type { Course } from './course';
 
 export interface CourseRequisite {
   id?: number;
   course_id: number;
   requisite_course_id: number;
-  requisite_type: CourseRequisiteRequisiteType;
+  requisite_type: CourseRequisiteTypeEnum;
   created_at?: string;
   updated_at?: string;
   requisite_course?: Course;

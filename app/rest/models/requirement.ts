@@ -5,14 +5,14 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { RequirementRequirementType } from './requirementRequirementType';
+import type { RequirementTypeEnum } from './requirementTypeEnum';
 
 export interface Requirement {
   readonly id?: number;
   requirement_name: string;
   /** @nullable */
   description?: string | null;
-  readonly requirement_type: RequirementRequirementType;
+  requirement_type: RequirementTypeEnum;
   is_mandatory: boolean;
   is_active: boolean;
   readonly created_at?: string;

@@ -4,9 +4,8 @@ import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
 import RequirementModal from '@/components/requirement/requirement.modal';
 import { Button } from '@/components/ui/button';
-import { RequirementTypeLabels, type RequirementTypeEnum } from '@/enums/requirement-type-enum';
 import { useGetRequirementPaginated } from '@rest/api';
-import type { Requirement } from '@rest/models';
+import { RequirementTypeEnum, type Requirement } from '@rest/models';
 import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
@@ -39,7 +38,7 @@ export default function AdminRequirements(): React.ReactNode {
         title: 'Type',
         dataIndex: 'requirement_type',
         render: (value) => (
-          <span className="capitalize">{RequirementTypeLabels[value as RequirementTypeEnum]}</span>
+          <span className="capitalize">{RequirementTypeEnum[value as RequirementTypeEnum]}</span>
         ),
       },
       {

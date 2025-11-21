@@ -1,4 +1,3 @@
-import { UserRoleEnum } from '@/enums/role-enum';
 import AdminAcademicTerm from '@/pages/admin/academic-term/page';
 import AdminBuilding from '@/pages/admin/campuses/building/page';
 import AdminCampusDetail from '@/pages/admin/campuses/campus/page';
@@ -14,7 +13,8 @@ import AdminAcademicCalendarPage from '@/pages/admin/school-year/academic-calend
 import AdminSchoolYear from '@/pages/admin/school-year/page';
 import AdminSections from '@/pages/admin/sections/page';
 import AdminUsers from '@/pages/admin/users/page';
-import type { Route } from '@/types/types';
+import type { Route } from '@/types/route';
+import { UserRoleEnum } from '@rest/models';
 import {
   BookIcon,
   BookOpenIcon,
@@ -37,7 +37,7 @@ const ADMIN: Route[] = [
     path: '#',
     layout: 'default',
     type: 'label',
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.dashboard',
@@ -46,7 +46,7 @@ const ADMIN: Route[] = [
     component: <AdminDashboard />,
     icon: <LayoutDashboardIcon className="h-4 w-4" />,
     layout: 'dashboard',
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.school-year',
@@ -56,7 +56,7 @@ const ADMIN: Route[] = [
     icon: <CalendarIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.academic-calendar',
@@ -66,7 +66,7 @@ const ADMIN: Route[] = [
     icon: <BookOpenIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.academic-term',
@@ -76,7 +76,7 @@ const ADMIN: Route[] = [
     icon: <ClockIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.campuses',
@@ -86,7 +86,7 @@ const ADMIN: Route[] = [
     icon: <SchoolIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // Campus/:id
   {
@@ -97,7 +97,7 @@ const ADMIN: Route[] = [
     icon: <SchoolIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // Building/:id/rooms
   {
@@ -108,7 +108,7 @@ const ADMIN: Route[] = [
     icon: <BuildingIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // College/:id/programs
   {
@@ -119,7 +119,7 @@ const ADMIN: Route[] = [
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // Curriculum/:id
   {
@@ -130,7 +130,7 @@ const ADMIN: Route[] = [
     icon: <LibraryIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.program-type',
@@ -140,7 +140,7 @@ const ADMIN: Route[] = [
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // Courses
   {
@@ -151,7 +151,7 @@ const ADMIN: Route[] = [
     icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // Courses/:id/requisites
   {
@@ -162,6 +162,7 @@ const ADMIN: Route[] = [
     icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
+    roles: [UserRoleEnum.admin],
   },
   // Sections
   {
@@ -172,7 +173,7 @@ const ADMIN: Route[] = [
     icon: <FolderIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   // Requirements
   {
@@ -183,7 +184,7 @@ const ADMIN: Route[] = [
     icon: <FileIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
   {
     key: 'admin.users',
@@ -193,7 +194,7 @@ const ADMIN: Route[] = [
     icon: <UserIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.ADMIN],
+    roles: [UserRoleEnum.admin],
   },
 ];
 

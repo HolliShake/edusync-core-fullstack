@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
-import { CurriculumStateEnum } from '@/enums/curriculum-state-enum';
 import { renderError } from '@/lib/error';
 import { encryptIdForUrl } from '@/lib/hash';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,7 +17,12 @@ import {
   useGetSchoolYearPaginated,
   useUpdateCurriculum,
 } from '@rest/api';
-import type { AcademicProgram, Curriculum, GetCurriculumsResponse200 } from '@rest/models';
+import {
+  CurriculumStateEnum,
+  type AcademicProgram,
+  type Curriculum,
+  type GetCurriculumsResponse200,
+} from '@rest/models';
 import { Calendar, Clock, Eye, FileText, GraduationCap, Hash, PlusCircle } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -45,9 +49,9 @@ const curriculumSchema = z.object({
   total_units: z.number().min(0, 'Total units required'),
   total_hours: z.number().min(0, 'Total hours required'),
   status: z.enum([
-    CurriculumStateEnum.ACTIVE,
-    CurriculumStateEnum.INACTIVE,
-    CurriculumStateEnum.ARCHIVED,
+    CurriculumStateEnum.active,
+    CurriculumStateEnum.inactive,
+    CurriculumStateEnum.archived,
   ]),
   approved_date: z.string().optional(),
   academic_program_id: z.number().min(1, 'Academic program required'),
@@ -58,17 +62,17 @@ const curriculumSchema = z.object({
 type CurriculumFormData = z.infer<typeof curriculumSchema>;
 
 const STATUS_OPTIONS: SelectOption[] = [
-  { label: 'Active', value: CurriculumStateEnum.ACTIVE },
-  { label: 'Inactive', value: CurriculumStateEnum.INACTIVE },
-  { label: 'Archived', value: CurriculumStateEnum.ARCHIVED },
+  { label: 'Active', value: CurriculumStateEnum.active },
+  { label: 'Inactive', value: CurriculumStateEnum.inactive },
+  { label: 'Archived', value: CurriculumStateEnum.archived },
 ];
 
 const STATUS_BADGE_CLASSES = {
-  [CurriculumStateEnum.ACTIVE]:
+  [CurriculumStateEnum.active]:
     'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  [CurriculumStateEnum.ARCHIVED]:
+  [CurriculumStateEnum.archived]:
     'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-  [CurriculumStateEnum.INACTIVE]: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+  [CurriculumStateEnum.inactive]: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
 } as const;
 
 const getDefaultValues = (academicProgramId?: number): CurriculumFormData => ({
@@ -78,7 +82,7 @@ const getDefaultValues = (academicProgramId?: number): CurriculumFormData => ({
   effective_year: new Date().getFullYear(),
   total_units: 0,
   total_hours: 0,
-  status: CurriculumStateEnum.ACTIVE,
+  status: CurriculumStateEnum.active,
   approved_date: new Date().toISOString(),
   academic_program_id: academicProgramId ?? 0,
   academic_term_id: 0,
@@ -113,7 +117,7 @@ export const useCurriculumSheetState = (): CurriculumSheetState => {
 const getStatusBadge = (status: string): string => {
   return (
     STATUS_BADGE_CLASSES[status as keyof typeof STATUS_BADGE_CLASSES] ||
-    STATUS_BADGE_CLASSES[CurriculumStateEnum.INACTIVE]
+    STATUS_BADGE_CLASSES[CurriculumStateEnum.inactive]
   );
 };
 
@@ -519,9 +523,9 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
                     setValue(
                       'status',
                       val as
-                        | typeof CurriculumStateEnum.ACTIVE
-                        | typeof CurriculumStateEnum.INACTIVE
-                        | typeof CurriculumStateEnum.ARCHIVED
+                        | typeof CurriculumStateEnum.active
+                        | typeof CurriculumStateEnum.inactive
+                        | typeof CurriculumStateEnum.archived
                     )
                   }
                   placeholder="Select status"

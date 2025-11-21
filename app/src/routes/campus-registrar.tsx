@@ -1,9 +1,9 @@
-import { UserRoleEnum } from '@/enums/role-enum';
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
 import CampusRegistrarCommunityFaculty from '@/pages/campus-registrar/faculty/page';
 import CampusRegistrarRequest from '@/pages/campus-registrar/request/page';
 import CampusRegistrarCommunityStudent from '@/pages/campus-registrar/student/page';
 import type { Route } from '@/types/route';
+import { UserRoleEnum } from '@rest/models';
 import { ClipboardListIcon, FileTextIcon, GraduationCapIcon, Users2Icon } from 'lucide-react';
 
 const CAMPUS_REGISTRAR: Route[] = [
@@ -13,7 +13,7 @@ const CAMPUS_REGISTRAR: Route[] = [
     path: '#',
     layout: 'default',
     type: 'label',
-    roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+    roles: [UserRoleEnum.campus_registrar],
   },
   {
     key: 'campus-registrar.enrollment',
@@ -23,7 +23,7 @@ const CAMPUS_REGISTRAR: Route[] = [
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+    roles: [UserRoleEnum.campus_registrar],
   },
   {
     key: 'campus-registrar.request',
@@ -33,7 +33,7 @@ const CAMPUS_REGISTRAR: Route[] = [
     icon: <FileTextIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
-    roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+    roles: [UserRoleEnum.campus_registrar],
   },
   {
     key: 'campus-registrar.community',
@@ -51,7 +51,7 @@ const CAMPUS_REGISTRAR: Route[] = [
         icon: <GraduationCapIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+        roles: [UserRoleEnum.campus_registrar],
       },
       {
         key: 'campus-registrar.community.faculty',
@@ -61,10 +61,10 @@ const CAMPUS_REGISTRAR: Route[] = [
         icon: <Users2Icon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
-        roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+        roles: [UserRoleEnum.campus_registrar],
       },
     ],
-    roles: [UserRoleEnum.CAMPUS_REGISTRAR],
+    roles: [UserRoleEnum.campus_registrar],
   },
 ];
 

@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { useCreateDocumentRequestLog, useGetDocumentRequestPaginated } from '@rest/api';
-import { DocumentRequestLogAction } from '@rest/models';
+import { DocumentRequestLogActionEnum } from '@rest/models';
 import type { DocumentRequest } from '@rest/models/documentRequest';
 import type { DocumentType } from '@rest/models/documentType';
 import { CalendarIcon, FileTextIcon, InfoIcon, UserIcon } from 'lucide-react';
@@ -75,7 +75,7 @@ function InfoRow({
 export default function RequestGenericTab({
   filter,
 }: {
-  filter: DocumentRequestLogAction;
+  filter: DocumentRequestLogActionEnum;
 }): React.ReactNode {
   const { session } = useAuth();
   const { data, isLoading, isError, refetch } = useGetDocumentRequestPaginated(
@@ -99,14 +99,14 @@ export default function RequestGenericTab({
 
   const positiveActionLabel = useMemo(() => {
     switch (filter) {
-      case DocumentRequestLogAction.submitted:
-      case DocumentRequestLogAction.paid:
+      case DocumentRequestLogActionEnum.submitted:
+      case DocumentRequestLogActionEnum.paid:
         return 'Approve';
-      case DocumentRequestLogAction.processing:
+      case DocumentRequestLogActionEnum.processing:
         return 'Ready';
-      case DocumentRequestLogAction.pickup:
+      case DocumentRequestLogActionEnum.pickup:
         return 'Complete';
-      case DocumentRequestLogAction.completed:
+      case DocumentRequestLogActionEnum.completed:
       default:
         return 'Done';
     }
@@ -114,14 +114,14 @@ export default function RequestGenericTab({
 
   const positiveActionNextValue = useMemo(() => {
     switch (filter) {
-      case DocumentRequestLogAction.submitted:
-      case DocumentRequestLogAction.paid:
-        return DocumentRequestLogAction.processing;
-      case DocumentRequestLogAction.processing:
-        return DocumentRequestLogAction.pickup;
-      case DocumentRequestLogAction.pickup:
-        return DocumentRequestLogAction.completed;
-      case DocumentRequestLogAction.completed:
+      case DocumentRequestLogActionEnum.submitted:
+      case DocumentRequestLogActionEnum.paid:
+        return DocumentRequestLogActionEnum.processing;
+      case DocumentRequestLogActionEnum.processing:
+        return DocumentRequestLogActionEnum.pickup;
+      case DocumentRequestLogActionEnum.pickup:
+        return DocumentRequestLogActionEnum.completed;
+      case DocumentRequestLogActionEnum.completed:
       default:
         return null;
     }
@@ -152,7 +152,7 @@ export default function RequestGenericTab({
       await createDocumentRequest({
         data: {
           document_request_id: reqId,
-          action: DocumentRequestLogAction.rejected,
+          action: DocumentRequestLogActionEnum.rejected,
           user_id: session?.id ?? 0,
           note: 'Document request rejected',
         },

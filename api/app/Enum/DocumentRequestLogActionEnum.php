@@ -2,6 +2,14 @@
 
 namespace App\Enum;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "DocumentRequestLogActionEnum",
+    title: "DocumentRequestLogActionEnum",
+    type: "string",
+    enum: DocumentRequestLogActionEnum::class,
+)]
 enum DocumentRequestLogActionEnum: string
 {
     case SUBMITTED   = 'submitted';

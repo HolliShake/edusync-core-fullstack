@@ -27,7 +27,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "name", type: "string"),
         new OA\Property(property: "email", type: "string", format: "email"),
         new OA\Property(property: "password", type: "string", format: "password"),
-        new OA\Property(property: "role", type: "string", enum: UserRoleEnum::class, readOnly: true),
+        new OA\Property(property: "role", ref: "#/components/schemas/UserRoleEnum", readOnly: true),
         new OA\Property(property: "email_verified_at", type: "string", format: "date-time", nullable: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),

@@ -2,6 +2,14 @@
 
 namespace App\Enum;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "EnrollmentLogActionEnum",
+    title: "EnrollmentLogActionEnum",
+    type: "string",
+    enum: EnrollmentLogActionEnum::class,
+)]
 enum EnrollmentLogActionEnum: string
 {
     case ENROLL                         = 'enroll';                         // Initial status

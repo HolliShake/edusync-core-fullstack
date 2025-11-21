@@ -10,10 +10,6 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
-import {
-  AdmissionApplicationLogTypeEnum,
-  type AdmissionApplicationLogType,
-} from '@/enums/admission-application-log-type-enum';
 import { formatId } from '@/lib/formatter';
 import { cn } from '@/lib/utils';
 import {
@@ -22,10 +18,11 @@ import {
   useGetAdmissionApplicationPaginated,
   useGetAdmissionApplicationScorePaginated,
 } from '@rest/api';
-import type {
-  AcademicProgramCriteria,
-  AdmissionApplication,
-  AdmissionApplicationScore,
+import {
+  AdmissionApplicationLogTypeEnum,
+  type AcademicProgramCriteria,
+  type AdmissionApplication,
+  type AdmissionApplicationScore,
 } from '@rest/models';
 import {
   CheckCircleIcon,
@@ -46,8 +43,8 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [field, setField] = useState<AdmissionApplicationScore[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<number, string>>({});
-  const [selectedStatus, setSelectedStatus] = useState<AdmissionApplicationLogType>(
-    AdmissionApplicationLogTypeEnum.APPROVED
+  const [selectedStatus, setSelectedStatus] = useState<AdmissionApplicationLogTypeEnum>(
+    AdmissionApplicationLogTypeEnum.approved
   );
   // Debounce search query
   useEffect(() => {
@@ -112,11 +109,11 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
     return [
       {
         label: 'Pending', // Show as "Pending", if already approved by ProgramChair
-        value: AdmissionApplicationLogTypeEnum.APPROVED,
+        value: AdmissionApplicationLogTypeEnum.approved,
       },
       {
         label: 'Accepted',
-        value: AdmissionApplicationLogTypeEnum.ACCEPTED,
+        value: AdmissionApplicationLogTypeEnum.accepted,
       },
     ];
   }, []);
@@ -292,7 +289,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
           <Select
             options={selectOptions}
             value={selectedStatus}
-            onValueChange={(value) => setSelectedStatus(value as AdmissionApplicationLogType)}
+            onValueChange={(value) => setSelectedStatus(value as AdmissionApplicationLogTypeEnum)}
           />
         </div>
       </div>

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enum\AcademicCalendarEventEnum;
 use App\Enum\AdmissionApplicationLogTypeEnum;
-use App\Enum\CalendarEventEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -164,7 +164,7 @@ class AdmissionApplication extends Model
         return $this->admission_schedule
             ->schoolYear
             ->academicCalendars()
-            ->where('event', CalendarEventEnum::ENROLLMENT->value)
+            ->where('event', AcademicCalendarEventEnum::ENROLLMENT->value)
             ->where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
             ->exists();
