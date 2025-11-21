@@ -62,6 +62,13 @@ class SectionTeacherController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer")
     )]
+    #[OA\Parameter(
+        name: "filter[user_id]",
+        in: "query",
+        description: "Filter by user ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",

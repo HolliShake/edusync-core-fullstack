@@ -17,6 +17,7 @@ use OpenApi\Attributes as OA;
     ],
     properties: [
         // Override fillables
+        new OA\Property(property: "id", type: "integer"),
         new OA\Property(property: "section_id", type: "integer"),
         new OA\Property(property: "user_id", type: "integer"),
         // Relations

@@ -13121,6 +13121,15 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "filter[user_id]",
+                        "in": "query",
+                        "description": "Filter by user ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -19427,6 +19436,10 @@
                     "is_posted": {
                         "type": "boolean"
                     },
+                    "has_grade_book": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
                     "curriculum_detail": {
                         "$ref": "#\/components\/schemas\/CurriculumDetail"
                     },
@@ -19570,6 +19583,9 @@
                     "user_id"
                 ],
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "section_id": {
                         "type": "integer"
                     },

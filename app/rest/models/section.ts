@@ -16,6 +16,7 @@ export interface Section {
   min_students: number;
   max_students: number;
   is_posted: boolean;
+  readonly has_grade_book?: boolean;
   curriculum_detail?: CurriculumDetail;
   readonly available_slots?: number;
 }

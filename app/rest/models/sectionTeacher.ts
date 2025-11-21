@@ -9,6 +9,7 @@ import type { Section } from './section';
 import type { User } from './user';
 
 export interface SectionTeacher {
+  id?: number;
   section_id: number;
   user_id: number;
   section?: Section;

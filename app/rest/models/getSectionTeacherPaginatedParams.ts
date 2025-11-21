@@ -27,4 +27,8 @@ rows?: number;
  * Filter by school year ID
  */
 'filter[school_year_id]'?: number;
+/**
+ * Filter by user ID
+ */
+'filter[user_id]'?: number;
 };

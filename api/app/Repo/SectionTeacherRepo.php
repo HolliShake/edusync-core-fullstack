@@ -35,6 +35,7 @@ class SectionTeacherRepo extends GenericRepo implements ISectionTeacherRepo
                     });
                 });
             }),
+            AllowedFilter::exact('user_id'),
         ];
     }
 

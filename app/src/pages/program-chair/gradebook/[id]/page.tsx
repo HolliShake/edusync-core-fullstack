@@ -108,9 +108,9 @@ export default function GradebookDetailPage(): React.ReactNode {
     return Number(weight);
   };
 
-  // Gradebook-level: sum over all periods' item weights
+  // Gradebook-level: sum over all periods' weights (not item weights)
   const totalWeight = useMemo(() => {
-    return gradingPeriods.reduce((sum, gp) => sum + getGradingPeriodTotalWeight(gp), 0);
+    return gradingPeriods.reduce((sum, gp) => sum + (Number(gp.weight) || 0), 0);
   }, [gradingPeriods]);
 
   const handleDeleteItem = async (item: GradeBookItem) => {
@@ -334,6 +334,20 @@ export default function GradebookDetailPage(): React.ReactNode {
 
         {/* Enhanced Grading Periods Section */}
         <div className="space-y-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold">Grading Periods</h2>
+            {gradingPeriods.length > 0 && (
+              <Button
+                onClick={() => handleOpenGradingPeriodModal(defaultGradingPeriod)}
+                disabled={totalWeight >= 100}
+                className="font-semibold gap-2 shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <PlusIcon className="w-5 h-5" />
+                Add Grading Period
+              </Button>
+            )}
+          </div>
+
           {gradingPeriods.length === 0 ? (
             <Card className="border-2 border-dashed border-muted-foreground/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-primary/30">
               <CardContent className="flex flex-col items-center justify-center py-16">
@@ -390,6 +404,12 @@ export default function GradebookDetailPage(): React.ReactNode {
                                 {gradingPeriod.title}
                               </span>
                               <span
+                                title={`Period Weight: ${Number(gradingPeriod.weight || 0).toFixed(2)}%`}
+                                className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
+                              >
+                                {Number(gradingPeriod.weight || 0).toFixed(1)}%
+                              </span>
+                              <span
                                 title={`Total Item Weight: ${periodTotalWeight.toFixed(2)}%`}
                                 className={`text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm
                                   ${
@@ -403,7 +423,7 @@ export default function GradebookDetailPage(): React.ReactNode {
                                 ) : (
                                   <AlertCircle className="h-3 w-3" />
                                 )}
-                                {periodTotalWeight.toFixed(1)}%
+                                Items: {periodTotalWeight.toFixed(1)}%
                               </span>
                             </div>
                             <span className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">

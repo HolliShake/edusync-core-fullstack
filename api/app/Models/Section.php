@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -31,6 +32,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "min_students", type: "integer"),
         new OA\Property(property: "max_students", type: "integer"),
         new OA\Property(property: "is_posted", type: "boolean"),
+        // Computed
+        new OA\Property(property: "has_grade_book", type: "boolean", readOnly: true),
         // Relations
         new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
         new OA\Property(property: "available_slots", type: "integer", readOnly: true),
@@ -143,6 +146,7 @@ class Section extends Model
     protected $appends = [
         'curriculum_detail',
         'available_slots',
+        'has_grade_book',
     ];
 
     /**
@@ -163,6 +167,16 @@ class Section extends Model
         });
 
         return $this->max_students - count($validatedAndNotDropped);
+    }
+
+    /**
+     * Get the has grade book attribute.
+     *
+     * @return bool
+     */
+    public function getHasGradeBookAttribute(): bool
+    {
+        return $this->gradeBook()->exists();
     }
 
     /**
@@ -193,5 +207,15 @@ class Section extends Model
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    /**
+     * Get the grade book for the section.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function gradeBook(): HasOne
+    {
+        return $this->hasOne(GradeBook::class, 'section_id');
     }
 }

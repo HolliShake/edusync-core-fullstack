@@ -109,6 +109,20 @@ class College extends Model
         'campus_id' => 'integer',
     ];
 
+    protected $appends = [
+        'campus',
+    ];
+
+    /**
+     * Get the campus attribute.
+     *
+     * @return Campus
+     */
+    public function getCampusAttribute(): Campus
+    {
+        return $this->campus()->first();
+    }
+
     /**
      * Get the campus that owns the college.
      *
