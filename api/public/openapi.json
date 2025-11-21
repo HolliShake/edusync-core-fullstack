@@ -3033,15 +3033,6 @@
                         }
                     },
                     {
-                        "name": "filter[campus_id]",
-                        "in": "query",
-                        "description": "Filter by campus ID",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
                         "name": "filter[college_id]",
                         "in": "query",
                         "description": "Filter by college ID",
@@ -3158,6 +3149,184 @@
                             "application\/json": {
                                 "schema": {
                                     "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AdmissionSchedule\/active-school-year": {
+            "get": {
+                "tags": [
+                    "AdmissionSchedule"
+                ],
+                "summary": "Get active school year",
+                "description": "Retrieve the active school year",
+                "operationId": "getActiveSchoolYears",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSchoolYearsResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AdmissionSchedule\/active-campuses": {
+            "get": {
+                "tags": [
+                    "AdmissionSchedule"
+                ],
+                "summary": "Get active campuses",
+                "description": "Retrieve the active campuses",
+                "operationId": "getActiveCampuses",
+                "parameters": [
+                    {
+                        "name": "filter[school_year_id]",
+                        "in": "query",
+                        "description": "Filter by school year ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetActiveCampusesResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AdmissionSchedule\/active-college-by-campus-id": {
+            "get": {
+                "tags": [
+                    "AdmissionSchedule"
+                ],
+                "summary": "Get active college by campus ID",
+                "description": "Retrieve the active college by campus ID",
+                "operationId": "getActiveColleges",
+                "parameters": [
+                    {
+                        "name": "filter[campus_id]",
+                        "in": "query",
+                        "description": "Filter by campus ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetCollegesResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
                                 }
                             }
                         }
@@ -15980,6 +16149,21 @@
                 },
                 "type": "object"
             },
+            "GetActiveCampusesResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Campus"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CreateCampusResponse200": {
                 "properties": {
                     "success": {
@@ -16099,6 +16283,21 @@
                     },
                     "data": {
                         "$ref": "#\/components\/schemas\/College"
+                    }
+                },
+                "type": "object"
+            },
+            "GetCollegesResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/College"
+                        }
                     }
                 },
                 "type": "object"

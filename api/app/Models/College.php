@@ -61,6 +61,15 @@ use OpenApi\Attributes as OA;
 )]
 
 #[OA\Schema(
+    schema: "GetCollegesResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/College"))
+    ]
+)]
+
+#[OA\Schema(
     schema: "CreateCollegeResponse200",
     type: "object",
     properties: [

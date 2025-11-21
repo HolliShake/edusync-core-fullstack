@@ -103,12 +103,12 @@ export default function ProgramChairAdmissionApplicationGenericTab({
       {
         key: 'academicProgram',
         title: 'Program',
-        render: (_, row) => row.academic_program?.program_name ?? 'N/A',
+        render: (_, row) => row.admission_schedule?.academic_program?.program_name ?? 'N/A',
       },
       {
         key: 'schoolYear',
         title: 'School Year',
-        render: (_, row) => row.school_year?.name ?? 'N/A',
+        render: (_, row) => row.admission_schedule?.school_year?.name ?? 'N/A',
       },
       {
         key: 'year',

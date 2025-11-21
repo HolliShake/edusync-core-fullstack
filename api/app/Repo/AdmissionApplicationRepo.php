@@ -42,8 +42,16 @@ class AdmissionApplicationRepo extends GenericRepo implements IAdmissionApplicat
                 });
             }),
             AllowedFilter::exact('user_id'),
-            AllowedFilter::exact('school_year_id'),
-            AllowedFilter::exact('academic_program_id'),
+            AllowedFilter::callback('school_year_id', function ($query, $value) {
+                $query->whereHas('admissionSchedule.schoolYear', function ($q) use ($value) {
+                    $q->where('id', $value);
+                });
+            }),
+            AllowedFilter::callback('academic_program_id', function ($query, $value) {
+                $query->whereHas('admissionSchedule.academicProgram', function ($q) use ($value) {
+                    $q->where('id', $value);
+                });
+            }),
         ];
     }
 

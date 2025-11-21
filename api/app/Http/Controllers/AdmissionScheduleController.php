@@ -55,13 +55,6 @@ class AdmissionScheduleController extends Controller
         schema: new OA\Schema(type: "integer")
     )]
     #[OA\Parameter(
-        name: "filter[campus_id]",
-        in: "query",
-        description: "Filter by campus ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
-    #[OA\Parameter(
         name: "filter[college_id]",
         in: "query",
         description: "Filter by college ID",
@@ -107,6 +100,124 @@ class AdmissionScheduleController extends Controller
         $page = $request->query("page", 0);
         $rows = $request->query("rows", 10);
         return $this->ok($this->service->getAll(true, $page, $rows));
+    }
+
+    #[OA\Get(
+        path: "/api/AdmissionSchedule/active-school-year",
+        summary: "Get active school year",
+        tags: ["AdmissionSchedule"],
+        description: "Retrieve the active school year",
+        operationId: "getActiveSchoolYears",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetSchoolYearsResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function getActiveSchoolYears(Request $request)
+    {
+        return $this->ok($this->service->getActiveSchoolYear());
+    }
+
+    #[OA\Get(
+        path: "/api/AdmissionSchedule/active-campuses",
+        summary: "Get active campuses",
+        tags: ["AdmissionSchedule"],
+        description: "Retrieve the active campuses",
+        operationId: "getActiveCampuses",
+    )]
+    #[OA\Parameter(
+        name: "filter[school_year_id]",
+        in: "query",
+        description: "Filter by school year ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetActiveCampusesResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function getActiveCampuses(Request $request)
+    {
+        $schoolYearId = $request->input('filter.school_year_id', null);
+        if (!$schoolYearId) {
+            return $this->validationError('School year ID is required');
+        }
+        return $this->ok($this->service->getActiveCampuses($schoolYearId));
+    }
+
+    #[OA\Get(
+        path: "/api/AdmissionSchedule/active-college-by-campus-id",
+        summary: "Get active college by campus ID",
+        tags: ["AdmissionSchedule"],
+        description: "Retrieve the active college by campus ID",
+        operationId: "getActiveColleges",
+    )]
+    #[OA\Parameter(
+        name: "filter[campus_id]",
+        in: "query",
+        description: "Filter by campus ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetCollegesResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function getActiveColleges(Request $request)
+    {
+        $campusId = $request->input('filter.campus_id', null);
+        if (!$campusId) {
+            return $this->validationError('Campus ID is required');
+        }
+        return $this->ok($this->service->getActiveCollegeByCampusId($campusId));
     }
 
     /**

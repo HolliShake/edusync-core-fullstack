@@ -117,12 +117,12 @@ export default function GuestAcceptedAdmission(): React.ReactNode {
                       <div className="flex items-start gap-2">
                         <GraduationCap className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                         <CardTitle className="text-lg leading-tight">
-                          {application.academic_program?.program_name}
+                          {application.admission_schedule?.academic_program?.program_name}
                         </CardTitle>
                       </div>
                       <CardDescription className="flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5" />
-                        {application.school_year?.name}
+                        {application.admission_schedule?.school_year?.name}
                       </CardDescription>
                     </div>
                     <Badge

@@ -26,6 +26,13 @@ class AdmissionScheduleRepo extends GenericRepo implements IAdmissionScheduleRep
             // Example: AllowedFilter::partial('name'),
             AllowedFilter::exact('academic_program_id'),
             AllowedFilter::exact('school_year_id'),
+            AllowedFilter::callback('college_id', function ($query, $value) {
+                $query->where('start_date', '<=', now())
+                    ->where('end_date', '>=', now())
+                    ->whereHas('academicProgram.college', function ($q) use ($value) {
+                        $q->where('id', $value);
+                    });
+            }),
         ];
     }
 

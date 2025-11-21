@@ -76,8 +76,8 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
   const { data: admissionProgramCriteriaResponse, isLoading: isLoadingCriteria } =
     useGetAcademicProgramCriteriaPaginated(
       {
-        'filter[academic_program_id]': selectedApplication?.academic_program_id,
-        'filter[school_year_id]': selectedApplication?.school_year_id,
+        'filter[academic_program_id]': selectedApplication?.admission_schedule?.academic_program_id,
+        'filter[school_year_id]': selectedApplication?.admission_schedule?.school_year_id,
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
       },

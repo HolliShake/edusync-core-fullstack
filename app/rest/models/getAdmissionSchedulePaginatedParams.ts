@@ -24,10 +24,6 @@ rows?: number;
  */
 'filter[school_year_id]'?: number;
 /**
- * Filter by campus ID
- */
-'filter[campus_id]'?: number;
-/**
  * Filter by college ID
  */
 'filter[college_id]'?: number;

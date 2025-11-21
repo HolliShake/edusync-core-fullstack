@@ -77,10 +77,10 @@ export default function ProgramChairGradebookPage() {
         ),
       },
       {
-        key: 'gradebook_items',
+        key: 'gradebook_grading_periods',
         title: 'Items',
         render: (_, row) => (
-          <span className="text-sm">{row.gradebook_items?.length ?? 0} item(s)</span>
+          <span className="text-sm">{row.gradebook_grading_periods?.length ?? 0} item(s)</span>
         ),
       },
       {

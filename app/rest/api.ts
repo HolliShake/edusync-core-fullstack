@@ -129,6 +129,9 @@ import type {
   GetAcademicProgramResponse200,
   GetAcademicTermPaginatedParams,
   GetAcademicTermResponse200,
+  GetActiveCampusesParams,
+  GetActiveCampusesResponse200,
+  GetActiveCollegesParams,
   GetAdmissionApplicationLogPaginatedParams,
   GetAdmissionApplicationLogResponse200,
   GetAdmissionApplicationPaginatedParams,
@@ -144,6 +147,7 @@ import type {
   GetCampusResponse200,
   GetCollegePaginatedParams,
   GetCollegeResponse200,
+  GetCollegesResponse200,
   GetCoursePaginatedParams,
   GetCourseRequisitePaginatedParams,
   GetCourseRequisiteResponse200,
@@ -191,6 +195,7 @@ import type {
   GetScholasticFilterByProgramIdParams,
   GetSchoolYearPaginatedParams,
   GetSchoolYearResponse200,
+  GetSchoolYearsResponse200,
   GetSectionPaginatedParams,
   GetSectionResponse200,
   GetSectionTeacherPaginatedParams,
@@ -3533,6 +3538,275 @@ export const useCreateAdmissionSchedule = <TError = UnauthenticatedResponse | Fo
       return useMutation(mutationOptions , queryClient);
     }
     
+/**
+ * Retrieve the active school year
+ * @summary Get active school year
+ */
+export const getActiveSchoolYears = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSchoolYearsResponse200>(
+      {url: `/api/AdmissionSchedule/active-school-year`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetActiveSchoolYearsQueryKey = () => {
+    return [`/api/AdmissionSchedule/active-school-year`] as const;
+    }
+
+    
+export const getGetActiveSchoolYearsQueryOptions = <TData = Awaited<ReturnType<typeof getActiveSchoolYears>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveSchoolYears>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetActiveSchoolYearsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getActiveSchoolYears>>> = ({ signal }) => getActiveSchoolYears(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getActiveSchoolYears>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetActiveSchoolYearsQueryResult = NonNullable<Awaited<ReturnType<typeof getActiveSchoolYears>>>
+export type GetActiveSchoolYearsQueryError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse
+
+
+export function useGetActiveSchoolYears<TData = Awaited<ReturnType<typeof getActiveSchoolYears>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveSchoolYears>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getActiveSchoolYears>>,
+          TError,
+          Awaited<ReturnType<typeof getActiveSchoolYears>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetActiveSchoolYears<TData = Awaited<ReturnType<typeof getActiveSchoolYears>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveSchoolYears>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getActiveSchoolYears>>,
+          TError,
+          Awaited<ReturnType<typeof getActiveSchoolYears>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetActiveSchoolYears<TData = Awaited<ReturnType<typeof getActiveSchoolYears>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveSchoolYears>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get active school year
+ */
+
+export function useGetActiveSchoolYears<TData = Awaited<ReturnType<typeof getActiveSchoolYears>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveSchoolYears>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetActiveSchoolYearsQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve the active campuses
+ * @summary Get active campuses
+ */
+export const getActiveCampuses = (
+    params?: GetActiveCampusesParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetActiveCampusesResponse200>(
+      {url: `/api/AdmissionSchedule/active-campuses`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetActiveCampusesQueryKey = (params?: GetActiveCampusesParams,) => {
+    return [`/api/AdmissionSchedule/active-campuses`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetActiveCampusesQueryOptions = <TData = Awaited<ReturnType<typeof getActiveCampuses>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(params?: GetActiveCampusesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveCampuses>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetActiveCampusesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getActiveCampuses>>> = ({ signal }) => getActiveCampuses(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getActiveCampuses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetActiveCampusesQueryResult = NonNullable<Awaited<ReturnType<typeof getActiveCampuses>>>
+export type GetActiveCampusesQueryError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse
+
+
+export function useGetActiveCampuses<TData = Awaited<ReturnType<typeof getActiveCampuses>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params: undefined |  GetActiveCampusesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveCampuses>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getActiveCampuses>>,
+          TError,
+          Awaited<ReturnType<typeof getActiveCampuses>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetActiveCampuses<TData = Awaited<ReturnType<typeof getActiveCampuses>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params?: GetActiveCampusesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveCampuses>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getActiveCampuses>>,
+          TError,
+          Awaited<ReturnType<typeof getActiveCampuses>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetActiveCampuses<TData = Awaited<ReturnType<typeof getActiveCampuses>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params?: GetActiveCampusesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveCampuses>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get active campuses
+ */
+
+export function useGetActiveCampuses<TData = Awaited<ReturnType<typeof getActiveCampuses>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params?: GetActiveCampusesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveCampuses>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetActiveCampusesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve the active college by campus ID
+ * @summary Get active college by campus ID
+ */
+export const getActiveColleges = (
+    params?: GetActiveCollegesParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetCollegesResponse200>(
+      {url: `/api/AdmissionSchedule/active-college-by-campus-id`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetActiveCollegesQueryKey = (params?: GetActiveCollegesParams,) => {
+    return [`/api/AdmissionSchedule/active-college-by-campus-id`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetActiveCollegesQueryOptions = <TData = Awaited<ReturnType<typeof getActiveColleges>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(params?: GetActiveCollegesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveColleges>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetActiveCollegesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getActiveColleges>>> = ({ signal }) => getActiveColleges(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getActiveColleges>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetActiveCollegesQueryResult = NonNullable<Awaited<ReturnType<typeof getActiveColleges>>>
+export type GetActiveCollegesQueryError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse
+
+
+export function useGetActiveColleges<TData = Awaited<ReturnType<typeof getActiveColleges>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params: undefined |  GetActiveCollegesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveColleges>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getActiveColleges>>,
+          TError,
+          Awaited<ReturnType<typeof getActiveColleges>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetActiveColleges<TData = Awaited<ReturnType<typeof getActiveColleges>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params?: GetActiveCollegesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveColleges>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getActiveColleges>>,
+          TError,
+          Awaited<ReturnType<typeof getActiveColleges>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetActiveColleges<TData = Awaited<ReturnType<typeof getActiveColleges>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params?: GetActiveCollegesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveColleges>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get active college by campus ID
+ */
+
+export function useGetActiveColleges<TData = Awaited<ReturnType<typeof getActiveColleges>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ params?: GetActiveCollegesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getActiveColleges>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetActiveCollegesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 /**
  * Retrieve a AdmissionSchedule by its ID
  * @summary Get a specific AdmissionSchedule

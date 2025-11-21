@@ -1,22 +1,16 @@
+import Select from '@/components/custom/select.component';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useAuth } from '@/context/auth.context';
 import {
   useCreateAdmissionApplication,
-  useGetAcademicProgramPaginated,
   useGetAcademicProgramRequirementPaginated,
-  useGetCampusPaginated,
-  useGetCollegePaginated,
-  useGetSchoolYearPaginated,
+  useGetActiveCampuses,
+  useGetActiveColleges,
+  useGetActiveSchoolYears,
+  useGetAdmissionSchedulePaginated,
 } from '@rest/api';
 import type { AdmissionApplication } from '@rest/models';
 import {
@@ -47,7 +41,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
     campusId: 0,
     schoolYearId: 0,
     collegeId: 0,
-    academicProgramId: 0,
+    admissionScheduleId: 0,
   });
 
   const { mutateAsync: createAdmissionApplication, isPending: isSubmitting } =
@@ -64,32 +58,27 @@ export default function GuestAdmissionPage(): React.ReactNode {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<number, File>>({});
 
-  const { data: campusResponse, isLoading: isLoadingCampuses } = useGetCampusPaginated({
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
+  const { data: activeSchoolYearResponse, isLoading: isLoadingActiveSchoolYear } =
+    useGetActiveSchoolYears();
 
-  const { data: schoolYearResponse, isLoading: isLoadingSchoolYears } = useGetSchoolYearPaginated({
-    sort: '-start_date',
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
+  const { data: activeCampusesResponse, isLoading: isLoadingActiveCampuses } = useGetActiveCampuses(
+    {
+      'filter[school_year_id]': fields.schoolYearId,
+    },
+    { query: { enabled: !!fields.schoolYearId } }
+  );
 
-  const { data: collegeResponse, isLoading: isLoadingColleges } = useGetCollegePaginated(
+  const { data: activeCollegesResponse, isLoading: isLoadingActiveColleges } = useGetActiveColleges(
     {
       'filter[campus_id]': fields.campusId,
-      page: 1,
-      rows: Number.MAX_SAFE_INTEGER,
     },
     { query: { enabled: !!fields.campusId } }
   );
 
-  const { data: academicProgramResponse, isLoading: isLoadingPrograms } =
-    useGetAcademicProgramPaginated(
+  const { data: activeAdmissionSchedulesResponse, isLoading: isLoadingActiveAdmissionSchedules } =
+    useGetAdmissionSchedulePaginated(
       {
         'filter[college_id]': fields.collegeId,
-        page: 1,
-        rows: Number.MAX_SAFE_INTEGER,
       },
       { query: { enabled: !!fields.collegeId } }
     );
@@ -97,26 +86,31 @@ export default function GuestAdmissionPage(): React.ReactNode {
   const { data: academicProgramRequirementResponse, isLoading: isLoadingRequirements } =
     useGetAcademicProgramRequirementPaginated(
       {
-        'filter[academic_program_id]': fields.academicProgramId,
-        'filter[school_year_id]': fields.schoolYearId,
+        'filter[academic_program_id]': (() => {
+          const data = activeAdmissionSchedulesResponse?.data?.data?.find(
+            (schedule) => schedule.id === fields.admissionScheduleId
+          );
+          if (!data) return undefined;
+          return data.academic_program_id;
+        })(),
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
       },
-      { query: { enabled: !!fields.academicProgramId || !!fields.schoolYearId } }
+      { query: { enabled: !!fields.admissionScheduleId } }
     );
 
-  const campuses = useMemo(() => campusResponse?.data?.data ?? [], [campusResponse]);
-
   const schoolYears = useMemo(
-    () => schoolYearResponse?.data?.data?.filter((data) => data.is_active && !data.is_locked) ?? [],
-    [schoolYearResponse]
+    () => activeSchoolYearResponse?.data ?? [],
+    [activeSchoolYearResponse]
   );
 
-  const colleges = useMemo(() => collegeResponse?.data?.data ?? [], [collegeResponse]);
+  const campuses = useMemo(() => activeCampusesResponse?.data ?? [], [activeCampusesResponse]);
 
-  const academicPrograms = useMemo(
-    () => academicProgramResponse?.data?.data ?? [],
-    [academicProgramResponse]
+  const colleges = useMemo(() => activeCollegesResponse?.data ?? [], [activeCollegesResponse]);
+
+  const admissionSchedules = useMemo(
+    () => activeAdmissionSchedulesResponse?.data?.data ?? [],
+    [activeAdmissionSchedulesResponse]
   );
 
   const academicProgramRequirements = useMemo(
@@ -142,11 +136,15 @@ export default function GuestAdmissionPage(): React.ReactNode {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const selectedSchedule = admissionSchedules.find(
+        (schedule) => schedule.id === fields.admissionScheduleId
+      );
+
       await createAdmissionApplication({
         data: {
           ...formData,
-          ...fields,
-          academic_program_id: fields.academicProgramId,
+          admission_schedule_id: fields.admissionScheduleId,
+          academic_program_id: selectedSchedule?.academic_program_id ?? 0,
           school_year_id: fields.schoolYearId,
           user_id: session?.id ?? 0,
           uploadedFiles,
@@ -165,7 +163,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
         campusId: 0,
         schoolYearId: 0,
         collegeId: 0,
-        academicProgramId: 0,
+        admissionScheduleId: 0,
       });
       setUploadedFiles({});
       setCurrentStep(1);
@@ -189,7 +187,7 @@ export default function GuestAdmissionPage(): React.ReactNode {
     fields.campusId &&
     fields.schoolYearId &&
     fields.collegeId &&
-    fields.academicProgramId &&
+    fields.admissionScheduleId &&
     allMandatoryFilesUploaded;
   const isStep2Complete = formData.first_name && formData.last_name;
   const isStep3Complete = formData.email && formData.phone && formData.address;
@@ -298,6 +296,39 @@ export default function GuestAdmissionPage(): React.ReactNode {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3 group">
                       <Label
+                        htmlFor="schoolYear"
+                        className="flex items-center gap-2 text-base font-bold group-hover:text-primary transition-colors"
+                      >
+                        <Calendar className="w-5 h-5" />
+                        Academic Year
+                      </Label>
+                      <Select
+                        value={fields.schoolYearId ? String(fields.schoolYearId) : ''}
+                        onValueChange={(value) =>
+                          setFields((prev) => ({
+                            ...prev,
+                            schoolYearId: Number(value),
+                            campusId: 0,
+                            collegeId: 0,
+                            admissionScheduleId: 0,
+                          }))
+                        }
+                        disabled={isLoadingActiveSchoolYear}
+                        placeholder={
+                          isLoadingActiveSchoolYear
+                            ? 'Loading academic years...'
+                            : 'Select academic year'
+                        }
+                        options={schoolYears.map((year) => ({
+                          label: year.name ?? '',
+                          value: String(year.id),
+                        }))}
+                        className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50"
+                      />
+                    </div>
+
+                    <div className="space-y-3 group">
+                      <Label
                         htmlFor="campus"
                         className="flex items-center gap-2 text-base font-bold group-hover:text-primary transition-colors"
                       >
@@ -311,68 +342,23 @@ export default function GuestAdmissionPage(): React.ReactNode {
                             ...prev,
                             campusId: Number(value),
                             collegeId: 0,
-                            academicProgramId: 0,
+                            admissionScheduleId: 0,
                           }))
                         }
-                        disabled={isLoadingCampuses}
-                      >
-                        <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
-                          <SelectValue
-                            placeholder={
-                              isLoadingCampuses ? 'Loading campuses...' : 'Choose your campus'
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {campuses.map((campus) => (
-                            <SelectItem
-                              key={campus.id}
-                              value={String(campus.id)}
-                              className="text-base py-3"
-                            >
-                              {campus.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="schoolYear"
-                        className="flex items-center gap-2 text-base font-bold group-hover:text-primary transition-colors"
-                      >
-                        <Calendar className="w-5 h-5" />
-                        Academic Year
-                      </Label>
-                      <Select
-                        value={fields.schoolYearId ? String(fields.schoolYearId) : ''}
-                        onValueChange={(value) =>
-                          setFields((prev) => ({ ...prev, schoolYearId: Number(value) }))
+                        disabled={!fields.schoolYearId || isLoadingActiveCampuses}
+                        placeholder={
+                          !fields.schoolYearId
+                            ? '← Select academic year first'
+                            : isLoadingActiveCampuses
+                              ? 'Loading campuses...'
+                              : 'Choose your campus'
                         }
-                        disabled={isLoadingSchoolYears}
-                      >
-                        <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
-                          <SelectValue
-                            placeholder={
-                              isLoadingSchoolYears
-                                ? 'Loading academic years...'
-                                : 'Select academic year'
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {schoolYears.map((year) => (
-                            <SelectItem
-                              key={year.id}
-                              value={String(year.id)}
-                              className="text-base py-3"
-                            >
-                              {year.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        options={campuses.map((campus) => ({
+                          label: campus.name ?? '',
+                          value: String(campus.id),
+                        }))}
+                        className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50"
+                      />
                     </div>
                   </div>
                   <div className="space-y-3 group">
@@ -389,76 +375,54 @@ export default function GuestAdmissionPage(): React.ReactNode {
                         setFields((prev) => ({
                           ...prev,
                           collegeId: Number(value),
-                          academicProgramId: 0,
+                          admissionScheduleId: 0,
                         }))
                       }
-                      disabled={!fields.campusId || isLoadingColleges}
-                    >
-                      <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
-                        <SelectValue
-                          placeholder={
-                            !fields.campusId
-                              ? '← Select campus first'
-                              : isLoadingColleges
-                                ? 'Loading colleges...'
-                                : 'Choose your college'
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {colleges.map((college) => (
-                          <SelectItem
-                            key={college.id}
-                            value={String(college.id)}
-                            className="text-base py-3"
-                          >
-                            {college.college_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      disabled={!fields.campusId || isLoadingActiveColleges}
+                      placeholder={
+                        !fields.campusId
+                          ? '← Select campus first'
+                          : isLoadingActiveColleges
+                            ? 'Loading colleges...'
+                            : 'Choose your college'
+                      }
+                      options={colleges.map((college) => ({
+                        label: college.college_name ?? '',
+                        value: String(college.id),
+                      }))}
+                      className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50"
+                    />
                   </div>
                   <div className="space-y-3 group">
                     <Label
-                      htmlFor="program"
+                      htmlFor="admissionSchedule"
                       className="flex items-center gap-2 text-base font-bold group-hover:text-primary transition-colors"
                     >
                       <FileText className="w-5 h-5" />
-                      Degree Program
+                      Admission Schedule
                     </Label>
                     <Select
-                      value={fields.academicProgramId ? String(fields.academicProgramId) : ''}
+                      value={fields.admissionScheduleId ? String(fields.admissionScheduleId) : ''}
                       onValueChange={(value) =>
-                        setFields((prev) => ({ ...prev, academicProgramId: Number(value) }))
+                        setFields((prev) => ({ ...prev, admissionScheduleId: Number(value) }))
                       }
-                      disabled={!fields.collegeId || isLoadingPrograms}
-                    >
-                      <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50">
-                        <SelectValue
-                          placeholder={
-                            !fields.collegeId
-                              ? '← Select college first'
-                              : isLoadingPrograms
-                                ? 'Loading programs...'
-                                : 'Choose your program'
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {academicPrograms.map((program) => (
-                          <SelectItem
-                            key={program.id}
-                            value={String(program.id)}
-                            className="text-base py-3"
-                          >
-                            {program.program_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      disabled={!fields.collegeId || isLoadingActiveAdmissionSchedules}
+                      placeholder={
+                        !fields.collegeId
+                          ? '← Select college first'
+                          : isLoadingActiveAdmissionSchedules
+                            ? 'Loading admission schedules...'
+                            : 'Choose admission schedule'
+                      }
+                      options={admissionSchedules.map((schedule) => ({
+                        label: schedule.academic_program?.program_name ?? '',
+                        value: String(schedule.id),
+                      }))}
+                      className="h-14 text-base border-2 hover:border-primary transition-colors disabled:opacity-50"
+                    />
                   </div>
                   {/* Program Requirements Section */}
-                  {fields.academicProgramId > 0 && (
+                  {fields.admissionScheduleId > 0 && (
                     <div className="mt-8 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 rounded-2xl border-2 border-primary/20">
                         <div className="flex items-start gap-4">

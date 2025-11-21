@@ -162,7 +162,7 @@ class AdmissionApplication extends Model
     {
         $now = now();
         return $this->admission_schedule
-            ->schoolYear()
+            ->schoolYear
             ->academicCalendars()
             ->where('event', CalendarEventEnum::ENROLLMENT->value)
             ->where('start_date', '<=', $now)

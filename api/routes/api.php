@@ -216,6 +216,9 @@ Route::controller(AdmissionApplicationController::class)->group(function() {
 
 Route::controller(AdmissionScheduleController::class)->group(function() {
     Route::get('/AdmissionSchedule', 'index');
+    Route::get('/AdmissionSchedule/active-school-year', 'getActiveSchoolYears');
+    Route::get('/AdmissionSchedule/active-campuses', 'getActiveCampuses');
+    Route::get('/AdmissionSchedule/active-college-by-campus-id', 'getActiveColleges');
     Route::get('/AdmissionSchedule/{id}', 'show');
     Route::post('/AdmissionSchedule', 'store');
     Route::put('/AdmissionSchedule/{id}', 'update');

@@ -37,8 +37,8 @@ export default function GuestEnrollment(): React.ReactNode {
   const { data: availableSectionsResponse, isLoading: isLoadingAvailableSections } =
     useGetSectionPaginated(
       {
-        'filter[school_year_id]': Number(application?.school_year_id),
-        'filter[academic_program_id]': Number(application?.academic_program_id),
+        'filter[school_year_id]': Number(application?.admission_schedule?.school_year_id),
+        'filter[academic_program_id]': Number(application?.admission_schedule?.academic_program_id),
         'filter[for_freshmen]': true,
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
@@ -188,7 +188,9 @@ export default function GuestEnrollment(): React.ReactNode {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <CardTitle className="text-2xl">{application?.school_year?.name}</CardTitle>
+                  <CardTitle className="text-2xl">
+                    {application?.admission_schedule?.school_year?.name}
+                  </CardTitle>
                   <CardDescription className="text-base">
                     {yearLevel} • {termLevel}
                   </CardDescription>
