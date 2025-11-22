@@ -13,7 +13,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useDeleteGradeBookItem, useDeleteGradeBookItemDetail } from '@rest/api';
+import {
+  useDeleteGradeBookItem,
+  useDeleteGradeBookItemDetail,
+  useGetGradeBookById,
+} from '@rest/api';
 import {
   AlertCircle,
   Calendar,
@@ -35,10 +39,21 @@ import type { GradeBookItem } from '@rest/models/gradeBookItem';
 import type { GradeBookItemDetail } from '@rest/models/gradeBookItemDetail';
 
 export interface GradeBookViewProps {
-  gradebook: GradeBook;
+  defaultGradebook: GradeBook;
 }
 
-export default function GradeBookView({ gradebook }: GradeBookViewProps): React.ReactNode {
+export default function GradeBookView({ defaultGradebook }: GradeBookViewProps): React.ReactNode {
+  const { data: gradebookData, refetch } = useGetGradeBookById(defaultGradebook.id!, {
+    query: {
+      enabled: false,
+    },
+  });
+
+  const gradebook = useMemo(
+    () => (gradebookData?.data as GradeBook) ?? defaultGradebook,
+    [gradebookData, defaultGradebook]
+  );
+
   const defaultGradingPeriod: GradeBookGradingPeriod = useMemo(
     () => ({
       gradebook_id: gradebook?.id ?? 0,
@@ -91,6 +106,7 @@ export default function GradeBookView({ gradebook }: GradeBookViewProps): React.
       try {
         await deleteGradeBookItem({ id: item.id as number });
         toast.success('Gradebook item deleted successfully');
+        refetch?.();
       } catch (error) {
         toast.error('Failed to delete gradebook item');
         console.error('Delete error:', error);
@@ -103,6 +119,7 @@ export default function GradeBookView({ gradebook }: GradeBookViewProps): React.
       try {
         await deleteGradeBookItemDetail({ id: detail.id as number });
         toast.success('Item detail deleted successfully');
+        refetch?.();
       } catch (error) {
         toast.error('Failed to delete item detail');
         console.error('Delete error:', error);
@@ -132,6 +149,18 @@ export default function GradeBookView({ gradebook }: GradeBookViewProps): React.
       [periodId]: itemId,
     }));
   }
+
+  const handleGradingPeriodSubmit = () => {
+    refetch?.();
+  };
+
+  const handleItemSubmit = () => {
+    refetch?.();
+  };
+
+  const handleItemDetailSubmit = () => {
+    refetch?.();
+  };
 
   if (!gradebook) {
     return null;
@@ -675,11 +704,17 @@ export default function GradeBookView({ gradebook }: GradeBookViewProps): React.
         </div>
       </div>
 
-      <GradebookGradingPeriodModal controller={gradingPeriodController} onSubmit={() => {}} />
+      <GradebookGradingPeriodModal
+        controller={gradingPeriodController}
+        onSubmit={handleGradingPeriodSubmit}
+      />
 
-      <GradebookItemModal controller={itemController} onSubmit={() => {}} />
+      <GradebookItemModal controller={itemController} onSubmit={handleItemSubmit} />
 
-      <GradebookItemDetailModal controller={itemDetailController} onSubmit={() => {}} />
+      <GradebookItemDetailModal
+        controller={itemDetailController}
+        onSubmit={handleItemDetailSubmit}
+      />
     </>
   );
 }

@@ -275,4 +275,14 @@ class Enrollment extends Model
     {
         return $this->hasMany(EnrollmentLog::class)->latest();
     }
+
+    /**
+     * Get the gradebook scores for the enrollment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function gradebookScores(): HasMany
+    {
+        return $this->hasMany(GradeBookScore::class);
+    }
 }

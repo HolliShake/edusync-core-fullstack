@@ -29,6 +29,7 @@ use App\Interface\IRepo\IGradeBookGradingPeriodRepo;
 use App\Interface\IRepo\IGradeBookItemDetailRepo;
 use App\Interface\IRepo\IGradeBookItemRepo;
 use App\Interface\IRepo\IGradeBookRepo;
+use App\Interface\IRepo\IGradeBookScoreRepo;
 use App\Interface\IRepo\IProgramTypeRepo;
 use App\Interface\IRepo\IRequirementRepo;
 use App\Interface\IRepo\IRoomRepo;
@@ -97,6 +98,7 @@ use App\Repo\GradeBookGradingPeriodRepo;
 use App\Repo\GradeBookItemDetailRepo;
 use App\Repo\GradeBookItemRepo;
 use App\Repo\GradeBookRepo;
+use App\Repo\GradeBookScoreRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RequirementRepo;
 use App\Repo\RoomRepo;
@@ -182,6 +184,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ISectionTeacherRepo::class, SectionTeacherRepo::class);
         $this->app->bind(IGradeBookGradingPeriodRepo::class, GradeBookGradingPeriodRepo::class);
         $this->app->bind(IAdmissionScheduleRepo::class, AdmissionScheduleRepo::class);
+        $this->app->bind(IGradeBookScoreRepo::class, GradeBookScoreRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -217,6 +220,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ISectionTeacherService::class, SectionTeacherService::class);
         $this->app->bind(IGradeBookGradingPeriodService::class, GradeBookGradingPeriodService::class);
         $this->app->bind(IAdmissionScheduleService::class, AdmissionScheduleService::class);
+        $this->app->bind(IGradeBookScoreRepo::class, GradeBookScoreRepo::class);
     }
 
     /**

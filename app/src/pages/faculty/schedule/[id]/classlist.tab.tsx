@@ -1,6 +1,7 @@
 import type { TableColumn } from '@/components/custom/table.component';
 import Table from '@/components/custom/table.component';
 import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useSectionTeacherContext } from '@/context/section-teacher.context';
 import { useGetEnrollmentPaginated } from '@rest/api';
 import type { Enrollment } from '@rest/models/enrollment';
@@ -60,8 +61,41 @@ export default function FacultyScheduleClasslistTab(): React.ReactNode {
 
   if (isLoading && !enrollments) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <p className="text-muted-foreground">Loading class list...</p>
+      <div className="space-y-4">
+        <div className="rounded-lg border bg-card">
+          <div className="border-b px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-4 flex-1">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+            </div>
+          </div>
+          <div className="divide-y">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="px-6 py-4">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-4 w-56" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="border-t px-6 py-4">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-4 w-32" />
+              <div className="flex gap-2">
+                <Skeleton className="h-8 w-8" />
+                <Skeleton className="h-8 w-8" />
+                <Skeleton className="h-8 w-8" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

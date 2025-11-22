@@ -68,7 +68,7 @@ export default function GradebookDetailPage(): React.ReactNode {
       title={gradebook.title}
       description={`Comprehensive grading management for ${gradebook.title}`}
     >
-      <GradeBookView gradebook={gradebook} />
+      <GradeBookView defaultGradebook={gradebook} />
     </TitledPage>
   );
 }

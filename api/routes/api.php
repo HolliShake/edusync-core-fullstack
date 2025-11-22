@@ -37,6 +37,7 @@ use App\Http\Controllers\GradeBookController;
 use App\Http\Controllers\GradeBookGradingPeriodController;
 use App\Http\Controllers\GradeBookItemController;
 use App\Http\Controllers\GradeBookItemDetailController;
+use App\Http\Controllers\GradeBookScoreController;
 use App\Http\Controllers\SectionTeacherController;
 
 Route::get('/user', function (Request $request) {
@@ -57,161 +58,161 @@ Route::controller(AuthController::class)->group(function() {
 
 Route::controller(AcademicCalendarController::class)->group(function() {
     Route::get('/AcademicCalendar', 'index');
-    Route::get('/AcademicCalendar/{id}', 'show');
+    Route::get('/AcademicCalendar/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AcademicCalendar', 'store');
-    Route::put('/AcademicCalendar/{id}', 'update');
-    Route::delete('/AcademicCalendar/{id}', 'destroy');
+    Route::put('/AcademicCalendar/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AcademicCalendar/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AcademicProgramController::class)->group(function() {
     Route::get('/AcademicProgram', 'index');
-    Route::get('/AcademicProgram/{id}', 'show');
+    Route::get('/AcademicProgram/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AcademicProgram/create', 'store');
-    Route::put('/AcademicProgram/update/{id}', 'update');
-    Route::delete('/AcademicProgram/delete/{id}', 'destroy');
+    Route::put('/AcademicProgram/update/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AcademicProgram/delete/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AcademicTermController::class)->group(function() {
     Route::get('/AcademicTerm', 'index');
-    Route::get('/AcademicTerm/{id}', 'show');
+    Route::get('/AcademicTerm/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AcademicTerm', 'store');
-    Route::put('/AcademicTerm/{id}', 'update');
-    Route::delete('/AcademicTerm/{id}', 'destroy');
+    Route::put('/AcademicTerm/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AcademicTerm/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(BuildingController::class)->group(function() {
     Route::get('/Building', 'index');
-    Route::get('/Building/{id}', 'show');
+    Route::get('/Building/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Building/create', 'store');
-    Route::put('/Building/update/{id}', 'update');
-    Route::delete('/Building/delete/{id}', 'destroy');
+    Route::put('/Building/update/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Building/delete/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CampusController::class)->group(function() {
     Route::get('/Campus', 'index');
-    Route::get('/Campus/{id}', 'show');
+    Route::get('/Campus/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Campus/create', 'store');
-    Route::put('/Campus/update/{id}', 'update');
-    Route::delete('/Campus/delete/{id}', 'destroy');
+    Route::put('/Campus/update/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Campus/delete/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CollegeController::class)->group(function() {
     Route::get('/College', 'index');
-    Route::get('/College/{id}', 'show');
+    Route::get('/College/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/College/create', 'store');
-    Route::put('/College/update/{id}', 'update');
-    Route::delete('/College/delete/{id}', 'destroy');
+    Route::put('/College/update/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/College/delete/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CourseController::class)->group(function() {
     Route::get('/Course', 'index');
-    Route::get('/Course/{id}', 'show');
+    Route::get('/Course/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Course', 'store');
-    Route::put('/Course/{id}', 'update');
-    Route::delete('/Course/{id}', 'destroy');
+    Route::put('/Course/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Course/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CourseRequisiteController::class)->group(function() {
     Route::get('/CourseRequisite', 'index');
-    Route::get('/CourseRequisite/{id}', 'show');
+    Route::get('/CourseRequisite/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/CourseRequisite', 'store');
-    Route::put('/CourseRequisite/{id}', 'update');
-    Route::delete('/CourseRequisite/{id}', 'destroy');
+    Route::put('/CourseRequisite/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/CourseRequisite/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CurriculumController::class)->group(function() {
     Route::get('/Curriculum', 'index');
-    Route::get('/Curriculum/{id}', 'show');
+    Route::get('/Curriculum/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Curriculum', 'store');
-    Route::put('/Curriculum/{id}', 'update');
-    Route::delete('/Curriculum/{id}', 'destroy');
+    Route::put('/Curriculum/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Curriculum/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CurriculumDetailController::class)->group(function() {
     Route::get('/CurriculumDetail', 'index');
-    Route::get('/CurriculumDetail/{id}', 'show');
+    Route::get('/CurriculumDetail/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/CurriculumDetail', 'store');
     Route::post('/CurriculumDetail/multiple', 'createMultiple');
-    Route::put('/CurriculumDetail/{id}', 'update');
-    Route::delete('/CurriculumDetail/{id}', 'destroy');
+    Route::put('/CurriculumDetail/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/CurriculumDetail/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(ProgramTypeController::class)->group(function() {
     Route::get('/ProgramType', 'index');
-    Route::get('/ProgramType/{id}', 'show');
+    Route::get('/ProgramType/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/ProgramType/create', 'store');
-    Route::put('/ProgramType/update/{id}', 'update');
-    Route::delete('/ProgramType/delete/{id}', 'destroy');
+    Route::put('/ProgramType/update/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/ProgramType/delete/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(RoomController::class)->group(function() {
     Route::get('/Room', 'index');
-    Route::get('/Room/{id}', 'show');
+    Route::get('/Room/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Room/create', 'store');
-    Route::put('/Room/update/{id}', 'update');
-    Route::delete('/Room/delete/{id}', 'destroy');
+    Route::put('/Room/update/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Room/delete/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(SchoolYearController::class)->group(function() {
     Route::get('/SchoolYear', 'index');
-    Route::get('/SchoolYear/{id}', 'show');
+    Route::get('/SchoolYear/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/SchoolYear', 'store');
-    Route::put('/SchoolYear/{id}', 'update');
-    Route::delete('/SchoolYear/{id}', 'destroy');
+    Route::put('/SchoolYear/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/SchoolYear/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(SectionController::class)->group(function() {
     Route::middleware(['throttle:150,1'])->get('/Section', 'index');
-    Route::get('/Section/{id}', 'show');
+    Route::get('/Section/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Section', 'store');
     Route::post('/Section/generate', 'generate');
-    Route::put('/Section/{id}', 'update');
-    Route::delete('/Section/{id}', 'destroy');
+    Route::put('/Section/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Section/{id}', 'destroy')->where('id', '[0-9]+');
     Route::delete('/Section/code/{section_code}', 'destroyBySectionCode');
 });
 
 Route::controller(RequirementController::class)->group(function() {
     Route::get('/Requirement', 'index');
-    Route::get('/Requirement/{id}', 'show');
+    Route::get('/Requirement/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Requirement', 'store');
-    Route::put('/Requirement/{id}', 'update');
-    Route::delete('/Requirement/{id}', 'destroy');
+    Route::put('/Requirement/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Requirement/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(UserController::class)->group(function() {
     Route::get('/User', 'index');
-    Route::get('/User/{id}', 'show');
+    Route::get('/User/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/User', 'store');
-    Route::put('/User/{id}', 'update');
-    Route::delete('/User/{id}', 'destroy');
+    Route::put('/User/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/User/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(DesignitionController::class)->group(function() {
     Route::get('/Designition', 'index');
-    Route::get('/Designition/{id}', 'show');
+    Route::get('/Designition/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Designition', 'store');
     Route::post('/Designition/create-program-chair', 'create_program_chair');
     Route::post('/Designition/create-college-dean', 'create_college_dean');
     Route::post('/Designition/create-campus-registrar', 'create_campus_registrar');
-    Route::put('/Designition/{id}', 'update');
-    Route::delete('/Designition/{id}', 'destroy');
+    Route::put('/Designition/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Designition/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 
 Route::controller(AcademicProgramRequirementController::class)->group(function() {
     Route::get('/AcademicProgramRequirement', 'index');
-    Route::get('/AcademicProgramRequirement/{id}', 'show');
+    Route::get('/AcademicProgramRequirement/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AcademicProgramRequirement', 'store');
-    Route::put('/AcademicProgramRequirement/{id}', 'update');
-    Route::delete('/AcademicProgramRequirement/{id}', 'destroy');
+    Route::put('/AcademicProgramRequirement/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AcademicProgramRequirement/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AdmissionApplicationController::class)->group(function() {
     Route::get('/AdmissionApplication', 'index');
-    Route::get('/AdmissionApplication/{id}', 'show');
+    Route::get('/AdmissionApplication/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AdmissionApplication', 'store');
-    Route::put('/AdmissionApplication/{id}', 'update');
-    Route::delete('/AdmissionApplication/{id}', 'destroy');
+    Route::put('/AdmissionApplication/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AdmissionApplication/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AdmissionScheduleController::class)->group(function() {
@@ -219,130 +220,140 @@ Route::controller(AdmissionScheduleController::class)->group(function() {
     Route::get('/AdmissionSchedule/active-school-year', 'getActiveSchoolYears');
     Route::get('/AdmissionSchedule/active-campuses', 'getActiveCampuses');
     Route::get('/AdmissionSchedule/active-college-by-campus-id', 'getActiveColleges');
-    Route::get('/AdmissionSchedule/{id}', 'show');
+    Route::get('/AdmissionSchedule/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AdmissionSchedule', 'store');
-    Route::put('/AdmissionSchedule/{id}', 'update');
-    Route::delete('/AdmissionSchedule/{id}', 'destroy');
+    Route::put('/AdmissionSchedule/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AdmissionSchedule/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AdmissionApplicationLogController::class)->group(function() {
     Route::get('/AdmissionApplicationLog', 'index');
-    Route::get('/AdmissionApplicationLog/{id}', 'show');
+    Route::get('/AdmissionApplicationLog/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AdmissionApplicationLog', 'store');
-    Route::put('/AdmissionApplicationLog/{id}', 'update');
-    Route::delete('/AdmissionApplicationLog/{id}', 'destroy');
+    Route::put('/AdmissionApplicationLog/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AdmissionApplicationLog/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 
 Route::controller(AcademicProgramCriteriaController::class)->group(function() {
     Route::get('/AcademicProgramCriteria', 'index');
-    Route::get('/AcademicProgramCriteria/{id}', 'show');
+    Route::get('/AcademicProgramCriteria/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AcademicProgramCriteria', 'store');
-    Route::put('/AcademicProgramCriteria/{id}', 'update');
-    Route::delete('/AcademicProgramCriteria/{id}', 'destroy');
+    Route::put('/AcademicProgramCriteria/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AcademicProgramCriteria/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AdmissionApplicationScoreController::class)->group(function() {
     Route::get('/AdmissionApplicationScore', 'index');
-    Route::get('/AdmissionApplicationScore/{id}', 'show');
+    Route::get('/AdmissionApplicationScore/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AdmissionApplicationScore', 'store');
     Route::post('/AdmissionApplicationScore/createOrUpdateMultiple', 'createOrUpdateMultiple');
-    Route::put('/AdmissionApplicationScore/{id}', 'update');
-    Route::delete('/AdmissionApplicationScore/{id}', 'destroy');
+    Route::put('/AdmissionApplicationScore/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AdmissionApplicationScore/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(EnrollmentController::class)->group(function() {
     Route::get('/Enrollment', 'index');
-    Route::get('/Enrollment/campus/scholastic-filter/{campus_id}', 'getScholasticFilterByCampusId');
-    Route::get('/Enrollment/academic-program/scholastic-filter/{academic_program_id}', 'getScholasticFilterByProgramId');
-    Route::get('/Enrollment/campus/grouped-by-user-name/{campus_id}', 'getEnrollmentsByCampusIdGroupedByUser');
-    Route::get('/Enrollment/academic-program/grouped-by-user-name/{academic_program_id}', 'getEnrollmentsByAcademicProgramIdGroupedByUser');
-    Route::get('/Enrollment/{id}', 'show');
+    Route::get('/Enrollment/campus/scholastic-filter/{campus_id}', 'getScholasticFilterByCampusId')->where('campus_id', '[0-9]+');
+    Route::get('/Enrollment/academic-program/scholastic-filter/{academic_program_id}', 'getScholasticFilterByProgramId')->where('academic_program_id', '[0-9]+');
+    Route::get('/Enrollment/campus/grouped-by-user-name/{campus_id}', 'getEnrollmentsByCampusIdGroupedByUser')->where('campus_id', '[0-9]+');
+    Route::get('/Enrollment/academic-program/grouped-by-user-name/{academic_program_id}', 'getEnrollmentsByAcademicProgramIdGroupedByUser')->where('academic_program_id', '[0-9]+');
+    Route::get('/Enrollment/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/Enrollment', 'store');
     Route::post('/Enrollment/enroll', 'enroll');
-    Route::put('/Enrollment/{id}', 'update');
-    Route::delete('/Enrollment/{id}', 'destroy');
+    Route::put('/Enrollment/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Enrollment/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(EnrollmentLogController::class)->group(function() {
     Route::get('/EnrollmentLog', 'index');
-    Route::get('/EnrollmentLog/{id}', 'show');
+    Route::get('/EnrollmentLog/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/EnrollmentLog', 'store');
-    Route::put('/EnrollmentLog/{id}', 'update');
-    Route::delete('/EnrollmentLog/{id}', 'destroy');
+    Route::put('/EnrollmentLog/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/EnrollmentLog/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(DocumentRequestController::class)->group(function() {
     Route::get('/DocumentRequest', 'index');
-    Route::get('/DocumentRequest/{id}', 'show');
+    Route::get('/DocumentRequest/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/DocumentRequest', 'store');
-    Route::put('/DocumentRequest/{id}', 'update');
-    Route::delete('/DocumentRequest/{id}', 'destroy');
+    Route::put('/DocumentRequest/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/DocumentRequest/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(DocumentRequestLogController::class)->group(function() {
     Route::get('/DocumentRequestLog', 'index');
-    Route::get('/DocumentRequestLog/{id}', 'show');
+    Route::get('/DocumentRequestLog/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/DocumentRequestLog', 'store');
-    Route::put('/DocumentRequestLog/{id}', 'update');
-    Route::delete('/DocumentRequestLog/{id}', 'destroy');
+    Route::put('/DocumentRequestLog/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/DocumentRequestLog/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(DocumentTypeController::class)->group(function() {
     Route::get('/DocumentType', 'index');
-    Route::get('/DocumentType/{id}', 'show');
+    Route::get('/DocumentType/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/DocumentType', 'store');
-    Route::put('/DocumentType/{id}', 'update');
-    Route::delete('/DocumentType/{id}', 'destroy');
+    Route::put('/DocumentType/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/DocumentType/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(CurriculumTaggingController::class)->group(function() {
     Route::get('/CurriculumTagging', 'index');
-    Route::get('/CurriculumTagging/{id}', 'show');
+    Route::get('/CurriculumTagging/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/CurriculumTagging', 'store');
-    Route::put('/CurriculumTagging/{id}', 'update');
-    Route::delete('/CurriculumTagging/{id}', 'destroy');
+    Route::put('/CurriculumTagging/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/CurriculumTagging/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(GradeBookController::class)->group(function() {
     Route::get('/GradeBook', 'index');
-    Route::get('/GradeBook/{id}', 'show');
+    Route::get('/GradeBook/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/GradeBook', 'store');
-    Route::post('/GradeBook/generate-from-template/{isTemplateGradeBookId}/{sectionId}', 'generateFromTemplate');
-    Route::put('/GradeBook/{id}', 'update');
-    Route::delete('/GradeBook/{id}', 'destroy');
+    Route::post('/GradeBook/generate-from-template/{isTemplateGradeBookId}/{sectionId}', 'generateFromTemplate')->where(['isTemplateGradeBookId' => '[0-9]+', 'sectionId' => '[0-9]+']);
+    Route::put('/GradeBook/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/GradeBook/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(GradeBookItemController::class)->group(function() {
     Route::get('/GradeBookItem', 'index');
-    Route::get('/GradeBookItem/{id}', 'show');
+    Route::get('/GradeBookItem/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/GradeBookItem', 'store');
-    Route::put('/GradeBookItem/{id}', 'update');
-    Route::delete('/GradeBookItem/{id}', 'destroy');
+    Route::put('/GradeBookItem/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/GradeBookItem/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(GradeBookItemDetailController::class)->group(function() {
     Route::get('/GradeBookItemDetail', 'index');
-    Route::get('/GradeBookItemDetail/{id}', 'show');
+    Route::get('/GradeBookItemDetail/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/GradeBookItemDetail', 'store');
-    Route::put('/GradeBookItemDetail/{id}', 'update');
-    Route::delete('/GradeBookItemDetail/{id}', 'destroy');
+    Route::put('/GradeBookItemDetail/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/GradeBookItemDetail/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(SectionTeacherController::class)->group(function() {
     Route::get('/SectionTeacher', 'index');
-    Route::get('/SectionTeacher/campus/{campus_id}', 'getSectionTeachersByCampusIdGroupedByTeacherName');
-    Route::get('/SectionTeacher/program/{academic_program_id}', 'getSectionTeachersByProgramIdGroupedByTeacherName');
-    Route::get('/SectionTeacher/{id}', 'show');
+    Route::get('/SectionTeacher/campus/{campus_id}', 'getSectionTeachersByCampusIdGroupedByTeacherName')->where('campus_id', '[0-9]+');
+    Route::get('/SectionTeacher/program/{academic_program_id}', 'getSectionTeachersByProgramIdGroupedByTeacherName')->where('academic_program_id', '[0-9]+');
+    Route::get('/SectionTeacher/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/SectionTeacher', 'store');
-    Route::put('/SectionTeacher/{id}', 'update');
-    Route::delete('/SectionTeacher/{id}', 'destroy');
+    Route::put('/SectionTeacher/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/SectionTeacher/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(GradeBookGradingPeriodController::class)->group(function() {
     Route::get('/GradeBookGradingPeriod', 'index');
-    Route::get('/GradeBookGradingPeriod/{id}', 'show');
+    Route::get('/GradeBookGradingPeriod/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/GradeBookGradingPeriod', 'store');
-    Route::put('/GradeBookGradingPeriod/{id}', 'update');
-    Route::delete('/GradeBookGradingPeriod/{id}', 'destroy');
+    Route::put('/GradeBookGradingPeriod/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/GradeBookGradingPeriod/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(GradeBookScoreController::class)->group(function() {
+    Route::get('/GradeBookScore', 'index');
+    Route::get('/GradeBookScore/get-sync/{section_id}', 'getSyncGradeBookScore')->where('section_id', '[0-9]+');
+    Route::get('/GradeBookScore/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/GradeBookScore', 'store');
+    Route::post('/GradeBookScore/sync-score/{section_id}', 'syncScoreForSection')->where('section_id', '[0-9]+');
+    Route::put('/GradeBookScore/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/GradeBookScore/{id}', 'destroy')->where('id', '[0-9]+');
 });

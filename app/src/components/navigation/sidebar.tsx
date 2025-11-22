@@ -136,7 +136,7 @@ export default function SideBar({
       {/* Navigation */}
       <nav
         className={cn(
-          'p-2 space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent',
+          'p-2 space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent scrollbar-thumb-rounded-full',
           isCollapsed && 'lg:px-1'
         )}
       >

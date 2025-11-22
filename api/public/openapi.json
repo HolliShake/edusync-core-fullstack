@@ -11201,6 +11201,498 @@
                 }
             }
         },
+        "\/api\/GradeBookScore": {
+            "get": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Get paginated list of GradeBookScore",
+                "description": "Retrieve a paginated list of GradeBookScore with optional search",
+                "operationId": "getGradeBookScorePaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedGradeBookScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Create a new GradeBookScore",
+                "description": " Create a new GradeBookScore with the provided details",
+                "operationId": "createGradeBookScore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/GradeBookScore"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "GradeBookScore created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateGradeBookScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/GradeBookScore\/get-sync\/{section_id}": {
+            "get": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Get list of GradeBookScore for sync",
+                "description": "Retrieve a sync list of GradeBookScore",
+                "operationId": "getSyncGradeBookScore",
+                "parameters": [
+                    {
+                        "name": "section_id",
+                        "in": "path",
+                        "description": "Section ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSyncGradeBookScoresResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/GradeBookScore\/{id}": {
+            "get": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Get a specific GradeBookScore",
+                "description": "Retrieve a GradeBookScore by its ID",
+                "operationId": "getGradeBookScoreById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetGradeBookScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "GradeBookScore not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Update a GradeBookScore",
+                "description": "Update an existing GradeBookScore with the provided details",
+                "operationId": "updateGradeBookScore",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/GradeBookScore"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "GradeBookScore updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateGradeBookScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "GradeBookScore not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Delete a GradeBookScore",
+                "description": "Delete a GradeBookScore by its ID",
+                "operationId": "deleteGradeBookScore",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "GradeBookScore deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteGradeBookScoreResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "GradeBookScore not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/GradeBookScore\/sync-score\/{section_id}": {
+            "post": {
+                "tags": [
+                    "GradeBookScore"
+                ],
+                "summary": "Sync score for a section",
+                "description": "Sync score for a section with the provided details",
+                "operationId": "syncScoreForSection",
+                "parameters": [
+                    {
+                        "name": "section_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#\/components\/schemas\/GradeBookScore"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "GradeBookScores created or updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetSyncGradeBookScoresResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/ProgramType": {
             "get": {
                 "tags": [
@@ -18918,6 +19410,176 @@
                 },
                 "type": "object"
             },
+            "GradeBookScore": {
+                "title": "GradeBookScore",
+                "required": [
+                    "gradebook_item_detail_id",
+                    "enrollment_id",
+                    "score"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "gradebook_item_detail_id": {
+                        "type": "integer"
+                    },
+                    "enrollment_id": {
+                        "type": "integer"
+                    },
+                    "score": {
+                        "type": "number"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "gradebook_item_detail": {
+                        "$ref": "#\/components\/schemas\/GradeBookItemDetail"
+                    },
+                    "enrollment": {
+                        "$ref": "#\/components\/schemas\/Enrollment"
+                    }
+                },
+                "type": "object"
+            },
+            "SyncGradeBookScore": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "gradebook_item_detail_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "enrollment_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "score": {
+                        "type": "number",
+                        "format": "decimal",
+                        "example": 85.5
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedGradeBookScore": {
+                "title": "PaginatedGradeBookScore",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/GradeBookScore"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedGradeBookScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedGradeBookScore"
+                    }
+                },
+                "type": "object"
+            },
+            "GetSyncGradeBookScoresResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/SyncGradeBookScore"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "GetGradeBookScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/GradeBookScore"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateGradeBookScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/GradeBookScore"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateGradeBookScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/GradeBookScore"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteGradeBookScoreResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "ProgramType": {
                 "title": "ProgramType",
                 "required": [
@@ -20182,6 +20844,10 @@
         {
             "name": "GradeBookItemDetail",
             "description": "GradeBookItemDetail"
+        },
+        {
+            "name": "GradeBookScore",
+            "description": "GradeBookScore"
         },
         {
             "name": "ProgramType",

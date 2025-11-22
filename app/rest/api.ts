@@ -67,6 +67,7 @@ import type {
   CreateGradeBookItemDetailResponse200,
   CreateGradeBookItemResponse200,
   CreateGradeBookResponse200,
+  CreateGradeBookScoreResponse200,
   CreateProgramTypeResponse200,
   CreateRequirementResponse200,
   CreateRoomResponse200,
@@ -104,6 +105,7 @@ import type {
   DeleteGradeBookItemDetailResponse200,
   DeleteGradeBookItemResponse200,
   DeleteGradeBookResponse200,
+  DeleteGradeBookScoreResponse200,
   DeleteProgramTypeResponse200,
   DeleteRequirementResponse200,
   DeleteRoomResponse200,
@@ -183,6 +185,8 @@ import type {
   GetGradeBookItemResponse200,
   GetGradeBookPaginatedParams,
   GetGradeBookResponse200,
+  GetGradeBookScorePaginatedParams,
+  GetGradeBookScoreResponse200,
   GetProgramTypePaginatedParams,
   GetProgramTypeResponse200,
   GetRequirementPaginatedParams,
@@ -205,12 +209,14 @@ import type {
   GetSectionTeachersByProgramIdGroupedByTeacherName200,
   GetSectionTeachersByProgramIdGroupedByTeacherNameParams,
   GetSectionsResponse200,
+  GetSyncGradeBookScoresResponse200,
   GetUserPaginatedParams,
   GetUserResponse200,
   GradeBook,
   GradeBookGradingPeriod,
   GradeBookItem,
   GradeBookItemDetail,
+  GradeBookScore,
   InternalServerErrorResponse,
   LoginResponse200,
   MultipleCurriculumDetail,
@@ -241,6 +247,7 @@ import type {
   PaginatedGradeBookItemDetailResponse200,
   PaginatedGradeBookItemResponse200,
   PaginatedGradeBookResponse200,
+  PaginatedGradeBookScoreResponse200,
   PaginatedProgramTypeResponse200,
   PaginatedRequirementResponse200,
   PaginatedRoomResponse200,
@@ -285,6 +292,7 @@ import type {
   UpdateGradeBookItemDetailResponse200,
   UpdateGradeBookItemResponse200,
   UpdateGradeBookResponse200,
+  UpdateGradeBookScoreResponse200,
   UpdateProgramTypeResponse200,
   UpdateRequirementResponse200,
   UpdateRoomResponse200,
@@ -11755,6 +11763,536 @@ export const useDeleteGradeBookItemDetail = <TError = UnauthenticatedResponse | 
       > => {
 
       const mutationOptions = getDeleteGradeBookItemDetailMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of GradeBookScore with optional search
+ * @summary Get paginated list of GradeBookScore
+ */
+export const getGradeBookScorePaginated = (
+    params?: GetGradeBookScorePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedGradeBookScoreResponse200>(
+      {url: `/api/GradeBookScore`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetGradeBookScorePaginatedQueryKey = (params?: GetGradeBookScorePaginatedParams,) => {
+    return [`/api/GradeBookScore`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetGradeBookScorePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetGradeBookScorePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGradeBookScorePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGradeBookScorePaginated>>> = ({ signal }) => getGradeBookScorePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetGradeBookScorePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getGradeBookScorePaginated>>>
+export type GetGradeBookScorePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetGradeBookScorePaginated<TData = Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetGradeBookScorePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradeBookScorePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getGradeBookScorePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradeBookScorePaginated<TData = Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetGradeBookScorePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradeBookScorePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getGradeBookScorePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradeBookScorePaginated<TData = Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetGradeBookScorePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of GradeBookScore
+ */
+
+export function useGetGradeBookScorePaginated<TData = Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetGradeBookScorePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScorePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetGradeBookScorePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new GradeBookScore with the provided details
+ * @summary Create a new GradeBookScore
+ */
+export const createGradeBookScore = (
+    gradeBookScore: NonReadonly<GradeBookScore>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateGradeBookScoreResponse200>(
+      {url: `/api/GradeBookScore`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: gradeBookScore, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateGradeBookScoreMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGradeBookScore>>, TError,{data: NonReadonly<GradeBookScore>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createGradeBookScore>>, TError,{data: NonReadonly<GradeBookScore>}, TContext> => {
+
+const mutationKey = ['createGradeBookScore'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGradeBookScore>>, {data: NonReadonly<GradeBookScore>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createGradeBookScore(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateGradeBookScoreMutationResult = NonNullable<Awaited<ReturnType<typeof createGradeBookScore>>>
+    export type CreateGradeBookScoreMutationBody = NonReadonly<GradeBookScore>
+    export type CreateGradeBookScoreMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new GradeBookScore
+ */
+export const useCreateGradeBookScore = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGradeBookScore>>, TError,{data: NonReadonly<GradeBookScore>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createGradeBookScore>>,
+        TError,
+        {data: NonReadonly<GradeBookScore>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateGradeBookScoreMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a sync list of GradeBookScore
+ * @summary Get list of GradeBookScore for sync
+ */
+export const getSyncGradeBookScore = (
+    sectionId: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSyncGradeBookScoresResponse200>(
+      {url: `/api/GradeBookScore/get-sync/${sectionId}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetSyncGradeBookScoreQueryKey = (sectionId?: number,) => {
+    return [`/api/GradeBookScore/get-sync/${sectionId}`] as const;
+    }
+
+    
+export const getGetSyncGradeBookScoreQueryOptions = <TData = Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSyncGradeBookScoreQueryKey(sectionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSyncGradeBookScore>>> = ({ signal }) => getSyncGradeBookScore(sectionId, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sectionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSyncGradeBookScoreQueryResult = NonNullable<Awaited<ReturnType<typeof getSyncGradeBookScore>>>
+export type GetSyncGradeBookScoreQueryError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse
+
+
+export function useGetSyncGradeBookScore<TData = Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSyncGradeBookScore>>,
+          TError,
+          Awaited<ReturnType<typeof getSyncGradeBookScore>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSyncGradeBookScore<TData = Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSyncGradeBookScore>>,
+          TError,
+          Awaited<ReturnType<typeof getSyncGradeBookScore>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSyncGradeBookScore<TData = Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get list of GradeBookScore for sync
+ */
+
+export function useGetSyncGradeBookScore<TData = Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradeBookScore>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSyncGradeBookScoreQueryOptions(sectionId,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a GradeBookScore by its ID
+ * @summary Get a specific GradeBookScore
+ */
+export const getGradeBookScoreById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetGradeBookScoreResponse200>(
+      {url: `/api/GradeBookScore/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetGradeBookScoreByIdQueryKey = (id?: number,) => {
+    return [`/api/GradeBookScore/${id}`] as const;
+    }
+
+    
+export const getGetGradeBookScoreByIdQueryOptions = <TData = Awaited<ReturnType<typeof getGradeBookScoreById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScoreById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGradeBookScoreByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGradeBookScoreById>>> = ({ signal }) => getGradeBookScoreById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScoreById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetGradeBookScoreByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getGradeBookScoreById>>>
+export type GetGradeBookScoreByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetGradeBookScoreById<TData = Awaited<ReturnType<typeof getGradeBookScoreById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScoreById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradeBookScoreById>>,
+          TError,
+          Awaited<ReturnType<typeof getGradeBookScoreById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradeBookScoreById<TData = Awaited<ReturnType<typeof getGradeBookScoreById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScoreById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradeBookScoreById>>,
+          TError,
+          Awaited<ReturnType<typeof getGradeBookScoreById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradeBookScoreById<TData = Awaited<ReturnType<typeof getGradeBookScoreById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScoreById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific GradeBookScore
+ */
+
+export function useGetGradeBookScoreById<TData = Awaited<ReturnType<typeof getGradeBookScoreById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradeBookScoreById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetGradeBookScoreByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing GradeBookScore with the provided details
+ * @summary Update a GradeBookScore
+ */
+export const updateGradeBookScore = (
+    id: number,
+    gradeBookScore: NonReadonly<GradeBookScore>,
+ ) => {
+      
+      
+      return fetchData<UpdateGradeBookScoreResponse200>(
+      {url: `/api/GradeBookScore/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: gradeBookScore
+    },
+      );
+    }
+  
+
+
+export const getUpdateGradeBookScoreMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGradeBookScore>>, TError,{id: number;data: NonReadonly<GradeBookScore>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateGradeBookScore>>, TError,{id: number;data: NonReadonly<GradeBookScore>}, TContext> => {
+
+const mutationKey = ['updateGradeBookScore'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGradeBookScore>>, {id: number;data: NonReadonly<GradeBookScore>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateGradeBookScore(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateGradeBookScoreMutationResult = NonNullable<Awaited<ReturnType<typeof updateGradeBookScore>>>
+    export type UpdateGradeBookScoreMutationBody = NonReadonly<GradeBookScore>
+    export type UpdateGradeBookScoreMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a GradeBookScore
+ */
+export const useUpdateGradeBookScore = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGradeBookScore>>, TError,{id: number;data: NonReadonly<GradeBookScore>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateGradeBookScore>>,
+        TError,
+        {id: number;data: NonReadonly<GradeBookScore>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateGradeBookScoreMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a GradeBookScore by its ID
+ * @summary Delete a GradeBookScore
+ */
+export const deleteGradeBookScore = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteGradeBookScoreResponse200>(
+      {url: `/api/GradeBookScore/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteGradeBookScoreMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGradeBookScore>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteGradeBookScore>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteGradeBookScore'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGradeBookScore>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteGradeBookScore(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteGradeBookScoreMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGradeBookScore>>>
+    
+    export type DeleteGradeBookScoreMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a GradeBookScore
+ */
+export const useDeleteGradeBookScore = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGradeBookScore>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteGradeBookScore>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteGradeBookScoreMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Sync score for a section with the provided details
+ * @summary Sync score for a section
+ */
+export const syncScoreForSection = (
+    sectionId: number,
+    gradeBookScore: NonReadonly<GradeBookScore[]>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSyncGradeBookScoresResponse200>(
+      {url: `/api/GradeBookScore/sync-score/${sectionId}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: gradeBookScore, signal
+    },
+      );
+    }
+  
+
+
+export const getSyncScoreForSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: NonReadonly<GradeBookScore[]>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: NonReadonly<GradeBookScore[]>}, TContext> => {
+
+const mutationKey = ['syncScoreForSection'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncScoreForSection>>, {sectionId: number;data: NonReadonly<GradeBookScore[]>}> = (props) => {
+          const {sectionId,data} = props ?? {};
+
+          return  syncScoreForSection(sectionId,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncScoreForSectionMutationResult = NonNullable<Awaited<ReturnType<typeof syncScoreForSection>>>
+    export type SyncScoreForSectionMutationBody = NonReadonly<GradeBookScore[]>
+    export type SyncScoreForSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Sync score for a section
+ */
+export const useSyncScoreForSection = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: NonReadonly<GradeBookScore[]>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncScoreForSection>>,
+        TError,
+        {sectionId: number;data: NonReadonly<GradeBookScore[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getSyncScoreForSectionMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

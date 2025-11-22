@@ -2,16 +2,14 @@
 
 namespace App\Repo;
 
-use App\Enum\EnrollmentLogActionEnum;
-use App\Interface\IRepo\IEnrollmentRepo;
-use App\Models\Enrollment;
-use Spatie\QueryBuilder\AllowedFilter;
+use App\Interface\IRepo\IGradeBookScoreRepo;
+use App\Models\GradeBookScore;
 
-class EnrollmentRepo extends GenericRepo implements IEnrollmentRepo
+class GradeBookScoreRepo extends GenericRepo implements IGradeBookScoreRepo
 {
     public function __construct()
     {
-        parent::__construct(Enrollment::class);
+        parent::__construct(GradeBookScore::class);
     }
 
     /**
@@ -24,16 +22,6 @@ class EnrollmentRepo extends GenericRepo implements IEnrollmentRepo
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
-            AllowedFilter::exact('user_id'),
-            AllowedFilter::exact('section_id'),
-            AllowedFilter::callback('officially_enrolled', function ($query, $value) {
-                $query->whereDoesntHave('enrollmentLogs', function ($q) {
-                    $q->where('action', EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value);
-                })
-                ->whereHas('enrollmentLogs', function ($q) {
-                    $q->where('action', EnrollmentLogActionEnum::REGISTRAR_APPROVED->value);
-                });
-            }),
         ];
     }
 

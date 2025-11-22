@@ -150,7 +150,7 @@ export default function Providers({ children }: { children: React.ReactNode }): 
           <ConfirmProvider>{children}</ConfirmProvider>
         </AuthProvider>
       </QueryClientProvider>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors expand={true} closeButton={true} />
     </ThemeProvider>
   );
 }

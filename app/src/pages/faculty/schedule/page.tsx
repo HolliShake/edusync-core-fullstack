@@ -1,30 +1,61 @@
+import Select from '@/components/custom/select.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/auth.context';
 import { encryptIdForUrl } from '@/lib/hash';
-import { useGetSectionTeacherPaginated } from '@rest/api';
-import type { SectionTeacher } from '@rest/models';
+import { useGetSchoolYearPaginated, useGetSectionTeacherPaginated } from '@rest/api';
+import type { SchoolYear, SectionTeacher } from '@rest/models';
 import { CheckCircle2, CircleX } from 'lucide-react';
 import type React from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function FacultySchedule(): React.ReactNode {
   const { session } = useAuth();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
+  const [selectedSchoolYear, setSelectedSchoolYear] = useState<number | undefined>(undefined);
 
   const navigate = useNavigate();
 
+  const { data: schoolYearResponse } = useGetSchoolYearPaginated(
+    {
+      sort: '-start_date',
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
+    },
+    { query: { enabled: !!session?.id } }
+  );
+
   const { data: sectionResponse } = useGetSectionTeacherPaginated(
     {
+      'filter[school_year_id]': selectedSchoolYear,
       'filter[user_id]': session?.id,
       page,
       rows,
     },
-    { query: { enabled: !!session?.id } }
+    { query: { enabled: !!session?.id && !!selectedSchoolYear } }
   );
+
+  const schoolYearOptions = useMemo(() => {
+    const schoolYears = schoolYearResponse?.data?.data as SchoolYear[] | undefined;
+    return (
+      schoolYears?.map((schoolYear) => ({
+        label: schoolYear.school_year_code ?? '',
+        value: schoolYear.id?.toString() ?? '',
+        subtitle: schoolYear.name,
+      })) ?? []
+    );
+  }, [schoolYearResponse]);
+
+  // Set the first school year as default when options are loaded
+  useEffect(() => {
+    if (schoolYearOptions.length > 0 && !selectedSchoolYear) {
+      const firstSchoolYearId = parseInt(schoolYearOptions[0].value);
+      setSelectedSchoolYear(firstSchoolYearId);
+    }
+  }, [schoolYearOptions, selectedSchoolYear]);
 
   const columns = useMemo<TableColumn<SectionTeacher>[]>(
     () => [
@@ -102,17 +133,32 @@ export default function FacultySchedule(): React.ReactNode {
 
   return (
     <TitledPage title="Schedule" description="View and manage your teaching schedule">
-      <Table
-        columns={columns}
-        rows={tableItems}
-        itemsPerPage={rows}
-        pagination={paginationMeta}
-        onPageChange={setPage}
-        showPagination={true}
-        onClickRow={(row) => {
-          navigate(`/faculty/schedule/${encryptIdForUrl(row?.id as number)}`);
-        }}
-      />
+      <div className="space-y-4">
+        <div className="flex items-center gap-4">
+          <div className="w-64">
+            <Select
+              placeholder="Select School Year"
+              options={schoolYearOptions}
+              value={selectedSchoolYear?.toString()}
+              onValueChange={(value) => {
+                setSelectedSchoolYear(parseInt(value));
+                setPage(1); // Reset to first page when filter changes
+              }}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          rows={tableItems}
+          itemsPerPage={rows}
+          pagination={paginationMeta}
+          onPageChange={setPage}
+          showPagination={true}
+          onClickRow={(row) => {
+            navigate(`/faculty/schedule/${encryptIdForUrl(row?.id as number)}`);
+          }}
+        />
+      </div>
     </TitledPage>
   );
 }
