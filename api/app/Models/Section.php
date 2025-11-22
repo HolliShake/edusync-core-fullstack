@@ -189,7 +189,13 @@ class Section extends Model
      */
     public function getGradeBookAttribute(): ?GradeBook
     {
-        return $this->gradeBook()->first()->makeHidden(['section', 'academic_program']);
+        $gradeBook = $this->gradeBook()->first();
+
+        if ($gradeBook) {
+            return $gradeBook->makeHidden(['section', 'academic_program']);
+        }
+
+        return null;
     }
 
     /**

@@ -57,9 +57,16 @@ class EnrollmentController extends Controller
         schema: new OA\Schema(type: "integer", default: 0)
     )]
     #[OA\Parameter(
-        name: "filter[academic_program_id_grouped_by_user_name]",
+        name: "filter[officially_enrolled]",
         in: "query",
-        description: "Academic Program ID grouped by user name",
+        description: "Officially enrolled",
+        required: false,
+        schema: new OA\Schema(type: "boolean", default: false)
+    )]
+    #[OA\Parameter(
+        name: "filter[section_id]",
+        in: "query",
+        description: "Section ID",
         required: false,
         schema: new OA\Schema(type: "integer", default: 0)
     )]

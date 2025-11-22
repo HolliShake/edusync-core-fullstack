@@ -13,13 +13,20 @@ import {
 } from '@rest/api';
 import { AlertCircle, BookOpen, CheckCircle2, Sparkles } from 'lucide-react';
 import type React from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import FacultyScheduleClasslistTab from './classlist.tab';
 import FacultyScheduleGradeTab from './grade.tab';
 
 export default function FacultyScheduleDetailContent(): React.ReactNode {
   const sectionTeacher = useSectionTeacherContext();
-  const [selectedTab, setSelectedTab] = useState<string>('grade');
+  const storageKey = `faculty-schedule-tab-${window.location.pathname}`;
+
+  const [selectedTab, setSelectedTab] = useState<string>(() => {
+    const savedTab = localStorage.getItem(storageKey);
+    return savedTab || 'grade';
+  });
+
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
 
   const section = useMemo(() => sectionTeacher?.section, [sectionTeacher]);
@@ -92,7 +99,7 @@ export default function FacultyScheduleDetailContent(): React.ReactNode {
       {
         label: 'Class List',
         value: 'class-list',
-        component: undefined,
+        component: <FacultyScheduleClasslistTab />,
       },
       {
         label: 'Grade Book Setup',
@@ -101,6 +108,10 @@ export default function FacultyScheduleDetailContent(): React.ReactNode {
       },
     ];
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, selectedTab);
+  }, [selectedTab, storageKey]);
 
   return (
     <div className="space-y-6">
@@ -117,9 +128,7 @@ export default function FacultyScheduleDetailContent(): React.ReactNode {
       ) : hasGradeBook ? (
         <Alert className="border-accent/30 bg-accent/10">
           <CheckCircle2 className="h-5 w-5 text-accent-foreground" />
-          <AlertTitle className="text-accent-foreground font-semibold">
-            Grade Book Ready!
-          </AlertTitle>
+          <AlertTitle className="font-semibold">Grade Book Ready!</AlertTitle>
           <AlertDescription className="text-muted-foreground">
             Your grade book is all set up and ready to use. You can start recording student grades
             and track their progress.
@@ -286,7 +295,11 @@ export default function FacultyScheduleDetailContent(): React.ReactNode {
         <Tabs value={selectedTab} onValueChange={setSelectedTab}>
           <TabsList>
             {tabs.map((tab) => (
-              <TabsTrigger key={tab.value} value={tab.value}>
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+              >
                 {tab.label}
               </TabsTrigger>
             ))}

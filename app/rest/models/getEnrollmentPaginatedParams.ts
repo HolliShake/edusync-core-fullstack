@@ -24,7 +24,11 @@ rows?: number;
  */
 'filter[user_id]'?: number;
 /**
- * Academic Program ID grouped by user name
+ * Officially enrolled
  */
-'filter[academic_program_id_grouped_by_user_name]'?: number;
+'filter[officially_enrolled]'?: boolean;
+/**
+ * Section ID
+ */
+'filter[section_id]'?: number;
 };
