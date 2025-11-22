@@ -1,31 +1,64 @@
+import type { TableColumn } from '@/components/custom/table.component';
+import Table from '@/components/custom/table.component';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { useSectionTeacherContext } from '@/context/section-teacher.context';
 import { useGetEnrollmentPaginated } from '@rest/api';
 import type { Enrollment } from '@rest/models/enrollment';
 import { Sparkles, Users, UserX } from 'lucide-react';
 import type React from 'react';
+import { useState } from 'react';
 
 export default function FacultyScheduleClasslistTab(): React.ReactNode {
   const sectionTeacher = useSectionTeacherContext();
+  const [page, setPage] = useState(1);
+  const [rows, _] = useState(10);
+
   const { data: enrollmentResponse, isLoading } = useGetEnrollmentPaginated(
     {
       'filter[officially_enrolled]': true,
       'filter[section_id]': sectionTeacher?.section?.id ?? 0,
+      page,
+      rows,
     },
     { query: { enabled: !!sectionTeacher?.section?.id } }
   );
 
   const enrollments = enrollmentResponse?.data?.data as Enrollment[] | undefined;
+  const paginationMeta = enrollmentResponse?.data
+    ? {
+        current_page: enrollmentResponse.data.current_page,
+        last_page: enrollmentResponse.data.last_page,
+        per_page: enrollmentResponse.data.per_page,
+        total: enrollmentResponse.data.total,
+        from: enrollmentResponse.data.from,
+        to: enrollmentResponse.data.to,
+      }
+    : undefined;
 
-  if (isLoading) {
+  const columns: TableColumn<Enrollment>[] = [
+    {
+      key: 'user.id',
+      title: 'Student ID',
+      className: 'font-medium',
+    },
+    {
+      key: 'user.name',
+      title: 'Name',
+    },
+    {
+      key: 'user.email',
+      title: 'Email',
+    },
+    {
+      key: 'latest_status_label',
+      title: 'Status',
+      render: (value: any) => (
+        <span className="text-sm text-muted-foreground">{value || 'N/A'}</span>
+      ),
+    },
+  ];
+
+  if (isLoading && !enrollments) {
     return (
       <div className="flex items-center justify-center p-8">
         <p className="text-muted-foreground">Loading class list...</p>
@@ -35,8 +68,8 @@ export default function FacultyScheduleClasslistTab(): React.ReactNode {
 
   if (!enrollments || enrollments.length === 0) {
     return (
-      <div className="p-4">
-        <Card className="border-dashed border-2">
+      <>
+        <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 px-6 text-center">
             <div className="rounded-full bg-primary/10 p-4 mb-4">
               <UserX className="h-12 w-12 text-primary/60" />
@@ -55,55 +88,29 @@ export default function FacultyScheduleClasslistTab(): React.ReactNode {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="p-4">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Student ID</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-center">Validated</TableHead>
-              <TableHead className="text-center">Dropped</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {enrollments.map((enrollment) => (
-              <TableRow key={enrollment.id}>
-                <TableCell className="font-medium">{enrollment.user?.id}</TableCell>
-                <TableCell>{enrollment.user?.name}</TableCell>
-                <TableCell>{enrollment.user?.email}</TableCell>
-                <TableCell>
-                  <span className="text-sm text-muted-foreground">
-                    {enrollment.latest_status_label || 'N/A'}
-                  </span>
-                </TableCell>
-                <TableCell className="text-center">
-                  {enrollment.validated ? (
-                    <span className="text-green-600">✓</span>
-                  ) : (
-                    <span className="text-muted-foreground">-</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-center">
-                  {enrollment.is_dropped ? (
-                    <span className="text-red-600">✓</span>
-                  ) : (
-                    <span className="text-muted-foreground">-</span>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="mt-4 text-sm text-muted-foreground">Total students: {enrollments.length}</div>
-    </div>
+    <>
+      <Table
+        columns={columns}
+        rows={enrollments}
+        rowKey={(enrollment) => enrollment.id!}
+        loading={isLoading}
+        striped
+        hoverable
+        pagination={paginationMeta}
+        showPagination={true}
+        onPageChange={setPage}
+        emptyState={
+          <div className="flex flex-col items-center gap-2">
+            <UserX className="h-8 w-8 text-muted-foreground" />
+            <span>No students enrolled</span>
+          </div>
+        }
+      />
+    </>
   );
 }

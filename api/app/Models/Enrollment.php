@@ -130,6 +130,7 @@ class Enrollment extends Model
     protected $appends = [
         'validated',
         'is_dropped',
+        'user',
         'section',
         'latest_status',
         'latest_status_label',
@@ -202,6 +203,16 @@ class Enrollment extends Model
             ->pluck('action');
         return $logs->contains(EnrollmentLogActionEnum::DROPPED->value)
             && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value);
+    }
+
+    /**
+     * Get the user that owns the enrollment.
+     *
+     * @return User
+     */
+    public function getUserAttribute(): User
+    {
+        return $this->user()->first();
     }
 
     /**

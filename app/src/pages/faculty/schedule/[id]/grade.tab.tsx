@@ -1,4 +1,5 @@
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   Table,
@@ -9,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useSectionTeacherContext } from '@/context/section-teacher.context';
+import { useGetEnrollmentPaginated } from '@rest/api';
 import type { Enrollment } from '@rest/models/enrollment';
 import type { GradeBook } from '@rest/models/gradeBook';
 import type { GradeBookGradingPeriod } from '@rest/models/gradeBookGradingPeriod';
@@ -29,22 +31,19 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
     [sectionTeacher]
   );
 
-  // Dummy student data
-  const dummyEnrollment: Enrollment = useMemo(
-    () => ({
-      id: 1,
-      user_id: 1,
-      section_id: sectionTeacher?.section?.id ?? 0,
-      validated: true,
-      is_dropped: false,
-      user: {
-        id: 1,
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        password: '',
-      },
-    }),
-    [sectionTeacher]
+  const { data: enrollmentResponse, isLoading } = useGetEnrollmentPaginated(
+    {
+      'filter[officially_enrolled]': true,
+      'filter[section_id]': sectionTeacher?.section?.id ?? 0,
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
+    },
+    { query: { enabled: !!sectionTeacher?.section?.id } }
+  );
+
+  const enrollments: Enrollment[] = useMemo(
+    () => (enrollmentResponse?.data?.data as Enrollment[] | undefined) || [],
+    [enrollmentResponse]
   );
 
   const gradingPeriods = useMemo(() => {
@@ -155,106 +154,93 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
   }
 
   return (
-    <div className="w-full">
-      <div className="rounded-lg border border-border bg-card shadow-sm overflow-hidden">
-        <div className="overflow-x-auto max-w-full">
-          <Table className="min-w-max w-full">
-            <TableHeader>
-              {/* Row 1: Grading Period Headers */}
-              <TableRow className="bg-muted/50 hover:bg-muted/50">
-                <TableHead
-                  className="sticky left-0 z-20 bg-muted/50 font-semibold text-foreground border-r border-border min-w-[150px]"
-                  rowSpan={hasColumns ? 4 : 1}
-                >
-                  Student Name
-                </TableHead>
-                {hasColumns ? (
-                  gradingPeriods.map((period, periodIdx) => {
-                    const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
-                    const totalDetailCount = items.reduce((sum, item) => {
-                      const details =
-                        (item.gradebook_item_details as GradeBookItemDetail[] | undefined) || [];
-                      return sum + (details.length || 1);
-                    }, 0);
-
-                    return (
-                      <TableHead
-                        key={periodIdx}
-                        className="text-center font-semibold text-foreground bg-primary/10 border-r border-border whitespace-nowrap"
-                        colSpan={totalDetailCount || 1}
-                      >
-                        {period.title}{' '}
-                        <span className="text-muted-foreground">({period.weight}%)</span>
-                      </TableHead>
-                    );
-                  })
-                ) : (
-                  <TableHead className="text-center font-semibold text-foreground bg-primary/10 border-r border-border whitespace-nowrap">
-                    No grade items configured
+    <Card className="p-0 overflow-hidden">
+      <CardContent className="p-0">
+        <div className="overflow-hidden">
+          <div className="overflow-x-auto max-w-full">
+            <Table className="min-w-max w-full">
+              <TableHeader>
+                {/* Row 1: Grading Period Headers */}
+                <TableRow className="bg-muted/50 hover:bg-muted/50">
+                  <TableHead
+                    className="sticky left-0 z-20 bg-muted/50 font-semibold text-foreground border-r border-border min-w-[150px]"
+                    rowSpan={hasColumns ? 4 : 1}
+                  >
+                    Student Name
                   </TableHead>
-                )}
-              </TableRow>
-
-              {hasColumns && (
-                <>
-                  {/* Row 2: Item Headers */}
-                  <TableRow className="bg-muted/30 hover:bg-muted/30">
-                    {gradingPeriods.map((period, periodIdx) => {
+                  {hasColumns ? (
+                    gradingPeriods.map((period, periodIdx) => {
                       const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
-
-                      if (items.length === 0) {
-                        return (
-                          <TableHead
-                            key={`${periodIdx}-empty`}
-                            className="text-center font-semibold text-foreground bg-secondary/20 border-r border-border whitespace-nowrap"
-                          >
-                            No items
-                          </TableHead>
-                        );
-                      }
-
-                      return items.map((item, itemIdx) => {
+                      const totalDetailCount = items.reduce((sum, item) => {
                         const details =
                           (item.gradebook_item_details as GradeBookItemDetail[] | undefined) || [];
+                        return sum + (details.length || 1);
+                      }, 0);
 
-                        return (
-                          <TableHead
-                            key={`${periodIdx}-${itemIdx}`}
-                            className="text-center font-semibold text-foreground bg-secondary/20 border-r border-border whitespace-nowrap"
-                            colSpan={details.length || 1}
-                          >
-                            {item.title}{' '}
-                            <span className="text-muted-foreground">({item.weight}%)</span>
-                          </TableHead>
-                        );
-                      });
-                    })}
-                  </TableRow>
+                      return (
+                        <TableHead
+                          key={periodIdx}
+                          className="text-center font-semibold text-foreground bg-primary/10 border-r border-border whitespace-nowrap"
+                          colSpan={totalDetailCount || 1}
+                        >
+                          {period.title}{' '}
+                          <span className="text-muted-foreground">({period.weight}%)</span>
+                        </TableHead>
+                      );
+                    })
+                  ) : (
+                    <TableHead className="text-center font-semibold text-foreground bg-primary/10 border-r border-border whitespace-nowrap">
+                      No grade items configured
+                    </TableHead>
+                  )}
+                </TableRow>
 
-                  {/* Row 3: Detail Headers */}
-                  <TableRow className="bg-muted/20 hover:bg-muted/20">
-                    {gradingPeriods.map((period) => {
-                      const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
+                {hasColumns && (
+                  <>
+                    {/* Row 2: Item Headers */}
+                    <TableRow className="bg-muted/30 hover:bg-muted/30">
+                      {gradingPeriods.map((period, periodIdx) => {
+                        const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
 
-                      if (items.length === 0) {
-                        return (
-                          <TableHead
-                            key={`${period.id}-empty-detail`}
-                            className="text-center font-semibold text-foreground bg-accent/10 border-r border-border min-w-[120px] whitespace-nowrap"
-                          >
-                            -
-                          </TableHead>
-                        );
-                      }
-
-                      return items.map((item) => {
-                        const details =
-                          (item.gradebook_item_details as GradeBookItemDetail[] | undefined) || [];
-
-                        if (details.length === 0) {
+                        if (items.length === 0) {
                           return (
                             <TableHead
-                              key={`${item.id}-empty-detail`}
+                              key={`${periodIdx}-empty`}
+                              className="text-center font-semibold text-foreground bg-secondary/20 border-r border-border whitespace-nowrap"
+                            >
+                              No items
+                            </TableHead>
+                          );
+                        }
+
+                        return items.map((item, itemIdx) => {
+                          const details =
+                            (item.gradebook_item_details as GradeBookItemDetail[] | undefined) ||
+                            [];
+
+                          return (
+                            <TableHead
+                              key={`${periodIdx}-${itemIdx}`}
+                              className="text-center font-semibold text-foreground bg-secondary/20 border-r border-border whitespace-nowrap"
+                              colSpan={details.length || 1}
+                            >
+                              {item.title}{' '}
+                              <span className="text-muted-foreground">({item.weight}%)</span>
+                            </TableHead>
+                          );
+                        });
+                      })}
+                    </TableRow>
+
+                    {/* Row 3: Detail Headers */}
+                    <TableRow className="bg-muted/20 hover:bg-muted/20">
+                      {gradingPeriods.map((period) => {
+                        const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
+
+                        if (items.length === 0) {
+                          return (
+                            <TableHead
+                              key={`${period.id}-empty-detail`}
                               className="text-center font-semibold text-foreground bg-accent/10 border-r border-border min-w-[120px] whitespace-nowrap"
                             >
                               -
@@ -262,42 +248,43 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
                           );
                         }
 
-                        return details.map((detail) => (
-                          <TableHead
-                            key={detail.id}
-                            className="text-center font-semibold text-foreground bg-accent/10 border-r border-border min-w-[120px] whitespace-nowrap"
-                          >
-                            {detail.title}
-                          </TableHead>
-                        ));
-                      });
-                    })}
-                  </TableRow>
+                        return items.map((item) => {
+                          const details =
+                            (item.gradebook_item_details as GradeBookItemDetail[] | undefined) ||
+                            [];
 
-                  {/* Row 4: Weight and Max Score */}
-                  <TableRow className="bg-muted/10 hover:bg-muted/10">
-                    {gradingPeriods.map((period) => {
-                      const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
+                          if (details.length === 0) {
+                            return (
+                              <TableHead
+                                key={`${item.id}-empty-detail`}
+                                className="text-center font-semibold text-foreground bg-accent/10 border-r border-border min-w-[120px] whitespace-nowrap"
+                              >
+                                -
+                              </TableHead>
+                            );
+                          }
 
-                      if (items.length === 0) {
-                        return (
-                          <TableHead
-                            key={`${period.id}-empty-weight`}
-                            className="text-center text-xs font-normal text-muted-foreground border-r border-border whitespace-nowrap"
-                          >
-                            -
-                          </TableHead>
-                        );
-                      }
+                          return details.map((detail) => (
+                            <TableHead
+                              key={detail.id}
+                              className="text-center font-semibold text-foreground bg-accent/10 border-r border-border min-w-[120px] whitespace-nowrap"
+                            >
+                              {detail.title}
+                            </TableHead>
+                          ));
+                        });
+                      })}
+                    </TableRow>
 
-                      return items.map((item) => {
-                        const details =
-                          (item.gradebook_item_details as GradeBookItemDetail[] | undefined) || [];
+                    {/* Row 4: Weight and Max Score */}
+                    <TableRow className="bg-muted/10 hover:bg-muted/10">
+                      {gradingPeriods.map((period) => {
+                        const items = (period.gradebook_items as GradeBookItem[] | undefined) || [];
 
-                        if (details.length === 0) {
+                        if (items.length === 0) {
                           return (
                             <TableHead
-                              key={`${item.id}-empty-weight`}
+                              key={`${period.id}-empty-weight`}
                               className="text-center text-xs font-normal text-muted-foreground border-r border-border whitespace-nowrap"
                             >
                               -
@@ -305,63 +292,82 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
                           );
                         }
 
-                        return details.map((detail) => (
-                          <TableHead
-                            key={`${detail.id}-weight`}
-                            className="text-center text-xs font-normal text-muted-foreground border-r border-border whitespace-nowrap"
-                          >
-                            {detail.weight}% | Max: {detail.max_score}
-                          </TableHead>
-                        ));
-                      });
-                    })}
-                  </TableRow>
-                </>
-              )}
-            </TableHeader>
+                        return items.map((item) => {
+                          const details =
+                            (item.gradebook_item_details as GradeBookItemDetail[] | undefined) ||
+                            [];
 
-            <TableBody>
-              {/* Dummy student row */}
-              <TableRow
-                className={`transition-colors ${
-                  hoveredRow === dummyEnrollment.id ? 'bg-primary/10' : 'hover:bg-muted/30'
-                }`}
-                onMouseEnter={() => setHoveredRow(dummyEnrollment.id!)}
-                onMouseLeave={() => setHoveredRow(null)}
-              >
-                <TableCell
-                  className={`font-medium sticky left-0 z-10 border-r border-border transition-colors ${
-                    hoveredRow === dummyEnrollment.id ? 'bg-primary/10' : 'bg-card'
-                  }`}
-                >
-                  {dummyEnrollment.user?.name}
-                </TableCell>
-                {hasColumns ? (
-                  columns.map((col, idx) => (
-                    <TableCell key={idx} className="text-center p-2 border-r border-border">
-                      {!col.isPlaceholder ? (
-                        <Input
-                          type="number"
-                          className="w-full text-center h-8 border-none bg-transparent focus-visible:bg-accent/10 focus-visible:ring-1 focus-visible:ring-ring"
-                          placeholder="0"
-                          min={col.detailMinScore}
-                          max={col.detailMaxScore}
-                        />
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                  ))
-                ) : (
-                  <TableCell className="text-center p-4 text-muted-foreground">
-                    No grade items to display
-                  </TableCell>
+                          if (details.length === 0) {
+                            return (
+                              <TableHead
+                                key={`${item.id}-empty-weight`}
+                                className="text-center text-xs font-normal text-muted-foreground border-r border-border whitespace-nowrap"
+                              >
+                                -
+                              </TableHead>
+                            );
+                          }
+
+                          return details.map((detail) => (
+                            <TableHead
+                              key={`${detail.id}-weight`}
+                              className="text-center text-xs font-normal text-muted-foreground border-r border-border whitespace-nowrap"
+                            >
+                              {detail.weight}% | Max: {detail.max_score}
+                            </TableHead>
+                          ));
+                        });
+                      })}
+                    </TableRow>
+                  </>
                 )}
-              </TableRow>
-            </TableBody>
-          </Table>
+              </TableHeader>
+
+              <TableBody>
+                {enrollments.map((enrollment) => (
+                  <TableRow
+                    key={enrollment.id}
+                    className={`transition-colors ${
+                      hoveredRow === enrollment.id ? 'bg-primary/10' : 'hover:bg-muted/30'
+                    }`}
+                    onMouseEnter={() => setHoveredRow(enrollment.id!)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                  >
+                    <TableCell
+                      className={`font-medium sticky left-0 z-10 border-r border-border transition-colors ${
+                        hoveredRow === enrollment.id ? 'bg-primary/10' : 'bg-card'
+                      }`}
+                    >
+                      {enrollment.user?.name}
+                    </TableCell>
+                    {hasColumns ? (
+                      columns.map((col, idx) => (
+                        <TableCell key={idx} className="text-center p-2 border-r border-border">
+                          {!col.isPlaceholder ? (
+                            <Input
+                              type="number"
+                              className="w-full text-center h-8 border-none bg-transparent focus-visible:bg-accent/10 focus-visible:ring-1 focus-visible:ring-ring"
+                              placeholder="0"
+                              min={col.detailMinScore}
+                              max={col.detailMaxScore}
+                            />
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </TableCell>
+                      ))
+                    ) : (
+                      <TableCell className="text-center p-4 text-muted-foreground">
+                        No grade items to display
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

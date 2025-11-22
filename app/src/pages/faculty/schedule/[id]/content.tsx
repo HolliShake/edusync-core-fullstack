@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import FacultyScheduleClasslistTab from './classlist.tab';
 import FacultyScheduleGradeTab from './grade.tab';
+import FacultyScheduleGradebookSetupTab from './gradebook-setup.tab';
 
 export default function FacultyScheduleDetailContent(): React.ReactNode {
   const sectionTeacher = useSectionTeacherContext();
@@ -104,7 +105,7 @@ export default function FacultyScheduleDetailContent(): React.ReactNode {
       {
         label: 'Grade Book Setup',
         value: 'grade-book-setup',
-        component: undefined,
+        component: <FacultyScheduleGradebookSetupTab />,
       },
     ];
   }, []);
