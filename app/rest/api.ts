@@ -10573,6 +10573,71 @@ export const useDeleteGradeBook = <TError = UnauthenticatedResponse | ForbiddenR
     }
     
 /**
+ * Generate a new GradeBook from a template
+ * @summary Generate a new GradeBook from a template
+ */
+export const generateGradeBookFromTemplate = (
+    isTemplateGradeBookId: number,
+    sectionId: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateGradeBookResponse200>(
+      {url: `/api/GradeBook/generate-from-template/${isTemplateGradeBookId}/${sectionId}`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getGenerateGradeBookFromTemplateMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateGradeBookFromTemplate>>, TError,{isTemplateGradeBookId: number;sectionId: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof generateGradeBookFromTemplate>>, TError,{isTemplateGradeBookId: number;sectionId: number}, TContext> => {
+
+const mutationKey = ['generateGradeBookFromTemplate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generateGradeBookFromTemplate>>, {isTemplateGradeBookId: number;sectionId: number}> = (props) => {
+          const {isTemplateGradeBookId,sectionId} = props ?? {};
+
+          return  generateGradeBookFromTemplate(isTemplateGradeBookId,sectionId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GenerateGradeBookFromTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof generateGradeBookFromTemplate>>>
+    
+    export type GenerateGradeBookFromTemplateMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Generate a new GradeBook from a template
+ */
+export const useGenerateGradeBookFromTemplate = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateGradeBookFromTemplate>>, TError,{isTemplateGradeBookId: number;sectionId: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof generateGradeBookFromTemplate>>,
+        TError,
+        {isTemplateGradeBookId: number;sectionId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getGenerateGradeBookFromTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of GradeBookGradingPeriod with optional search
  * @summary Get paginated list of GradeBookGradingPeriod
  */

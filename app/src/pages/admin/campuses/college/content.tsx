@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCollegeContext } from '@/context/college.content';
+import { useCollegeContext } from '@/context/college.context';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteAcademicProgram, useGetAcademicProgramPaginated } from '@rest/api';
 import type { AcademicProgram } from '@rest/models';

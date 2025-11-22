@@ -191,6 +191,68 @@ class GradeBookController extends Controller
     }
 
     /**
+     * Generate a new GradeBook from a template.
+     */
+    #[OA\Post(
+        path: "/api/GradeBook/generate-from-template/{isTemplateGradeBookId}/{sectionId}",
+        summary: "Generate a new GradeBook from a template",
+        tags: ["GradeBook"],
+        description: "Generate a new GradeBook from a template",
+        operationId: "generateGradeBookFromTemplate",
+    )]
+    #[OA\Parameter(
+        name: "isTemplateGradeBookId",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer"),
+    )]
+    #[OA\Parameter(
+        name: "sectionId",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer"),
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "GradeBook created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateGradeBookResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "GradeBook not found"
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function generateFromTemplate(Request $request, $isTemplateGradeBookId, $sectionId)
+    {
+        try {
+            return $this->ok($this->service->generateFromTemplate($isTemplateGradeBookId, $sectionId));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound('GradeBook not found');
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     #[OA\Put(

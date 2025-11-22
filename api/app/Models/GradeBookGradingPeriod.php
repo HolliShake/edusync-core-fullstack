@@ -153,6 +153,7 @@ class GradeBookGradingPeriod extends Model
      */
     public function gradebookItems(): HasMany
     {
-        return $this->hasMany(GradeBookItem::class, 'gradebook_grading_period_id');
+        return $this->hasMany(GradeBookItem::class, 'gradebook_grading_period_id')
+            ->orderBy('id', 'asc');
     }
 }

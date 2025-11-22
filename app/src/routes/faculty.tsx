@@ -16,7 +16,7 @@ const FACULTY: Route[] = [
   {
     key: 'faculty.schedule',
     title: 'Schedule',
-    path: '/faculty/enrollment',
+    path: '/faculty/schedule',
     component: <FacultySchedule />,
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -26,7 +26,7 @@ const FACULTY: Route[] = [
   {
     key: 'faculty.schedule.detail',
     title: 'Schedule Detail',
-    path: '/faculty/schedule/:id',
+    path: '/faculty/schedule/:sectionTeacherId',
     component: <FacultyScheduleDetail />,
     icon: <ClipboardListIcon className="h-4 w-4" />,
     layout: 'dashboard',

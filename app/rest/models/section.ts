@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CurriculumDetail } from './curriculumDetail';
+import type { GradeBook } from './gradeBook';
 
 export interface Section {
   readonly id?: number;
@@ -19,4 +20,5 @@ export interface Section {
   readonly has_grade_book?: boolean;
   curriculum_detail?: CurriculumDetail;
   readonly available_slots?: number;
+  grade_book?: GradeBook;
 }

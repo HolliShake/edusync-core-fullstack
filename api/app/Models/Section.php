@@ -37,6 +37,8 @@ use OpenApi\Attributes as OA;
         // Relations
         new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
         new OA\Property(property: "available_slots", type: "integer", readOnly: true),
+        new OA\Property(property: "grade_book", ref: "#/components/schemas/GradeBook"),
+
     ]
 )]
 
@@ -147,6 +149,7 @@ class Section extends Model
         'curriculum_detail',
         'available_slots',
         'has_grade_book',
+        'grade_book',
     ];
 
     /**
@@ -177,6 +180,16 @@ class Section extends Model
     public function getHasGradeBookAttribute(): bool
     {
         return $this->gradeBook()->exists();
+    }
+
+    /**
+     * Get the grade book for the section.
+     *
+     * @return GradeBook
+     */
+    public function getGradeBookAttribute(): ?GradeBook
+    {
+        return $this->gradeBook()->first()->makeHidden(['section', 'academic_program']);
     }
 
     /**

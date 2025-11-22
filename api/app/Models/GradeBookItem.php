@@ -149,6 +149,7 @@ class GradeBookItem extends Model
      */
     public function gradebookItemDetails(): HasMany
     {
-        return $this->hasMany(GradeBookItemDetail::class, 'gradebook_item_id');
+        return $this->hasMany(GradeBookItemDetail::class, 'gradebook_item_id')
+            ->orderBy('id', 'asc');
     }
 }

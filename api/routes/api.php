@@ -308,6 +308,7 @@ Route::controller(GradeBookController::class)->group(function() {
     Route::get('/GradeBook', 'index');
     Route::get('/GradeBook/{id}', 'show');
     Route::post('/GradeBook', 'store');
+    Route::post('/GradeBook/generate-from-template/{isTemplateGradeBookId}/{sectionId}', 'generateFromTemplate');
     Route::put('/GradeBook/{id}', 'update');
     Route::delete('/GradeBook/{id}', 'destroy');
 });
