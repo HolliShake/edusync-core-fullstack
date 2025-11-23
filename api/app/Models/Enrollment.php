@@ -285,4 +285,14 @@ class Enrollment extends Model
     {
         return $this->hasMany(GradeBookScore::class);
     }
+
+    /**
+     * Get the grading period grades for the enrollment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function gradingPeriodGrades(): HasMany
+    {
+        return $this->hasMany(GradingPeriodGrade::class);
+    }
 }

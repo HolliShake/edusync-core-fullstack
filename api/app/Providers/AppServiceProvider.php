@@ -30,6 +30,7 @@ use App\Interface\IRepo\IGradeBookItemDetailRepo;
 use App\Interface\IRepo\IGradeBookItemRepo;
 use App\Interface\IRepo\IGradeBookRepo;
 use App\Interface\IRepo\IGradeBookScoreRepo;
+use App\Interface\IRepo\IGradingPeriodGradeRepo;
 use App\Interface\IRepo\IProgramTypeRepo;
 use App\Interface\IRepo\IRequirementRepo;
 use App\Interface\IRepo\IRoomRepo;
@@ -64,6 +65,7 @@ use App\Interface\IService\IGradeBookGradingPeriodService;
 use App\Interface\IService\IGradeBookItemDetailService;
 use App\Interface\IService\IGradeBookItemService;
 use App\Interface\IService\IGradeBookService;
+use App\Interface\IService\IGradingPeriodGradeService;
 use App\Interface\IService\IProgramTypeService;
 use App\Interface\IService\IRequirementService;
 use App\Interface\IService\IRoomService;
@@ -99,6 +101,7 @@ use App\Repo\GradeBookItemDetailRepo;
 use App\Repo\GradeBookItemRepo;
 use App\Repo\GradeBookRepo;
 use App\Repo\GradeBookScoreRepo;
+use App\Repo\GradingPeriodGradeRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RequirementRepo;
 use App\Repo\RoomRepo;
@@ -133,6 +136,7 @@ use App\Service\GradeBookGradingPeriodService;
 use App\Service\GradeBookItemDetailService;
 use App\Service\GradeBookItemService;
 use App\Service\GradeBookService;
+use App\Service\GradingPeriodGradeService;
 use App\Service\ProgramTypeService;
 use App\Service\RequirementService;
 use App\Service\RoomService;
@@ -185,6 +189,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IGradeBookGradingPeriodRepo::class, GradeBookGradingPeriodRepo::class);
         $this->app->bind(IAdmissionScheduleRepo::class, AdmissionScheduleRepo::class);
         $this->app->bind(IGradeBookScoreRepo::class, GradeBookScoreRepo::class);
+        $this->app->bind(IGradingPeriodGradeRepo::class, GradingPeriodGradeRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -221,6 +226,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IGradeBookGradingPeriodService::class, GradeBookGradingPeriodService::class);
         $this->app->bind(IAdmissionScheduleService::class, AdmissionScheduleService::class);
         $this->app->bind(IGradeBookScoreRepo::class, GradeBookScoreRepo::class);
+        $this->app->bind(IGradingPeriodGradeService::class, GradingPeriodGradeService::class);
     }
 
     /**

@@ -68,6 +68,7 @@ import type {
   CreateGradeBookItemResponse200,
   CreateGradeBookResponse200,
   CreateGradeBookScoreResponse200,
+  CreateGradingPeriodGradeResponse200,
   CreateProgramTypeResponse200,
   CreateRequirementResponse200,
   CreateRoomResponse200,
@@ -106,6 +107,7 @@ import type {
   DeleteGradeBookItemResponse200,
   DeleteGradeBookResponse200,
   DeleteGradeBookScoreResponse200,
+  DeleteGradingPeriodGradeResponse200,
   DeleteProgramTypeResponse200,
   DeleteRequirementResponse200,
   DeleteRoomResponse200,
@@ -187,6 +189,8 @@ import type {
   GetGradeBookResponse200,
   GetGradeBookScorePaginatedParams,
   GetGradeBookScoreResponse200,
+  GetGradingPeriodGradePaginatedParams,
+  GetGradingPeriodGradeResponse200,
   GetProgramTypePaginatedParams,
   GetProgramTypeResponse200,
   GetRequirementPaginatedParams,
@@ -210,6 +214,7 @@ import type {
   GetSectionTeachersByProgramIdGroupedByTeacherNameParams,
   GetSectionsResponse200,
   GetSyncGradeBookScoresResponse200,
+  GetSyncGradingPeriodGradesResponse200,
   GetUserPaginatedParams,
   GetUserResponse200,
   GradeBook,
@@ -217,6 +222,7 @@ import type {
   GradeBookItem,
   GradeBookItemDetail,
   GradeBookScore,
+  GradingPeriodGrade,
   InternalServerErrorResponse,
   LoginResponse200,
   MultipleCurriculumDetail,
@@ -248,6 +254,7 @@ import type {
   PaginatedGradeBookItemResponse200,
   PaginatedGradeBookResponse200,
   PaginatedGradeBookScoreResponse200,
+  PaginatedGradingPeriodGradeResponse200,
   PaginatedProgramTypeResponse200,
   PaginatedRequirementResponse200,
   PaginatedRoomResponse200,
@@ -263,6 +270,7 @@ import type {
   SectionTeacher,
   SessionResponse200,
   SuccessResponse,
+  SyncGradingPeriodGrade,
   UnauthenticatedResponse,
   UnauthorizedResponse,
   UpdateAcademicCalendarResponse200,
@@ -293,6 +301,7 @@ import type {
   UpdateGradeBookItemResponse200,
   UpdateGradeBookResponse200,
   UpdateGradeBookScoreResponse200,
+  UpdateGradingPeriodGradeResponse200,
   UpdateProgramTypeResponse200,
   UpdateRequirementResponse200,
   UpdateRoomResponse200,
@@ -12293,6 +12302,536 @@ export const useSyncScoreForSection = <TError = UnauthenticatedResponse | Forbid
       > => {
 
       const mutationOptions = getSyncScoreForSectionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of GradingPeriodGrade with optional search
+ * @summary Get paginated list of GradingPeriodGrade
+ */
+export const getGradingPeriodGradePaginated = (
+    params?: GetGradingPeriodGradePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedGradingPeriodGradeResponse200>(
+      {url: `/api/GradingPeriodGrade`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetGradingPeriodGradePaginatedQueryKey = (params?: GetGradingPeriodGradePaginatedParams,) => {
+    return [`/api/GradingPeriodGrade`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetGradingPeriodGradePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetGradingPeriodGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGradingPeriodGradePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>> = ({ signal }) => getGradingPeriodGradePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetGradingPeriodGradePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>>
+export type GetGradingPeriodGradePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetGradingPeriodGradePaginated<TData = Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetGradingPeriodGradePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradingPeriodGradePaginated<TData = Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetGradingPeriodGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradingPeriodGradePaginated<TData = Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetGradingPeriodGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of GradingPeriodGrade
+ */
+
+export function useGetGradingPeriodGradePaginated<TData = Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetGradingPeriodGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetGradingPeriodGradePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new GradingPeriodGrade with the provided details
+ * @summary Create a new GradingPeriodGrade
+ */
+export const createGradingPeriodGrade = (
+    gradingPeriodGrade: NonReadonly<GradingPeriodGrade>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateGradingPeriodGradeResponse200>(
+      {url: `/api/GradingPeriodGrade`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: gradingPeriodGrade, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateGradingPeriodGradeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGradingPeriodGrade>>, TError,{data: NonReadonly<GradingPeriodGrade>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createGradingPeriodGrade>>, TError,{data: NonReadonly<GradingPeriodGrade>}, TContext> => {
+
+const mutationKey = ['createGradingPeriodGrade'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGradingPeriodGrade>>, {data: NonReadonly<GradingPeriodGrade>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createGradingPeriodGrade(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateGradingPeriodGradeMutationResult = NonNullable<Awaited<ReturnType<typeof createGradingPeriodGrade>>>
+    export type CreateGradingPeriodGradeMutationBody = NonReadonly<GradingPeriodGrade>
+    export type CreateGradingPeriodGradeMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new GradingPeriodGrade
+ */
+export const useCreateGradingPeriodGrade = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGradingPeriodGrade>>, TError,{data: NonReadonly<GradingPeriodGrade>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createGradingPeriodGrade>>,
+        TError,
+        {data: NonReadonly<GradingPeriodGrade>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateGradingPeriodGradeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a sync list of GradingPeriodGrade
+ * @summary Get list of GradingPeriodGrade for sync
+ */
+export const getSyncGradingPeriodGrade = (
+    sectionId: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSyncGradingPeriodGradesResponse200>(
+      {url: `/api/GradingPeriodGrade/get-sync/${sectionId}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetSyncGradingPeriodGradeQueryKey = (sectionId?: number,) => {
+    return [`/api/GradingPeriodGrade/get-sync/${sectionId}`] as const;
+    }
+
+    
+export const getGetSyncGradingPeriodGradeQueryOptions = <TData = Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSyncGradingPeriodGradeQueryKey(sectionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>> = ({ signal }) => getSyncGradingPeriodGrade(sectionId, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sectionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSyncGradingPeriodGradeQueryResult = NonNullable<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>>
+export type GetSyncGradingPeriodGradeQueryError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse
+
+
+export function useGetSyncGradingPeriodGrade<TData = Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>,
+          TError,
+          Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSyncGradingPeriodGrade<TData = Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>,
+          TError,
+          Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSyncGradingPeriodGrade<TData = Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get list of GradingPeriodGrade for sync
+ */
+
+export function useGetSyncGradingPeriodGrade<TData = Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncGradingPeriodGrade>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSyncGradingPeriodGradeQueryOptions(sectionId,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a GradingPeriodGrade by its ID
+ * @summary Get a specific GradingPeriodGrade
+ */
+export const getGradingPeriodGradeById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetGradingPeriodGradeResponse200>(
+      {url: `/api/GradingPeriodGrade/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetGradingPeriodGradeByIdQueryKey = (id?: number,) => {
+    return [`/api/GradingPeriodGrade/${id}`] as const;
+    }
+
+    
+export const getGetGradingPeriodGradeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGradingPeriodGradeByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGradingPeriodGradeById>>> = ({ signal }) => getGradingPeriodGradeById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetGradingPeriodGradeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getGradingPeriodGradeById>>>
+export type GetGradingPeriodGradeByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetGradingPeriodGradeById<TData = Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradingPeriodGradeById>>,
+          TError,
+          Awaited<ReturnType<typeof getGradingPeriodGradeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradingPeriodGradeById<TData = Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGradingPeriodGradeById>>,
+          TError,
+          Awaited<ReturnType<typeof getGradingPeriodGradeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetGradingPeriodGradeById<TData = Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific GradingPeriodGrade
+ */
+
+export function useGetGradingPeriodGradeById<TData = Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGradingPeriodGradeById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetGradingPeriodGradeByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing GradingPeriodGrade with the provided details
+ * @summary Update a GradingPeriodGrade
+ */
+export const updateGradingPeriodGrade = (
+    id: number,
+    gradingPeriodGrade: NonReadonly<GradingPeriodGrade>,
+ ) => {
+      
+      
+      return fetchData<UpdateGradingPeriodGradeResponse200>(
+      {url: `/api/GradingPeriodGrade/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: gradingPeriodGrade
+    },
+      );
+    }
+  
+
+
+export const getUpdateGradingPeriodGradeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGradingPeriodGrade>>, TError,{id: number;data: NonReadonly<GradingPeriodGrade>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateGradingPeriodGrade>>, TError,{id: number;data: NonReadonly<GradingPeriodGrade>}, TContext> => {
+
+const mutationKey = ['updateGradingPeriodGrade'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGradingPeriodGrade>>, {id: number;data: NonReadonly<GradingPeriodGrade>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateGradingPeriodGrade(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateGradingPeriodGradeMutationResult = NonNullable<Awaited<ReturnType<typeof updateGradingPeriodGrade>>>
+    export type UpdateGradingPeriodGradeMutationBody = NonReadonly<GradingPeriodGrade>
+    export type UpdateGradingPeriodGradeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a GradingPeriodGrade
+ */
+export const useUpdateGradingPeriodGrade = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGradingPeriodGrade>>, TError,{id: number;data: NonReadonly<GradingPeriodGrade>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateGradingPeriodGrade>>,
+        TError,
+        {id: number;data: NonReadonly<GradingPeriodGrade>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateGradingPeriodGradeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a GradingPeriodGrade by its ID
+ * @summary Delete a GradingPeriodGrade
+ */
+export const deleteGradingPeriodGrade = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteGradingPeriodGradeResponse200>(
+      {url: `/api/GradingPeriodGrade/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteGradingPeriodGradeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGradingPeriodGrade>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteGradingPeriodGrade>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteGradingPeriodGrade'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGradingPeriodGrade>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteGradingPeriodGrade(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteGradingPeriodGradeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGradingPeriodGrade>>>
+    
+    export type DeleteGradingPeriodGradeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a GradingPeriodGrade
+ */
+export const useDeleteGradingPeriodGrade = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGradingPeriodGrade>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteGradingPeriodGrade>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteGradingPeriodGradeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Sync grading period grade for a section with the provided details
+ * @summary Sync grading period grade for a section
+ */
+export const syncGradingPeriodGradeForSection = (
+    sectionId: number,
+    syncGradingPeriodGrade: SyncGradingPeriodGrade[],
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSyncGradingPeriodGradesResponse200>(
+      {url: `/api/GradingPeriodGrade/sync-grading-period-grade/${sectionId}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: syncGradingPeriodGrade, signal
+    },
+      );
+    }
+  
+
+
+export const getSyncGradingPeriodGradeForSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncGradingPeriodGradeForSection>>, TError,{sectionId: number;data: SyncGradingPeriodGrade[]}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof syncGradingPeriodGradeForSection>>, TError,{sectionId: number;data: SyncGradingPeriodGrade[]}, TContext> => {
+
+const mutationKey = ['syncGradingPeriodGradeForSection'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncGradingPeriodGradeForSection>>, {sectionId: number;data: SyncGradingPeriodGrade[]}> = (props) => {
+          const {sectionId,data} = props ?? {};
+
+          return  syncGradingPeriodGradeForSection(sectionId,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncGradingPeriodGradeForSectionMutationResult = NonNullable<Awaited<ReturnType<typeof syncGradingPeriodGradeForSection>>>
+    export type SyncGradingPeriodGradeForSectionMutationBody = SyncGradingPeriodGrade[]
+    export type SyncGradingPeriodGradeForSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Sync grading period grade for a section
+ */
+export const useSyncGradingPeriodGradeForSection = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncGradingPeriodGradeForSection>>, TError,{sectionId: number;data: SyncGradingPeriodGrade[]}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncGradingPeriodGradeForSection>>,
+        TError,
+        {sectionId: number;data: SyncGradingPeriodGrade[]},
+        TContext
+      > => {
+
+      const mutationOptions = getSyncGradingPeriodGradeForSectionMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

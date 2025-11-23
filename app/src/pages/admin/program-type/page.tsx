@@ -153,36 +153,34 @@ export default function AdminProgramTypes(): React.ReactNode {
         </div>
       </div>
 
-      <div className="bg-card rounded-lg border shadow-sm">
-        <Table
-          columns={columns}
-          rows={visibleItems}
-          loading={isLoading}
-          pagination={programTypes?.data}
-          onPageChange={setPage}
-          itemsPerPage={rows}
-          onItemsPerPageChange={setRows}
-          emptyState={
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="p-4 bg-muted rounded-full mb-3">
-                <SearchIcon className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <h3 className="text-lg font-semibold">No program types found</h3>
-              <p className="text-sm text-muted-foreground max-w-xs mt-1">
-                {programTypeItems.length === 0
-                  ? 'Get started by creating a new program type.'
-                  : 'Try adjusting your search query or filters.'}
-              </p>
-              {programTypeItems.length === 0 && (
-                <Button onClick={() => controller.openFn()} variant="outline" className="mt-4">
-                  <PlusIcon className="h-4 w-4 mr-2" />
-                  Create Program Type
-                </Button>
-              )}
+      <Table
+        columns={columns}
+        rows={visibleItems}
+        loading={isLoading}
+        pagination={programTypes?.data}
+        onPageChange={setPage}
+        itemsPerPage={rows}
+        onItemsPerPageChange={setRows}
+        emptyState={
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="p-4 bg-muted rounded-full mb-3">
+              <SearchIcon className="h-8 w-8 text-muted-foreground" />
             </div>
-          }
-        />
-      </div>
+            <h3 className="text-lg font-semibold">No program types found</h3>
+            <p className="text-sm text-muted-foreground max-w-xs mt-1">
+              {programTypeItems.length === 0
+                ? 'Get started by creating a new program type.'
+                : 'Try adjusting your search query or filters.'}
+            </p>
+            {programTypeItems.length === 0 && (
+              <Button onClick={() => controller.openFn()} variant="outline" className="mt-4">
+                <PlusIcon className="h-4 w-4 mr-2" />
+                Create Program Type
+              </Button>
+            )}
+          </div>
+        }
+      />
 
       <ProgramTypeModal
         controller={controller}

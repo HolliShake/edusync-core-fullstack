@@ -18,6 +18,7 @@ import {
   Table as UITable,
 } from '@/components/ui/table';
 import React from 'react';
+import { Card, CardContent } from '../ui/card';
 
 export type TableColumn<RowType> = {
   key: keyof RowType | string;
@@ -334,131 +335,131 @@ export default function Table<RowType extends Record<string, any>>({
   };
 
   return (
-    <div
-      role="region"
-      aria-label="data table"
-      className={`overflow-hidden rounded-xl shadow-md bg-card text-foreground ${className || ''}`}
-    >
-      <div className="overflow-x-auto">
-        <UITable
-          className={`w-full ${compact ? 'text-sm' : 'text-[0.95rem]'} ${tableClassName || ''}`}
-        >
-          <TableHeader className={theadClassName}>
-            <TableRow>
-              {selectable && (
-                <TableHead
-                  className={`
+    <Card role="region" aria-label="data table" className={`overflow-hidden ${className || ''}`}>
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <UITable
+            className={`w-full ${compact ? 'text-sm' : 'text-[0.95rem]'} ${tableClassName || ''}`}
+          >
+            <TableHeader className={theadClassName}>
+              <TableRow>
+                {selectable && (
+                  <TableHead
+                    className={`
                     text-[0.75rem] leading-5 font-medium tracking-wide uppercase text-muted-foreground/90 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
                     ${compact ? 'px-3 py-2' : 'px-4 py-3'}
                     w-12
                   `}
-                >
-                  <Checkbox
-                    checked={isAllSelected}
-                    onCheckedChange={handleSelectAll}
-                    aria-label="Select all rows"
-                    className={isSomeSelected ? 'data-[state=checked]:bg-primary/50' : ''}
-                  />
-                </TableHead>
-              )}
-              {columns.map((col, idx) => (
-                <TableHead
-                  key={`th-${idx}-${String(col.key)}`}
-                  className={`
+                  >
+                    <Checkbox
+                      checked={isAllSelected}
+                      onCheckedChange={handleSelectAll}
+                      aria-label="Select all rows"
+                      className={isSomeSelected ? 'data-[state=checked]:bg-primary/50' : ''}
+                    />
+                  </TableHead>
+                )}
+                {columns.map((col, idx) => (
+                  <TableHead
+                    key={`th-${idx}-${String(col.key)}`}
+                    className={`
                     text-[0.75rem] leading-5 font-medium tracking-wide uppercase text-muted-foreground/90 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60
                     ${compact ? 'px-3 py-2' : 'px-4 py-3'}
                     ${col.headerClassName || ''}
                   `}
-                  style={{
-                    width: col.width,
-                    textAlign: col.align ?? 'left',
-                  }}
-                >
-                  {col.title}
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody className={tbodyClassName}>
-            {loading ? (
-              renderSkeletonRows()
-            ) : rows.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length + (selectable ? 1 : 0)}
-                  className="h-36 text-center"
-                >
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="w-12 h-12 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
-                      <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8V4a1 1 0 00-1-1H7a1 1 0 00-1 1v1m8 0V4.5"
-                        />
-                      </svg>
-                    </div>
-                    <div className="text-sm font-medium">{emptyState ?? 'No data available'}</div>
-                    <div className="text-xs text-muted-foreground">No records found to display</div>
-                  </div>
-                </TableCell>
+                    style={{
+                      width: col.width,
+                      textAlign: col.align ?? 'left',
+                    }}
+                  >
+                    {col.title}
+                  </TableHead>
+                ))}
               </TableRow>
-            ) : (
-              rows.map((row, rowIndex) => {
-                const key = getRowKey(row, rowIndex);
-                const isSelected = selectedRows.includes(key);
-                return (
-                  <TableRow
-                    key={key}
-                    className={` 
+            </TableHeader>
+            <TableBody className={tbodyClassName}>
+              {loading ? (
+                renderSkeletonRows()
+              ) : rows.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length + (selectable ? 1 : 0)}
+                    className="h-36 text-center"
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <div className="w-12 h-12 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8V4a1 1 0 00-1-1H7a1 1 0 00-1 1v1m8 0V4.5"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-sm font-medium">{emptyState ?? 'No data available'}</div>
+                      <div className="text-xs text-muted-foreground">
+                        No records found to display
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                rows.map((row, rowIndex) => {
+                  const key = getRowKey(row, rowIndex);
+                  const isSelected = selectedRows.includes(key);
+                  return (
+                    <TableRow
+                      key={key}
+                      className={` 
                       ${onClickRow ? '!cursor-pointer' : ''}
                       ${getRowClassName(row, rowIndex)}
                       ${isSelected ? 'bg-muted/70' : ''}
                     `}
-                    onClick={() => onClickRow?.(row, rowIndex)}
-                  >
-                    {selectable && (
-                      <TableCell
-                        className={`
+                      onClick={() => onClickRow?.(row, rowIndex)}
+                    >
+                      {selectable && (
+                        <TableCell
+                          className={`
                           ${compact ? 'px-3 py-2' : 'px-4 py-3'}
                           w-12
                         `}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Checkbox
-                          checked={isSelected}
-                          onCheckedChange={(checked) => handleSelectRow(key, checked as boolean)}
-                          aria-label={`Select row ${rowIndex + 1}`}
-                        />
-                      </TableCell>
-                    )}
-                    {columns.map((col, colIndex) => (
-                      <TableCell
-                        key={`td-${rowIndex}-${colIndex}`}
-                        className={`
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Checkbox
+                            checked={isSelected}
+                            onCheckedChange={(checked) => handleSelectRow(key, checked as boolean)}
+                            aria-label={`Select row ${rowIndex + 1}`}
+                          />
+                        </TableCell>
+                      )}
+                      {columns.map((col, colIndex) => (
+                        <TableCell
+                          key={`td-${rowIndex}-${colIndex}`}
+                          className={`
                           ${compact ? 'px-3 py-2' : 'px-4 py-3'}
                           ${col.className || ''}
                         `}
-                        style={{ textAlign: col.align ?? 'left' }}
-                      >
-                        {renderCell(col, row, rowIndex)}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </UITable>
-      </div>
-      {renderPagination()}
-    </div>
+                          style={{ textAlign: col.align ?? 'left' }}
+                        >
+                          {renderCell(col, row, rowIndex)}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
+              )}
+            </TableBody>
+          </UITable>
+        </div>
+        {renderPagination()}
+      </CardContent>
+    </Card>
   );
 }

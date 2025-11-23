@@ -15,9 +15,11 @@ import { useSectionTeacherContext } from '@/context/section-teacher.context';
 import {
   useGetEnrollmentPaginated,
   useGetSyncGradeBookScore,
+  useGetSyncGradingPeriodGrade,
+  useSyncGradingPeriodGradeForSection,
   useSyncScoreForSection,
 } from '@rest/api';
-import type { GradeBookScore } from '@rest/models';
+import type { GradeBookScore, SyncGradingPeriodGrade } from '@rest/models';
 import type { Enrollment } from '@rest/models/enrollment';
 import type { GradeBook } from '@rest/models/gradeBook';
 import type { GradeBookGradingPeriod } from '@rest/models/gradeBookGradingPeriod';
@@ -58,14 +60,29 @@ const createScorePayload = (
   };
 };
 
+// Helper function to get period grade from API
+const getPeriodGradeFromAPI = (
+  gradingPeriodGrades: SyncGradingPeriodGrade[],
+  enrollmentId: number,
+  periodId: number
+): SyncGradingPeriodGrade | undefined => {
+  return gradingPeriodGrades.find(
+    (grade) =>
+      grade.enrollment_id === enrollmentId && grade.gradebook_grading_period_id === periodId
+  );
+};
+
 export default function FacultyScheduleGradeTab(): React.ReactNode {
   const sectionTeacher = useSectionTeacherContext();
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   const [scoreChanges, setScoreChanges] = useState<Map<string, number>>(new Map());
+  const [periodGradeChanges, setPeriodGradeChanges] = useState<Map<string, number>>(new Map());
 
   const hasGradeBook = useMemo(() => !!sectionTeacher?.section?.grade_book, [sectionTeacher]);
 
   const { mutateAsync: syncScoreForSection, isPending: isSyncingScore } = useSyncScoreForSection();
+  const { mutateAsync: syncGradingPeriodGradeForSection, isPending: isSyncingGradingPeriodGrade } =
+    useSyncGradingPeriodGradeForSection();
 
   // fetch grade book data
   const gradeBook = useMemo(
@@ -90,6 +107,11 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
     }
   );
 
+  const { data: gradingPeriodGradeResponse, refetch: refetchGradingPeriodGrade } =
+    useGetSyncGradingPeriodGrade(sectionTeacher?.section?.id ?? 0, {
+      query: { enabled: !!sectionTeacher?.section?.id },
+    });
+
   const enrollments: Enrollment[] = useMemo(
     () => (enrollmentResponse?.data?.data as Enrollment[] | undefined) || [],
     [enrollmentResponse]
@@ -98,6 +120,11 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
   const gradeBookScores: GradeBookScore[] = useMemo(
     () => (gradeBookScoreResponse?.data as GradeBookScore[] | undefined) || [],
     [gradeBookScoreResponse]
+  );
+
+  const gradingPeriodGrades: SyncGradingPeriodGrade[] = useMemo(
+    () => (gradingPeriodGradeResponse?.data as SyncGradingPeriodGrade[] | undefined) || [],
+    [gradingPeriodGradeResponse]
   );
 
   const gradingPeriods = useMemo(() => {
@@ -244,6 +271,28 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
     });
   };
 
+  // Handler for period grade input changes
+  const handlePeriodGradeChange = (enrollmentId: number, periodId: number, value: string) => {
+    const key = `${enrollmentId}-${periodId}`;
+
+    if (value === '') {
+      setPeriodGradeChanges((prev) => {
+        const updated = new Map(prev);
+        updated.delete(key);
+        return updated;
+      });
+      return;
+    }
+
+    const numericValue = Number(value);
+
+    setPeriodGradeChanges((prev) => {
+      const updated = new Map(prev);
+      updated.set(key, numericValue);
+      return updated;
+    });
+  };
+
   // Handler for save button click
   const handleSaveScores = async () => {
     const validationErrors: string[] = [];
@@ -296,6 +345,7 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
       });
       toast.success(`${payloads.length} score(s) saved successfully`);
       refetchGradeBookScore();
+      refetchGradingPeriodGrade();
     } catch (error) {
       console.error(error);
       toast.error('Failed to save scores');
@@ -303,6 +353,73 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
 
     // Clear the changes after successful save
     setScoreChanges(new Map());
+  };
+
+  // Handler for posting period grade
+  const handleSyncGradingPeriodGrade = async (
+    enrollmentId: number,
+    periodId: number,
+    isPosted: boolean
+  ) => {
+    const key = `${enrollmentId}-${periodId}`;
+    let grade = periodGradeChanges.get(key);
+
+    const existingGrade = getPeriodGradeFromAPI(gradingPeriodGrades, enrollmentId, periodId);
+
+    if (existingGrade && existingGrade?.is_posted) {
+      toast.error('Grade already posted');
+      return;
+    }
+
+    // If no local change, try to use existing API grade
+    if (grade === undefined && existingGrade?.grade !== undefined) {
+      grade = Number(existingGrade.grade);
+    }
+
+    // If still undefined, try calculated grade
+    if (grade === undefined) {
+      const calculated = getPeriodGrade(enrollmentId, periodId);
+      grade = Number(calculated);
+    }
+
+    if (grade === undefined) {
+      toast.error('Please enter a grade before saving or posting');
+      return;
+    }
+
+    // Validate grade is between 0 and 100
+    if (grade < 0 || grade > 100) {
+      toast.error('Grade must be between 0 and 100');
+      return;
+    }
+
+    try {
+      await syncGradingPeriodGradeForSection({
+        sectionId: sectionTeacher?.section?.id ?? 0,
+        data: [
+          {
+            id: existingGrade?.id ?? undefined,
+            gradebook_grading_period_id: periodId,
+            enrollment_id: enrollmentId,
+            grade: grade,
+            is_posted: isPosted,
+          },
+        ],
+      });
+
+      toast.success(isPosted ? 'Grade posted successfully' : 'Grade saved successfully');
+      refetchGradingPeriodGrade();
+
+      // Clear the local change after successful post
+      setPeriodGradeChanges((prev) => {
+        const updated = new Map(prev);
+        updated.delete(key);
+        return updated;
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to save/post grade');
+    }
   };
 
   // Helper to get the current value for an input (either from local state or from API)
@@ -319,8 +436,28 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
     return score !== undefined ? score : '';
   };
 
+  // Helper to get current period grade value
+  const getCurrentPeriodGrade = (enrollmentId: number, periodId: number): number | string => {
+    const key = `${enrollmentId}-${periodId}`;
+
+    // Check if there's a local change first
+    if (periodGradeChanges.has(key)) {
+      return periodGradeChanges.get(key)!;
+    }
+
+    // Otherwise, get from calculated/API data
+    return getPeriodGrade(enrollmentId, periodId);
+  };
+
   // Helper to calculate period grade
   const getPeriodGrade = (enrollmentId: number, periodId: number): string => {
+    // First, check if we have a grade from the API
+    const apiGrade = getPeriodGradeFromAPI(gradingPeriodGrades, enrollmentId, periodId);
+    if (apiGrade?.grade !== undefined) {
+      return Number(apiGrade.grade).toFixed(2);
+    }
+
+    // Fallback to calculation if no API grade exists
     const periodColumns = columns.filter(
       (col) =>
         col.periodId === periodId &&
@@ -344,6 +481,12 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
     });
 
     return totalPeriodGrade.toFixed(2);
+  };
+
+  // Helper to check if a period is posted for a specific enrollment
+  const isPeriodPosted = (enrollmentId: number, periodId: number): boolean => {
+    const periodGrade = getPeriodGradeFromAPI(gradingPeriodGrades, enrollmentId, periodId);
+    return periodGrade?.is_posted ?? true;
   };
 
   if (!hasGradeBook) {
@@ -666,12 +809,76 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
                       {hasColumns ? (
                         columns.map((col, idx) => {
                           if (col.isPeriodGrade) {
+                            const periodGrade = getPeriodGradeFromAPI(
+                              gradingPeriodGrades,
+                              enrollment.id!,
+                              col.periodId
+                            );
+                            const isPosted = periodGrade?.is_posted ?? true;
+                            const currentValue = getCurrentPeriodGrade(
+                              enrollment.id!,
+                              col.periodId
+                            );
+
                             return (
                               <TableCell
                                 key={idx}
                                 className="text-center p-2 border-r border-border font-bold bg-muted/10"
                               >
-                                {getPeriodGrade(enrollment.id!, col.periodId)}%
+                                <div className="flex items-center gap-2 justify-center">
+                                  <Input
+                                    type="number"
+                                    className="w-24 text-center h-9 border border-input bg-background focus-visible:bg-accent/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all"
+                                    placeholder="0.00"
+                                    min={0}
+                                    max={100}
+                                    step="0.01"
+                                    value={currentValue}
+                                    onChange={(e) => {
+                                      handlePeriodGradeChange(
+                                        enrollment.id!,
+                                        col.periodId,
+                                        e.target.value
+                                      );
+                                    }}
+                                    disabled={isPosted}
+                                  />
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-9 px-4 font-medium hover:bg-blue-600 hover:text-white border-blue-500 text-blue-600 transition-all shadow-sm hover:shadow-md"
+                                    onClick={() =>
+                                      handleSyncGradingPeriodGrade(
+                                        enrollment.id!,
+                                        col.periodId,
+                                        false
+                                      )
+                                    }
+                                    disabled={isPosted || isSyncingGradingPeriodGrade}
+                                  >
+                                    {isSyncingGradingPeriodGrade ? 'Saving...' : 'Save'}
+                                  </Button>
+
+                                  <Button
+                                    size="sm"
+                                    variant={isPosted ? 'secondary' : 'default'}
+                                    className={`h-9 px-4 font-medium transition-all shadow-sm hover:shadow-md ${
+                                      isPosted
+                                        ? 'bg-green-600 hover:bg-green-700 text-white border-green-600'
+                                        : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                                    }`}
+                                    onClick={() =>
+                                      handleSyncGradingPeriodGrade(
+                                        enrollment.id!,
+                                        col.periodId,
+                                        true
+                                      )
+                                    }
+                                    disabled={isPosted || isSyncingGradingPeriodGrade}
+                                  >
+                                    {isPosted ? '✓ Posted' : 'Post'}
+                                  </Button>
+                                </div>
                               </TableCell>
                             );
                           }
@@ -679,6 +886,7 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
                           const currentValue = !col.isPlaceholder
                             ? getCurrentScore(enrollment.id!, col.detailId)
                             : '';
+                          const isPosted = isPeriodPosted(enrollment.id!, col.periodId);
 
                           return (
                             <TableCell key={idx} className="text-center p-2 border-r border-border">
@@ -693,6 +901,7 @@ export default function FacultyScheduleGradeTab(): React.ReactNode {
                                   onChange={(e) => {
                                     handleScoreChange(enrollment.id!, col.detailId, e.target.value);
                                   }}
+                                  disabled={isPosted}
                                 />
                               ) : (
                                 <span className="text-muted-foreground">-</span>

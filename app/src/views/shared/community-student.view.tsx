@@ -352,17 +352,18 @@ export default function CommunityStudentView({ role }: { role: UserRoleEnum }): 
               />
             </div>
           </div>
-          <Table
-            columns={columns}
-            rows={tableItems}
-            itemsPerPage={itemsPerPage}
-            pagination={paginationMeta}
-            showPagination={true}
-            onPageChange={setPage}
-            onItemsPerPageChange={setItemsPerPage}
-          />
         </CardContent>
       </Card>
+
+      <Table
+        columns={columns}
+        rows={tableItems}
+        itemsPerPage={itemsPerPage}
+        pagination={paginationMeta}
+        showPagination={true}
+        onPageChange={setPage}
+        onItemsPerPageChange={setItemsPerPage}
+      />
     </div>
   );
 }
