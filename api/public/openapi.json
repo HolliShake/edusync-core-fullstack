@@ -21987,6 +21987,10 @@
                     },
                     "value": {
                         "type": "string"
+                    },
+                    "parent_value": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"

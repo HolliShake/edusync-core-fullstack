@@ -14,7 +14,8 @@ use OpenApi\Attributes as OA;
     ],
     properties: [
         new OA\Property(property: "label", type: "string"),
-        new OA\Property(property: "value", type: "string")
+        new OA\Property(property: "value", type: "string"),
+        new OA\Property(property: "parent_value", type: "string", nullable: true)
     ]
 )]
 class Util {} // Dummy class

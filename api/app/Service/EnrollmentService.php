@@ -52,7 +52,8 @@ class EnrollmentService extends GenericService implements IEnrollmentService
             if (!isset($years[$yearOrder])) {
                 $years[$yearOrder] = [
                     'label' => 'Year ' . $yearOrder,
-                    'value' => $yearOrder
+                    'value' => $yearOrder,
+                    'parent_value' => null
                 ];
             }
 
@@ -60,7 +61,8 @@ class EnrollmentService extends GenericService implements IEnrollmentService
             if (!isset($terms[$termOrder])) {
                 $terms[$termOrder] = [
                     'label' => $academicTerm->suffix . ' ' . $termOrder,
-                    'value' => $termOrder
+                    'value' => $termOrder,
+                    'parent_value' => $yearOrder
                 ];
             }
         }
@@ -69,8 +71,6 @@ class EnrollmentService extends GenericService implements IEnrollmentService
             'year' => array_values($years),
             'term' => array_values($terms)
         ];
-
-        return [];
     }
 
     public function getScholasticFilterByProgramId(int $academicProgramId, ?string $latestStatus, int $schoolYearId): array
@@ -107,7 +107,8 @@ class EnrollmentService extends GenericService implements IEnrollmentService
             if (!isset($years[$yearOrder])) {
                 $years[$yearOrder] = [
                     'label' => 'Year ' . $yearOrder,
-                    'value' => $yearOrder
+                    'value' => $yearOrder,
+                    'parent_value' => null
                 ];
             }
 
@@ -115,7 +116,8 @@ class EnrollmentService extends GenericService implements IEnrollmentService
             if (!isset($terms[$termOrder])) {
                 $terms[$termOrder] = [
                     'label' => $academicTerm->suffix . ' ' . $termOrder,
-                    'value' => $termOrder
+                    'value' => $termOrder,
+                    'parent_value' => $yearOrder
                 ];
             }
         }

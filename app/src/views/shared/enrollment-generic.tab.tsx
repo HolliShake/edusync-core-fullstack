@@ -234,12 +234,14 @@ export default function EnrollmentGenericTab({
 
   const termsList = useMemo(() => {
     return (
-      scholasticFilterResponse?.data?.term?.map((term: KeyValuePair) => ({
-        label: term.label,
-        value: String(term.value),
-      })) ?? []
+      scholasticFilterResponse?.data?.term
+        ?.filter((term: KeyValuePair) => Number(term.parent_value ?? 0) === Number(yearId ?? 0))
+        .map((term: KeyValuePair) => ({
+          label: term.label,
+          value: String(term.value),
+        })) ?? []
     );
-  }, [scholasticFilterResponse]);
+  }, [scholasticFilterResponse, yearId]);
 
   useEffect(() => {
     if (schoolYearsList.length > 0 && schoolYearId === undefined) {

@@ -9,4 +9,6 @@
 export interface KeyValuePair {
   label: string;
   value: string;
+  /** @nullable */
+  parent_value?: string | null;
 }

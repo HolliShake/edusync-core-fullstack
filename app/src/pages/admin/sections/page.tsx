@@ -207,6 +207,13 @@ export default function AdminSections(): React.ReactNode {
   const availableTerms = useMemo(() => {
     const termsMap = new Map<number, string>();
     sectionItems.forEach((section) => {
+      // Filter by selected year level
+      if (
+        filters.selectedYear !== 0 &&
+        section.curriculum_detail?.year_order !== filters.selectedYear
+      ) {
+        return;
+      }
       const termOrder = section.curriculum_detail?.term_order;
       const termLabel = section.curriculum_detail?.term_label;
       if (termOrder !== undefined && termLabel) {
@@ -216,7 +223,7 @@ export default function AdminSections(): React.ReactNode {
     return Array.from(termsMap.entries())
       .sort((a, b) => a[0] - b[0])
       .map(([order, label]) => ({ order, label }));
-  }, [sectionItems]);
+  }, [sectionItems, availableYears, filters.selectedYear]);
 
   // Auto-select first campus when campuses are loaded and no campus is selected
   useEffect(() => {
