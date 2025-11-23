@@ -194,7 +194,7 @@ export default function AdminCollegeTab(): React.ReactNode {
         onClickRow={(row) => {
           const campusId = encryptIdForUrl(campus?.id as number);
           const collegeId = encryptIdForUrl(row.id as number);
-          navigate(`/admin/campuses/${campusId}/colleges/${collegeId}/programs`);
+          navigate(`/admin/campus/${campusId}/college/${collegeId}/program`);
         }}
       />
 

@@ -45,8 +45,8 @@ const CAMPUS_REGISTRAR: Route[] = [
     children: [
       {
         key: 'campus-registrar.community.student',
-        title: 'Students',
-        path: '/campus-registrar/community/students',
+        title: 'Student',
+        path: '/campus-registrar/community/student',
         component: <CampusRegistrarCommunityStudent />,
         icon: <GraduationCapIcon className="h-4 w-4" />,
         layout: 'dashboard',
@@ -55,8 +55,8 @@ const CAMPUS_REGISTRAR: Route[] = [
       },
       {
         key: 'campus-registrar.community.faculty',
-        title: 'Faculties',
-        path: '/campus-registrar/community/faculties',
+        title: 'Faculty',
+        path: '/campus-registrar/community/faculty',
         component: <CampusRegistrarCommunityFaculty />,
         icon: <Users2Icon className="h-4 w-4" />,
         layout: 'dashboard',

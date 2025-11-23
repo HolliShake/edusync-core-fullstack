@@ -155,7 +155,7 @@ export default function AdminCourses(): React.ReactNode {
         onPageChange={setPage}
         showPagination={true}
         loading={isLoading}
-        onClickRow={(row) => navigate(`/admin/courses/${encryptIdForUrl(row?.id as number)}`)}
+        onClickRow={(row) => navigate(`/admin/course/${encryptIdForUrl(row?.id as number)}`)}
       />
       <CourseModal
         controller={controller}

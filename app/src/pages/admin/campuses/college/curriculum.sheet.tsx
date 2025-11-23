@@ -383,7 +383,7 @@ export default function CurriculumSheet({ controller }: CurriculumSheetProps) {
   const handleViewCurriculum = useCallback(
     (curr: Curriculum) => {
       navigate(
-        `/admin/campuses/${campusId}/colleges/${collegeId}/programs/${encryptIdForUrl(academicProgram?.id as number)}/curriculum/${encryptIdForUrl(curr.id as number)}`
+        `/admin/campus/${campusId}/college/${collegeId}/program/${encryptIdForUrl(academicProgram?.id as number)}/curriculum/${encryptIdForUrl(curr.id as number)}`
       );
     },
     [navigate, campusId, collegeId, academicProgram?.id]

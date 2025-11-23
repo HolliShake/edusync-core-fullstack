@@ -208,7 +208,7 @@ export default function AdminBuildingTab(): React.ReactNode {
         onClickRow={(row) => {
           const campusId = encryptIdForUrl(campus?.id as number);
           const buildingId = encryptIdForUrl(row.id as number);
-          navigate(`/admin/campuses/${campusId}/buildings/${buildingId}/rooms`);
+          navigate(`/admin/campus/${campusId}/building/${buildingId}/room`);
         }}
       />
 

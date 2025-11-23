@@ -522,76 +522,78 @@ export default function GradeBookView({
                     key={gradingPeriod.id}
                     className="rounded-2xl shadow-lg border-2 bg-background overflow-hidden hover:shadow-xl transition-all duration-300"
                   >
-                    <AccordionTrigger className="!no-underline px-6 py-5 bg-muted/80 hover:bg-muted rounded-t-2xl min-h-[72px] transition-all duration-200">
-                      <div className="flex flex-1 items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                            <Calendar className="h-6 w-6 text-primary-foreground" />
-                          </div>
-                          <div className="flex flex-col gap-1 items-start">
-                            <div className="flex items-center gap-3">
-                              <span className="truncate max-w-xs md:max-w-lg font-bold text-lg">
-                                {gradingPeriod.title}
-                              </span>
-                              <span
-                                title={`Period Weight: ${Number(gradingPeriod.weight || 0).toFixed(2)}%`}
-                                className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
-                              >
-                                {Number(gradingPeriod.weight || 0).toFixed(1)}%
-                              </span>
-                              <span
-                                title={`Total Item Weight: ${periodTotalWeight.toFixed(2)}%`}
-                                className={`text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm
+                    <div className="relative group bg-muted/80 hover:bg-muted rounded-t-2xl transition-all duration-200">
+                      <AccordionTrigger className="!no-underline px-6 py-5 bg-transparent hover:bg-transparent w-full">
+                        <div className="flex flex-1 items-center justify-between gap-4">
+                          <div className="flex items-center gap-4">
+                            <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center shadow-md">
+                              <Calendar className="h-6 w-6 text-primary-foreground" />
+                            </div>
+                            <div className="flex flex-col gap-1 items-start">
+                              <div className="flex items-center gap-3">
+                                <span className="truncate max-w-xs md:max-w-lg font-bold text-lg">
+                                  {gradingPeriod.title}
+                                </span>
+                                <span
+                                  title={`Period Weight: ${Number(gradingPeriod.weight || 0).toFixed(2)}%`}
+                                  className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
+                                >
+                                  {Number(gradingPeriod.weight || 0).toFixed(1)}%
+                                </span>
+                                <span
+                                  title={`Total Item Weight: ${periodTotalWeight.toFixed(2)}%`}
+                                  className={`text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 shadow-sm
                                   ${
                                     periodTotalWeight === 100
                                       ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                                       : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
                                   }`}
-                              >
-                                {periodTotalWeight === 100 ? (
-                                  <CheckCircle2 className="h-3 w-3" />
-                                ) : (
-                                  <AlertCircle className="h-3 w-3" />
-                                )}
-                                Items: {periodTotalWeight.toFixed(1)}%
+                                >
+                                  {periodTotalWeight === 100 ? (
+                                    <CheckCircle2 className="h-3 w-3" />
+                                  ) : (
+                                    <AlertCircle className="h-3 w-3" />
+                                  )}
+                                  Items: {periodTotalWeight.toFixed(1)}%
+                                </span>
+                              </div>
+                              <span className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
+                                <FileText className="h-3 w-3" />
+                                {gpItems?.length || 0} item{gpItems?.length !== 1 ? 's' : ''}
                               </span>
                             </div>
-                            <span className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
-                              <FileText className="h-3 w-3" />
-                              {gpItems?.length || 0} item{gpItems?.length !== 1 ? 's' : ''}
-                            </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 ml-4">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            title="Add Item"
-                            className="rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
-                            disabled={periodTotalWeight >= 100}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleOpenItemModal(gradingPeriod);
-                            }}
-                          >
-                            <PlusIcon className="w-4 h-4 mr-1" />
-                            <span className="hidden sm:inline">Add Item</span>
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            title="Edit Grading Period"
-                            className="rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              gradingPeriodController.openFn(gradingPeriod);
-                            }}
-                          >
-                            <EditIcon className="w-4 h-4" />
-                          </Button>
-                        </div>
+                      </AccordionTrigger>
+                      <div className="absolute right-14 top-1/2 -translate-y-1/2 z-10 flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          title="Add Item"
+                          className="rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
+                          disabled={periodTotalWeight >= 100}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenItemModal(gradingPeriod);
+                          }}
+                        >
+                          <PlusIcon className="w-4 h-4 mr-1" />
+                          <span className="hidden sm:inline">Add Item</span>
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          title="Edit Grading Period"
+                          className="rounded-xl hover:bg-primary/10 hover:text-primary transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            gradingPeriodController.openFn(gradingPeriod);
+                          }}
+                        >
+                          <EditIcon className="w-4 h-4" />
+                        </Button>
                       </div>
-                    </AccordionTrigger>
+                    </div>
                     <AccordionContent>
                       <Card className="!shadow-none !border-0 rounded-t-none bg-transparent">
                         <CardContent className="pb-8 pt-6 px-6">

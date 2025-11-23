@@ -112,7 +112,7 @@ export default function AdminCampus(): React.ReactNode {
         pagination={paginationMeta}
         onPageChange={setPage}
         showPagination={true}
-        onClickRow={(row) => navigate(`/admin/campuses/${encryptIdForUrl(row?.id as number)}`)}
+        onClickRow={(row) => navigate(`/admin/campus/${encryptIdForUrl(row?.id as number)}`)}
       />
       <CampusModal
         controller={controller}

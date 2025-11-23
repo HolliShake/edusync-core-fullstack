@@ -142,7 +142,7 @@ export default function GuestAdmissionApplications(): React.ReactNode {
               key={application.id}
               className="hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer group"
               onClick={() =>
-                navigate(`/guest/admission/applications/${encryptIdForUrl(application.id!)}`)
+                navigate(`/guest/admission/application/${encryptIdForUrl(application.id!)}`)
               }
             >
               <CardHeader className="pb-3">

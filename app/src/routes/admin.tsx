@@ -79,9 +79,9 @@ const ADMIN: Route[] = [
     roles: [UserRoleEnum.admin],
   },
   {
-    key: 'admin.campuses',
-    title: 'Campuses',
-    path: '/admin/campuses',
+    key: 'admin.campus',
+    title: 'Campus',
+    path: '/admin/campus',
     component: <AdminCampus />,
     icon: <SchoolIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -90,9 +90,9 @@ const ADMIN: Route[] = [
   },
   // Campus/:id
   {
-    key: 'admin.campus',
-    title: 'Campus',
-    path: '/admin/campuses/:campusId',
+    key: 'admin.campus-detail',
+    title: 'Campus Detail',
+    path: '/admin/campus/:campusId',
     component: <AdminCampusDetail />,
     icon: <SchoolIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -103,7 +103,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.building',
     title: 'Building',
-    path: '/admin/campuses/:campusId/buildings/:buildingId/rooms',
+    path: '/admin/campus/:campusId/building/:buildingId/room',
     component: <AdminBuilding />,
     icon: <BuildingIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -114,7 +114,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.college',
     title: 'College',
-    path: '/admin/campuses/:campusId/colleges/:collegeId/programs',
+    path: '/admin/campus/:campusId/college/:collegeId/program',
     component: <AdminCollege />,
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -125,7 +125,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.curriculum',
     title: 'Curriculum',
-    path: '/admin/campuses/:campusId/colleges/:collegeId/programs/:programId/curriculum/:curriculumId',
+    path: '/admin/campus/:campusId/college/:collegeId/program/:programId/curriculum/:curriculumId',
     component: <AdminCurriculum />,
     icon: <LibraryIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -146,7 +146,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.course',
     title: 'Course',
-    path: '/admin/courses',
+    path: '/admin/course',
     component: <AdminCourses />,
     icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -157,7 +157,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.course-requisite',
     title: 'Course Requisite',
-    path: '/admin/courses/:courseId',
+    path: '/admin/course/:courseId',
     component: <AdminCourseRequisites />,
     icon: <BookIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -168,7 +168,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.section',
     title: 'Section',
-    path: '/admin/sections',
+    path: '/admin/section',
     component: <AdminSections />,
     icon: <FolderIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -179,7 +179,7 @@ const ADMIN: Route[] = [
   {
     key: 'admin.requirement',
     title: 'Requirement',
-    path: '/admin/requirements',
+    path: '/admin/requirement',
     component: <AdminRequirements />,
     icon: <FileIcon className="h-4 w-4" />,
     layout: 'dashboard',
@@ -187,9 +187,9 @@ const ADMIN: Route[] = [
     roles: [UserRoleEnum.admin],
   },
   {
-    key: 'admin.users',
-    title: 'Users',
-    path: '/admin/users',
+    key: 'admin.user',
+    title: 'User',
+    path: '/admin/user',
     component: <AdminUsers />,
     icon: <UserIcon className="h-4 w-4" />,
     layout: 'dashboard',

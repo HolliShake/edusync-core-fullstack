@@ -35,7 +35,16 @@ import {
   useGetSectionTeachersByProgramIdGroupedByTeacherName,
 } from '@rest/api';
 import { UserRoleEnum, type SectionTeacher } from '@rest/models';
-import { Building2, GraduationCap, Mail, Search, User, Users } from 'lucide-react';
+import {
+  Building2,
+  GraduationCap,
+  Mail,
+  Search,
+  User,
+  UserCheck,
+  Users,
+  UserX,
+} from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -322,17 +331,29 @@ export default function CommunityFacultyView({ role }: { role: UserRoleEnum }): 
     return Object.keys(groupedData).length;
   }, [facultyResponse]);
 
+  const totalActiveFaculties = useMemo(() => {
+    // Count unique faculty members from the grouped data
+    const groupedData = facultyResponse?.data?.data;
+    if (!groupedData || typeof groupedData !== 'object') return 0;
+    return Object.keys(groupedData).length;
+  }, [facultyResponse]);
+
   const isInitialLoading = isLoading && !facultyResponse;
 
   if (isInitialLoading) {
     return (
       <div className="space-y-3">
-        <div className="grid gap-2 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-3">
           {[...Array(3)].map((_, i) => (
-            <Card key={i} className="border-border/50">
-              <CardHeader className="pb-1.5 pt-2.5 px-3">
-                <Skeleton className="h-2.5 w-16 mb-0.5" />
-                <Skeleton className="h-6 w-10" />
+            <Card key={i} className="border-border/50 overflow-hidden">
+              <CardHeader className="pb-3 pt-4 px-4">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-2 flex-1">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-8 w-16" />
+                  </div>
+                  <Skeleton className="h-10 w-10 rounded-lg" />
+                </div>
               </CardHeader>
             </Card>
           ))}
@@ -379,37 +400,55 @@ export default function CommunityFacultyView({ role }: { role: UserRoleEnum }): 
 
   return (
     <div className="space-y-3">
-      <div className="grid gap-2 md:grid-cols-3">
-        <Card className="border-border/50 hover:border-border transition-colors">
-          <CardHeader className="pb-1.5 pt-2.5 px-3">
-            <CardDescription className="text-[10px] text-muted-foreground font-medium">
-              Total Faculties
-            </CardDescription>
-            <CardTitle className="text-xl font-bold bg-gradient-to-br from-slate-900 to-slate-600 dark:from-slate-100 dark:to-slate-400 bg-clip-text text-transparent">
-              {totalFaculties}
+      <div className="grid gap-3 md:grid-cols-3">
+        <Card className="border-border/50 hover:border-emerald-500/30 transition-all duration-200 shadow-sm hover:shadow-md group">
+          <CardHeader className="pb-2 pt-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardDescription className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide">
+                Total Faculty
+              </CardDescription>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500/10 to-teal-500/10 group-hover:from-emerald-500/20 group-hover:to-teal-500/20 transition-colors">
+                <UserCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
+              {totalFaculties.toLocaleString()}
             </CardTitle>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Total faculty in the program</p>
           </CardHeader>
         </Card>
 
-        <Card className="border-border/50 hover:border-emerald-500/30 transition-colors">
-          <CardHeader className="pb-1.5 pt-2.5 px-3">
-            <CardDescription className="text-[10px] text-muted-foreground font-medium">
-              Active Faculties
-            </CardDescription>
-            <CardTitle className="text-xl font-bold bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
-              {totalFaculties}
+        <Card className="border-border/50 hover:border-emerald-500/30 transition-all duration-200 shadow-sm hover:shadow-md group">
+          <CardHeader className="pb-2 pt-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardDescription className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide">
+                Active Faculty
+              </CardDescription>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500/10 to-teal-500/10 group-hover:from-emerald-500/20 group-hover:to-teal-500/20 transition-colors">
+                <UserCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
+              {totalActiveFaculties.toLocaleString()}
             </CardTitle>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Currently active status</p>
           </CardHeader>
         </Card>
 
-        <Card className="border-border/50 hover:border-slate-500/30 transition-colors">
-          <CardHeader className="pb-1.5 pt-2.5 px-3">
-            <CardDescription className="text-[10px] text-muted-foreground font-medium">
-              Inactive Faculties
-            </CardDescription>
-            <CardTitle className="text-xl font-bold bg-gradient-to-br from-slate-600 to-slate-500 dark:from-slate-400 dark:to-slate-500 bg-clip-text text-transparent">
-              0
+        <Card className="border-border/50 hover:border-slate-500/30 transition-all duration-200 shadow-sm hover:shadow-md group">
+          <CardHeader className="pb-2 pt-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardDescription className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide">
+                Inactive Faculty
+              </CardDescription>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-slate-500/10 to-slate-600/10 group-hover:from-slate-500/20 group-hover:to-slate-600/20 transition-colors">
+                <UserX className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-br from-slate-600 to-slate-500 dark:from-slate-400 dark:to-slate-500 bg-clip-text text-transparent">
+              {(totalFaculties - totalActiveFaculties).toLocaleString()}
             </CardTitle>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Not currently active</p>
           </CardHeader>
         </Card>
       </div>
@@ -425,7 +464,7 @@ export default function CommunityFacultyView({ role }: { role: UserRoleEnum }): 
                 </CardTitle>
               </div>
               <CardDescription className="text-[10px] text-muted-foreground mt-0.5">
-                View and manage faculties in your program
+                View and manage faculty in your program
               </CardDescription>
             </div>
             <div className="flex items-center gap-1.5">

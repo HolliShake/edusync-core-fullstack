@@ -42,9 +42,9 @@ const GUEST: Route[] = [
         roles: [UserRoleEnum.guest],
       },
       {
-        key: 'guest.admission.applications',
-        title: 'Applications',
-        path: '/guest/admission/applications',
+        key: 'guest.admission.application',
+        title: 'Application',
+        path: '/guest/admission/application',
         component: <GuestAdmissionApplications />,
         icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
@@ -54,7 +54,7 @@ const GUEST: Route[] = [
       {
         key: 'guest.admission.application.status',
         title: 'Application Status',
-        path: '/guest/admission/applications/:admissionApplicationId',
+        path: '/guest/admission/application/:admissionApplicationId',
         component: <GuestAdmissionApplicationStatus />,
         icon: <FileTextIcon className="h-4 w-4" />,
         layout: 'dashboard',
@@ -109,9 +109,9 @@ const GUEST: Route[] = [
     roles: [UserRoleEnum.guest],
   },
   {
-    key: 'guest.settings',
+    key: 'guest.setting',
     title: 'Request A Document',
-    path: '/guest/settings',
+    path: '/guest/setting',
     component: <GuestRequestDocument />,
     icon: <FileTextIcon className="h-4 w-4" />,
     layout: 'dashboard',
