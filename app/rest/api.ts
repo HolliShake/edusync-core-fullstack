@@ -63,6 +63,7 @@ import type {
   CreateDocumentTypeResponse200,
   CreateEnrollmentLogResponse200,
   CreateEnrollmentResponse200,
+  CreateFinalGradeResponse200,
   CreateGradeBookGradingPeriodResponse200,
   CreateGradeBookItemDetailResponse200,
   CreateGradeBookItemResponse200,
@@ -102,6 +103,7 @@ import type {
   DeleteDocumentTypeResponse200,
   DeleteEnrollmentLogResponse200,
   DeleteEnrollmentResponse200,
+  DeleteFinalGradeResponse200,
   DeleteGradeBookGradingPeriodResponse200,
   DeleteGradeBookItemDetailResponse200,
   DeleteGradeBookItemResponse200,
@@ -121,6 +123,7 @@ import type {
   DocumentType,
   Enrollment,
   EnrollmentLog,
+  FinalGrade,
   ForbiddenResponse,
   GenerateSection,
   GetAcademicCalendarPaginatedParams,
@@ -179,6 +182,8 @@ import type {
   GetEnrollmentsByAcademicProgramIdGroupedByUserParams,
   GetEnrollmentsByCampusIdGroupedByUser200,
   GetEnrollmentsByCampusIdGroupedByUserParams,
+  GetFinalGradePaginatedParams,
+  GetFinalGradeResponse200,
   GetGradeBookGradingPeriodPaginatedParams,
   GetGradeBookGradingPeriodResponse200,
   GetGradeBookItemDetailPaginatedParams,
@@ -213,6 +218,7 @@ import type {
   GetSectionTeachersByProgramIdGroupedByTeacherName200,
   GetSectionTeachersByProgramIdGroupedByTeacherNameParams,
   GetSectionsResponse200,
+  GetSyncFinalGradesResponse200,
   GetSyncGradeBookScoresResponse200,
   GetSyncGradingPeriodGradesResponse200,
   GetUserPaginatedParams,
@@ -249,6 +255,7 @@ import type {
   PaginatedDocumentTypeResponse200,
   PaginatedEnrollmentLogResponse200,
   PaginatedEnrollmentResponse200,
+  PaginatedFinalGradeResponse200,
   PaginatedGradeBookGradingPeriodResponse200,
   PaginatedGradeBookItemDetailResponse200,
   PaginatedGradeBookItemResponse200,
@@ -270,6 +277,8 @@ import type {
   SectionTeacher,
   SessionResponse200,
   SuccessResponse,
+  SyncFinalGrade,
+  SyncGradeBookScore,
   SyncGradingPeriodGrade,
   UnauthenticatedResponse,
   UnauthorizedResponse,
@@ -296,6 +305,7 @@ import type {
   UpdateDocumentTypeResponse200,
   UpdateEnrollmentLogResponse200,
   UpdateEnrollmentResponse200,
+  UpdateFinalGradeResponse200,
   UpdateGradeBookGradingPeriodResponse200,
   UpdateGradeBookItemDetailResponse200,
   UpdateGradeBookItemResponse200,
@@ -10216,6 +10226,536 @@ export const useDeleteEnrollmentLog = <TError = UnauthenticatedResponse | Forbid
     }
     
 /**
+ * Retrieve a paginated list of FinalGrade with optional search
+ * @summary Get paginated list of FinalGrade
+ */
+export const getFinalGradePaginated = (
+    params?: GetFinalGradePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedFinalGradeResponse200>(
+      {url: `/api/FinalGrade`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetFinalGradePaginatedQueryKey = (params?: GetFinalGradePaginatedParams,) => {
+    return [`/api/FinalGrade`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetFinalGradePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getFinalGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetFinalGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFinalGradePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFinalGradePaginated>>> = ({ signal }) => getFinalGradePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFinalGradePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFinalGradePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getFinalGradePaginated>>>
+export type GetFinalGradePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetFinalGradePaginated<TData = Awaited<ReturnType<typeof getFinalGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetFinalGradePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFinalGradePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getFinalGradePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFinalGradePaginated<TData = Awaited<ReturnType<typeof getFinalGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetFinalGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFinalGradePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getFinalGradePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFinalGradePaginated<TData = Awaited<ReturnType<typeof getFinalGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetFinalGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of FinalGrade
+ */
+
+export function useGetFinalGradePaginated<TData = Awaited<ReturnType<typeof getFinalGradePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetFinalGradePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFinalGradePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new FinalGrade with the provided details
+ * @summary Create a new FinalGrade
+ */
+export const createFinalGrade = (
+    finalGrade: NonReadonly<FinalGrade>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateFinalGradeResponse200>(
+      {url: `/api/FinalGrade`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: finalGrade, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateFinalGradeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFinalGrade>>, TError,{data: NonReadonly<FinalGrade>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createFinalGrade>>, TError,{data: NonReadonly<FinalGrade>}, TContext> => {
+
+const mutationKey = ['createFinalGrade'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFinalGrade>>, {data: NonReadonly<FinalGrade>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createFinalGrade(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateFinalGradeMutationResult = NonNullable<Awaited<ReturnType<typeof createFinalGrade>>>
+    export type CreateFinalGradeMutationBody = NonReadonly<FinalGrade>
+    export type CreateFinalGradeMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new FinalGrade
+ */
+export const useCreateFinalGrade = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFinalGrade>>, TError,{data: NonReadonly<FinalGrade>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createFinalGrade>>,
+        TError,
+        {data: NonReadonly<FinalGrade>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateFinalGradeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a sync FinalGrade by its enrollment ID
+ * @summary Get sync FinalGrade
+ */
+export const getSyncFinalGrade = (
+    sectionId: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSyncFinalGradesResponse200>(
+      {url: `/api/FinalGrade/get-sync/${sectionId}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetSyncFinalGradeQueryKey = (sectionId?: number,) => {
+    return [`/api/FinalGrade/get-sync/${sectionId}`] as const;
+    }
+
+    
+export const getGetSyncFinalGradeQueryOptions = <TData = Awaited<ReturnType<typeof getSyncFinalGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncFinalGrade>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSyncFinalGradeQueryKey(sectionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSyncFinalGrade>>> = ({ signal }) => getSyncFinalGrade(sectionId, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sectionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSyncFinalGrade>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSyncFinalGradeQueryResult = NonNullable<Awaited<ReturnType<typeof getSyncFinalGrade>>>
+export type GetSyncFinalGradeQueryError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse
+
+
+export function useGetSyncFinalGrade<TData = Awaited<ReturnType<typeof getSyncFinalGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncFinalGrade>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSyncFinalGrade>>,
+          TError,
+          Awaited<ReturnType<typeof getSyncFinalGrade>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSyncFinalGrade<TData = Awaited<ReturnType<typeof getSyncFinalGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncFinalGrade>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSyncFinalGrade>>,
+          TError,
+          Awaited<ReturnType<typeof getSyncFinalGrade>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSyncFinalGrade<TData = Awaited<ReturnType<typeof getSyncFinalGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncFinalGrade>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get sync FinalGrade
+ */
+
+export function useGetSyncFinalGrade<TData = Awaited<ReturnType<typeof getSyncFinalGrade>>, TError = UnauthenticatedResponse | ForbiddenResponse | InternalServerErrorResponse>(
+ sectionId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSyncFinalGrade>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSyncFinalGradeQueryOptions(sectionId,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a FinalGrade by its ID
+ * @summary Get a specific FinalGrade
+ */
+export const getFinalGradeById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetFinalGradeResponse200>(
+      {url: `/api/FinalGrade/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetFinalGradeByIdQueryKey = (id?: number,) => {
+    return [`/api/FinalGrade/${id}`] as const;
+    }
+
+    
+export const getGetFinalGradeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getFinalGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradeById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFinalGradeByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFinalGradeById>>> = ({ signal }) => getFinalGradeById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFinalGradeById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFinalGradeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getFinalGradeById>>>
+export type GetFinalGradeByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetFinalGradeById<TData = Awaited<ReturnType<typeof getFinalGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradeById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFinalGradeById>>,
+          TError,
+          Awaited<ReturnType<typeof getFinalGradeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFinalGradeById<TData = Awaited<ReturnType<typeof getFinalGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradeById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFinalGradeById>>,
+          TError,
+          Awaited<ReturnType<typeof getFinalGradeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFinalGradeById<TData = Awaited<ReturnType<typeof getFinalGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradeById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific FinalGrade
+ */
+
+export function useGetFinalGradeById<TData = Awaited<ReturnType<typeof getFinalGradeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFinalGradeById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFinalGradeByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing FinalGrade with the provided details
+ * @summary Update a FinalGrade
+ */
+export const updateFinalGrade = (
+    id: number,
+    finalGrade: NonReadonly<FinalGrade>,
+ ) => {
+      
+      
+      return fetchData<UpdateFinalGradeResponse200>(
+      {url: `/api/FinalGrade/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: finalGrade
+    },
+      );
+    }
+  
+
+
+export const getUpdateFinalGradeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFinalGrade>>, TError,{id: number;data: NonReadonly<FinalGrade>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateFinalGrade>>, TError,{id: number;data: NonReadonly<FinalGrade>}, TContext> => {
+
+const mutationKey = ['updateFinalGrade'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFinalGrade>>, {id: number;data: NonReadonly<FinalGrade>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateFinalGrade(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateFinalGradeMutationResult = NonNullable<Awaited<ReturnType<typeof updateFinalGrade>>>
+    export type UpdateFinalGradeMutationBody = NonReadonly<FinalGrade>
+    export type UpdateFinalGradeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a FinalGrade
+ */
+export const useUpdateFinalGrade = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFinalGrade>>, TError,{id: number;data: NonReadonly<FinalGrade>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateFinalGrade>>,
+        TError,
+        {id: number;data: NonReadonly<FinalGrade>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateFinalGradeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a FinalGrade by its ID
+ * @summary Delete a FinalGrade
+ */
+export const deleteFinalGrade = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteFinalGradeResponse200>(
+      {url: `/api/FinalGrade/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteFinalGradeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFinalGrade>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFinalGrade>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteFinalGrade'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFinalGrade>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteFinalGrade(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFinalGradeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFinalGrade>>>
+    
+    export type DeleteFinalGradeMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a FinalGrade
+ */
+export const useDeleteFinalGrade = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFinalGrade>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFinalGrade>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteFinalGradeMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Sync final grade for a section with the provided details
+ * @summary Sync final grade for a section
+ */
+export const syncFinalGradeForSection = (
+    sectionId: number,
+    syncFinalGrade: SyncFinalGrade[],
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetSyncFinalGradesResponse200>(
+      {url: `/api/FinalGrade/sync-final-grade/${sectionId}`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: syncFinalGrade, signal
+    },
+      );
+    }
+  
+
+
+export const getSyncFinalGradeForSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncFinalGradeForSection>>, TError,{sectionId: number;data: SyncFinalGrade[]}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof syncFinalGradeForSection>>, TError,{sectionId: number;data: SyncFinalGrade[]}, TContext> => {
+
+const mutationKey = ['syncFinalGradeForSection'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncFinalGradeForSection>>, {sectionId: number;data: SyncFinalGrade[]}> = (props) => {
+          const {sectionId,data} = props ?? {};
+
+          return  syncFinalGradeForSection(sectionId,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncFinalGradeForSectionMutationResult = NonNullable<Awaited<ReturnType<typeof syncFinalGradeForSection>>>
+    export type SyncFinalGradeForSectionMutationBody = SyncFinalGrade[]
+    export type SyncFinalGradeForSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Sync final grade for a section
+ */
+export const useSyncFinalGradeForSection = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncFinalGradeForSection>>, TError,{sectionId: number;data: SyncFinalGrade[]}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncFinalGradeForSection>>,
+        TError,
+        {sectionId: number;data: SyncFinalGrade[]},
+        TContext
+      > => {
+
+      const mutationOptions = getSyncFinalGradeForSectionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of GradeBook with optional search
  * @summary Get paginated list of GradeBook
  */
@@ -12245,7 +12785,7 @@ export const useDeleteGradeBookScore = <TError = UnauthenticatedResponse | Forbi
  */
 export const syncScoreForSection = (
     sectionId: number,
-    gradeBookScore: NonReadonly<GradeBookScore[]>,
+    syncGradeBookScore: SyncGradeBookScore[],
  signal?: AbortSignal
 ) => {
       
@@ -12253,7 +12793,7 @@ export const syncScoreForSection = (
       return fetchData<GetSyncGradeBookScoresResponse200>(
       {url: `/api/GradeBookScore/sync-score/${sectionId}`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: gradeBookScore, signal
+      data: syncGradeBookScore, signal
     },
       );
     }
@@ -12261,8 +12801,8 @@ export const syncScoreForSection = (
 
 
 export const getSyncScoreForSectionMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: NonReadonly<GradeBookScore[]>}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: NonReadonly<GradeBookScore[]>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: SyncGradeBookScore[]}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: SyncGradeBookScore[]}, TContext> => {
 
 const mutationKey = ['syncScoreForSection'];
 const {mutation: mutationOptions} = options ?
@@ -12274,7 +12814,7 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncScoreForSection>>, {sectionId: number;data: NonReadonly<GradeBookScore[]>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncScoreForSection>>, {sectionId: number;data: SyncGradeBookScore[]}> = (props) => {
           const {sectionId,data} = props ?? {};
 
           return  syncScoreForSection(sectionId,data,)
@@ -12286,18 +12826,18 @@ const {mutation: mutationOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type SyncScoreForSectionMutationResult = NonNullable<Awaited<ReturnType<typeof syncScoreForSection>>>
-    export type SyncScoreForSectionMutationBody = NonReadonly<GradeBookScore[]>
+    export type SyncScoreForSectionMutationBody = SyncGradeBookScore[]
     export type SyncScoreForSectionMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Sync score for a section
  */
 export const useSyncScoreForSection = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: NonReadonly<GradeBookScore[]>}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncScoreForSection>>, TError,{sectionId: number;data: SyncGradeBookScore[]}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof syncScoreForSection>>,
         TError,
-        {sectionId: number;data: NonReadonly<GradeBookScore[]>},
+        {sectionId: number;data: SyncGradeBookScore[]},
         TContext
       > => {
 

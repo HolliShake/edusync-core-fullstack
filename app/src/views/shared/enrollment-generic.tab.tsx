@@ -1,3 +1,31 @@
+/**
+ * EnrollmentGenericTab Component
+ *
+ * A comprehensive enrollment management interface for handling student enrollments.
+ * This component provides functionality for:
+ * - Viewing and managing enrollment requests by status
+ * - Filtering enrollments by school year, semester, and year level
+ * - Approving or rejecting enrollment requests based on user role
+ * - Displaying enrollment statistics and validation status
+ * - Handling enrollment actions (approve, reject, edit, delete)
+ *
+ * The component supports different user roles:
+ * - Program Chair: Can approve/reject initial enrollment requests
+ * - Campus Registrar: Can approve/reject program chair-approved requests
+ *
+ * Enrollment workflow:
+ * 1. Student submits enrollment request (enroll status)
+ * 2. Program Chair reviews and approves/rejects (program_chair_approved)
+ * 3. Campus Registrar reviews and approves/rejects (registrar_approved)
+ * 4. Similar workflow for drop requests
+ *
+ * @param {EnrollmentGenericTabProps} props - Component props
+ * @param {UserRoleEnum} props.role - The user role determining available actions
+ * @param {EnrollmentLogActionEnum} props.status - The enrollment status to filter by
+ * @param {number} [props.campusId] - Optional campus ID for campus-specific filtering
+ * @param {number} [props.programId] - Optional program ID for program-specific filtering
+ */
+
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Select from '@/components/custom/select.component';

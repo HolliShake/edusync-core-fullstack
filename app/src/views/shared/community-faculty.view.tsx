@@ -1,3 +1,28 @@
+/**
+ * CommunityFacultyView Component
+ *
+ * A comprehensive faculty directory interface for viewing and managing faculty members within a program or campus.
+ * This component provides functionality for:
+ * - Viewing faculty information including personal details, program, and teaching assignments
+ * - Filtering faculty by school year and status
+ * - Searching faculty by name, email, program, or college
+ * - Paginating through faculty records
+ * - Displaying faculty statistics and assignment information
+ *
+ * The component supports different user roles:
+ * - Program Chair: Views faculty within their specific academic program
+ * - Campus Registrar: Views faculty across the entire campus
+ *
+ * Faculty information displayed includes:
+ * - Faculty name and email
+ * - Academic program and college
+ * - Teaching assignments and sections
+ * - Status information
+ *
+ * @param {Object} props - Component props
+ * @param {UserRoleEnum} props.role - The user role determining the scope of faculty data (program or campus level)
+ */
+
 import Select from '@/components/custom/select.component';
 import type { TableColumn } from '@/components/custom/table.component';
 import Table from '@/components/custom/table.component';

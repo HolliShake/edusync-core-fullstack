@@ -31,21 +31,73 @@ class GradingPeriodGradeService extends GenericService implements IGradingPeriod
             ->with(['gradingPeriodGrades'])
             ->get()
             ->flatMap(function ($enrollment) {
+
+                $recommendedGrades = $enrollment->section
+                    ->gradeBook()->first()
+                    ->gradeBookGradingPeriods()
+                    ->get()->mapWithKeys(function($period) use ($enrollment) {
+                        // Get all grade book items for this period
+                        $periodColumns = $period->gradeBookItems()
+                            ->with('gradeBookItemDetails')
+                            ->get()
+                            ->flatMap(function($item) use ($period) {
+                                return array_map(function($detail) use ($item) {
+                                    return (object)[
+                                        'detailId'       => $detail['id'],
+                                        'detailMaxScore' => $detail['max_score'],
+                                        'detailWeight'   => $detail['weight'],
+                                        'itemWeight'     => $item['weight'],
+                                    ];
+                                }, $item->gradeBookItemDetails);
+                            })
+                            ->filter(fn($col) => $col->detailMaxScore > 0);
+
+                        if ($periodColumns->isEmpty()) {
+                            return [$period->id => '0.00'];
+                        }
+
+                        $totalPeriodGrade = 0;
+
+                        foreach ($periodColumns as $col) {
+                            // Get the score for this enrollment and detail
+                            $gradeBookScore = $enrollment->gradeBookScores()
+                                ->where('gradebook_item_detail_id', $col->detailId)
+                                ->first();
+
+                            $score = $gradeBookScore ? $gradeBookScore->score : 0;
+
+                            $normalizedScore = $score / $col->detailMaxScore;
+                            // Contribution = (Score / Max) * DetailWeight% * (ItemWeight% / 100)
+                            $term = $normalizedScore * $col->detailWeight * ($col->itemWeight / 100);
+                            $totalPeriodGrade += $term;
+                        }
+
+                        return [$period->id => number_format($totalPeriodGrade, 2, '.', '')];
+                    });
+
                 return $enrollment->gradingPeriodGrades->isEmpty()
                     ? $enrollment->section->gradeBook()->first()->gradeBookGradingPeriods()->get()->map(fn($period) => (object)[
                         'id'                          => null,
                         'gradebook_grading_period_id' => $period->id,
                         'enrollment_id'               => $enrollment->id,
-                        'grade'                       => 0,
+                        'grade'                       => $recommendedGrades[$period->id],
+                        'recommended_grade'           => $recommendedGrades[$period->id],
+                        'is_overridden'               => false,
                         'is_posted'                   => false
                     ])
-                    : $enrollment->section->gradeBook()->first()->gradeBookGradingPeriods()->get()->map(function($period) use ($enrollment) {
+                    : $enrollment->section->gradeBook()->first()->gradeBookGradingPeriods()->get()->map(function($period) use ($enrollment, $recommendedGrades) {
                         $existingGrade = $enrollment->gradingPeriodGrades->firstWhere('gradebook_grading_period_id', $period->id);
+                        $existingGradeValue = $existingGrade ? (float)$existingGrade->grade : null;
+                        $recommendedGradeValue = (float) $recommendedGrades[$period->id];
+                        $finalGrade = (float)($existingGradeValue ?? (float) $recommendedGradeValue);
+
                         return (object)[
                             'id'                          => $existingGrade?->id ?? null,
                             'gradebook_grading_period_id' => $period->id,
                             'enrollment_id'               => $enrollment->id,
-                            'grade'                       => $existingGrade?->grade ?? 0,
+                            'grade'                       => $finalGrade,
+                            'recommended_grade'           => $recommendedGradeValue,
+                            'is_overridden'               => $existingGradeValue !== null && $existingGradeValue !== $recommendedGradeValue,
                             'is_posted'                   => $existingGrade?->is_posted ?? false
                         ];
                     });

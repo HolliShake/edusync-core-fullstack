@@ -6,13 +6,14 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface SyncGradingPeriodGrade {
+export interface SyncFinalGrade {
   /** @nullable */
   id?: number | null;
-  gradebook_grading_period_id?: number;
   enrollment_id?: number;
   grade?: number;
+  credited_units?: number;
   recommended_grade?: number;
   is_overridden?: boolean;
   is_posted?: boolean;
+  is_passed?: boolean;
 }

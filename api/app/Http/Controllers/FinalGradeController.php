@@ -3,29 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Service\GradeBookScoreService;
+use App\Service\FinalGradeService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/GradeBookScore"
+    path: "/FinalGrade"
 )]
-class GradeBookScoreController extends Controller
+class FinalGradeController extends Controller
 {
-    public function __construct(protected GradeBookScoreService $service) {
+    public function __construct(protected FinalGradeService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/GradeBookScore",
-        summary: "Get paginated list of GradeBookScore",
-        tags: ["GradeBookScore"],
-        description: "Retrieve a paginated list of GradeBookScore with optional search",
-        operationId:"getGradeBookScorePaginated",
+        path: "/api/FinalGrade",
+        summary: "Get paginated list of FinalGrade",
+        tags: ["FinalGrade"],
+        description: "Retrieve a paginated list of FinalGrade with optional search",
+        operationId:"getFinalGradePaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -51,7 +51,7 @@ class GradeBookScoreController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedGradeBookScoreResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedFinalGradeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -71,27 +71,23 @@ class GradeBookScoreController extends Controller
         return $this->ok($this->service->getAll(true, $page, $rows));
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     #[OA\Get(
-        path: "/api/GradeBookScore/get-sync/{section_id}",
-        summary: "Get list of GradeBookScore for sync",
-        tags: ["GradeBookScore"],
-        description: "Retrieve a sync list of GradeBookScore",
-        operationId: "getSyncGradeBookScore",
+        path: "/api/FinalGrade/get-sync/{section_id}",
+        summary: "Get sync FinalGrade",
+        tags: ["FinalGrade"],
+        description: "Retrieve a sync FinalGrade by its enrollment ID",
+        operationId: "getSyncFinalGrade",
     )]
     #[OA\Parameter(
         name: "section_id",
         in: "path",
-        description: "Section ID",
         required: true,
         schema: new OA\Schema(type: "integer")
     )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetSyncGradeBookScoresResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetSyncFinalGradesResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -108,7 +104,7 @@ class GradeBookScoreController extends Controller
         description: "Internal server error",
         content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
     )]
-    public function getSyncGradeBookScore(Request $request, $section_id)
+    public function getSyncFinalGrade(Request $request, $section_id)
     {
         return $this->ok($this->service->getSync($section_id));
     }
@@ -117,11 +113,11 @@ class GradeBookScoreController extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/GradeBookScore/{id}",
-        summary: "Get a specific GradeBookScore",
-        tags: ["GradeBookScore"],
-        description: "Retrieve a GradeBookScore by its ID",
-        operationId: "getGradeBookScoreById",
+        path: "/api/FinalGrade/{id}",
+        summary: "Get a specific FinalGrade",
+        tags: ["FinalGrade"],
+        description: "Retrieve a FinalGrade by its ID",
+        operationId: "getFinalGradeById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -132,7 +128,7 @@ class GradeBookScoreController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetGradeBookScoreResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetFinalGradeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -146,14 +142,14 @@ class GradeBookScoreController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "GradeBookScore not found"
+        description: "FinalGrade not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('GradeBookScore not found');
+            return $this->notFound('FinalGrade not found');
         }
     }
 
@@ -161,20 +157,20 @@ class GradeBookScoreController extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/GradeBookScore",
-        summary: "Create a new GradeBookScore",
-        tags: ["GradeBookScore"],
-        description:" Create a new GradeBookScore with the provided details",
-        operationId: "createGradeBookScore",
+        path: "/api/FinalGrade",
+        summary: "Create a new FinalGrade",
+        tags: ["FinalGrade"],
+        description:" Create a new FinalGrade with the provided details",
+        operationId: "createFinalGrade",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/GradeBookScore")
+        content: new OA\JsonContent(ref: "#/components/schemas/FinalGrade")
     )]
     #[OA\Response(
         response: 200,
-        description: "GradeBookScore created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateGradeBookScoreResponse200")
+        description: "FinalGrade created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateFinalGradeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -200,9 +196,10 @@ class GradeBookScoreController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'gradebook_item_detail_id' => 'required|integer',
-                'enrollment_id' => 'required|integer',
-                'score' => 'required|numeric',
+                'enrollment_id' => 'required|integer|exists:enrollment,id',
+                'grade' => 'required|numeric',
+                'credited_units' => 'required|integer',
+                'is_posted' => 'required|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -218,14 +215,14 @@ class GradeBookScoreController extends Controller
     }
 
     /**
-     * Create or update multiple GradeBookScores.
+     * Create or update multiple FinalGrades.
      */
     #[OA\Post(
-        path: "/api/GradeBookScore/sync-score/{section_id}",
-        summary: "Sync score for a section",
-        tags: ["GradeBookScore"],
-        description: "Sync score for a section with the provided details",
-        operationId: "syncScoreForSection",
+        path: "/api/FinalGrade/sync-final-grade/{section_id}",
+        summary: "Sync final grade for a section",
+        tags: ["FinalGrade"],
+        description: "Sync final grade for a section with the provided details",
+        operationId: "syncFinalGradeForSection",
     )]
     #[OA\Parameter(
         name: "section_id",
@@ -237,13 +234,13 @@ class GradeBookScoreController extends Controller
         required: true,
         content: new OA\JsonContent(
             type: "array",
-            items: new OA\Items(ref: "#/components/schemas/SyncGradeBookScore")
+            items: new OA\Items(ref: "#/components/schemas/SyncFinalGrade")
         )
     )]
     #[OA\Response(
         response: 200,
-        description: "GradeBookScores created or updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetSyncGradeBookScoresResponse200")
+        description: "FinalGrades created or updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetSyncFinalGradesResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -265,14 +262,15 @@ class GradeBookScoreController extends Controller
         description: "Internal server error",
         content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
     )]
-    public function syncScoreForSection(Request $request, $section_id)
+    public function syncFinalGradeForSection(Request $request, $section_id)
     {
         try {
             $validator = Validator::make($request->all(), [
-                '*.id' => 'nullable|integer|exists:gradebook_score,id',
-                '*.gradebook_item_detail_id' => 'required|integer|exists:gradebook_item_detail,id',
+                '*.id' => 'nullable|integer|exists:final_grade,id',
                 '*.enrollment_id' => 'required|integer|exists:enrollment,id',
-                '*.score' => 'required|numeric',
+                '*.grade' => 'nullable|numeric',
+                '*.credited_units' => 'nullable|integer',
+                '*.is_posted' => 'nullable|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -281,7 +279,7 @@ class GradeBookScoreController extends Controller
 
             $validated = $validator->validated();
 
-            return $this->ok($this->service->syncScoreForSection($section_id, $validated));
+            return $this->ok($this->service->syncFinalGradeForSection($section_id, $validated));
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -291,11 +289,11 @@ class GradeBookScoreController extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/GradeBookScore/{id}",
-        summary: "Update a GradeBookScore",
-        tags: ["GradeBookScore"],
-        description: "Update an existing GradeBookScore with the provided details",
-        operationId: "updateGradeBookScore",
+        path: "/api/FinalGrade/{id}",
+        summary: "Update a FinalGrade",
+        tags: ["FinalGrade"],
+        description: "Update an existing FinalGrade with the provided details",
+        operationId: "updateFinalGrade",
     )]
     #[OA\Parameter(
         name: "id",
@@ -305,12 +303,12 @@ class GradeBookScoreController extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/GradeBookScore")
+        content: new OA\JsonContent(ref: "#/components/schemas/FinalGrade")
     )]
     #[OA\Response(
         response: 200,
-        description: "GradeBookScore updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateGradeBookScoreResponse200")
+        description: "FinalGrade updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateFinalGradeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -324,7 +322,7 @@ class GradeBookScoreController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "GradeBookScore not found"
+        description: "FinalGrade not found"
     )]
     #[OA\Response(
         response: 422,
@@ -340,9 +338,10 @@ class GradeBookScoreController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'gradebook_item_detail_id' => 'required|integer',
-                'enrollment_id' => 'required|integer',
-                'score' => 'required|numeric',
+                'enrollment_id' => 'required|integer|exists:enrollment,id',
+                'grade' => 'required|numeric',
+                'credited_units' => 'required|integer',
+                'is_posted' => 'required|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -353,7 +352,7 @@ class GradeBookScoreController extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('GradeBookScore not found');
+            return $this->notFound('FinalGrade not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -363,11 +362,11 @@ class GradeBookScoreController extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/GradeBookScore/{id}",
-        summary: "Delete a GradeBookScore",
-        tags: ["GradeBookScore"],
-        description: "Delete a GradeBookScore by its ID",
-        operationId: "deleteGradeBookScore",
+        path: "/api/FinalGrade/{id}",
+        summary: "Delete a FinalGrade",
+        tags: ["FinalGrade"],
+        description: "Delete a FinalGrade by its ID",
+        operationId: "deleteFinalGrade",
     )]
     #[OA\Parameter(
         name: "id",
@@ -377,8 +376,8 @@ class GradeBookScoreController extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "GradeBookScore deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteGradeBookScoreResponse200")
+        description: "FinalGrade deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteFinalGradeResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -392,7 +391,7 @@ class GradeBookScoreController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "GradeBookScore not found"
+        description: "FinalGrade not found"
     )]
     #[OA\Response(
         response: 500,
@@ -405,7 +404,7 @@ class GradeBookScoreController extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('GradeBookScore not found');
+            return $this->notFound('FinalGrade not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

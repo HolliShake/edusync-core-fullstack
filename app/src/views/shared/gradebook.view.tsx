@@ -1,3 +1,26 @@
+/**
+ * GradeBookView Component
+ *
+ * A comprehensive gradebook management interface that allows instructors to:
+ * - View and manage grading periods
+ * - Create and organize grade book items (assignments, exams, etc.)
+ * - Define item details with weights and maximum scores
+ * - Track completion status and statistics
+ *
+ * The component uses an accordion-based layout to organize grading periods,
+ * with nested items and their details. It provides modals for creating/editing
+ * grading periods, items, and item details.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <GradeBookView
+ *   defaultGradebook={gradebook}
+ *   isLoading={false}
+ * />
+ * ```
+ */
+
 import { useConfirm } from '@/components/confirm.provider';
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
@@ -12,6 +35,7 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   useDeleteGradeBookItem,
@@ -40,9 +64,13 @@ import type { GradeBookItemDetail } from '@rest/models/gradeBookItemDetail';
 
 export interface GradeBookViewProps {
   defaultGradebook: GradeBook;
+  isLoading?: boolean;
 }
 
-export default function GradeBookView({ defaultGradebook }: GradeBookViewProps): React.ReactNode {
+export default function GradeBookView({
+  defaultGradebook,
+  isLoading,
+}: GradeBookViewProps): React.ReactNode {
   const { data: gradebookData, refetch } = useGetGradeBookById(defaultGradebook.id!, {
     query: {
       enabled: false,
@@ -161,6 +189,140 @@ export default function GradeBookView({ defaultGradebook }: GradeBookViewProps):
   const handleItemDetailSubmit = () => {
     refetch?.();
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        {/* Enhanced Summary Card Skeleton */}
+        <Card className="border-2 shadow-xl overflow-hidden">
+          <CardHeader className="bg-muted/50 pb-4">
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-6 w-6 rounded" />
+              <Skeleton className="h-7 w-48" />
+              <Skeleton className="h-7 w-32 ml-auto rounded-full" />
+            </div>
+            <Skeleton className="h-5 w-96 mt-2" />
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="relative overflow-hidden">
+                  <div className="relative space-y-2 p-6 rounded-2xl border-2 bg-background shadow-lg">
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-5 w-5 rounded" />
+                    </div>
+                    <Skeleton className="h-10 w-16" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Enhanced Grading Periods Section Skeleton */}
+        <div className="space-y-5">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-10 w-48 rounded-lg" />
+          </div>
+
+          <div className="space-y-4">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <Card
+                key={i}
+                className="rounded-2xl shadow-lg border-2 bg-background overflow-hidden"
+              >
+                <div className="px-6 py-5 bg-muted/80 min-h-[72px]">
+                  <div className="flex flex-1 items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <Skeleton className="h-12 w-12 rounded-xl" />
+                      <div className="flex flex-col gap-2 items-start">
+                        <div className="flex items-center gap-3">
+                          <Skeleton className="h-5 w-40" />
+                          <Skeleton className="h-5 w-16 rounded-full" />
+                          <Skeleton className="h-5 w-32 rounded-full" />
+                        </div>
+                        <Skeleton className="h-3 w-24" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-9 w-24 rounded-xl" />
+                      <Skeleton className="h-9 w-9 rounded-xl" />
+                    </div>
+                  </div>
+                </div>
+                <CardContent className="pb-8 pt-6 px-6">
+                  <div className="space-y-6">
+                    {/* Tabs skeleton */}
+                    <div className="w-full flex gap-2 bg-muted/80 rounded-xl p-2 shadow-inner">
+                      {Array.from({ length: 2 }).map((_, j) => (
+                        <Skeleton key={j} className="h-10 w-32 rounded-lg" />
+                      ))}
+                    </div>
+
+                    {/* Tab content skeleton */}
+                    <Card className="!shadow-none !border-2 p-0 bg-muted/20 rounded-xl">
+                      <CardHeader className="flex flex-row items-start justify-between pb-4 px-6 pt-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3">
+                            <Skeleton className="h-8 w-8 rounded-lg" />
+                            <Skeleton className="h-6 w-40" />
+                            <Skeleton className="h-6 w-16 rounded-full" />
+                          </div>
+                          <Skeleton className="h-4 w-32 mt-2 ml-11" />
+                        </div>
+                        <Skeleton className="h-9 w-9 rounded-xl" />
+                      </CardHeader>
+                      <CardContent className="px-6 pb-6">
+                        {/* Weight summary skeleton */}
+                        <div className="mb-6 rounded-xl bg-muted/80 p-5 shadow-md border-2 border-muted">
+                          <div className="flex items-center justify-between gap-4 mb-3">
+                            <div>
+                              <Skeleton className="h-5 w-48 mb-2" />
+                              <Skeleton className="h-3 w-40" />
+                            </div>
+                            <div className="text-right">
+                              <Skeleton className="h-12 w-32 rounded-xl mb-2" />
+                              <Skeleton className="h-3 w-24" />
+                            </div>
+                          </div>
+                          <Skeleton className="h-2.5 w-full rounded-full" />
+                        </div>
+
+                        {/* Item details skeleton */}
+                        <div className="space-y-3">
+                          {Array.from({ length: 2 }).map((_, k) => (
+                            <div
+                              key={k}
+                              className="flex items-center justify-between p-4 rounded-xl bg-background border-2 shadow-md"
+                            >
+                              <div className="flex-1">
+                                <Skeleton className="h-4 w-40 mb-2" />
+                                <div className="flex gap-3">
+                                  <Skeleton className="h-6 w-24 rounded-lg" />
+                                  <Skeleton className="h-6 w-20 rounded-lg" />
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <Skeleton className="h-9 w-9 rounded-xl" />
+                                <Skeleton className="h-9 w-9 rounded-xl" />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!gradebook) {
     return null;

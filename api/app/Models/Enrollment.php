@@ -295,4 +295,14 @@ class Enrollment extends Model
     {
         return $this->hasMany(GradingPeriodGrade::class);
     }
+
+    /**
+     * Get the final grade for the enrollment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function finalGrade(): HasOne
+    {
+        return $this->hasOne(FinalGrade::class);
+    }
 }

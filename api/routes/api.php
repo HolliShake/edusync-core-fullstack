@@ -33,6 +33,7 @@ use App\Http\Controllers\DocumentRequestLogController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EnrollmentLogController;
+use App\Http\Controllers\FinalGradeController;
 use App\Http\Controllers\GradeBookController;
 use App\Http\Controllers\GradeBookGradingPeriodController;
 use App\Http\Controllers\GradeBookItemController;
@@ -367,4 +368,14 @@ Route::controller(GradingPeriodGradeController::class)->group(function() {
     Route::post('/GradingPeriodGrade/sync-grading-period-grade/{section_id}', 'syncGradingPeriodGradeForSection')->where('section_id', '[0-9]+');
     Route::put('/GradingPeriodGrade/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/GradingPeriodGrade/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(FinalGradeController::class)->group(function() {
+    Route::get('/FinalGrade', 'index');
+    Route::get('/FinalGrade/get-sync/{section_id}', 'getSyncFinalGrade')->where('section_id', '[0-9]+');
+    Route::get('/FinalGrade/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/FinalGrade', 'store');
+    Route::post('/FinalGrade/sync-final-grade/{section_id}', 'syncFinalGradeForSection')->where('section_id', '[0-9]+');
+    Route::put('/FinalGrade/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/FinalGrade/{id}', 'destroy')->where('id', '[0-9]+');
 });

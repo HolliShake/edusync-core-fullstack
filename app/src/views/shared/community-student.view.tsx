@@ -1,3 +1,28 @@
+/**
+ * CommunityStudentView Component
+ *
+ * A comprehensive student directory interface for viewing and managing students within a program or campus.
+ * This component provides functionality for:
+ * - Viewing student information including personal details, program, and enrollment status
+ * - Filtering students by school year and enrollment status
+ * - Searching students by name, email, program, or college
+ * - Paginating through student records
+ * - Displaying student statistics and enrollment information
+ *
+ * The component supports different user roles:
+ * - Program Chair: Views students within their specific academic program
+ * - Campus Registrar: Views students across the entire campus
+ *
+ * Student information displayed includes:
+ * - Student name and email
+ * - Academic program and college
+ * - Year level and enrollment status
+ * - School year information
+ *
+ * @param {Object} props - Component props
+ * @param {UserRoleEnum} props.role - The user role determining the scope of student data (program or campus level)
+ */
+
 import Select from '@/components/custom/select.component';
 import type { TableColumn } from '@/components/custom/table.component';
 import Table from '@/components/custom/table.component';

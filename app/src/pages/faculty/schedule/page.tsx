@@ -96,7 +96,7 @@ export default function FacultySchedule(): React.ReactNode {
       {
         key: 'schedule',
         title: 'Schedule & Room',
-        render: (_, row) => {
+        render: (_) => {
           return (
             <div className="flex flex-col">
               <span className="font-medium">TBD</span>
