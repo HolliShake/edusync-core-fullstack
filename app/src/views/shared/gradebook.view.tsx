@@ -62,16 +62,16 @@ import type { GradeBookGradingPeriod } from '@rest/models/gradeBookGradingPeriod
 import type { GradeBookItem } from '@rest/models/gradeBookItem';
 import type { GradeBookItemDetail } from '@rest/models/gradeBookItemDetail';
 
-export interface GradeBookViewProps {
+interface GradeBookViewProps {
   defaultGradebook: GradeBook;
-  isLoading?: boolean;
 }
 
-export default function GradeBookView({
-  defaultGradebook,
-  isLoading,
-}: GradeBookViewProps): React.ReactNode {
-  const { data: gradebookData, refetch } = useGetGradeBookById(defaultGradebook.id!, {
+export default function GradeBookView({ defaultGradebook }: GradeBookViewProps): React.ReactNode {
+  const {
+    data: gradebookData,
+    refetch,
+    isLoading,
+  } = useGetGradeBookById(defaultGradebook.id!, {
     query: {
       enabled: false,
     },

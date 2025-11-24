@@ -7,3 +7,5 @@ You are an expert frontend developer working with React.js, TypeScript, and shad
 ### TabsTrigger Styling
 
 When creating tabs using shadcn/ui, **always** apply the following className to `TabsTrigger` components for consistent active state styling:
+
+"className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"

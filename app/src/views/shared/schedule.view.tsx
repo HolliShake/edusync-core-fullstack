@@ -1,9 +1,33 @@
+/**
+ * @file schedule.view.tsx
+ * @description Shared schedule view component for managing class schedules across different user roles.
+ * Provides a calendar interface for viewing and managing section assignments with drag-and-drop functionality.
+ *
+ * @features
+ * - Interactive calendar view with FullCalendar integration
+ * - Drag-and-drop section assignment to time slots
+ * - Multi-level filtering (School Year, College, Program, Year Level, Term, Section)
+ * - Role-based access control (Campus Scheduler, Campus Registrar, Program Chair)
+ * - Real-time schedule updates and conflict detection
+ * - Section details and assignment management modals
+ * - Export functionality for schedules
+ *
+ * @components
+ * - Calendar view with time grid display
+ * - Draggable sections list with color-coded indicators
+ * - Filter controls for hierarchical data selection
+ * - Modal dialogs for assignment, viewing, and section details
+ *
+ * @dependencies
+ * - FullCalendar for calendar rendering and interactions
+ * - Custom UI components (Select, Card, Badge, etc.)
+ * - REST API hooks for data fetching and mutations
+ * - Authentication context for role-based features
+ */
+
 import { useModal } from '@/components/custom/modal.component';
 import Select, { type SelectOption } from '@/components/custom/select.component';
 import AssignmentModal, { type AssignmentModalData } from '@/components/schedule/assignment-modal';
-import SectionDetailsModal, {
-  type SectionDetailsModalData,
-} from '@/components/schedule/section-details-modal';
 import ViewEventModal, { type ViewEventModalData } from '@/components/schedule/view-event-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,7 +58,7 @@ import {
   useGetSectionPaginated,
   useUpdateScheduleAssignment,
 } from '@rest/api';
-import { UserRoleEnum, WeeklyScheduleEnum } from '@rest/models';
+import { UserRoleEnum, WeeklyScheduleEnum, type Section } from '@rest/models';
 import { format } from 'date-fns';
 import {
   CalendarIcon,
@@ -51,9 +75,10 @@ import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-type ScheduleViewProps = {
+export interface ScheduleViewProps {
   role: UserRoleEnum;
-};
+  onClickViewDetails?: (section: Section) => void;
+}
 
 const SECTION_COLORS = [
   {
@@ -94,7 +119,10 @@ const SECTION_COLORS = [
   }, // cyan-500
 ];
 
-export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNode {
+export default function ScheduleView({
+  role,
+  onClickViewDetails = undefined,
+}: ScheduleViewProps): React.ReactNode {
   const { session } = useAuth();
   const draggableRef = useRef<HTMLDivElement>(null);
 
@@ -114,7 +142,6 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
   // Modal Controllers
   const assignmentModal = useModal<AssignmentModalData>();
   const viewEventModal = useModal<ViewEventModalData>();
-  const sectionDetailsModal = useModal<SectionDetailsModalData>();
 
   // Queries
   const {
@@ -991,8 +1018,12 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
                                         size="icon"
                                         className="h-6 w-6 text-muted-foreground hover:text-foreground"
                                         onClick={(e) => {
+                                          onClickViewDetails?.(section);
+                                          !onClickViewDetails &&
+                                            toast.warning(
+                                              'View details functionality is not implemented'
+                                            );
                                           e.stopPropagation();
-                                          sectionDetailsModal.openFn({ section });
                                         }}
                                         title="View Details"
                                       >
@@ -1053,9 +1084,6 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
 
         {/* View/Delete Modal */}
         <ViewEventModal controller={viewEventModal} refetchAssignments={refetchAssignments} />
-
-        {/* Section Details Modal */}
-        <SectionDetailsModal controller={sectionDetailsModal} />
       </div>
     </>
   );

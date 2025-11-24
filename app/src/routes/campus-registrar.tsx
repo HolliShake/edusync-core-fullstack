@@ -1,6 +1,7 @@
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
 import CampusRegistrarCommunityFaculty from '@/pages/campus-registrar/faculty/page';
 import CampusRegistrarRequest from '@/pages/campus-registrar/request/page';
+import CampusRegistrarScheduleDetail from '@/pages/campus-registrar/schedule/[id]/page';
 import CampusRegistrarSchedule from '@/pages/campus-registrar/schedule/page';
 import CampusRegistrarCommunityStudent from '@/pages/campus-registrar/student/page';
 import type { Route } from '@/types/route';
@@ -78,6 +79,16 @@ const CAMPUS_REGISTRAR: Route[] = [
     title: 'Schedule',
     path: '/campus-registrar/schedule',
     component: <CampusRegistrarSchedule />,
+    icon: <CalendarIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
+    roles: [UserRoleEnum.campus_registrar],
+  },
+  {
+    key: 'campus-registrar.schedule.detail',
+    title: 'Schedule Detail',
+    path: '/campus-registrar/schedule/:scheduleId',
+    component: <CampusRegistrarScheduleDetail />,
     icon: <CalendarIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,

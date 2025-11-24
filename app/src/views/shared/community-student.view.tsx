@@ -46,7 +46,11 @@ import {
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-export default function CommunityStudentView({ role }: { role: UserRoleEnum }): React.ReactNode {
+interface CommunityStudentViewProps {
+  role: UserRoleEnum;
+}
+
+export default function CommunityStudentView({ role }: CommunityStudentViewProps): React.ReactNode {
   const { session } = useAuth();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);

@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import type { SelectProps as ShadcnSelectProps } from '@radix-ui/react-select';
-import { useEffect, useState } from 'react';
 
 export type SelectOption = {
   label: string;
@@ -32,25 +31,15 @@ const Select = ({
   className,
   ...props
 }: CustomSelectProps) => {
-  const [internalValue, setInternalValue] = useState<string | undefined>(value);
+  // Always use controlled mode - normalize undefined/empty string to empty string
+  const currentValue = value ?? '';
 
   const handleValueChange = (newValue: string) => {
-    setInternalValue(newValue);
     onValueChange?.(newValue);
   };
 
-  // Use controlled value if provided, otherwise use internal state
-  // Handle empty string and undefined as no selection
-  const currentValue = value !== undefined && value !== '' ? value : internalValue || undefined;
-
   // Find the selected option to display its label
   const selectedOption = options.find((option) => option.value === currentValue);
-
-  useEffect(() => {
-    if (value !== internalValue) {
-      setInternalValue(value || undefined);
-    }
-  }, [value, internalValue]);
 
   return (
     <ShadcnSelect value={currentValue} onValueChange={handleValueChange} {...props}>

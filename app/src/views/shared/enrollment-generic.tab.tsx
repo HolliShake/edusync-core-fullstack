@@ -73,15 +73,17 @@ import {
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 
+interface EnrollmentGenericTabProps {
+  role: UserRoleEnum;
+  status: EnrollmentLogActionEnum;
+  needsAction?: boolean;
+}
+
 export default function EnrollmentGenericTab({
   role,
   status,
   needsAction = true,
-}: {
-  role: UserRoleEnum;
-  status: EnrollmentLogActionEnum;
-  needsAction?: boolean;
-}): React.ReactNode {
+}: EnrollmentGenericTabProps): React.ReactNode {
   const { session } = useAuth();
   const [page] = React.useState(1);
   const [rows] = React.useState(10);
