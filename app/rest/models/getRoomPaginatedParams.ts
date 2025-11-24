@@ -23,4 +23,16 @@ rows?: number;
  * Filter by Building ID
  */
 'filter[building_id]'?: number;
+/**
+ * Filter by Campus ID
+ */
+'filter[campus_id]'?: number;
+/**
+ * Filter by College ID
+ */
+'filter[college_id]'?: number;
+/**
+ * Filter by Academic Program ID
+ */
+'filter[academic_program_id]'?: number;
 };

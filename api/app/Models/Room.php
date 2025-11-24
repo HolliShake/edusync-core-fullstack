@@ -116,6 +116,21 @@ class Room extends Model
         'is_lab'        => 'boolean',
     ];
 
+
+    protected $appends = [
+        'building',
+    ];
+
+    /**
+     * Get the building attribute.
+     *
+     * @return Building
+     */
+    public function getBuildingAttribute(): Building
+    {
+        return $this->building()->first();
+    }
+
     /**
      * Get the building that owns the room.
      *

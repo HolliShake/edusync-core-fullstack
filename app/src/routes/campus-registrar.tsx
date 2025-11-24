@@ -1,10 +1,17 @@
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
 import CampusRegistrarCommunityFaculty from '@/pages/campus-registrar/faculty/page';
 import CampusRegistrarRequest from '@/pages/campus-registrar/request/page';
+import CampusRegistrarSchedule from '@/pages/campus-registrar/schedule/page';
 import CampusRegistrarCommunityStudent from '@/pages/campus-registrar/student/page';
 import type { Route } from '@/types/route';
 import { UserRoleEnum } from '@rest/models';
-import { ClipboardListIcon, FileTextIcon, GraduationCapIcon, Users2Icon } from 'lucide-react';
+import {
+  CalendarIcon,
+  ClipboardListIcon,
+  FileTextIcon,
+  GraduationCapIcon,
+  Users2Icon,
+} from 'lucide-react';
 
 const CAMPUS_REGISTRAR: Route[] = [
   {
@@ -64,6 +71,16 @@ const CAMPUS_REGISTRAR: Route[] = [
         roles: [UserRoleEnum.campus_registrar],
       },
     ],
+    roles: [UserRoleEnum.campus_registrar],
+  },
+  {
+    key: 'campus-registrar.schedule',
+    title: 'Schedule',
+    path: '/campus-registrar/schedule',
+    component: <CampusRegistrarSchedule />,
+    icon: <CalendarIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: true,
     roles: [UserRoleEnum.campus_registrar],
   },
 ];

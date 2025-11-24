@@ -73,6 +73,7 @@ import type {
   CreateProgramTypeResponse200,
   CreateRequirementResponse200,
   CreateRoomResponse200,
+  CreateScheduleAssignmentResponse200,
   CreateSchoolYearResponse200,
   CreateSectionResponse200,
   CreateSectionTeacherResponse200,
@@ -113,6 +114,7 @@ import type {
   DeleteProgramTypeResponse200,
   DeleteRequirementResponse200,
   DeleteRoomResponse200,
+  DeleteScheduleAssignmentResponse200,
   DeleteSchoolYearResponse200,
   DeleteSectionResponse200,
   DeleteSectionTeacherResponse200,
@@ -202,6 +204,9 @@ import type {
   GetRequirementResponse200,
   GetRoomPaginatedParams,
   GetRoomResponse200,
+  GetScheduleAssignmentPaginatedParams,
+  GetScheduleAssignmentResponse200,
+  GetScheduleAssignmentsResponse200,
   GetScholasticFilterByCampusId200,
   GetScholasticFilterByCampusIdParams,
   GetScholasticFilterByProgramId200,
@@ -265,6 +270,7 @@ import type {
   PaginatedProgramTypeResponse200,
   PaginatedRequirementResponse200,
   PaginatedRoomResponse200,
+  PaginatedScheduleAssignmentResponse200,
   PaginatedSchoolYearResponse200,
   PaginatedSectionResponse200,
   PaginatedSectionTeacherResponse200,
@@ -272,6 +278,7 @@ import type {
   ProgramType,
   Requirement,
   Room,
+  ScheduleAssignment,
   SchoolYear,
   Section,
   SectionTeacher,
@@ -315,6 +322,7 @@ import type {
   UpdateProgramTypeResponse200,
   UpdateRequirementResponse200,
   UpdateRoomResponse200,
+  UpdateScheduleAssignmentResponse200,
   UpdateSchoolYearResponse200,
   UpdateSectionResponse200,
   UpdateSectionTeacherResponse200,
@@ -14494,6 +14502,469 @@ export const useDeleteRoom = <TError = UnauthenticatedResponse | ForbiddenRespon
       > => {
 
       const mutationOptions = getDeleteRoomMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of ScheduleAssignment with optional search
+ * @summary Get paginated list of ScheduleAssignment
+ */
+export const getScheduleAssignmentPaginated = (
+    params?: GetScheduleAssignmentPaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedScheduleAssignmentResponse200>(
+      {url: `/api/ScheduleAssignment`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetScheduleAssignmentPaginatedQueryKey = (params?: GetScheduleAssignmentPaginatedParams,) => {
+    return [`/api/ScheduleAssignment`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetScheduleAssignmentPaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetScheduleAssignmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScheduleAssignmentPaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>> = ({ signal }) => getScheduleAssignmentPaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetScheduleAssignmentPaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>>
+export type GetScheduleAssignmentPaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetScheduleAssignmentPaginated<TData = Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetScheduleAssignmentPaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleAssignmentPaginated<TData = Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetScheduleAssignmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleAssignmentPaginated<TData = Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetScheduleAssignmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of ScheduleAssignment
+ */
+
+export function useGetScheduleAssignmentPaginated<TData = Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetScheduleAssignmentPaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentPaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetScheduleAssignmentPaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ *  Create a new ScheduleAssignment with the provided details
+ * @summary Create a new ScheduleAssignment
+ */
+export const createScheduleAssignment = (
+    scheduleAssignment: NonReadonly<ScheduleAssignment>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateScheduleAssignmentResponse200>(
+      {url: `/api/ScheduleAssignment`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: scheduleAssignment, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateScheduleAssignmentMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScheduleAssignment>>, TError,{data: NonReadonly<ScheduleAssignment>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createScheduleAssignment>>, TError,{data: NonReadonly<ScheduleAssignment>}, TContext> => {
+
+const mutationKey = ['createScheduleAssignment'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createScheduleAssignment>>, {data: NonReadonly<ScheduleAssignment>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createScheduleAssignment(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateScheduleAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof createScheduleAssignment>>>
+    export type CreateScheduleAssignmentMutationBody = NonReadonly<ScheduleAssignment>
+    export type CreateScheduleAssignmentMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new ScheduleAssignment
+ */
+export const useCreateScheduleAssignment = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScheduleAssignment>>, TError,{data: NonReadonly<ScheduleAssignment>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createScheduleAssignment>>,
+        TError,
+        {data: NonReadonly<ScheduleAssignment>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateScheduleAssignmentMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Retrieve ScheduleAssignment by section code
+ * @summary Get ScheduleAssignment by section code
+ */
+export const getScheduleAssignmentBySectionCode = (
+    sectionCode: string,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetScheduleAssignmentsResponse200>(
+      {url: `/api/ScheduleAssignment/section/${sectionCode}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetScheduleAssignmentBySectionCodeQueryKey = (sectionCode?: string,) => {
+    return [`/api/ScheduleAssignment/section/${sectionCode}`] as const;
+    }
+
+    
+export const getGetScheduleAssignmentBySectionCodeQueryOptions = <TData = Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(sectionCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScheduleAssignmentBySectionCodeQueryKey(sectionCode);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>> = ({ signal }) => getScheduleAssignmentBySectionCode(sectionCode, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sectionCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetScheduleAssignmentBySectionCodeQueryResult = NonNullable<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>>
+export type GetScheduleAssignmentBySectionCodeQueryError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+
+export function useGetScheduleAssignmentBySectionCode<TData = Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ sectionCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleAssignmentBySectionCode<TData = Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ sectionCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleAssignmentBySectionCode<TData = Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ sectionCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get ScheduleAssignment by section code
+ */
+
+export function useGetScheduleAssignmentBySectionCode<TData = Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse>(
+ sectionCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentBySectionCode>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetScheduleAssignmentBySectionCodeQueryOptions(sectionCode,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Retrieve a ScheduleAssignment by its ID
+ * @summary Get a specific ScheduleAssignment
+ */
+export const getScheduleAssignmentById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetScheduleAssignmentResponse200>(
+      {url: `/api/ScheduleAssignment/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetScheduleAssignmentByIdQueryKey = (id?: number,) => {
+    return [`/api/ScheduleAssignment/${id}`] as const;
+    }
+
+    
+export const getGetScheduleAssignmentByIdQueryOptions = <TData = Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScheduleAssignmentByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScheduleAssignmentById>>> = ({ signal }) => getScheduleAssignmentById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetScheduleAssignmentByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getScheduleAssignmentById>>>
+export type GetScheduleAssignmentByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | null
+
+
+export function useGetScheduleAssignmentById<TData = Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleAssignmentById>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleAssignmentById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleAssignmentById<TData = Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleAssignmentById>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleAssignmentById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleAssignmentById<TData = Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific ScheduleAssignment
+ */
+
+export function useGetScheduleAssignmentById<TData = Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError = UnauthenticatedResponse | ForbiddenResponse | null>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleAssignmentById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetScheduleAssignmentByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Update an existing ScheduleAssignment with the provided details
+ * @summary Update a ScheduleAssignment
+ */
+export const updateScheduleAssignment = (
+    id: number,
+    scheduleAssignment: NonReadonly<ScheduleAssignment>,
+ ) => {
+      
+      
+      return fetchData<UpdateScheduleAssignmentResponse200>(
+      {url: `/api/ScheduleAssignment/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: scheduleAssignment
+    },
+      );
+    }
+  
+
+
+export const getUpdateScheduleAssignmentMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateScheduleAssignment>>, TError,{id: number;data: NonReadonly<ScheduleAssignment>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateScheduleAssignment>>, TError,{id: number;data: NonReadonly<ScheduleAssignment>}, TContext> => {
+
+const mutationKey = ['updateScheduleAssignment'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateScheduleAssignment>>, {id: number;data: NonReadonly<ScheduleAssignment>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateScheduleAssignment(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateScheduleAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof updateScheduleAssignment>>>
+    export type UpdateScheduleAssignmentMutationBody = NonReadonly<ScheduleAssignment>
+    export type UpdateScheduleAssignmentMutationError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a ScheduleAssignment
+ */
+export const useUpdateScheduleAssignment = <TError = UnauthenticatedResponse | ForbiddenResponse | null | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateScheduleAssignment>>, TError,{id: number;data: NonReadonly<ScheduleAssignment>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateScheduleAssignment>>,
+        TError,
+        {id: number;data: NonReadonly<ScheduleAssignment>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateScheduleAssignmentMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Delete a ScheduleAssignment by its ID
+ * @summary Delete a ScheduleAssignment
+ */
+export const deleteScheduleAssignment = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteScheduleAssignmentResponse200>(
+      {url: `/api/ScheduleAssignment/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteScheduleAssignmentMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteScheduleAssignment>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteScheduleAssignment>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteScheduleAssignment'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteScheduleAssignment>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteScheduleAssignment(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteScheduleAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteScheduleAssignment>>>
+    
+    export type DeleteScheduleAssignmentMutationError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a ScheduleAssignment
+ */
+export const useDeleteScheduleAssignment = <TError = UnauthenticatedResponse | ForbiddenResponse | null | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteScheduleAssignment>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteScheduleAssignment>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteScheduleAssignmentMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

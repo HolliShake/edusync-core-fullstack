@@ -40,6 +40,7 @@ use App\Http\Controllers\GradeBookItemController;
 use App\Http\Controllers\GradeBookItemDetailController;
 use App\Http\Controllers\GradeBookScoreController;
 use App\Http\Controllers\GradingPeriodGradeController;
+use App\Http\Controllers\ScheduleAssignmentController;
 use App\Http\Controllers\SectionTeacherController;
 
 Route::get('/user', function (Request $request) {
@@ -378,4 +379,13 @@ Route::controller(FinalGradeController::class)->group(function() {
     Route::post('/FinalGrade/sync-final-grade/{section_id}', 'syncFinalGradeForSection')->where('section_id', '[0-9]+');
     Route::put('/FinalGrade/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/FinalGrade/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(ScheduleAssignmentController::class)->group(function() {
+    Route::get('/ScheduleAssignment', 'index');
+    Route::get('/ScheduleAssignment/section/{section_code}', 'getBySectionCode');
+    Route::get('/ScheduleAssignment/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/ScheduleAssignment', 'store');
+    Route::put('/ScheduleAssignment/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/ScheduleAssignment/{id}', 'destroy')->where('id', '[0-9]+');
 });

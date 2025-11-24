@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -131,5 +132,15 @@ class College extends Model
     public function campus(): BelongsTo
     {
         return $this->belongsTo(Campus::class, 'campus_id');
+    }
+
+    /**
+     * Get the academic programs that belong to the college.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function academicPrograms(): HasMany
+    {
+        return $this->hasMany(AcademicProgram::class);
     }
 }

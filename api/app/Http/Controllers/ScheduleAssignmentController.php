@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\RoomService;
+use App\Enum\WeeklyScheduleEnum;
+use App\Http\Controllers\Controller;
+use App\Service\ScheduleAssignmentService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/Room"
+    path: "/ScheduleAssignment"
 )]
-class RoomController extends Controller
+class ScheduleAssignmentController extends Controller
 {
-    public function __construct(protected RoomService $service) {
+    public function __construct(protected ScheduleAssignmentService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/Room",
-        summary: "Get paginated list of Room",
-        tags: ["Room"],
-        description: "Retrieve a paginated list of Room with optional search",
-        operationId:"getRoomPaginated",
+        path: "/api/ScheduleAssignment",
+        summary: "Get paginated list of ScheduleAssignment",
+        tags: ["ScheduleAssignment"],
+        description: "Retrieve a paginated list of ScheduleAssignment with optional search",
+        operationId:"getScheduleAssignmentPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -47,38 +49,10 @@ class RoomController extends Controller
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
     )]
-    #[OA\Parameter(
-        name: "filter[building_id]",
-        in: "query",
-        description: "Filter by Building ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
-    #[OA\Parameter(
-        name: "filter[campus_id]",
-        in: "query",
-        description: "Filter by Campus ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
-    #[OA\Parameter(
-        name: "filter[college_id]",
-        in: "query",
-        description: "Filter by College ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
-    #[OA\Parameter(
-        name: "filter[academic_program_id]",
-        in: "query",
-        description: "Filter by Academic Program ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedRoomResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedScheduleAssignmentResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -99,25 +73,25 @@ class RoomController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get ScheduleAssignment by section code.
      */
     #[OA\Get(
-        path: "/api/Room/{id}",
-        summary: "Get a specific Room",
-        tags: ["Room"],
-        description: "Retrieve a Room by its ID",
-        operationId: "getRoomById",
+        path: "/api/ScheduleAssignment/section/{section_code}",
+        summary: "Get ScheduleAssignment by section code",
+        tags: ["ScheduleAssignment"],
+        description: "Retrieve ScheduleAssignment by section code",
+        operationId: "getScheduleAssignmentBySectionCode",
     )]
     #[OA\Parameter(
-        name: "id",
+        name: "section_code",
         in: "path",
         required: true,
-        schema: new OA\Schema(type: "integer")
+        schema: new OA\Schema(type: "string")
     )]
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetRoomResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetScheduleAssignmentsResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -131,14 +105,59 @@ class RoomController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "Room not found"
+        description: "ScheduleAssignment not found"
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function getBySectionCode(Request $request, $section_code)
+    {
+        return $this->ok($this->service->getBySectionCode($section_code));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    #[OA\Get(
+        path: "/api/ScheduleAssignment/{id}",
+        summary: "Get a specific ScheduleAssignment",
+        tags: ["ScheduleAssignment"],
+        description: "Retrieve a ScheduleAssignment by its ID",
+        operationId: "getScheduleAssignmentById",
+    )]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Successful operation",
+        content: new OA\JsonContent(ref: "#/components/schemas/GetScheduleAssignmentResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "ScheduleAssignment not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Room not found');
+            return $this->notFound('ScheduleAssignment not found');
         }
     }
 
@@ -146,20 +165,20 @@ class RoomController extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/Room/create",
-        summary: "Create a new Room",
-        tags: ["Room"],
-        description:" Create a new Room with the provided details",
-        operationId: "createRoom",
+        path: "/api/ScheduleAssignment",
+        summary: "Create a new ScheduleAssignment",
+        tags: ["ScheduleAssignment"],
+        description:" Create a new ScheduleAssignment with the provided details",
+        operationId: "createScheduleAssignment",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/Room")
+        content: new OA\JsonContent(ref: "#/components/schemas/ScheduleAssignment")
     )]
     #[OA\Response(
         response: 200,
-        description: "Room created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateRoomResponse200")
+        description: "ScheduleAssignment created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateScheduleAssignmentResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -185,13 +204,11 @@ class RoomController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'short_name' => 'required|string|max:255',
-                'building_id' => 'required|integer|exists:building,id',
-                'floor' => 'required|integer|min:0',
-                'room_code' => 'required|string|max:255',
-                'is_lab' => 'required|boolean',
-                'room_capacity' => 'required|integer|min:1',
+                'section_id' => 'required|integer|exists:section,id',
+                'room_id' => 'required|integer|exists:room,id',
+                'day_schedule' => 'required|string|in:' . implode(',', array_column(WeeklyScheduleEnum::cases(), 'value')),
+                'start_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time',
             ]);
 
             if ($validator->fails()) {
@@ -210,11 +227,11 @@ class RoomController extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/Room/update/{id}",
-        summary: "Update a Room",
-        tags: ["Room"],
-        description: "Update an existing Room with the provided details",
-        operationId: "updateRoom",
+        path: "/api/ScheduleAssignment/{id}",
+        summary: "Update a ScheduleAssignment",
+        tags: ["ScheduleAssignment"],
+        description: "Update an existing ScheduleAssignment with the provided details",
+        operationId: "updateScheduleAssignment",
     )]
     #[OA\Parameter(
         name: "id",
@@ -224,12 +241,12 @@ class RoomController extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/Room")
+        content: new OA\JsonContent(ref: "#/components/schemas/ScheduleAssignment")
     )]
     #[OA\Response(
         response: 200,
-        description: "Room updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateRoomResponse200")
+        description: "ScheduleAssignment updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateScheduleAssignmentResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -243,7 +260,7 @@ class RoomController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "Room not found"
+        description: "ScheduleAssignment not found"
     )]
     #[OA\Response(
         response: 422,
@@ -259,13 +276,11 @@ class RoomController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'sometimes|required|string|max:255',
-                'short_name' => 'sometimes|required|string|max:255',
-                'building_id' => 'sometimes|required|integer|exists:building,id',
-                'floor' => 'sometimes|required|integer|min:0',
-                'room_code' => 'sometimes|required|string|max:255',
-                'is_lab' => 'sometimes|required|boolean',
-                'room_capacity' => 'sometimes|required|integer|min:1',
+                'section_id' => 'sometimes|required|integer|exists:section,id',
+                'room_id' => 'sometimes|required|integer|exists:room,id',
+                'day_schedule' => 'sometimes|required|string|in:' . implode(',', array_column(WeeklyScheduleEnum::cases(), 'value')),
+                'start_time' => 'sometimes|required|date_format:H:i',
+                'end_time' => 'sometimes|required|date_format:H:i|after:start_time',
             ]);
 
             if ($validator->fails()) {
@@ -276,7 +291,7 @@ class RoomController extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Room not found');
+            return $this->notFound('ScheduleAssignment not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -286,11 +301,11 @@ class RoomController extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/Room/delete/{id}",
-        summary: "Delete a Room",
-        tags: ["Room"],
-        description: "Delete a Room by its ID",
-        operationId: "deleteRoom",
+        path: "/api/ScheduleAssignment/{id}",
+        summary: "Delete a ScheduleAssignment",
+        tags: ["ScheduleAssignment"],
+        description: "Delete a ScheduleAssignment by its ID",
+        operationId: "deleteScheduleAssignment",
     )]
     #[OA\Parameter(
         name: "id",
@@ -300,8 +315,8 @@ class RoomController extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "Room deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteRoomResponse200")
+        description: "ScheduleAssignment deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteScheduleAssignmentResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -315,7 +330,7 @@ class RoomController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "Room not found"
+        description: "ScheduleAssignment not found"
     )]
     #[OA\Response(
         response: 500,
@@ -328,7 +343,7 @@ class RoomController extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('Room not found');
+            return $this->notFound('ScheduleAssignment not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

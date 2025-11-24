@@ -13426,6 +13426,33 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "filter[campus_id]",
+                        "in": "query",
+                        "description": "Filter by Campus ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[college_id]",
+                        "in": "query",
+                        "description": "Filter by College ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Filter by Academic Program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -13725,6 +13752,415 @@
                     },
                     "404": {
                         "description": "Room not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/ScheduleAssignment": {
+            "get": {
+                "tags": [
+                    "ScheduleAssignment"
+                ],
+                "summary": "Get paginated list of ScheduleAssignment",
+                "description": "Retrieve a paginated list of ScheduleAssignment with optional search",
+                "operationId": "getScheduleAssignmentPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedScheduleAssignmentResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ScheduleAssignment"
+                ],
+                "summary": "Create a new ScheduleAssignment",
+                "description": " Create a new ScheduleAssignment with the provided details",
+                "operationId": "createScheduleAssignment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ScheduleAssignment created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateScheduleAssignmentResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/ScheduleAssignment\/section\/{section_code}": {
+            "get": {
+                "tags": [
+                    "ScheduleAssignment"
+                ],
+                "summary": "Get ScheduleAssignment by section code",
+                "description": "Retrieve ScheduleAssignment by section code",
+                "operationId": "getScheduleAssignmentBySectionCode",
+                "parameters": [
+                    {
+                        "name": "section_code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetScheduleAssignmentsResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ScheduleAssignment not found"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/ScheduleAssignment\/{id}": {
+            "get": {
+                "tags": [
+                    "ScheduleAssignment"
+                ],
+                "summary": "Get a specific ScheduleAssignment",
+                "description": "Retrieve a ScheduleAssignment by its ID",
+                "operationId": "getScheduleAssignmentById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetScheduleAssignmentResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ScheduleAssignment not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ScheduleAssignment"
+                ],
+                "summary": "Update a ScheduleAssignment",
+                "description": "Update an existing ScheduleAssignment with the provided details",
+                "operationId": "updateScheduleAssignment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ScheduleAssignment updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateScheduleAssignmentResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ScheduleAssignment not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ScheduleAssignment"
+                ],
+                "summary": "Delete a ScheduleAssignment",
+                "description": "Delete a ScheduleAssignment by its ID",
+                "operationId": "deleteScheduleAssignment",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "ScheduleAssignment deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteScheduleAssignmentResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ScheduleAssignment not found"
                     },
                     "500": {
                         "description": " Internal server error",
@@ -15844,6 +16280,19 @@
                     "student",
                     "faculty",
                     "guest"
+                ]
+            },
+            "WeeklyScheduleEnum": {
+                "title": "WeeklyScheduleEnum",
+                "type": "string",
+                "enum": [
+                    "Sunday",
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday"
                 ]
             },
             "UnauthenticatedResponse": {
@@ -21353,6 +21802,161 @@
                 },
                 "type": "object"
             },
+            "ScheduleAssignment": {
+                "title": "ScheduleAssignment",
+                "required": [
+                    "section_id",
+                    "room_id",
+                    "day_schedule",
+                    "start_time",
+                    "end_time"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "section_id": {
+                        "type": "integer"
+                    },
+                    "room_id": {
+                        "type": "integer"
+                    },
+                    "day_schedule": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "time"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "time"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "section": {
+                        "$ref": "#\/components\/schemas\/Section"
+                    },
+                    "room": {
+                        "$ref": "#\/components\/schemas\/Room"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedScheduleAssignment": {
+                "title": "PaginatedScheduleAssignment",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedScheduleAssignmentResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedScheduleAssignment"
+                    }
+                },
+                "type": "object"
+            },
+            "GetScheduleAssignmentResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                    }
+                },
+                "type": "object"
+            },
+            "GetScheduleAssignmentsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateScheduleAssignmentResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateScheduleAssignmentResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/ScheduleAssignment"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteScheduleAssignmentResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "SchoolYear": {
                 "title": "SchoolYear",
                 "required": [
@@ -22232,6 +22836,10 @@
         {
             "name": "Room",
             "description": "Room"
+        },
+        {
+            "name": "ScheduleAssignment",
+            "description": "ScheduleAssignment"
         },
         {
             "name": "SchoolYear",

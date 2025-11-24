@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -99,4 +100,14 @@ class Campus extends Model
         'short_name',
         'address'
     ];
+
+    /**
+     * Get the colleges that belong to the campus.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function colleges(): HasMany
+    {
+        return $this->hasMany(College::class);
+    }
 }

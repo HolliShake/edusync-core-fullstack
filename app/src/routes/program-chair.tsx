@@ -11,6 +11,7 @@ import GradebookDetailPage from '@/pages/program-chair/gradebook/[id]/page';
 import ProgramChairGradebookPage from '@/pages/program-chair/gradebook/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
+import ProgramChairSchedule from '@/pages/program-chair/schedule/page';
 import ProgramChairCommunityStudent from '@/pages/program-chair/student/page';
 import type { Route } from '@/types/route';
 import { UserRoleEnum } from '@rest/models';
@@ -206,7 +207,7 @@ const PROGRAM_CHAIR: Route[] = [
     key: 'program-chair.schedule',
     title: 'Schedule',
     path: '/program-chair/schedule',
-    component: <></>,
+    component: <ProgramChairSchedule />,
     icon: <ClockIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
