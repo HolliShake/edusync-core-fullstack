@@ -8,11 +8,14 @@ import { renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useCreateAdmissionSchedule,
+  useGetAcademicCalendarPaginated,
   useGetSchoolYearPaginated,
   useUpdateAdmissionSchedule,
 } from '@rest/api';
+import { AcademicCalendarEventEnum } from '@rest/models';
 import type { AdmissionSchedule } from '@rest/models/admissionSchedule';
-import { useEffect, useMemo } from 'react';
+import { format } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -47,6 +50,8 @@ export default function AdmissionScheduleModal({
     reset,
     setError,
     control,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<AdmissionScheduleFormData>({
     resolver: zodResolver(admissionScheduleSchema),
@@ -57,6 +62,27 @@ export default function AdmissionScheduleModal({
       end_date: '',
     },
   });
+
+  const [timeFrameSuggestion, setTimeFrameSuggestion] = useState<{
+    event: string;
+    suggestedStart: string;
+    suggestedEnd: string;
+  } | null>(null);
+
+  const { data: academicCalendarResponse } = useGetAcademicCalendarPaginated(
+    {
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
+      'filter[school_year_id]': Number(watch('school_year_id')),
+      'filter[event]': AcademicCalendarEventEnum.ENROLLMENT,
+    },
+    {
+      query: {
+        enabled: !!watch('school_year_id'),
+        queryKey: ['/api/AcademicCalendar', watch('school_year_id')],
+      },
+    }
+  );
 
   const { mutateAsync: createAdmissionSchedule, isPending } = useCreateAdmissionSchedule();
   const { mutateAsync: updateAdmissionSchedule, isPending: isUpdating } =
@@ -79,6 +105,24 @@ export default function AdmissionScheduleModal({
       })) ?? []
     );
   }, [schoolYearsResponse]);
+
+  useEffect(() => {
+    if (isEdit) return; // disable time frame suggestion for edit
+    const enrollment = academicCalendarResponse?.data?.data?.find(
+      (ac) =>
+        ac.event === AcademicCalendarEventEnum.ENROLLMENT &&
+        new Date(ac.end_date) >= new Date(Date.now())
+    );
+    setTimeFrameSuggestion(
+      enrollment
+        ? {
+            event: enrollment.name,
+            suggestedStart: enrollment.start_date,
+            suggestedEnd: enrollment.end_date,
+          }
+        : null
+    );
+  }, [academicCalendarResponse, watch('school_year_id')]);
 
   const onFormSubmit = async (data: AdmissionScheduleFormData) => {
     const payload: AdmissionSchedule = {
@@ -105,8 +149,16 @@ export default function AdmissionScheduleModal({
     }
   };
 
+  const applySuggestedDates = () => {
+    if (timeFrameSuggestion) {
+      setValue('start_date', format(new Date(timeFrameSuggestion.suggestedStart), 'yyyy-MM-dd'));
+      setValue('end_date', format(new Date(timeFrameSuggestion.suggestedEnd), 'yyyy-MM-dd'));
+    }
+  };
+
   useEffect(() => {
     if (!controller.data) {
+      setTimeFrameSuggestion(null);
       return reset({
         school_year_id: 0,
         intake_limit: 1,
@@ -114,6 +166,8 @@ export default function AdmissionScheduleModal({
         end_date: '',
       });
     }
+
+    setTimeFrameSuggestion(null);
     reset({
       school_year_id: controller.data.school_year_id,
       intake_limit: controller.data.intake_limit,
@@ -162,6 +216,30 @@ export default function AdmissionScheduleModal({
             <p className="text-sm text-destructive">{errors.intake_limit.message}</p>
           )}
         </div>
+
+        {timeFrameSuggestion && (
+          <div className="rounded-md bg-blue-50 p-3 border border-blue-200">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-blue-900">Suggested Enrollment Period</p>
+                <p className="text-xs text-blue-700 mt-1">{timeFrameSuggestion.event}</p>
+                <p className="text-xs text-blue-700 mt-1">
+                  {new Date(timeFrameSuggestion.suggestedStart).toLocaleDateString()} -{' '}
+                  {new Date(timeFrameSuggestion.suggestedEnd).toLocaleDateString()}
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={applySuggestedDates}
+                className="ml-2 text-xs"
+              >
+                Apply
+              </Button>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="start_date">Start Date</Label>

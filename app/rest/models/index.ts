@@ -119,6 +119,8 @@ export * from './enrollmentLogActionEnum';
 export * from './finalGrade';
 export * from './forbiddenResponse';
 export * from './generateSection';
+export * from './getAcademicCalendarPaginatedFilterEvent';
+export * from './getAcademicCalendarPaginatedFilterEventType';
 export * from './getAcademicCalendarPaginatedParams';
 export * from './getAcademicCalendarResponse200';
 export * from './getAcademicCalendarsResponse200';

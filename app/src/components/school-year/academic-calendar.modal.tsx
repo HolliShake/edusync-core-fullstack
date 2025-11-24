@@ -10,29 +10,14 @@ import {
   useGetSchoolYearPaginated,
   useUpdateAcademicCalendar,
 } from '@rest/api';
-import type { SchoolYear } from '@rest/models';
+import { AcademicCalendarEventEnum, type SchoolYear } from '@rest/models';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 // Accept a nullable schoolYear prop. Do not fetch the list here.
-const events = [
-  'REGISTRATION',
-  'ENROLLMENT',
-  'ORIENTATION',
-  'START_OF_CLASSES',
-  'HOLIDAY',
-  'UNIVERSITY_EVENT',
-  'DEADLINE',
-  'PERIODIC_EXAM',
-  'END_OF_CLASSES',
-  'GRADE_SUBMISSION',
-  'GRADUATION',
-  'FACULTY_EVALUATION',
-  'ACADEMIC_TRANSITION',
-  'OTHER',
-] as const;
+const events = Object.values(AcademicCalendarEventEnum) as AcademicCalendarEventEnum[];
 
 // z.enum fix: must not pass config object, just the enum values
 const academicCalendarSchema = z.object({

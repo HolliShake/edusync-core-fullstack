@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { GetAcademicCalendarPaginatedFilterEvent } from './getAcademicCalendarPaginatedFilterEvent';
 
 export type GetAcademicCalendarPaginatedParams = {
 /**
@@ -24,7 +25,15 @@ rows?: number;
  */
 'filter[school_year_id]'?: number;
 /**
+ * Filter by event
+ */
+'filter[event]'?: GetAcademicCalendarPaginatedFilterEvent;
+/**
  * Comma-separated list of related resources to include in the response
  */
 include?: string;
+/**
+ * Sort by order
+ */
+sort?: string;
 };

@@ -30,6 +30,7 @@ use OpenApi\Attributes as OA;
             ref: "#/components/schemas/AcademicCalendarEventEnum",
             readOnly: true
         ),
+        new OA\Property(property: "order", type: "integer"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Relations
@@ -123,6 +124,9 @@ class AcademicCalendar extends Model
     protected $casts = [
         'school_year_id' => 'integer',
         'event'          => AcademicCalendarEventEnum::class,
+        'order'          => 'integer',
+        'start_date'     => 'date',
+        'end_date'       => 'date',
     ];
 
     protected $appends = [

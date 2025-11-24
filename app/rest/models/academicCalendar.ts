@@ -17,6 +17,7 @@ export interface AcademicCalendar {
   end_date: string;
   school_year_id: number;
   event: AcademicCalendarEventEnum;
+  order?: number;
   readonly created_at?: string;
   readonly updated_at?: string;
   school_year?: SchoolYear;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\AcademicCalendarEventEnum;
 use App\Enum\CalendarEventEnum;
 use App\Service\AcademicCalendarService;
 use App\Service\SchoolYearService;
@@ -58,9 +59,23 @@ class AcademicCalendarController extends Controller
         schema: new OA\Schema(type: "integer")
     )]
     #[OA\Parameter(
+        name: "filter[event]",
+        in: "query",
+        description: "Filter by event",
+        required: false,
+        schema: new OA\Schema(type: "string", enum: AcademicCalendarEventEnum::class)
+    )]
+    #[OA\Parameter(
         name: "include",
         in: "query",
         description: "Comma-separated list of related resources to include in the response",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "sort",
+        in: "query",
+        description: "Sort by order",
         required: false,
         schema: new OA\Schema(type: "string")
     )]
@@ -179,7 +194,8 @@ class AcademicCalendarController extends Controller
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date',
                 'school_year_id' => 'required|integer|exists:school_year,id',
-                'event' => 'required|string|in:' . implode(',', array_column(CalendarEventEnum::cases(), 'value')),
+                'event' => 'required|string|in:' . implode(',', array_column(AcademicCalendarEventEnum::cases(), 'value')),
+                // 'order' => 'required|integer', has default 0
             ]);
 
             if ($validator->fails()) {
@@ -276,7 +292,8 @@ class AcademicCalendarController extends Controller
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date',
                 'school_year_id' => 'required|integer|exists:school_year,id',
-                'event' => 'required|string|in:' . implode(',', array_column(CalendarEventEnum::cases(), 'value')),
+                'event' => 'required|string|in:' . implode(',', array_column(AcademicCalendarEventEnum::cases(), 'value')),
+                'order' => 'required|integer',
             ]);
 
             if ($validator->fails()) {
@@ -299,7 +316,7 @@ class AcademicCalendarController extends Controller
 
             if ($start_date < $school_year_start || $start_date > $school_year_end) {
                 return $this->validationError([
-                    'start_date' => ['Start date must be within the school year period']
+                    'start_date' => ['Start date must be within the school year period ' . $school_year_start->format('Y-m-d') . ' to ' . $school_year_end->format('Y-m-d') . ' but got ' . $start_date->format('Y-m-d')]
                 ]);
             }
 
@@ -313,6 +330,72 @@ class AcademicCalendarController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->notFound('AcademicCalendar not found');
         } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    #[OA\Put(
+        path: "/api/AcademicCalendar/multiple",
+        summary: "Update multiple AcademicCalendar",
+        tags: ["AcademicCalendar"],
+        description: "Update multiple AcademicCalendar with the provided details",
+        operationId: "updateAcademicCalendarMultiple",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            type: "array",
+            items: new OA\Items(ref: "#/components/schemas/AcademicCalendar")
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "AcademicCalendar updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAcademicCalendarResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function updateMultiple(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                '*.id' => 'required|integer|exists:academic_calendar,id',
+                '*.name' => 'required|string|max:255',
+                '*.description' => 'nullable|string|max:4096',
+                '*.start_date' => 'required|date',
+                '*.end_date' => 'required|date|after_or_equal:start_date',
+                '*.school_year_id' => 'required|integer|exists:school_year,id',
+                '*.event' => 'required|string|in:' . implode(',', array_column(AcademicCalendarEventEnum::cases(), 'value')),
+                '*.order' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->updateMultiple($validated));
+        }
+        catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
     }

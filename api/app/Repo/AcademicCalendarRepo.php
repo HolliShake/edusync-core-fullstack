@@ -6,6 +6,7 @@ use App\Interface\IRepo\IAcademicCalendarRepo;
 use App\Models\AcademicCalendar;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\AllowedSort;
 
 class AcademicCalendarRepo extends GenericRepo implements IAcademicCalendarRepo
 {
@@ -25,6 +26,7 @@ class AcademicCalendarRepo extends GenericRepo implements IAcademicCalendarRepo
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
             AllowedFilter::exact('school_year_id'),
+            AllowedFilter::exact('event'),
         ];
     }
 
@@ -38,6 +40,7 @@ class AcademicCalendarRepo extends GenericRepo implements IAcademicCalendarRepo
             'created_at',
             'updated_at',
             // Add other campus-specific sortable fields
+            AllowedSort::field('order', 'order'),
         ];
     }
 

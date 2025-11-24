@@ -60,9 +60,43 @@
                         }
                     },
                     {
+                        "name": "filter[event]",
+                        "in": "query",
+                        "description": "Filter by event",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "REGISTRATION",
+                                "ENROLLMENT",
+                                "ADDING_DROPPING_OF_SUBJECTS",
+                                "ORIENTATION",
+                                "START_OF_CLASSES",
+                                "ACADEMIC_TRANSITION",
+                                "PERIODIC_EXAM",
+                                "END_OF_CLASSES",
+                                "FACULTY_EVALUATION",
+                                "GRADE_SUBMISSION",
+                                "GRADUATION",
+                                "UNIVERSITY_EVENT",
+                                "HOLIDAY",
+                                "OTHER"
+                            ]
+                        }
+                    },
+                    {
                         "name": "include",
                         "in": "query",
                         "description": "Comma-separated list of related resources to include in the response",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by order",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -363,6 +397,81 @@
                     },
                     "500": {
                         "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AcademicCalendar\/multiple": {
+            "put": {
+                "tags": [
+                    "AcademicCalendar"
+                ],
+                "summary": "Update multiple AcademicCalendar",
+                "description": "Update multiple AcademicCalendar with the provided details",
+                "operationId": "updateAcademicCalendarMultiple",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#\/components\/schemas\/AcademicCalendar"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AcademicCalendar updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateAcademicCalendarResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -16195,6 +16304,7 @@
                 "enum": [
                     "REGISTRATION",
                     "ENROLLMENT",
+                    "ADDING_DROPPING_OF_SUBJECTS",
                     "ORIENTATION",
                     "START_OF_CLASSES",
                     "ACADEMIC_TRANSITION",
@@ -16202,7 +16312,6 @@
                     "END_OF_CLASSES",
                     "FACULTY_EVALUATION",
                     "GRADE_SUBMISSION",
-                    "DEADLINE",
                     "GRADUATION",
                     "UNIVERSITY_EVENT",
                     "HOLIDAY",
@@ -16502,6 +16611,9 @@
                     },
                     "event": {
                         "$ref": "#\/components\/schemas\/AcademicCalendarEventEnum"
+                    },
+                    "order": {
+                        "type": "integer"
                     },
                     "created_at": {
                         "type": "string",

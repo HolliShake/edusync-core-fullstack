@@ -6,15 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * Enum representing key event types in a university academic calendar.
-Add or refine cases as needed for your institution's requirements.
- */
-export type AcademicCalendarEventEnum = typeof AcademicCalendarEventEnum[keyof typeof AcademicCalendarEventEnum];
+export type GetAcademicCalendarPaginatedFilterEvent = typeof GetAcademicCalendarPaginatedFilterEvent[keyof typeof GetAcademicCalendarPaginatedFilterEvent];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const AcademicCalendarEventEnum = {
+export const GetAcademicCalendarPaginatedFilterEvent = {
   REGISTRATION: 'REGISTRATION',
   ENROLLMENT: 'ENROLLMENT',
   ADDING_DROPPING_OF_SUBJECTS: 'ADDING_DROPPING_OF_SUBJECTS',

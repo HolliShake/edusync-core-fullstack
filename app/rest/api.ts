@@ -734,6 +734,71 @@ export const useDeleteAcademicCalendar = <TError = UnauthenticatedResponse | For
     }
     
 /**
+ * Update multiple AcademicCalendar with the provided details
+ * @summary Update multiple AcademicCalendar
+ */
+export const updateAcademicCalendarMultiple = (
+    academicCalendar: NonReadonly<AcademicCalendar[]>,
+ ) => {
+      
+      
+      return fetchData<UpdateAcademicCalendarResponse200>(
+      {url: `/api/AcademicCalendar/multiple`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: academicCalendar
+    },
+      );
+    }
+  
+
+
+export const getUpdateAcademicCalendarMultipleMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendarMultiple>>, TError,{data: NonReadonly<AcademicCalendar[]>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendarMultiple>>, TError,{data: NonReadonly<AcademicCalendar[]>}, TContext> => {
+
+const mutationKey = ['updateAcademicCalendarMultiple'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAcademicCalendarMultiple>>, {data: NonReadonly<AcademicCalendar[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateAcademicCalendarMultiple(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAcademicCalendarMultipleMutationResult = NonNullable<Awaited<ReturnType<typeof updateAcademicCalendarMultiple>>>
+    export type UpdateAcademicCalendarMultipleMutationBody = NonReadonly<AcademicCalendar[]>
+    export type UpdateAcademicCalendarMultipleMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update multiple AcademicCalendar
+ */
+export const useUpdateAcademicCalendarMultiple = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAcademicCalendarMultiple>>, TError,{data: NonReadonly<AcademicCalendar[]>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateAcademicCalendarMultiple>>,
+        TError,
+        {data: NonReadonly<AcademicCalendar[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAcademicCalendarMultipleMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of AcademicProgram with optional search
  * @summary Get paginated list of AcademicProgram
  */

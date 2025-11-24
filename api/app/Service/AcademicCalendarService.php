@@ -11,4 +11,18 @@ class AcademicCalendarService extends GenericService implements IAcademicCalenda
     {
         parent::__construct($academicCalendarRepository);
     }
+
+    public function updateMultiple(array $data): array
+    {
+        try {
+            $this->repository->query()
+                ->upsert($data, ['id'], ['name', 'description', 'start_date', 'end_date', 'school_year_id', 'event', 'order']);
+            return $this->repository->query()
+                ->whereIn('id', array_column($data, 'id'))
+                ->get()
+                ->toArray();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
 }

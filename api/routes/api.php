@@ -64,6 +64,7 @@ Route::controller(AcademicCalendarController::class)->group(function() {
     Route::get('/AcademicCalendar/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AcademicCalendar', 'store');
     Route::put('/AcademicCalendar/{id}', 'update')->where('id', '[0-9]+');
+    Route::put('/AcademicCalendar/multiple', 'updateMultiple');
     Route::delete('/AcademicCalendar/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
