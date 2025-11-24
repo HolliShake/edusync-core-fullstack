@@ -40,13 +40,16 @@ const Select = ({
   };
 
   // Use controlled value if provided, otherwise use internal state
-  const currentValue = value !== undefined ? value : internalValue;
+  // Handle empty string and undefined as no selection
+  const currentValue = value !== undefined && value !== '' ? value : internalValue || undefined;
 
   // Find the selected option to display its label
   const selectedOption = options.find((option) => option.value === currentValue);
 
   useEffect(() => {
-    if (value !== internalValue) setInternalValue(value || '');
+    if (value !== internalValue) {
+      setInternalValue(value || undefined);
+    }
   }, [value, internalValue]);
 
   return (
@@ -63,7 +66,9 @@ const Select = ({
           >
             <div>
               {option.label}
-              {option.subtitle && <span className="block text-xs">{option.subtitle}</span>}
+              {option.subtitle && (
+                <span className="block text-xs text-muted-foreground">{option.subtitle}</span>
+              )}
             </div>
           </SelectItem>
         ))}

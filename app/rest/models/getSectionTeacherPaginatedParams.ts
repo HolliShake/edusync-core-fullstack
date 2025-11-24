@@ -28,6 +28,10 @@ rows?: number;
  */
 'filter[school_year_id]'?: number;
 /**
+ * Filter by section ID
+ */
+'filter[section_id]'?: number;
+/**
  * Filter by user ID
  */
 'filter[user_id]'?: number;

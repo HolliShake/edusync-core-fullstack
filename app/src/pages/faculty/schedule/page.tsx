@@ -69,7 +69,16 @@ export default function FacultySchedule(): React.ReactNode {
       {
         key: 'section.section_name',
         title: 'Section',
-        render: (_, row) => row?.section?.section_name || 'N/A',
+        render: (_, row) => {
+          return (
+            <div className="flex flex-col">
+              <span className="font-medium">{row?.section?.section_name || 'N/A'}</span>
+              <span className="text-sm text-muted-foreground">
+                {row?.section?.section_ref || 'N/A'}
+              </span>
+            </div>
+          );
+        },
       },
       {
         key: 'section.curriculum_detail.course.course_title',

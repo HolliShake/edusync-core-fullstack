@@ -15127,6 +15127,15 @@
                         }
                     },
                     {
+                        "name": "filter[section_id]",
+                        "in": "query",
+                        "description": "Filter by section ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "filter[user_id]",
                         "in": "query",
                         "description": "Filter by user ID",

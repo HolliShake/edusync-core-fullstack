@@ -1,6 +1,9 @@
 import { useModal } from '@/components/custom/modal.component';
-import Select from '@/components/custom/select.component';
+import Select, { type SelectOption } from '@/components/custom/select.component';
 import AssignmentModal, { type AssignmentModalData } from '@/components/schedule/assignment-modal';
+import SectionDetailsModal, {
+  type SectionDetailsModalData,
+} from '@/components/schedule/section-details-modal';
 import ViewEventModal, { type ViewEventModalData } from '@/components/schedule/view-event-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -39,6 +42,7 @@ import {
   ChevronsUpDown,
   DoorOpenIcon,
   DownloadIcon,
+  EyeIcon,
   RefreshCwIcon,
   SearchIcon,
   UsersIcon,
@@ -110,6 +114,7 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
   // Modal Controllers
   const assignmentModal = useModal<AssignmentModalData>();
   const viewEventModal = useModal<ViewEventModalData>();
+  const sectionDetailsModal = useModal<SectionDetailsModalData>();
 
   // Queries
   const {
@@ -122,7 +127,13 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
     },
-    { query: { enabled: !!session?.active_academic_program } }
+    {
+      query: {
+        enabled: !!session?.active_academic_program,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+      },
+    }
   );
 
   const { data: collegeResponse } = useGetCollegePaginated(
@@ -136,6 +147,8 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
         enabled:
           !!session?.active_campus &&
           (role === UserRoleEnum.campus_scheduler || role === UserRoleEnum.campus_registrar),
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
       },
     }
   );
@@ -151,6 +164,8 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
         enabled:
           !!selectedCollegeId &&
           (role === UserRoleEnum.campus_scheduler || role === UserRoleEnum.campus_registrar),
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
       },
     }
   );
@@ -166,7 +181,13 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
     },
-    { query: { enabled: !!selectedProgramId && !!schoolYearId } }
+    {
+      query: {
+        enabled: !!selectedProgramId && !!schoolYearId,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+      },
+    }
   );
 
   const {
@@ -176,13 +197,8 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
   } = useGetScheduleAssignmentBySectionCode(selectedSectionCode, {
     query: {
       enabled: !!selectedSectionCode,
-      queryKey: [
-        '/api/ScheduleAssignment/section',
-        selectedSectionCode,
-        schoolYearId,
-        yearOrder,
-        termOrder,
-      ],
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
     },
   });
 
@@ -195,50 +211,51 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
     [assignmentsResponse]
   );
 
-  const schoolYearOptions = useMemo(() => {
+  const schoolYearOptions = useMemo<SelectOption[]>(() => {
     return (
       schoolYearResponse?.data?.data?.map((schoolYear) => ({
-        label: schoolYear.name,
-        value: schoolYear.id?.toString() ?? '',
+        label: schoolYear.name ?? '',
+        value: String(schoolYear.id),
       })) ?? []
     );
   }, [schoolYearResponse]);
 
-  const collegeOptions = useMemo(() => {
+  const collegeOptions = useMemo<SelectOption[]>(() => {
     return (
       collegeResponse?.data?.data?.map((college) => ({
         label: college.college_name ?? '',
-        value: college.id?.toString() ?? '',
+        value: String(college.id),
       })) ?? []
     );
   }, [collegeResponse]);
 
-  const programOptions = useMemo(() => {
+  const programOptions = useMemo<SelectOption[]>(() => {
     // If the role is program chair, set the selected program id to the active academic program
-    if (role === UserRoleEnum.program_chair) {
+    if (role === UserRoleEnum.program_chair && session?.active_academic_program) {
       return [
         {
           label: 'Default Program',
-          value: String(session?.active_academic_program),
+          value: String(session.active_academic_program),
         },
       ];
     }
     return (
       programResponse?.data?.data?.map((program) => ({
         label: program.program_name ?? '',
-        value: program.id?.toString() ?? '',
+        value: String(program.id),
       })) ?? []
     );
-  }, [role, programResponse]);
+  }, [role, session?.active_academic_program, programResponse]);
 
-  const yearOptions = useMemo(() => {
+  const yearOptions = useMemo<SelectOption[]>(() => {
     const sections = sectionResponse?.data?.data ?? [];
-    const yearMap = new Map<string, { label: string; value: string }>();
+    const yearMap = new Map<string, SelectOption>();
 
     sections.forEach((s) => {
       const label = s.curriculum_detail?.year_label;
-      const value = String(s.curriculum_detail?.year_order);
-      if (label && value) {
+      const yearOrderValue = s.curriculum_detail?.year_order;
+      if (label && yearOrderValue !== undefined && yearOrderValue !== null) {
+        const value = String(yearOrderValue);
         yearMap.set(value, { label, value });
       }
     });
@@ -246,16 +263,17 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
     return Array.from(yearMap.values()).sort((a, b) => a.label.localeCompare(b.label));
   }, [sectionResponse]);
 
-  const termOptions = useMemo(() => {
+  const termOptions = useMemo<SelectOption[]>(() => {
     const sections = sectionResponse?.data?.data ?? [];
-    const termMap = new Map<string, { label: string; value: string }>();
+    const termMap = new Map<string, SelectOption>();
 
     sections
       .filter((s) => !yearOrder || String(s.curriculum_detail?.year_order) === yearOrder)
       .forEach((s) => {
         const label = s.curriculum_detail?.term_label;
-        const value = String(s.curriculum_detail?.term_order);
-        if (label && value) {
+        const termOrderValue = s.curriculum_detail?.term_order;
+        if (label && termOrderValue !== undefined && termOrderValue !== null) {
+          const value = String(termOrderValue);
           termMap.set(value, { label, value });
         }
       });
@@ -289,7 +307,7 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
     return sections;
   }, [availableSections, selectedSectionCode]);
 
-  const sectionOptions = useMemo(() => {
+  const sectionOptions = useMemo<SelectOption[]>(() => {
     const sections = availableSections;
 
     const grouped = sections.reduce(
@@ -305,11 +323,11 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
 
     return Object.values(grouped)
       .map((section) => ({
-        label: section.section_name,
-        subtitle: section.section_code,
+        label: section.section_name ?? '',
+        subtitle: section.section_code ?? '',
         value: section.section_code ?? '',
       }))
-      .sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''));
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [availableSections]);
 
   const calendarEvents = useMemo(() => {
@@ -378,6 +396,18 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
   const isLoading = isLoadingSchoolYears || (schoolYearId && isLoadingSections && !sectionResponse);
 
   // Effects
+  // Reset all state when role changes (when switching between pages)
+  useEffect(() => {
+    setSchoolYearId(undefined);
+    setSelectedCollegeId(undefined);
+    setSelectedProgramId(undefined);
+    setYearOrder('');
+    setTermOrder('');
+    setSelectedSectionCodes([]);
+    setSelectedSectionCode('');
+    setOpenSchoolYear(false);
+  }, [role]);
+
   useEffect(() => {
     if (schoolYearOptions.length > 0) {
       setSchoolYearId(Number(schoolYearOptions[0].value));
@@ -630,7 +660,7 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
                 <Select
                   placeholder="Select college..."
                   options={collegeOptions}
-                  value={String(selectedCollegeId)}
+                  value={selectedCollegeId !== undefined ? String(selectedCollegeId) : ''}
                   onValueChange={(value) => setSelectedCollegeId(Number(value))}
                 />
               </div>
@@ -644,7 +674,7 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
                 <Select
                   placeholder="Select program..."
                   options={programOptions}
-                  value={String(selectedProgramId)}
+                  value={selectedProgramId !== undefined ? String(selectedProgramId) : ''}
                   onValueChange={(value) => setSelectedProgramId(Number(value))}
                 />
               </div>
@@ -942,19 +972,33 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
                               >
                                 <CardHeader className="p-4 space-y-2">
                                   <div className="flex items-start justify-between gap-2">
-                                    <CardTitle className="text-sm font-bold truncate select-none leading-tight">
+                                    <CardTitle className="text-sm font-bold truncate select-none leading-tight flex-1">
                                       {section.curriculum_detail?.course?.course_title} (
                                       {section.curriculum_detail?.course?.course_code})
                                       <span className="block text-xs font-normal text-muted-foreground mt-0.5">
                                         {section.section_name} • {section.section_ref}
                                       </span>
                                     </CardTitle>
-                                    <Badge
-                                      variant={isSelected ? 'default' : 'secondary'}
-                                      className="shrink-0 font-mono text-[10px] px-2 py-0.5 select-none shadow-sm"
-                                    >
-                                      {section.section_code}
-                                    </Badge>
+                                    <div className="flex flex-col items-end gap-1 shrink-0">
+                                      <Badge
+                                        variant={isSelected ? 'default' : 'secondary'}
+                                        className="font-mono text-[10px] px-2 py-0.5 select-none shadow-sm"
+                                      >
+                                        {section.section_code}
+                                      </Badge>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          sectionDetailsModal.openFn({ section });
+                                        }}
+                                        title="View Details"
+                                      >
+                                        <EyeIcon className="h-4 w-4" />
+                                      </Button>
+                                    </div>
                                   </div>
                                   <div className="flex items-center gap-3 text-xs text-muted-foreground select-none">
                                     <div className="flex items-center gap-1.5">
@@ -1009,6 +1053,9 @@ export default function ScheduleView({ role }: ScheduleViewProps): React.ReactNo
 
         {/* View/Delete Modal */}
         <ViewEventModal controller={viewEventModal} refetchAssignments={refetchAssignments} />
+
+        {/* Section Details Modal */}
+        <SectionDetailsModal controller={sectionDetailsModal} />
       </div>
     </>
   );

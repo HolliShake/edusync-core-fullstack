@@ -63,6 +63,13 @@ class SectionTeacherController extends Controller
         schema: new OA\Schema(type: "integer")
     )]
     #[OA\Parameter(
+        name: "filter[section_id]",
+        in: "query",
+        description: "Filter by section ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
         name: "filter[user_id]",
         in: "query",
         description: "Filter by user ID",
@@ -406,7 +413,8 @@ class SectionTeacherController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'section_id' => 'required|integer|exists:section,id',
+                'user_id' => 'required|integer|exists:user,id',
             ]);
 
             if ($validator->fails()) {
@@ -474,7 +482,8 @@ class SectionTeacherController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'section_id' => 'required|integer|exists:section,id',
+                'user_id' => 'required|integer|exists:user,id',
             ]);
 
             if ($validator->fails()) {
