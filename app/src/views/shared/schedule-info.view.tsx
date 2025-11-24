@@ -3,6 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -13,7 +20,7 @@ import {
   useGetSectionTeacherPaginated,
   useGetUserPaginated,
 } from '@rest/api';
-import type { Enrollment, Section, User } from '@rest/models';
+import type { Section, User } from '@rest/models';
 import { ChevronLeft, ChevronRight, Search, Trash2, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
@@ -162,8 +169,8 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
   const { data: sectionTeachersResponse, refetch: refetchTeachers } = useGetSectionTeacherPaginated(
     {
       'filter[section_id]': Number(section?.id),
-      page: 1,
-      rows: 100, // Assuming not more than 100 teachers per section
+      page: teacherMeta.page,
+      rows: teacherMeta.rows,
     },
     {
       query: {
@@ -177,6 +184,8 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
     [sectionTeachersResponse]
   );
 
+  const teacherTotalPages = sectionTeachersResponse?.data?.last_page ?? 1;
+
   const assignedTeacherIds = useMemo(
     () => new Set(sectionTeachers.map((st) => st.user_id)),
     [sectionTeachers]
@@ -186,8 +195,8 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
   const { data: enrollmentsResponse, refetch: refetchEnrollments } = useGetEnrollmentPaginated(
     {
       'filter[section_id]': Number(section?.id),
-      page: 1,
-      rows: 100, // Assuming not more than 100 students per section
+      page: studentMeta.page,
+      rows: studentMeta.rows,
     },
     {
       query: {
@@ -197,6 +206,8 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
   );
 
   const enrollments = useMemo(() => enrollmentsResponse?.data?.data ?? [], [enrollmentsResponse]);
+
+  const studentTotalPages = enrollmentsResponse?.data?.last_page ?? 1;
 
   const assignedStudentIds = useMemo(
     () => new Set(enrollments.map((e) => e.user_id)),
@@ -262,7 +273,7 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
     [section, createEnrollment, refetchEnrollments]
   );
 
-  const handleRemoveStudent = useCallback(async (enrollment: Enrollment, userName?: string) => {
+  const handleRemoveStudent = useCallback(async () => {
     // Removal functionality removed - enrollment logs are no longer created
     toast.info('Student removal is currently disabled');
   }, []);
@@ -273,6 +284,30 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
 
   const handleNextPage = useCallback(() => {
     setUserMeta((prev) => ({ ...prev, page: prev.page + 1 }));
+  }, []);
+
+  const handleTeacherPreviousPage = useCallback(() => {
+    setTeacherMeta((prev) => ({ ...prev, page: prev.page - 1 }));
+  }, []);
+
+  const handleTeacherNextPage = useCallback(() => {
+    setTeacherMeta((prev) => ({ ...prev, page: prev.page + 1 }));
+  }, []);
+
+  const handleTeacherRowsChange = useCallback((value: string) => {
+    setTeacherMeta((prev) => ({ ...prev, rows: Number(value), page: 1 }));
+  }, []);
+
+  const handleStudentPreviousPage = useCallback(() => {
+    setStudentMeta((prev) => ({ ...prev, page: prev.page - 1 }));
+  }, []);
+
+  const handleStudentNextPage = useCallback(() => {
+    setStudentMeta((prev) => ({ ...prev, page: prev.page + 1 }));
+  }, []);
+
+  const handleStudentRowsChange = useCallback((value: string) => {
+    setStudentMeta((prev) => ({ ...prev, rows: Number(value), page: 1 }));
   }, []);
 
   if (!section) {
@@ -464,7 +499,7 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="teachers" className="flex-1 mt-0">
+              <TabsContent value="teachers" className="flex-1 mt-0 flex flex-col">
                 <DropZone onDrop={handleAddTeacher}>
                   {sectionTeachers.length === 0 ? (
                     <div className="flex flex-col items-center justify-center text-muted-foreground py-12">
@@ -475,7 +510,7 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                       <p className="text-xs mt-1.5">Drag users here to assign them as teachers</p>
                     </div>
                   ) : (
-                    <ScrollArea className="max-h-[500px] pr-4">
+                    <ScrollArea className="max-h-[400px] pr-4">
                       <div className="grid grid-cols-1 gap-3 p-3">
                         {sectionTeachers.map((st) => (
                           <div
@@ -509,9 +544,56 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                     </ScrollArea>
                   )}
                 </DropZone>
+
+                <div className="flex items-center justify-between pt-4 mt-4 border-t">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-xs text-muted-foreground whitespace-nowrap">
+                      Rows per page:
+                    </Label>
+                    <Select
+                      value={String(teacherMeta.rows)}
+                      onValueChange={handleTeacherRowsChange}
+                    >
+                      <SelectTrigger className="h-9 w-[70px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">5</SelectItem>
+                        <SelectItem value="10">10</SelectItem>
+                        <SelectItem value="20">20</SelectItem>
+                        <SelectItem value="50">50</SelectItem>
+                        <SelectItem value="100">100</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 rounded-lg"
+                      onClick={handleTeacherPreviousPage}
+                      disabled={teacherMeta.page === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <span className="text-xs text-muted-foreground font-medium">
+                      Page {teacherMeta.page} of {teacherTotalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 rounded-lg"
+                      onClick={handleTeacherNextPage}
+                      disabled={teacherMeta.page >= teacherTotalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
 
-              <TabsContent value="students" className="flex-1 mt-0">
+              <TabsContent value="students" className="flex-1 mt-0 flex flex-col">
                 <DropZone onDrop={handleAddStudent}>
                   {enrollments.length === 0 ? (
                     <div className="flex flex-col items-center justify-center text-muted-foreground py-12">
@@ -522,7 +604,7 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                       <p className="text-xs mt-1.5">Drag users here to enroll them as students</p>
                     </div>
                   ) : (
-                    <ScrollArea className="max-h-[500px] -mr-3 pr-3">
+                    <ScrollArea className="max-h-[400px] -mr-3 pr-3">
                       <div className="grid grid-cols-1 gap-3 p-3">
                         {enrollments.map((enrollment) => (
                           <div
@@ -553,7 +635,7 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                               variant="ghost"
                               size="icon"
                               className="h-9 w-9 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity"
-                              onClick={() => handleRemoveStudent(enrollment, enrollment.user?.name)}
+                              onClick={() => handleRemoveStudent()}
                               disabled={enrollment.is_dropped}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -564,6 +646,53 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                     </ScrollArea>
                   )}
                 </DropZone>
+
+                <div className="flex items-center justify-between pt-4 mt-4 border-t">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-xs text-muted-foreground whitespace-nowrap">
+                      Rows per page:
+                    </Label>
+                    <Select
+                      value={String(studentMeta.rows)}
+                      onValueChange={handleStudentRowsChange}
+                    >
+                      <SelectTrigger className="h-9 w-[70px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">5</SelectItem>
+                        <SelectItem value="10">10</SelectItem>
+                        <SelectItem value="20">20</SelectItem>
+                        <SelectItem value="50">50</SelectItem>
+                        <SelectItem value="100">100</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 rounded-lg"
+                      onClick={handleStudentPreviousPage}
+                      disabled={studentMeta.page === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <span className="text-xs text-muted-foreground font-medium">
+                      Page {studentMeta.page} of {studentTotalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 rounded-lg"
+                      onClick={handleStudentNextPage}
+                      disabled={studentMeta.page >= studentTotalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
