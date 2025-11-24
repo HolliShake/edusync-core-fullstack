@@ -1,3 +1,4 @@
+import { useConfirm } from '@/components/confirm.provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,12 +16,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   useCreateEnrollment,
   useCreateSectionTeacher,
+  useDeleteEnrollment,
   useDeleteSectionTeacher,
   useGetEnrollmentPaginated,
   useGetSectionTeacherPaginated,
   useGetUserPaginated,
 } from '@rest/api';
-import type { Section, User } from '@rest/models';
+import type { Enrollment, Section, User } from '@rest/models';
 import { ChevronLeft, ChevronRight, Search, Trash2, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
@@ -214,10 +216,13 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
     [enrollments]
   );
 
+  const confirm = useConfirm();
+
   // Mutations
   const { mutateAsync: createSectionTeacher } = useCreateSectionTeacher();
   const { mutateAsync: deleteSectionTeacher } = useDeleteSectionTeacher();
   const { mutateAsync: createEnrollment } = useCreateEnrollment();
+  const { mutateAsync: deleteEnrollment } = useDeleteEnrollment();
 
   const handleAddTeacher = useCallback(
     async (user: User) => {
@@ -241,15 +246,17 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
 
   const handleRemoveTeacher = useCallback(
     async (sectionTeacherId: number, userName?: string) => {
-      try {
-        await deleteSectionTeacher({ id: sectionTeacherId });
-        toast.success(`${userName || 'Teacher'} removed from section`);
-        refetchTeachers();
-      } catch (error) {
-        toast.error('Failed to remove teacher');
-      }
+      confirm.confirm(async () => {
+        try {
+          await deleteSectionTeacher({ id: sectionTeacherId });
+          toast.success(`${userName || 'Teacher'} removed from section`);
+          refetchTeachers();
+        } catch (error) {
+          toast.error('Failed to remove teacher');
+        }
+      });
     },
-    [deleteSectionTeacher, refetchTeachers]
+    [confirm, deleteSectionTeacher, refetchTeachers]
   );
 
   const handleAddStudent = useCallback(
@@ -273,10 +280,21 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
     [section, createEnrollment, refetchEnrollments]
   );
 
-  const handleRemoveStudent = useCallback(async () => {
-    // Removal functionality removed - enrollment logs are no longer created
-    toast.info('Student removal is currently disabled');
-  }, []);
+  const handleRemoveStudent = useCallback(
+    async (enrollment: Enrollment) => {
+      // Removal functionality removed - enrollment logs are no longer created
+      confirm.confirm(async () => {
+        try {
+          await deleteEnrollment({ id: enrollment.id! });
+          toast.success('Student removed from section');
+          refetchEnrollments();
+        } catch (error) {
+          toast.error('Failed to remove student');
+        }
+      });
+    },
+    [confirm, deleteEnrollment, refetchEnrollments]
+  );
 
   const handlePreviousPage = useCallback(() => {
     setUserMeta((prev) => ({ ...prev, page: prev.page - 1 }));
@@ -635,7 +653,7 @@ export default function ScheduleInfoView({ section }: ScheduleInfoViewProps) {
                               variant="ghost"
                               size="icon"
                               className="h-9 w-9 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity"
-                              onClick={() => handleRemoveStudent()}
+                              onClick={() => handleRemoveStudent(enrollment)}
                               disabled={enrollment.is_dropped}
                             >
                               <Trash2 className="h-4 w-4" />

@@ -91,7 +91,7 @@ const CAMPUS_REGISTRAR: Route[] = [
     component: <CampusRegistrarScheduleDetail />,
     icon: <CalendarIcon className="h-4 w-4" />,
     layout: 'dashboard',
-    sidebar: true,
+    sidebar: false,
     roles: [UserRoleEnum.campus_registrar],
   },
 ];

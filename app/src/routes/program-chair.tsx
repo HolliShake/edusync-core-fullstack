@@ -11,6 +11,7 @@ import GradebookDetailPage from '@/pages/program-chair/gradebook/[id]/page';
 import ProgramChairGradebookPage from '@/pages/program-chair/gradebook/page';
 import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
 import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
+import ProgramChairScheduleDetail from '@/pages/program-chair/schedule/[id]/page';
 import ProgramChairSchedule from '@/pages/program-chair/schedule/page';
 import ProgramChairCommunityStudent from '@/pages/program-chair/student/page';
 import type { Route } from '@/types/route';
@@ -20,6 +21,7 @@ import {
   BookOpenCheckIcon,
   BookOpenIcon,
   CalendarDaysIcon,
+  CalendarIcon,
   CheckCircleIcon,
   ClipboardListIcon,
   ClockIcon,
@@ -211,6 +213,16 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <ClockIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: true,
+    roles: [UserRoleEnum.program_chair],
+  },
+  {
+    key: 'program-chair.schedule.detail',
+    title: 'Schedule Detail',
+    path: '/program-chair/schedule/:scheduleId',
+    component: <ProgramChairScheduleDetail />,
+    icon: <CalendarIcon className="h-4 w-4" />,
+    layout: 'dashboard',
+    sidebar: false,
     roles: [UserRoleEnum.program_chair],
   },
 ];
