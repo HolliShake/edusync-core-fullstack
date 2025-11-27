@@ -39,29 +39,6 @@ class SectionRepo extends GenericRepo implements ISectionRepo
                 $query->whereHas('curriculumDetail', function ($q) use ($value) {
                     $q->where('curriculum_id', $value);
                 });
-            }),
-            AllowedFilter::callback('for_freshmen', function ($query, $value) {
-                if (!filter_var($value, FILTER_VALIDATE_BOOLEAN)) return;
-
-                $query->whereHas('curriculumDetail', function ($q) {
-                    $q->where('year_order', 1)
-                      ->whereHas('curriculum', function ($q) {
-                        $q->whereHas('schoolYear', function ($q) {
-                            $q->whereHas('academicCalendars', function ($q) {
-                                $q->where('event', 'ENROLLMENT')
-                                    ->whereDate('start_date', '<=', now())
-                                    ->whereDate('end_date', '>=', now());
-                            });
-                        });
-                    })->where('term_order', '=', function ($subQuery) use ($q) {
-                        $subQuery->selectRaw('COUNT(*)')
-                            ->from('academic_calendar as ac')
-                            ->join('curriculum', 'curriculum.school_year_id', '=', 'ac.school_year_id')
-                            ->whereColumn('curriculum.id', 'curriculum_detail.curriculum_id')
-                            ->where('ac.event', 'ACADEMIC_TRANSITION')
-                            ->whereDate('ac.start_date', '<=', now());
-                    });
-                });
             })
         ];
     }

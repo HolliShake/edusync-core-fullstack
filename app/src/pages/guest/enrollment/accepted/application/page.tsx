@@ -4,19 +4,23 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { decryptIdFromUrl } from '@/lib/hash';
 import { useEnrollUser, useGetAdmissionApplicationById, useGetSectionPaginated } from '@rest/api';
 import type { Enrollment, Section } from '@rest/models';
-import { AlertCircle, BookOpen, Calendar, CheckCircle2, Trash, Users } from 'lucide-react';
+import { AlertCircle, BookOpen, Calendar, CheckCircle2, Filter, Trash, Users } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 export default function GuestEnrollment(): React.ReactNode {
-  //   const { session } = useAuth();
-  //   const navigate = useNavigate();
-
   const { mutateAsync: enrollUser, isPending: isEnrollingUser } = useEnrollUser();
 
   const [alert, setAlert] = useState<string | undefined>(undefined);
@@ -25,13 +29,17 @@ export default function GuestEnrollment(): React.ReactNode {
 
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
+  // ---- Filter state ----
+  const [selectedYearOrder, setSelectedYearOrder] = useState<number | null>(null);
+  const [selectedTermOrder, setSelectedTermOrder] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState('');
+
   const { data: applicationResponse, isLoading: isLoadingApplication } =
     useGetAdmissionApplicationById(Number(decryptIdFromUrl(applicationId as string)), {
       query: { enabled: !!applicationId },
     });
 
   const application = useMemo(() => applicationResponse?.data, [applicationResponse]);
-
   const [selectedCourses, setSelectedCourses] = useState<number[]>([]);
 
   const { data: availableSectionsResponse, isLoading: isLoadingAvailableSections } =
@@ -39,7 +47,6 @@ export default function GuestEnrollment(): React.ReactNode {
       {
         'filter[school_year_id]': Number(application?.admission_schedule?.school_year_id),
         'filter[academic_program_id]': Number(application?.admission_schedule?.academic_program_id),
-        'filter[for_freshmen]': true,
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
       },
@@ -51,45 +58,119 @@ export default function GuestEnrollment(): React.ReactNode {
       }
     );
 
-  const availableSectionsGroupBySectionCode = useMemo(() => {
+  // Helper: unique list by string value
+  function uniqueOptions<T>(arr: T[], key: keyof T) {
+    return arr.filter((item, idx, self) => self.findIndex((i) => i[key] === item[key]) === idx);
+  }
+
+  // ---- Filters Data ----
+  const yearOptions = useMemo(() => {
     const sections = availableSectionsResponse?.data?.data ?? [];
-    return sections.reduce<Record<string, Section[]>>((acc, section) => {
+    const opts = uniqueOptions(
+      sections
+        .map((s) => ({
+          label: s.curriculum_detail?.year_label,
+          value: s.curriculum_detail?.year_order,
+        }))
+        .filter((opt) => opt.value !== null && opt.value !== undefined),
+      'value'
+    );
+    // Sort by value (order)
+    return [...opts].sort((a, b) => (a.value as number) - (b.value as number));
+  }, [availableSectionsResponse]);
+
+  const termOptions = useMemo(() => {
+    const sections = availableSectionsResponse?.data?.data ?? [];
+    const opts = uniqueOptions(
+      sections
+        .filter((s) =>
+          selectedYearOrder === null ? true : s.curriculum_detail?.year_order === selectedYearOrder
+        )
+        .map((s) => ({
+          label: s.curriculum_detail?.term_label,
+          value: s.curriculum_detail?.term_order,
+        }))
+        .filter((opt) => opt.value !== null && opt.value !== undefined),
+      'value'
+    );
+    // Sort by value (order)
+    return [...opts].sort((a, b) => (a.value as number) - (b.value as number));
+  }, [availableSectionsResponse, selectedYearOrder]);
+
+  // ---- Group, filter available sections by Year + Term + Search ----
+  const availableSectionsGroupBySectionCode = useMemo(() => {
+    const allSections = availableSectionsResponse?.data?.data ?? [];
+    // Apply filters
+    let sections = allSections as Section[];
+    if (selectedYearOrder !== null) {
+      sections = sections.filter((s) => s.curriculum_detail?.year_order === selectedYearOrder);
+    }
+    if (selectedTermOrder !== null) {
+      sections = sections.filter((s) => s.curriculum_detail?.term_order === selectedTermOrder);
+    }
+    if (searchText.trim() !== '') {
+      const q = searchText.trim().toLowerCase();
+      sections = sections.filter(
+        (section) =>
+          (section.section_name?.toLowerCase() ?? '').includes(q) ||
+          (section.section_code?.toLowerCase() ?? '').includes(q)
+      );
+    }
+    // Sort by section_name before grouping
+    const sortedSections = [...sections].sort((a, b) => {
+      const nameA = a.section_name?.toLowerCase() ?? '';
+      const nameB = b.section_name?.toLowerCase() ?? '';
+      return nameA.localeCompare(nameB);
+    });
+    return sortedSections.reduce<Record<string, Section[]>>((acc, section) => {
       if (!acc[section.section_code]) {
         acc[section.section_code] = [];
       }
       acc[section.section_code].push(section);
       return acc;
     }, {});
-  }, [availableSectionsResponse]);
-
-  const yearLevel = useMemo(() => {
-    const sections = availableSectionsResponse?.data?.data ?? [];
-    return sections.map((s) => s.curriculum_detail?.year_label).find((t) => t !== undefined);
-  }, [availableSectionsResponse]);
-
-  const termLevel = useMemo(() => {
-    const sections = availableSectionsResponse?.data?.data ?? [];
-    return sections.map((s) => s.curriculum_detail?.term_label).find((t) => t !== undefined);
-  }, [availableSectionsResponse]);
+  }, [availableSectionsResponse, selectedYearOrder, selectedTermOrder, searchText]);
 
   const isLoadingAll = useMemo(() => {
     return isLoadingApplication || isLoadingAvailableSections;
   }, [isLoadingApplication, isLoadingAvailableSections]);
 
+  // Filter state: auto-select defaults on load & on filter change
+  useEffect(() => {
+    if (
+      yearOptions.length > 0 &&
+      (selectedYearOrder === null || !yearOptions.find((o) => o.value === selectedYearOrder))
+    ) {
+      setSelectedYearOrder(yearOptions[0].value!);
+    }
+  }, [yearOptions, selectedYearOrder]); // auto default to first year option
+
+  useEffect(() => {
+    if (
+      termOptions.length > 0 &&
+      (selectedTermOrder === null || !termOptions.find((o) => o.value === selectedTermOrder))
+    ) {
+      setSelectedTermOrder(termOptions[0].value!);
+    }
+  }, [termOptions, selectedTermOrder]); // auto default to first term option
+
   useEffect(() => {
     const sectionCodes = Object.keys(availableSectionsGroupBySectionCode);
-    if (sectionCodes.length > 0 && !selectedSection) {
+    if (sectionCodes.length > 0 && !sectionCodes.includes(selectedSection || '')) {
       setSelectedSection(sectionCodes[0]);
     }
+    // If after filtering, current selectedSection is not valid, select first available
   }, [availableSectionsGroupBySectionCode, selectedSection]);
 
+  // Courses for the selected section (after filters)
   const courses = useMemo<Section[]>(() => {
     return availableSectionsGroupBySectionCode[selectedSection!] ?? [];
   }, [selectedSection, availableSectionsGroupBySectionCode]);
 
+  // Selected courses & calculations
   const selectedSectionCourses = useMemo<Section[]>(() => {
-    const sections = availableSectionsResponse?.data?.data ?? [];
-    return sections.filter((section) => selectedCourses.includes(section.id!));
+    const allSections = availableSectionsResponse?.data?.data ?? [];
+    return allSections.filter((section) => selectedCourses.includes(section.id!));
   }, [selectedCourses, availableSectionsResponse]);
 
   const totalUnitsRequired = useMemo(() => {
@@ -191,9 +272,6 @@ export default function GuestEnrollment(): React.ReactNode {
                   <CardTitle className="text-2xl">
                     {application?.admission_schedule?.school_year?.name}
                   </CardTitle>
-                  <CardDescription className="text-base">
-                    {yearLevel} • {termLevel}
-                  </CardDescription>
                 </div>
                 <Badge variant="secondary" className="h-fit px-4 py-2 text-sm">
                   <Calendar className="mr-2 h-4 w-4" />
@@ -214,6 +292,77 @@ export default function GuestEnrollment(): React.ReactNode {
                 Choose your preferred section for this term
               </p>
             </div>
+            {/* --- Filters UI Start --- */}
+            <Card className="px-1 py-3 shadow-sm border-primary/10">
+              <div className="flex flex-col gap-4 md:flex-row md:gap-6 md:items-end px-4">
+                <div className="flex-1 flex flex-col md:flex-row gap-4 md:gap-6">
+                  <div className="flex flex-col gap-1 min-w-[160px]">
+                    <label className="text-xs font-semibold text-muted-foreground mb-1">
+                      Year Level
+                    </label>
+                    <Select
+                      value={selectedYearOrder === null ? undefined : String(selectedYearOrder)}
+                      onValueChange={(value) => {
+                        setSelectedYearOrder(Number(value));
+                        // Reset term filter on year change, to the first available term for new year
+                        setSelectedTermOrder(null);
+                      }}
+                    >
+                      <SelectTrigger className="w-full bg-card">
+                        <SelectValue placeholder="Select year level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {yearOptions.map((option) => (
+                          <SelectItem key={option.value} value={String(option.value)}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex flex-col gap-1 min-w-[160px]">
+                    <label className="text-xs font-semibold text-muted-foreground mb-1">
+                      Term / Semester
+                    </label>
+                    <Select
+                      value={selectedTermOrder === null ? undefined : String(selectedTermOrder)}
+                      onValueChange={(value) => setSelectedTermOrder(Number(value))}
+                      disabled={termOptions.length === 0}
+                    >
+                      <SelectTrigger className="w-full bg-card">
+                        <SelectValue placeholder="Select term/semester" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {termOptions.map((option) => (
+                          <SelectItem key={option.value} value={String(option.value)}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex-1 flex flex-col gap-1 min-w-[160px]">
+                    <label className="text-xs font-semibold text-muted-foreground mb-1">
+                      Search Section
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        className="w-full rounded-md border px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition ring-inset bg-background"
+                        placeholder="Search by code or name"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        autoCapitalize="none"
+                        spellCheck="false"
+                        autoCorrect="off"
+                        maxLength={64}
+                      />
+                      <Filter className="absolute right-2 text-muted-foreground h-4 w-4 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+            {/* --- Filters UI End --- */}
 
             {Object.keys(availableSectionsGroupBySectionCode).length === 0 ? (
               <Card className="border-dashed">
@@ -225,7 +374,7 @@ export default function GuestEnrollment(): React.ReactNode {
                     No sections available at this time
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Please check back later or contact the registrar
+                    Please update your filters or check back later.
                   </p>
                 </CardContent>
               </Card>
@@ -233,44 +382,55 @@ export default function GuestEnrollment(): React.ReactNode {
               <div className="grid gap-6 lg:grid-cols-12">
                 {/* Section List - Compact Version */}
                 <div className="lg:col-span-3">
-                  <div className="sticky top-4 max-h-[calc(100vh-8rem)] overflow-y-auto space-y-2 pr-2">
-                    {Object.keys(availableSectionsGroupBySectionCode).map((sectionCode) => {
-                      const sections = availableSectionsGroupBySectionCode[sectionCode];
-                      const firstSection = sections[0];
-                      const isSelected = selectedSection === sectionCode;
-                      return (
-                        <button
-                          key={firstSection.id}
-                          className={`group relative w-full rounded-lg border p-3 text-left transition-all duration-200 outline-none ${
-                            isSelected
-                              ? 'border-primary bg-primary/5 shadow-md'
-                              : 'border-border bg-card hover:border-primary/50 hover:shadow-sm'
-                          }`}
-                          onClick={() => setSelectedSection(sectionCode)}
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex-1 min-w-0">
-                              <h4
-                                className={`text-sm font-semibold truncate ${
-                                  isSelected
-                                    ? 'text-primary'
-                                    : 'text-foreground group-hover:text-primary'
-                                }`}
-                              >
-                                {firstSection.section_name}
-                              </h4>
-                              <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                                {firstSection.section_code}
-                              </p>
-                            </div>
-                            {isSelected && (
-                              <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                            )}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <Card className="sticky top-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+                    <CardContent className="p-2">
+                      <div className="space-y-2">
+                        {Object.keys(availableSectionsGroupBySectionCode).map((sectionCode) => {
+                          const sections = availableSectionsGroupBySectionCode[sectionCode];
+                          const firstSection = sections[0];
+                          const isSelected = selectedSection === sectionCode;
+                          // Highlight if search matches
+                          return (
+                            <button
+                              key={firstSection.id}
+                              className={`group relative w-full rounded-lg border p-3 text-left transition-all duration-200 outline-none ${
+                                isSelected
+                                  ? 'border-primary bg-primary/5 shadow-md scale-[1.02]'
+                                  : 'border-border bg-card hover:border-primary/50 hover:shadow-sm'
+                              }`}
+                              onClick={() => setSelectedSection(sectionCode)}
+                              tabIndex={0}
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <h4
+                                    className={`text-sm font-semibold truncate ${
+                                      isSelected
+                                        ? 'text-primary'
+                                        : 'text-foreground group-hover:text-primary'
+                                    }`}
+                                  >
+                                    {firstSection.section_name}
+                                  </h4>
+                                  <p className="text-xs text-muted-foreground font-mono mt-0.5">
+                                    {firstSection.section_code}
+                                  </p>
+                                  {firstSection.curriculum_detail?.year_label && (
+                                    <span className="text-xs rounded bg-muted px-2 py-0.5 mt-1 inline-block">
+                                      {firstSection.curriculum_detail.year_label}
+                                    </span>
+                                  )}
+                                </div>
+                                {isSelected && (
+                                  <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                                )}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* Section Details */}
@@ -395,7 +555,7 @@ export default function GuestEnrollment(): React.ReactNode {
                                 size="icon"
                                 onClick={() => {
                                   setSelectedCourses(
-                                    selectedCourses.filter((section) => section != value)
+                                    selectedCourses.filter((section) => section !== value)
                                   );
                                 }}
                               >
@@ -426,10 +586,13 @@ export default function GuestEnrollment(): React.ReactNode {
                   {/*  */}
                   <div className="flex flex-row justify-between items-center">
                     <span className="block">
-                      {totalUnitsSelected}/{totalUnitsRequired}
+                      <span className="font-mono font-bold mr-2">
+                        {totalUnitsSelected}/{totalUnitsRequired}
+                      </span>
+                      <span className="text-xs text-muted-foreground">Total Units</span>
                     </span>
                     <Button
-                      disabled={totalUnitsSelected != totalUnitsRequired || isEnrollingUser}
+                      disabled={totalUnitsSelected !== totalUnitsRequired || isEnrollingUser}
                       onClick={handleSubmit}
                     >
                       Submit

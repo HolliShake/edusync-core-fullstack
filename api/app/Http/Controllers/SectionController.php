@@ -69,13 +69,6 @@ class SectionController extends Controller
         schema: new OA\Schema(type: "integer")
     )]
     #[OA\Parameter(
-        name: "filter[for_freshmen]",
-        in: "query",
-        description: "Filter by freshmen",
-        required: false,
-        schema: new OA\Schema(type: "boolean")
-    )]
-    #[OA\Parameter(
         name: "paginate",
         in: "query",
         description: "Paginate the results",

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enum\AcademicCalendarEventEnum;
-use App\Enum\CalendarEventEnum;
 use App\Service\AcademicCalendarService;
 use App\Service\SchoolYearService;
 use DateTime;

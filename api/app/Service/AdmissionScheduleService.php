@@ -30,6 +30,8 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
     public function getActiveCampuses(int $schoolYearId) {
         return $this->repository->query()
             ->where('school_year_id', $schoolYearId)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
             ->with('academicProgram.college.campus')
             ->get()
             ->pluck('academicProgram.college.campus')

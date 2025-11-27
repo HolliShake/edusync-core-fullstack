@@ -14715,15 +14715,6 @@
                         }
                     },
                     {
-                        "name": "filter[for_freshmen]",
-                        "in": "query",
-                        "description": "Filter by freshmen",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    },
-                    {
                         "name": "paginate",
                         "in": "query",
                         "description": "Paginate the results",

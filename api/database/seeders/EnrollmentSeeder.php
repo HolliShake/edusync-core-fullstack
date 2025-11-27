@@ -10,7 +10,7 @@ use App\Models\AdmissionApplication;
 use App\Models\AcademicCalendar;
 use App\Enum\UserRoleEnum;
 use App\Enum\AdmissionApplicationLogTypeEnum;
-use App\Enum\CalendarEventEnum;
+use App\Enum\AcademicCalendarEventEnum;
 
 class EnrollmentSeeder extends Seeder
 {
@@ -130,7 +130,7 @@ class EnrollmentSeeder extends Seeder
     private function isSchoolYearEnrollmentActive($schoolYearId): bool
     {
         return AcademicCalendar::where('school_year_id', $schoolYearId)
-            ->where('event', CalendarEventEnum::ENROLLMENT->value)
+            ->where('event', AcademicCalendarEventEnum::ENROLLMENT->value)
             ->where('start_date', '<=', now())
             ->where('end_date', '>=', now())
             ->exists();
