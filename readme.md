@@ -69,6 +69,12 @@ The system follows clean architecture principles with a clear separation between
 - Academic term (semester) configuration
 - Calendar event management
 - Section/class scheduling
+- Schedule assignment to rooms with time slots
+- Weekly schedule management (day and time configuration)
+- Room and time conflict detection
+- Teacher assignment to sections
+- Faculty workload tracking
+- Schedule viewing by section, teacher, campus, and program
 
 ### 👥 User Management
 
@@ -126,11 +132,17 @@ The system follows clean architecture principles with a clear separation between
 ### 📊 Gradebook System
 
 - Gradebook management for sections
+- Grading period configuration with weight allocation
 - Grade item creation with configurable weights
 - Grade item detail tracking for individual students
-- Hierarchical grade structure (Gradebook → Items → Item Details)
+- Hierarchical grade structure (Gradebook → Grading Periods → Items → Item Details)
+- Individual score tracking per assessment
+- Grading period grade calculation and posting
+- Final grade computation and synchronization
 - Support for various grading criteria
+- Grade posting and visibility control
 - Student performance tracking and evaluation
+- Batch grade synchronization for sections
 
 ### 🔍 Advanced Features
 
@@ -165,6 +177,8 @@ The system follows clean architecture principles with a clear separation between
 - **Build Tool**: Vite 7.x
 - **UI Framework**: Tailwind CSS 4.x
 - **Component Library**: Radix UI
+- **Charting**: Recharts
+- **Calendar**: FullCalendar
 - **State Management**: Zustand
 - **Data Fetching**: TanStack Query (React Query)
 - **HTTP Client**: Axios
@@ -291,9 +305,11 @@ edusync-core-fullstack/
 │   │   ├── lib/                  # Utility libraries
 │   │   ├── pages/                # Page components
 │   │   │   ├── admin/            # Admin pages
-│   │   │   ├── college-dean/     # College dean pages
-│   │   │   ├── program-chair/    # Program chair pages
-│   │   │   └── student/          # Student pages
+│   │   │   ├── auth/             # Authentication pages
+│   │   │   ├── campus-registrar/ # Campus registrar pages
+│   │   │   ├── faculty/          # Faculty pages
+│   │   │   ├── guest/            # Guest/Public pages
+│   │   │   └── program-chair/    # Program chair pages
 │   │   ├── routes/               # Route definitions
 │   │   ├── store/                # State management
 │   │   └── types/                # TypeScript type definitions
@@ -559,8 +575,14 @@ DELETE /api/{resource}/delete/{id}  # Delete by ID
 - `DocumentRequestLog` - Document request status logs
 - `DocumentType` - Document type definitions
 - `GradeBook` - Gradebook management
+- `GradeBookGradingPeriod` - Grading period configuration
 - `GradeBookItem` - Grade items
 - `GradeBookItemDetail` - Grade item details
+- `GradeBookScore` - Individual score tracking
+- `GradingPeriodGrade` - Grading period grades
+- `FinalGrade` - Final grade management
+- `ScheduleAssignment` - Schedule assignments for sections
+- `SectionTeacher` - Teacher assignments to sections
 
 #### Query Parameters
 
@@ -595,6 +617,18 @@ Some resources have additional specialized endpoints:
   - `POST /api/Designition/create-program-chair` - Assign Program Chair role
   - `POST /api/Designition/create-college-dean` - Assign College Dean role
   - `POST /api/Designition/create-campus-registrar` - Assign Campus Registrar role
+- **Gradebook Synchronization**:
+  - `GET /api/GradeBookScore/get-sync/{section_id}` - Get scores for sync
+  - `POST /api/GradeBookScore/sync-score/{section_id}` - Batch sync scores for section
+  - `GET /api/GradingPeriodGrade/get-sync/{section_id}` - Get grading period grades for sync
+  - `POST /api/GradingPeriodGrade/sync-grading-period-grade/{section_id}` - Batch sync period grades
+  - `GET /api/FinalGrade/get-sync/{section_id}` - Get final grades for sync
+  - `POST /api/FinalGrade/sync-final-grade/{section_id}` - Batch sync final grades
+- **Schedule Management**:
+  - `GET /api/ScheduleAssignment/section/{section_code}` - Get schedule by section code
+- **Section Teacher Management**:
+  - `GET /api/SectionTeacher/campus/{campusId}` - Get teachers by campus (grouped by name)
+  - `GET /api/SectionTeacher/program/{academicProgramId}` - Get teachers by program (grouped by name)
 
 ### Frontend Pages
 
@@ -625,37 +659,45 @@ The application provides different interfaces based on user roles:
 - **Curriculum Students**: `/program-chair/curriculum/:curriculumId/student`
 - **Admission Evaluation**: `/program-chair/admission/evaluation`
 - **Admission Applications**: `/program-chair/admission/application`
+- **Admission Schedule**: `/program-chair/admission/schedule`
 - **Application Status**: `/program-chair/admission/application/:admissionApplicationId`
 - **Program Criteria**: `/program-chair/program-criteria`
 - **Program Requirements**: `/program-chair/program-requirement`
 - **Enrollment Management**: `/program-chair/enrollment`
 - **Gradebook**: `/program-chair/gradebook`
 - **Gradebook Detail**: `/program-chair/gradebook/:gradebookId`
-- **Community Students**: `/program-chair/community/students`
-- **Community Faculties**: `/program-chair/community/faculties`
+- **Schedule Management**: `/program-chair/schedule`
+- **Schedule Detail**: `/program-chair/schedule/:id`
+- **Students**: `/program-chair/student`
+- **Faculty**: `/program-chair/faculty`
 
 #### Campus Registrar
 
-- **Document Requests**: `/campus-registrar/document-request`
+- **Document Requests**: `/campus-registrar/request`
 - **Document Request Detail**: `/campus-registrar/request/:documentRequestId`
 - **Enrollment Management**: `/campus-registrar/enrollment`
 - **Students**: `/campus-registrar/student`
+- **Faculty**: `/campus-registrar/faculty`
+- **Schedule Management**: `/campus-registrar/schedule`
+- **Schedule Detail**: `/campus-registrar/schedule/:id`
+
+#### Faculty
+
+- **Schedule**: `/faculty/schedule`
+- **Schedule Detail**: `/faculty/schedule/:scheduleId`
+  - Class List Tab
+  - Gradebook Setup Tab
+  - Grade Management Tab
 
 #### Guest (Public)
 
 - **Admission Application**: `/guest/admission`
 - **My Applications**: `/guest/admission-applications`
 - **Application Status**: `/guest/admission-applications/:id`
-- **Enrollment**: `/guest/enrollment`
+- **Enrollment Applications**: `/guest/enrollment/applications`
 - **Accepted Applications**: `/guest/enrollment/accepted`
+- **Enrollment Application Detail**: `/guest/enrollment/accepted/application`
 - **Document Requests**: `/guest/request`
-
-#### Student
-
-- **Enrollment**: `/student`
-- **Evaluation**: `/student/evaluation`
-- **Gradebook**: `/student/gradebook`
-- **Document Requests**: `/student/request`
 
 ## 🔧 Development
 
@@ -889,25 +931,27 @@ For support, please open an issue on the GitHub repository or contact the develo
 
 ### Upcoming Features
 
-- [ ] Faculty workload management
-- [ ] Class scheduling automation
-- [ ] Report generation
-- [ ] Email notifications
+- [ ] Class scheduling automation with conflict resolution
+- [ ] Report generation and export
+- [ ] Email notifications and alerts
 - [ ] Mobile application
 - [ ] Advanced analytics dashboard
 - [ ] Multi-language support
 - [ ] Integration with LMS platforms
+- [ ] Student module implementation
+- [ ] College Dean module implementation
+- [ ] SMS notifications
+- [ ] Payment integration for document requests
 
 ### In Progress
 
 - [ ] Self-enrollment system
-- [ ] Faculty module enhancements
-- [ ] Student module enhancements
 - [ ] Bulk approve for campus registrar validation
 - [ ] Bulk approve for program chair approval
 - [ ] Reject actions for program chair and campus registrar
-- [ ] Advanced search and filtering
+- [ ] Advanced search and filtering across all modules
 - [ ] Student evaluation system completion
+- [ ] Grade report generation and printing
 
 ### Completed
 
@@ -920,6 +964,9 @@ For support, please open an issue on the GitHub repository or contact the develo
 - [x] Academic program criteria and requirements
 - [x] Calendar and scheduling
 - [x] Section management and generation
+- [x] Schedule assignment to rooms and time slots
+- [x] Teacher assignment to sections
+- [x] Faculty workload tracking
 - [x] User authentication and authorization
 - [x] Role-based access control implementation
 - [x] User designation system (Designition)
@@ -929,16 +976,24 @@ For support, please open an issue on the GitHub repository or contact the develo
 - [x] Enrollment approval workflow
 - [x] Document request system
 - [x] Document tracking and status management
-- [x] Gradebook system
+- [x] Gradebook system with grading periods
 - [x] Grade items and grading criteria
+- [x] Individual score tracking
+- [x] Grading period grade calculation
+- [x] Final grade computation and posting
+- [x] Batch grade synchronization
+- [x] Faculty schedule viewing and management
+- [x] Class list management
+- [x] Campus Registrar schedule management
+- [x] Program Chair schedule oversight
 - [x] OpenAPI documentation
 - [x] Docker containerization
 - [x] Modern React UI with Tailwind CSS
 
 ---
 
-**Last Updated**: November 14, 2025  
-**Version**: 1.2.0  
+**Last Updated**: November 27, 2025
+**Version**: 1.3.0
 **Status**: Active Development
 
 Made with ❤️ by HolliShake
