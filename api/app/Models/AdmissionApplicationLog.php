@@ -134,7 +134,7 @@ class AdmissionApplicationLog extends Model
      */
     public function getTypeLabelAttribute(): string
     {
-        switch ($this->type) {
+        switch ($this->type->value) {
             case AdmissionApplicationLogTypeEnum::SUBMITTED->value:
                 return 'Pending';
             case AdmissionApplicationLogTypeEnum::APPROVED->value:
@@ -142,11 +142,11 @@ class AdmissionApplicationLog extends Model
             case AdmissionApplicationLogTypeEnum::REJECTED->value:
                 return 'Rejected by Program Chair';
             case AdmissionApplicationLogTypeEnum::ACCEPTED->value:
-            return 'Ready for Enrollment';
+                return 'Ready for Enrollment';
             case AdmissionApplicationLogTypeEnum::CANCELLED->value:
                 return 'Cancelled by Student';
             default:
-                return 'Pending';
+                return 'Unknown Status';
         }
     }
 

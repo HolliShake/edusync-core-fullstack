@@ -150,28 +150,8 @@ class Enrollment extends Model
 
     public function getLatestStatusLabelAttribute(): string
     {
-        $latestLog = $this->latestStatus()->first();
-        $action = $latestLog ? $latestLog->action : EnrollmentLogActionEnum::ENROLL;
-
-        // Handle both enum and string values
-        $actionValue = $action instanceof EnrollmentLogActionEnum ? $action->value : $action;
-
-        switch ($actionValue) {
-            case EnrollmentLogActionEnum::ENROLL->value:
-                return 'Pending';
-            case EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value:
-                return 'Program Chair Approved';
-            case EnrollmentLogActionEnum::REGISTRAR_APPROVED->value:
-                return 'Officially Enrolled';
-            case EnrollmentLogActionEnum::DROPPED->value:
-                return 'Dropped Requested';
-            case EnrollmentLogActionEnum::PROGRAM_CHAIR_DROPPED_APPROVED->value:
-                return 'Dropped Approved by Program Chair';
-            case EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value:
-                return 'Officially Dropped';
-            default:
-                return 'Pending';
-        }
+        $log = $this->latestStatus()->first();
+        return $log?->action_label ?? EnrollmentLogActionEnum::ENROLL->value;
     }
 
     /**

@@ -40,7 +40,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
   return (
     <Providers>
       <AuthProvider>
-        <div className="flex h-screen w-screen">
+        <div className="flex h-screen w-screen overflow-hidden">
           {/* Mobile overlay */}
           {!isSidebarCollapsed && (
             <div
@@ -53,12 +53,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
           <AppSideBar isCollapsed={isSidebarCollapsed} setIsCollapsed={handleSidebarToggle} />
 
           {/* Main content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col min-h-0">
             {/* Header */}
             <Header setIsSidebarOpen={handleSidebarToggle} />
 
             {/* Main content area */}
-            <main className="flex-1 overflow-auto p-10 bg-background">{children}</main>
+            <main className="flex-1 overflow-y-auto bg-background">
+              <div className="m-10">{children}</div>
+            </main>
           </div>
         </div>
       </AuthProvider>

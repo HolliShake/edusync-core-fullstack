@@ -98,20 +98,6 @@ export default function ProgramRequirement(): React.ReactNode {
         ),
       },
       {
-        key: 'schoolYear',
-        title: 'School Year',
-        render: (schoolYear: any) => (
-          <div className="flex items-center gap-2">
-            <span>{schoolYear?.name}</span>
-            {schoolYear?.is_current && (
-              <Badge variant="default" className="text-xs">
-                Current
-              </Badge>
-            )}
-          </div>
-        ),
-      },
-      {
         key: 'is_mandatory',
         title: 'Mandatory',
         render: (isMandatory) => (

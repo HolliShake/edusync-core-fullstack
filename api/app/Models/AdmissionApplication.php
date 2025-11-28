@@ -195,21 +195,8 @@ class AdmissionApplication extends Model
      */
     public function getLatestStatusLabelAttribute(): string
     {
-        $latestLog = $this->latestStatus()->first() ?? AdmissionApplicationLogTypeEnum::SUBMITTED->value;
-        switch ($latestLog->type) {
-            case AdmissionApplicationLogTypeEnum::SUBMITTED->value:
-                return 'Pending';
-            case AdmissionApplicationLogTypeEnum::APPROVED->value:
-                return 'Approved for Evaluation';
-            case AdmissionApplicationLogTypeEnum::REJECTED->value:
-                return 'Rejected by Program Chair';
-            case AdmissionApplicationLogTypeEnum::ACCEPTED->value:
-                return 'Ready for Enrollment';
-            case AdmissionApplicationLogTypeEnum::CANCELLED->value:
-                return 'Cancelled by Student';
-            default:
-                return 'Pending';
-        }
+        $latestLog = $this->latestStatus()->first();
+        return $latestLog?->type_label ?? AdmissionApplicationLogTypeEnum::SUBMITTED->value;
     }
 
     /**

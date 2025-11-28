@@ -12,7 +12,7 @@ import { useMemo, useState } from 'react';
 
 export default function AdminRequirements(): React.ReactNode {
   const [page, setPage] = useState(1);
-  const [rows] = useState(10);
+  const [rows] = useState(120);
 
   const { data: requirements, refetch } = useGetRequirementPaginated({
     page,

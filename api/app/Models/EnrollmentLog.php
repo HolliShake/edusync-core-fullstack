@@ -124,6 +124,7 @@ class EnrollmentLog extends Model
     protected $appends = [
         'enrollment',
         'user',
+        'action_label',
     ];
 
         /**
@@ -144,6 +145,33 @@ class EnrollmentLog extends Model
     public function getUserAttribute(): User
     {
         return $this->user()->first();
+    }
+
+    /**
+     * Get the action label attribute.
+     *
+     * @return string
+     */
+    public function getActionLabelAttribute(): string
+    {
+        switch ($this->action->value) {
+            case EnrollmentLogActionEnum::ENROLL->value:
+                return 'Pending';
+            case EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value:
+                return 'Program Chair Approved';
+            case EnrollmentLogActionEnum::REGISTRAR_APPROVED->value:
+                return 'Officially Enrolled';
+            case EnrollmentLogActionEnum::PROGRAM_CHAIR_DROPPED_APPROVED->value:
+                return 'Dropped Approved by Program Chair';
+            case EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value:
+                return 'Officially Dropped';
+            case EnrollmentLogActionEnum::DROPPED->value:
+                return 'Dropped Requested';
+            case EnrollmentLogActionEnum::REJECTED->value:
+                return 'Rejected';
+            default:
+                return 'Unknown Action';
+        }
     }
 
     /**
