@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
+import AppConfig from '@/lib/app.config';
 import { cn } from '@/lib/utils';
 import ROUTES from '@/routes';
 import type { Route } from '@/types/types';
@@ -78,7 +79,7 @@ export default function SideBar({
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-30 bg-card border-r border-border shadow-sm transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col',
+        'fixed inset-y-0 left-0 z-30 bg-card border-r border-border shadow-sm transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col flex-none',
         isCollapsed ? 'translate-x-0' : '-translate-x-full',
         isCollapsed ? 'lg:w-16 w-64' : 'w-64'
       )}
@@ -103,10 +104,10 @@ export default function SideBar({
           >
             <div className="transition-all duration-300">
               <h2 className="text-base font-bold text-sidebar-foreground tracking-tight">
-                EduPortal
+                {AppConfig.App}
               </h2>
               <p className="text-[10px] font-medium text-sidebar-accent-foreground tracking-wide">
-                Learning Management System
+                {AppConfig.Subtitle}
               </p>
             </div>
           </div>
@@ -118,8 +119,7 @@ export default function SideBar({
             variant="ghost"
             size="icon"
             className={cn(
-              'shadow-sm hidden lg:flex rounded-lg bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80 transition-all duration-200',
-              isCollapsed ? 'w-7 h-7' : 'w-7 h-7'
+              'shadow-sm hidden lg:flex rounded-lg bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80 transition-all duration-200 w-7 h-7 flex-shrink-0'
             )}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
@@ -252,7 +252,7 @@ export default function SideBar({
 
                     {/* Expandable indicator for routes with children */}
                     {hasChildren && !isCollapsed && (
-                      <div className="absolute right-2 flex items-center justify-center w-4 h-4 transition-all duration-200">
+                      <div className="absolute right-2 flex items-center justify-center w-4 h-4 flex-shrink-0 transition-all duration-200">
                         <svg
                           className={cn(
                             'w-3 h-3 transition-transform duration-200',
@@ -285,7 +285,7 @@ export default function SideBar({
                       isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                     )}
                   >
-                    <div className="ml-4 pl-3 pt-1 pb-1 border-l border-sidebar-border relative space-y-1">
+                    <div className="ml-4 pl-3 pt-1 pb-3 border-l border-sidebar-border relative space-y-1">
                       {route.children
                         ?.filter((data) => data.sidebar === true || data.sidebar === undefined)
                         .map((child: Route, childIndex: number) => {
@@ -337,7 +337,7 @@ export default function SideBar({
 
                               {/* Active indicator badge */}
                               {isChildActive && (
-                                <div className="ml-2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                                <div className="ml-2 w-1.5 h-1.5 flex-shrink-0 rounded-full bg-primary animate-pulse" />
                               )}
                             </Link>
                           );
@@ -365,8 +365,8 @@ export default function SideBar({
           </div>
         ) : (
           <div className="text-xs text-muted-foreground text-center">
-            <p className="font-medium text-foreground text-[11px]">EduPortal Platform</p>
-            <p className="text-[9px] mt-0.5 opacity-70">v1.0.0</p>
+            <p className="font-medium text-foreground text-[11px]">{AppConfig.Footer}</p>
+            <p className="text-[9px] mt-0.5 opacity-70">{AppConfig.Version}</p>
           </div>
         )}
       </div>

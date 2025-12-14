@@ -5,9 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\AdmissionApplicationScore;
 use App\Models\AdmissionApplication;
-use App\Models\AcademicProgramCriteria;
+use App\Models\AdmissionCriteria;
 use App\Models\User;
-use App\Enum\UserRoleEnum;
+use App\Models\Designition;
+use App\Models\AcademicProgram;
 
 class AdmissionApplicationScoreSeeder extends Seeder
 {
@@ -16,136 +17,129 @@ class AdmissionApplicationScoreSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get required data
-        $applications = AdmissionApplication::with(['admissionSchedule.academicProgram'])->get();
-        $criteria = AcademicProgramCriteria::with(['academicProgram'])->get();
+        $this->command->info('Starting AdmissionApplicationScoreSeeder...');
 
-        // Get users with dynamic roles (based on designations)
-        $allUsers = User::with('designitions')->get();
-        $evaluators = $this->getUsersWithRole($allUsers, UserRoleEnum::PROGRAM_CHAIR);
+        // 1. Get all admission applications
+        $applications = AdmissionApplication::with(['admissionSchedule'])->get();
 
-        if ($applications->isEmpty() || $criteria->isEmpty() || $evaluators->isEmpty()) {
-            $this->command->warn('Required data not found. Make sure AdmissionApplicationSeeder, AcademicProgramCriteriaSeeder, UserSeeder, and DesignitionSeeder have been run.');
+        if ($applications->isEmpty()) {
+            $this->command->warn('No admission applications found. Skipping.');
             return;
         }
 
-        $this->command->info('Creating admission application scores for ' . $applications->count() . ' applications...');
-
-        $scoreCount = 0;
+        $count = 0;
 
         foreach ($applications as $application) {
-            // Get criteria for this application's academic program
-            $academicProgramId = $application->admissionSchedule->academic_program_id;
-            $programCriteria = $criteria->where('academic_program_id', $academicProgramId);
-
-            if ($programCriteria->isEmpty()) {
+            $schedule = $application->admissionSchedule;
+            
+            if (!$schedule) {
+                $this->command->warn("Application ID {$application->id} has no admission schedule.");
                 continue;
             }
 
-            // Create scores for each criteria
-            foreach ($programCriteria as $criterion) {
-                // Check if score already exists
-                $existingScore = AdmissionApplicationScore::where('admission_application_id', $application->id)
-                    ->where('academic_program_criteria_id', $criterion->id)
+            $programId = $schedule->academic_program_id;
+            
+            // 2. Get criteria for the specific program and schedule
+            // Note: Criteria are often linked to a schedule or a program. 
+            // Based on previous code, they seemed to be linked to both.
+            // Let's try to match both if possible, or fallback to just program/schedule if schema allows.
+            // Checking schema from previous steps: AdmissionCriteria has academic_program_id and admission_schedule_id.
+            
+            $criteria = AdmissionCriteria::where('admission_schedule_id', $schedule->id)
+                ->where('academic_program_id', $programId)
+                ->get();
+
+            if ($criteria->isEmpty()) {
+                // Fallback: maybe criteria are only linked to schedule?
+                $criteria = AdmissionCriteria::where('admission_schedule_id', $schedule->id)->get();
+            }
+
+            if ($criteria->isEmpty()) {
+                $this->command->warn("No criteria found for Application {$application->id} (Schedule: {$schedule->id}).");
+                continue;
+            }
+
+            // 3. Find a suitable evaluator (User)
+            // Try to find a Program Chair for this specific program
+            $evaluator = null;
+            
+            // Look for a user with designation for this academic program
+            $designation = Designition::where('designitionable_type', AcademicProgram::class)
+                ->where('designitionable_id', $programId)
+                ->where('is_active', true)
+                ->first();
+
+            if ($designation) {
+                $evaluator = User::find($designation->user_id);
+            }
+
+            // Fallback 1: Any Program Chair
+            if (!$evaluator) {
+                $anyChairDesignation = Designition::where('designitionable_type', AcademicProgram::class)
+                    ->where('is_active', true)
+                    ->inRandomOrder()
                     ->first();
-
-                if (!$existingScore) {
-                    $score = $this->generateRealisticScore($criterion);
-                    $comments = $this->generateComments($score);
-
-                    AdmissionApplicationScore::create([
-                        'admission_application_id' => $application->id,
-                        'academic_program_criteria_id' => $criterion->id,
-                        'user_id' => $evaluators->random()->id,
-                        'score' => $score,
-                        'comments' => $comments,
-                        'is_posted' => true, // Post all scores to trigger automatic "accepted" logs for passing students
-                    ]);
-
-                    $scoreCount++;
+                
+                if ($anyChairDesignation) {
+                    $evaluator = User::find($anyChairDesignation->user_id);
                 }
+            }
+
+            // Fallback 2: Any User (Admin/Faculty/etc) - just pick the first user to ensure data is created
+            if (!$evaluator) {
+                $evaluator = User::first();
+            }
+
+            if (!$evaluator) {
+                $this->command->error('No users found in the system to assign as evaluator.');
+                return;
+            }
+
+            foreach ($criteria as $criterion) {
+                // Check if score already exists
+                $exists = AdmissionApplicationScore::where('admission_application_id', $application->id)
+                    ->where('admission_criteria_id', $criterion->id)
+                    ->where('user_id', $evaluator->id)
+                    ->exists();
+
+                if ($exists) {
+                    continue;
+                }
+
+                $scoreValue = $this->generateScore($criterion->max_score);
+                
+                AdmissionApplicationScore::create([
+                    'admission_application_id' => $application->id,
+                    'admission_criteria_id' => $criterion->id,
+                    'user_id' => $evaluator->id,
+                    'score' => $scoreValue,
+                    'comments' => $this->generateComment($scoreValue, $criterion->max_score),
+                    'is_posted' => true, // Auto-post for now
+                ]);
+
+                $count++;
             }
         }
 
-        $this->command->info("Created {$scoreCount} admission application scores successfully!");
+        $this->command->info("Seeded {$count} admission application scores.");
     }
 
-    /**
-     * Get users with a specific role (considering dynamic roles from designations)
-     */
-    private function getUsersWithRole($users, UserRoleEnum $targetRole): \Illuminate\Support\Collection
+    private function generateScore($maxScore)
     {
-        return $users->filter(function ($user) use ($targetRole) {
-            $userRoles = $user->roles; // This calls the getRolesAttribute() method
-            return in_array($targetRole->value, $userRoles);
-        });
+        // Generate a random score between 60% and 100% of max score
+        $min = $maxScore * 0.60;
+        $random = rand($min * 100, $maxScore * 100) / 100;
+        return round($random, 2);
     }
 
-    /**
-     * Generate realistic score based on criteria type
-     */
-    private function generateRealisticScore($criterion): float
+    private function generateComment($score, $maxScore)
     {
-        // Generate scores based on different criteria types
-        $criteriaName = strtolower($criterion->criteria_name ?? '');
-
-        if (str_contains($criteriaName, 'gpa') || str_contains($criteriaName, 'grade')) {
-            // GPA/Grade criteria: 1.0 - 4.0 scale
-            return round(rand(150, 400) / 100, 2);
-        } elseif (str_contains($criteriaName, 'exam') || str_contains($criteriaName, 'test')) {
-            // Exam criteria: 0 - 100 scale (bias towards higher scores for passing)
-            return round(rand(75, 100), 1);
-        } elseif (str_contains($criteriaName, 'interview')) {
-            // Interview criteria: 0 - 100 scale (bias towards higher scores)
-            return round(rand(80, 100), 1);
-        } elseif (str_contains($criteriaName, 'essay') || str_contains($criteriaName, 'writing')) {
-            // Essay/Writing criteria: 0 - 100 scale (bias towards higher scores)
-            return round(rand(75, 100), 1);
-        } else {
-            // Default: 0 - 100 scale (bias towards higher scores for passing)
-            return round(rand(70, 100), 1);
-        }
-    }
-
-    /**
-     * Generate appropriate comments based on score
-     */
-    private function generateComments(float $score): string
-    {
-        if ($score >= 90) {
-            $comments = [
-                'Excellent performance across all areas',
-                'Outstanding academic achievement',
-                'Exceptional candidate with strong potential',
-                'Excellent work, very impressive',
-                'Outstanding performance in all criteria'
-            ];
-        } elseif ($score >= 80) {
-            $comments = [
-                'Good performance with room for improvement',
-                'Solid academic foundation',
-                'Good potential with some areas to develop',
-                'Satisfactory performance overall',
-                'Good work with minor areas for improvement'
-            ];
-        } elseif ($score >= 70) {
-            $comments = [
-                'Adequate performance, needs improvement',
-                'Meets minimum requirements',
-                'Satisfactory but could be better',
-                'Average performance with potential',
-                'Adequate work, some improvement needed'
-            ];
-        } else {
-            $comments = [
-                'Below expectations, significant improvement needed',
-                'Does not meet minimum standards',
-                'Needs substantial improvement',
-                'Below average performance',
-                'Requires significant development'
-            ];
-        }
-
-        return $comments[array_rand($comments)];
+        $percentage = ($score / $maxScore) * 100;
+        
+        if ($percentage >= 90) return 'Excellent performance.';
+        if ($percentage >= 80) return 'Very good.';
+        if ($percentage >= 75) return 'Good.';
+        if ($percentage >= 60) return 'Satisfactory.';
+        return 'Needs improvement.';
     }
 }

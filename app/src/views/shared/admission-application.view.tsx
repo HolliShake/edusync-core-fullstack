@@ -320,7 +320,7 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                       {application.first_name} {application.last_name}
                     </CardTitle>
                     <CardDescription className="mt-1">
-                      Application ID: {application.pool_no} • Year: {application.year}
+                      Application ID: {application.id}
                     </CardDescription>
                   </div>
                 </div>
@@ -338,9 +338,9 @@ export default function AdmissionApplicationStatusView(): React.ReactNode {
                     </span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground block mb-1">School Year</span>
+                    <span className="text-muted-foreground block mb-1">University Admission</span>
                     <span className="font-medium">
-                      {application.admission_schedule?.school_year?.name}
+                      {application.admission_schedule?.university_admission?.school_year?.name}
                     </span>
                   </div>
                 </div>

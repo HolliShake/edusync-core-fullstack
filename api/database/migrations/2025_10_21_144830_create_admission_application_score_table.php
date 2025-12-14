@@ -19,8 +19,8 @@ return new class extends Migration
                 ->constrained('admission_application')
                 ->onDelete('cascade');
             // Fk
-            $table->foreignId('academic_program_criteria_id')
-                ->constrained('academic_program_criteria')
+            $table->foreignId('admission_criteria_id')
+                ->constrained('admission_criteria')
                 ->onDelete('cascade');
             // Fk
             $table->foreignId('user_id')
@@ -31,7 +31,8 @@ return new class extends Migration
             $table->text('comments')->nullable();
             $table->boolean('is_posted')->default(false);
 
-            $table->unique(['admission_application_id', 'academic_program_criteria_id', 'user_id'], 'admission_application_score_unique');
+            // Unique
+            $table->unique(['admission_application_id', 'admission_criteria_id', 'user_id'], 'admission_application_score_unique');
         });
     }
 

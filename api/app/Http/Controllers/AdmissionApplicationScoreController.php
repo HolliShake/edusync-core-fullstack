@@ -165,7 +165,7 @@ class AdmissionApplicationScoreController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'admission_application_id' => 'required|integer|exists:admission_application,id',
-                'academic_program_criteria_id' => 'required|integer|exists:academic_program_criteria,id',
+                'admission_criteria_id' => 'required|integer|exists:admission_criteria,id',
                 'user_id' => 'required|integer|exists:user,id',
                 'score' => 'required|numeric',
                 'comments' => 'nullable|string',
@@ -231,7 +231,7 @@ class AdmissionApplicationScoreController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 '*.admission_application_id' => 'required|integer|exists:admission_application,id',
-                '*.academic_program_criteria_id' => 'required|integer|exists:academic_program_criteria,id',
+                '*.admission_criteria_id' => 'required|integer|exists:admission_criteria,id',
                 '*.user_id' => 'required|integer|exists:user,id',
                 '*.score' => 'required|numeric',
                 '*.comments' => 'nullable|string',
@@ -304,7 +304,7 @@ class AdmissionApplicationScoreController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'admission_application_id' => 'required|integer|exists:admission_application,id',
-                'academic_program_criteria_id' => 'required|integer|exists:academic_program_criteria,id',
+                'admission_criteria_id' => 'required|integer|exists:admission_criteria,id',
                 'user_id' => 'required|integer|exists:user,id',
                 'score' => 'required|numeric',
                 'comments' => 'nullable|string',

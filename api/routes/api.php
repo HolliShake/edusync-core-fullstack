@@ -1,12 +1,13 @@
 <?php
-
-
+use App\Http\Controllers\AdmissionCriteriaController;
+use App\Http\Controllers\TestingCenterController;
+use App\Http\Controllers\UniversityAdmissionController;
+use App\Http\Controllers\UniversityAdmissionCriteriaController;
+use App\Http\Controllers\UniversityAdmissionScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AcademicCalendarController;
 use App\Http\Controllers\AcademicProgramController;
-use App\Http\Controllers\AcademicProgramCriteriaController;
-use App\Http\Controllers\AcademicProgramRequirementController;
 use App\Http\Controllers\AcademicTermController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BuildingController;
@@ -202,15 +203,6 @@ Route::controller(DesignitionController::class)->group(function() {
     Route::delete('/Designition/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
-
-Route::controller(AcademicProgramRequirementController::class)->group(function() {
-    Route::get('/AcademicProgramRequirement', 'index');
-    Route::get('/AcademicProgramRequirement/{id}', 'show')->where('id', '[0-9]+');
-    Route::post('/AcademicProgramRequirement', 'store');
-    Route::put('/AcademicProgramRequirement/{id}', 'update')->where('id', '[0-9]+');
-    Route::delete('/AcademicProgramRequirement/{id}', 'destroy')->where('id', '[0-9]+');
-});
-
 Route::controller(AdmissionApplicationController::class)->group(function() {
     Route::get('/AdmissionApplication', 'index');
     Route::get('/AdmissionApplication/{id}', 'show')->where('id', '[0-9]+');
@@ -239,12 +231,12 @@ Route::controller(AdmissionApplicationLogController::class)->group(function() {
 });
 
 
-Route::controller(AcademicProgramCriteriaController::class)->group(function() {
-    Route::get('/AcademicProgramCriteria', 'index');
-    Route::get('/AcademicProgramCriteria/{id}', 'show')->where('id', '[0-9]+');
-    Route::post('/AcademicProgramCriteria', 'store');
-    Route::put('/AcademicProgramCriteria/{id}', 'update')->where('id', '[0-9]+');
-    Route::delete('/AcademicProgramCriteria/{id}', 'destroy')->where('id', '[0-9]+');
+Route::controller(AdmissionCriteriaController::class)->group(function() {
+    Route::get('/AdmissionCriteria', 'index');
+    Route::get('/AdmissionCriteria/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/AdmissionCriteria', 'store');
+    Route::put('/AdmissionCriteria/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AdmissionCriteria/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(AdmissionApplicationScoreController::class)->group(function() {
@@ -389,4 +381,37 @@ Route::controller(ScheduleAssignmentController::class)->group(function() {
     Route::post('/ScheduleAssignment', 'store');
     Route::put('/ScheduleAssignment/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/ScheduleAssignment/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(TestingCenterController::class)->group(function() {
+    Route::get('/TestingCenter', 'index');
+    Route::get('/TestingCenter/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/TestingCenter', 'store');
+    Route::put('/TestingCenter/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/TestingCenter/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(UniversityAdmissionController::class)->group(function() {
+    Route::get('/UniversityAdmission', 'index');
+    Route::get('/UniversityAdmission/Invitation/{userId}', 'getCurrentUserInvitation')->where('userId', '[0-9]+');
+    Route::get('/UniversityAdmission/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/UniversityAdmission', 'store');
+    Route::put('/UniversityAdmission/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/UniversityAdmission/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(UniversityAdmissionScheduleController::class)->group(function() {
+    Route::get('/UniversityAdmissionSchedule', 'index');
+    Route::get('/UniversityAdmissionSchedule/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/UniversityAdmissionSchedule', 'store');
+    Route::put('/UniversityAdmissionSchedule/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/UniversityAdmissionSchedule/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(UniversityAdmissionCriteriaController::class)->group(function() {
+    Route::get('/UniversityAdmissionCriteria', 'index');
+    Route::get('/UniversityAdmissionCriteria/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/UniversityAdmissionCriteria', 'store');
+    Route::put('/UniversityAdmissionCriteria/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/UniversityAdmissionCriteria/{id}', 'destroy')->where('id', '[0-9]+');
 });

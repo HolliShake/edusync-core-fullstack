@@ -22,10 +22,6 @@ return new class extends Migration
             $table->foreignId('admission_schedule_id')
                 ->constrained('admission_schedule')
                 ->onDelete('cascade');
-            // Auto
-            $table->year('year')
-                ->default(now()->year);
-            $table->unsignedBigInteger('pool_no');
             // Fields
             $table->string('first_name');
             $table->string('last_name');

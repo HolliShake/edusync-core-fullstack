@@ -28,52 +28,53 @@ return new class extends Migration
 
                 -- Only proceed if the new score is posted
                 IF NEW.is_posted = 1 THEN
-                    -- Get the academic program and school year from the admission application via admission schedule
-                    SELECT asch.academic_program_id, asch.school_year_id
-                    INTO @program_id, @school_year_id
+                    -- Get the academic program from the admission application via admission schedule
+                    SELECT asch.academic_program_id
+                    INTO @program_id
                     FROM admission_application aa
                     INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
                     WHERE aa.id = NEW.admission_application_id;
 
-                    -- Count total criteria for this program and school year
+                    -- Count total criteria for this program and admission schedule
                     SELECT COUNT(*)
                     INTO criteria_count
-                    FROM academic_program_criteria
+                    FROM admission_criteria
                     WHERE academic_program_id = @program_id
-                    AND school_year_id = @school_year_id
+                    AND admission_schedule_id = (
+                        SELECT admission_schedule_id 
+                        FROM admission_application 
+                        WHERE id = NEW.admission_application_id
+                    )
                     AND is_active = 1;
 
-                    -- Count posted scores for this admission application (grouped by criteria and user)
-                    SELECT COUNT(DISTINCT CONCAT(academic_program_criteria_id, "-", user_id))
+                    -- Count distinct criteria that have posted scores
+                    SELECT COUNT(DISTINCT admission_criteria_id)
                     INTO posted_scores_count
                     FROM admission_application_score
                     WHERE admission_application_id = NEW.admission_application_id
                     AND is_posted = 1;
 
-                    -- Check if all scores are posted (posted score count equals criteria count)
                     SET all_scores_posted = (posted_scores_count >= criteria_count);
 
                     IF all_scores_posted = 1 THEN
                         -- Calculate weighted score using the latest posted score for each criteria-user combination
                         SELECT
-                            SUM((aas.score / apc.max_score) * apc.weight),
-                            SUM(apc.weight)
+                            SUM((aas.score / ac.max_score) * ac.weight),
+                            SUM(ac.weight)
                         INTO weighted_score, total_weight
                         FROM (
                             SELECT
                                 admission_application_id,
-                                academic_program_criteria_id,
+                                admission_criteria_id,
                                 user_id,
-                                score,
-                                MAX(id) as max_id
+                                score
                             FROM admission_application_score
                             WHERE admission_application_id = NEW.admission_application_id
                             AND is_posted = 1
-                            GROUP BY admission_application_id, academic_program_criteria_id, user_id
                         ) aas
-                        INNER JOIN academic_program_criteria apc
-                            ON aas.academic_program_criteria_id = apc.id
-                        WHERE apc.is_active = 1;
+                        INNER JOIN admission_criteria ac
+                            ON aas.admission_criteria_id = ac.id
+                        WHERE ac.is_active = 1;
 
                         -- Calculate final score as percentage
                         IF total_weight > 0 THEN
@@ -87,6 +88,11 @@ return new class extends Migration
                         SET is_passing = (total_score >= passing_threshold);
 
                         IF is_passing = 1 THEN
+                            -- Delete rejected log if passing
+                            DELETE FROM admission_application_log
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND type = "rejected";
+
                             -- Check if accepted log already exists
                             SELECT COUNT(*)
                             INTO log_exists
@@ -117,18 +123,44 @@ return new class extends Migration
                             DELETE FROM admission_application_log
                             WHERE admission_application_id = NEW.admission_application_id
                             AND type = "accepted";
+
+                            -- Check if rejected log already exists
+                            SELECT COUNT(*)
+                            INTO log_exists
+                            FROM admission_application_log
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND type = "rejected";
+
+                            -- Insert rejected log if it doesn\'t exist
+                            IF log_exists = 0 THEN
+                                INSERT INTO admission_application_log (
+                                    admission_application_id,
+                                    user_id,
+                                    type,
+                                    note,
+                                    created_at,
+                                    updated_at
+                                ) VALUES (
+                                    NEW.admission_application_id,
+                                    NEW.user_id,
+                                    "rejected",
+                                    CONCAT("Automatically rejected with score: ", ROUND(total_score, 2), "%"),
+                                    NOW(),
+                                    NOW()
+                                );
+                            END IF;
                         END IF;
                     ELSE
-                        -- Not all scores posted, delete accepted log if exists
+                        -- Not all scores posted, delete accepted/rejected log if exists
                         DELETE FROM admission_application_log
                         WHERE admission_application_id = NEW.admission_application_id
-                        AND type = "accepted";
+                        AND type IN ("accepted", "rejected");
                     END IF;
                 ELSE
-                    -- Score is not posted, remove accepted log if exists
+                    -- Score is not posted, remove accepted/rejected log if exists
                     DELETE FROM admission_application_log
                     WHERE admission_application_id = NEW.admission_application_id
-                    AND type = "accepted";
+                    AND type IN ("accepted", "rejected");
                 END IF;
             END
         ');
@@ -149,101 +181,141 @@ return new class extends Migration
                 DECLARE is_passing BOOLEAN;
                 DECLARE log_exists INT;
 
-                -- Get the academic program and school year from the admission application via admission schedule
-                SELECT asch.academic_program_id, asch.school_year_id
-                INTO @program_id, @school_year_id
-                FROM admission_application aa
-                INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
-                WHERE aa.id = NEW.admission_application_id;
+                -- Only proceed if the new score is posted
+                IF NEW.is_posted = 1 THEN
+                    -- Get the academic program from the admission application via admission schedule
+                    SELECT asch.academic_program_id
+                    INTO @program_id
+                    FROM admission_application aa
+                    INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
+                    WHERE aa.id = NEW.admission_application_id;
 
-                -- Count total criteria for this program and school year
-                SELECT COUNT(*)
-                INTO criteria_count
-                FROM academic_program_criteria
-                WHERE academic_program_id = @program_id
-                AND school_year_id = @school_year_id
-                AND is_active = 1;
+                    -- Count total criteria for this program and admission schedule
+                    SELECT COUNT(*)
+                    INTO criteria_count
+                    FROM admission_criteria
+                    WHERE academic_program_id = @program_id
+                    AND admission_schedule_id = (
+                        SELECT admission_schedule_id 
+                        FROM admission_application 
+                        WHERE id = NEW.admission_application_id
+                    )
+                    AND is_active = 1;
 
-                -- Count posted scores for this admission application (grouped by criteria and user)
-                SELECT COUNT(DISTINCT CONCAT(academic_program_criteria_id, "-", user_id))
-                INTO posted_scores_count
-                FROM admission_application_score
-                WHERE admission_application_id = NEW.admission_application_id
-                AND is_posted = 1;
+                    -- Count distinct criteria that have posted scores
+                    SELECT COUNT(DISTINCT admission_criteria_id)
+                    INTO posted_scores_count
+                    FROM admission_application_score
+                    WHERE admission_application_id = NEW.admission_application_id
+                    AND is_posted = 1;
 
-                -- Check if all scores are posted (posted score count equals criteria count)
-                SET all_scores_posted = (posted_scores_count >= criteria_count);
+                    SET all_scores_posted = (posted_scores_count >= criteria_count);
 
-                IF all_scores_posted = 1 THEN
-                    -- Calculate weighted score using the latest posted score for each criteria-user combination
-                    SELECT
-                        SUM((aas.score / apc.max_score) * apc.weight),
-                        SUM(apc.weight)
-                    INTO weighted_score, total_weight
-                    FROM (
+                    IF all_scores_posted = 1 THEN
+                        -- Calculate weighted score using the latest posted score for each criteria-user combination
                         SELECT
-                            admission_application_id,
-                            academic_program_criteria_id,
-                            user_id,
-                            score,
-                            MAX(id) as max_id
-                        FROM admission_application_score
-                        WHERE admission_application_id = NEW.admission_application_id
-                        AND is_posted = 1
-                        GROUP BY admission_application_id, academic_program_criteria_id, user_id
-                    ) aas
-                    INNER JOIN academic_program_criteria apc
-                        ON aas.academic_program_criteria_id = apc.id
-                    WHERE apc.is_active = 1;
-
-                    -- Calculate final score as percentage
-                    IF total_weight > 0 THEN
-                        SET total_score = (weighted_score / total_weight) * 100;
-                    ELSE
-                        SET total_score = 0;
-                    END IF;
-
-                    -- Set passing threshold to 75%
-                    SET passing_threshold = 75.00;
-                    SET is_passing = (total_score >= passing_threshold);
-
-                    IF is_passing = 1 THEN
-                        -- Check if accepted log already exists
-                        SELECT COUNT(*)
-                        INTO log_exists
-                        FROM admission_application_log
-                        WHERE admission_application_id = NEW.admission_application_id
-                        AND type = "accepted";
-
-                        -- Insert accepted log if it doesn\'t exist
-                        IF log_exists = 0 THEN
-                            INSERT INTO admission_application_log (
+                            SUM((aas.score / ac.max_score) * ac.weight),
+                            SUM(ac.weight)
+                        INTO weighted_score, total_weight
+                        FROM (
+                            SELECT
                                 admission_application_id,
+                                admission_criteria_id,
                                 user_id,
-                                type,
-                                note,
-                                created_at,
-                                updated_at
-                            ) VALUES (
-                                NEW.admission_application_id,
-                                NEW.user_id,
-                                "accepted",
-                                CONCAT("Automatically accepted with score: ", ROUND(total_score, 2), "%"),
-                                NOW(),
-                                NOW()
-                            );
+                                score
+                            FROM admission_application_score
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND is_posted = 1
+                        ) aas
+                        INNER JOIN admission_criteria ac
+                            ON aas.admission_criteria_id = ac.id
+                        WHERE ac.is_active = 1;
+
+                        -- Calculate final score as percentage
+                        IF total_weight > 0 THEN
+                            SET total_score = (weighted_score / total_weight) * 100;
+                        ELSE
+                            SET total_score = 0;
+                        END IF;
+
+                        -- Set passing threshold to 75%
+                        SET passing_threshold = 75.00;
+                        SET is_passing = (total_score >= passing_threshold);
+
+                        IF is_passing = 1 THEN
+                            -- Delete rejected log if passing
+                            DELETE FROM admission_application_log
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND type = "rejected";
+
+                            -- Check if accepted log already exists
+                            SELECT COUNT(*)
+                            INTO log_exists
+                            FROM admission_application_log
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND type = "accepted";
+
+                            -- Insert accepted log if it doesn\'t exist
+                            IF log_exists = 0 THEN
+                                INSERT INTO admission_application_log (
+                                    admission_application_id,
+                                    user_id,
+                                    type,
+                                    note,
+                                    created_at,
+                                    updated_at
+                                ) VALUES (
+                                    NEW.admission_application_id,
+                                    NEW.user_id,
+                                    "accepted",
+                                    CONCAT("Automatically accepted with score: ", ROUND(total_score, 2), "%"),
+                                    NOW(),
+                                    NOW()
+                                );
+                            END IF;
+                        ELSE
+                            -- Delete accepted log if failing
+                            DELETE FROM admission_application_log
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND type = "accepted";
+
+                            -- Check if rejected log already exists
+                            SELECT COUNT(*)
+                            INTO log_exists
+                            FROM admission_application_log
+                            WHERE admission_application_id = NEW.admission_application_id
+                            AND type = "rejected";
+
+                            -- Insert rejected log if it doesn\'t exist
+                            IF log_exists = 0 THEN
+                                INSERT INTO admission_application_log (
+                                    admission_application_id,
+                                    user_id,
+                                    type,
+                                    note,
+                                    created_at,
+                                    updated_at
+                                ) VALUES (
+                                    NEW.admission_application_id,
+                                    NEW.user_id,
+                                    "rejected",
+                                    CONCAT("Automatically rejected with score: ", ROUND(total_score, 2), "%"),
+                                    NOW(),
+                                    NOW()
+                                );
+                            END IF;
                         END IF;
                     ELSE
-                        -- Delete accepted log if failing
+                        -- Not all scores posted, delete accepted/rejected log if exists
                         DELETE FROM admission_application_log
                         WHERE admission_application_id = NEW.admission_application_id
-                        AND type = "accepted";
+                        AND type IN ("accepted", "rejected");
                     END IF;
                 ELSE
-                    -- Not all scores posted, delete accepted log if exists
+                    -- Score is not posted, remove accepted/rejected log if exists
                     DELETE FROM admission_application_log
                     WHERE admission_application_id = NEW.admission_application_id
-                    AND type = "accepted";
+                    AND type IN ("accepted", "rejected");
                 END IF;
             END
         ');

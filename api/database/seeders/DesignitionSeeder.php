@@ -5,11 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Designition;
 use App\Models\AcademicProgram;
-use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Campus;
-use App\Enum\AdmissionApplicationLogTypeEnum;
-use App\Enum\EnrollmentLogActionEnum;
 
 class DesignitionSeeder extends Seeder
 {
@@ -19,157 +16,86 @@ class DesignitionSeeder extends Seeder
     public function run(): void
     {
         // Get required data
-        $programChair = User::find(1); // Program Chair user
-        $academicPrograms = AcademicProgram::all();
-
-        if (!$programChair || $academicPrograms->isEmpty()) {
-            $this->command->warn('Required data not found. Make sure UserSeeder and AcademicProgramSeeder have been run.');
+        $programChair = User::find(1); // User 1 will be our multi-role user
+        
+        if (!$programChair) {
+            $this->command->warn('User 1 not found. Make sure UserSeeder has been run.');
             return;
         }
 
-        $this->command->info('Creating designitions for program chair...');
+        $this->command->info('Assigning roles to User 1...');
 
         $designitionCount = 0;
 
-        // Find the academic program with the most valid admissions and enrollments
-        $programWithMostActivity = $this->findProgramWithMostActivity();
-
-        if ($programWithMostActivity) {
-            // Check if designition already exists
-            $existingDesignition = Designition::where('user_id', 1)
+        // 1. Assign Program Chair (Computer Science)
+        $bscsProgram = AcademicProgram::where('short_name', 'BSCS')->first();
+        
+        if ($bscsProgram) {
+            $existingProgramDesignition = Designition::where('user_id', 1)
                 ->where('designitionable_type', AcademicProgram::class)
-                ->where('designitionable_id', $programWithMostActivity->id)
-                ->where('is_active', true)
+                ->where('designitionable_id', $bscsProgram->id)
                 ->first();
 
-            if (!$existingDesignition) {
+            if (!$existingProgramDesignition) {
                 Designition::create([
                     'user_id' => 1,
                     'designitionable_type' => AcademicProgram::class,
-                    'designitionable_id' => $programWithMostActivity->id,
+                    'designitionable_id' => $bscsProgram->id,
                     'is_active' => true,
                 ]);
-
                 $designitionCount++;
-                $this->command->info("Assigned Program Chair to: {$programWithMostActivity->program_name} (ID: {$programWithMostActivity->id})");
-            } else {
-                $this->command->info("Program Chair already assigned to: {$programWithMostActivity->program_name}");
+                $this->command->info("Assigned Program Chair to: {$bscsProgram->program_name}");
             }
+        } else {
+            $this->command->warn('BSCS Program not found.');
         }
 
-        // Create Campus Registrar designation (user_id = 2)
-        $campusRegistrar = User::find(2);
-        $campus = Campus::first();
+        // 2. Assign College Dean (College of Computer Studies - CCS)
+        $ccsCollege = \App\Models\College::where('college_shortname', 'CCS')->first();
 
-        if ($campusRegistrar && $campus) {
-            // Check if designition already exists
-            $existingCampusDesignition = Designition::where('user_id', 2)
-                ->where('designitionable_type', Campus::class)
-                ->where('designitionable_id', $campus->id)
-                ->where('is_active', true)
+        if ($ccsCollege) {
+            $existingDeanDesignition = Designition::where('user_id', 1)
+                ->where('designitionable_type', \App\Models\College::class)
+                ->where('designitionable_id', $ccsCollege->id)
                 ->first();
 
-            if (!$existingCampusDesignition) {
+            if (!$existingDeanDesignition) {
                 Designition::create([
-                    'user_id' => 2,
+                    'user_id' => 1,
+                    'designitionable_type' => \App\Models\College::class,
+                    'designitionable_id' => $ccsCollege->id,
+                    'is_active' => true,
+                ]);
+                $designitionCount++;
+                $this->command->info("Assigned College Dean to: {$ccsCollege->college_name}");
+            }
+        } else {
+            $this->command->warn('CCS College not found.');
+        }
+
+        // 3. Assign Campus Registrar (First Campus)
+        $campus = Campus::first();
+
+        if ($campus) {
+            $existingRegistrarDesignition = Designition::where('user_id', 1)
+                ->where('designitionable_type', Campus::class)
+                ->where('designitionable_id', $campus->id)
+                ->first();
+
+            if (!$existingRegistrarDesignition) {
+                Designition::create([
+                    'user_id' => 1,
                     'designitionable_type' => Campus::class,
                     'designitionable_id' => $campus->id,
                     'is_active' => true,
                 ]);
-
                 $designitionCount++;
-                $this->command->info("Assigned Campus Registrar to: {$campus->campus_name} (ID: {$campus->id})");
-            } else {
-                $this->command->info("Campus Registrar already assigned to: {$campus->campus_name}");
+                $this->command->info("Assigned Campus Registrar to: {$campus->name}");
             }
         } else {
-            $this->command->warn('Campus Registrar user (ID: 2) or Campus not found. Skipping Campus Registrar designation.');
+            $this->command->warn('No Campus found.');
         }
 
-        // Note: Due to unique constraint on ['user_id', 'designitionable_type', 'is_active'],
-        // a user can only have ONE active designition per type (AcademicProgram, College, Campus, etc.)
-        // So we only assign to the most active program
-
-        $this->command->info("Created {$designitionCount} designitions successfully!");
+        $this->command->info("Created {$designitionCount} designitions for User 1 successfully!");
     }
-
-    /**
-     * Find the academic program with the most valid admissions and enrollments
-     */
-    private function findProgramWithMostActivity(): ?AcademicProgram
-    {
-        // Get programs with their admission application counts through admission schedules
-        $programs = AcademicProgram::withCount([
-            'admissionSchedules as admission_applications_count' => function ($query) {
-                $query->whereHas('schoolYear', function ($schoolYearQuery) {
-                    $schoolYearQuery->where('is_active', true);
-                })->withCount('admissionApplications');
-            }
-        ])->get();
-
-        if ($programs->isEmpty()) {
-            // Fallback: get the first program if no activity data
-            return AcademicProgram::first();
-        }
-
-        // Calculate total activity score for each program
-        $programScores = $programs->map(function ($program) {
-            // Get admission count through: AcademicProgram → AdmissionSchedule → AdmissionApplication
-            $admissionCount = $this->getAdmissionCountForProgram($program);
-
-            // Get enrollment count through the relationship chain:
-            // AcademicProgram → Curriculum → CurriculumDetail → Section → Enrollment
-            $enrollmentCount = $this->getEnrollmentCountForProgram($program);
-            $totalScore = $admissionCount + $enrollmentCount;
-
-            return [
-                'program' => $program,
-                'score' => $totalScore,
-                'admissions' => $admissionCount,
-                'enrollments' => $enrollmentCount
-            ];
-        });
-
-        // Sort by total activity score (descending)
-        $sortedPrograms = $programScores->sortByDesc('score');
-        $topProgram = $sortedPrograms->first();
-
-        if ($topProgram) {
-            $this->command->info("Top program activity: {$topProgram['program']->program_name}");
-            $this->command->info("- Valid Admissions: {$topProgram['admissions']}");
-            $this->command->info("- Valid Enrollments: {$topProgram['enrollments']}");
-            $this->command->info("- Total Score: {$topProgram['score']}");
-        }
-
-        return $topProgram['program'] ?? AcademicProgram::first();
-    }
-
-    /**
-     * Get admission count for a program through the relationship chain
-     */
-    private function getAdmissionCountForProgram(AcademicProgram $program): int
-    {
-        // Get admissions through: AcademicProgram → AdmissionSchedule → AdmissionApplication
-        return $program->admissionSchedules()
-            ->whereHas('schoolYear', function ($query) {
-                $query->where('is_active', true);
-            })
-            ->withCount('admissionApplications')
-            ->get()
-            ->sum('admission_applications_count');
-    }
-
-    /**
-     * Get enrollment count for a program through the relationship chain
-     */
-    private function getEnrollmentCountForProgram(AcademicProgram $program): int
-    {
-        // Get enrollments through: AcademicProgram → Curriculum → CurriculumDetail → Section → Enrollment
-        return Enrollment::whereHas('section.curriculumDetail.curriculum', function ($query) use ($program) {
-            $query->where('academic_program_id', $program->id);
-        })->whereHas('enrollmentLogs', function ($logQuery) {
-            $logQuery->where('action', EnrollmentLogActionEnum::REGISTRAR_APPROVED->value);
-        })->count();
-    }
-
 }

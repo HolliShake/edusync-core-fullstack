@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
     required: [
         // Override required
         'admission_application_id',
-        'academic_program_criteria_id',
+        'admission_criteria_id',
         'user_id',
         'score',
         'is_posted',
@@ -22,7 +22,7 @@ use OpenApi\Attributes as OA;
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "admission_application_id", type: "integer", example: 1),
-        new OA\Property(property: "academic_program_criteria_id", type: "integer", example: 1),
+        new OA\Property(property: "admission_criteria_id", type: "integer", example: 1),
         new OA\Property(property: "user_id", type: "integer", example: 1),
         new OA\Property(property: "score", type: "number", format: "decimal", example: 85.50),
         new OA\Property(property: "comments", type: "string", nullable: true, example: "Good performance"),
@@ -31,7 +31,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         // Relations
         new OA\Property(property: "admission_application", ref: "#/components/schemas/AdmissionApplication"),
-        new OA\Property(property: "academic_program_criteria", ref: "#/components/schemas/AcademicProgramCriteria"),
+        new OA\Property(property: "admission_criteria", ref: "#/components/schemas/AdmissionCriteria"),
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
     ]
 )]
@@ -112,7 +112,7 @@ class AdmissionApplicationScore extends Model
 
     protected $fillable = [
         'admission_application_id',
-        'academic_program_criteria_id',
+        'admission_criteria_id',
         'user_id',
         'score',
         'comments',
@@ -120,12 +120,12 @@ class AdmissionApplicationScore extends Model
     ];
 
     protected $casts = [
-        'admission_application_id'     => 'integer',
-        'academic_program_criteria_id' => 'integer',
-        'user_id'                      => 'integer',
-        'score'                        => 'decimal:2',
-        'comments'                     => 'string',
-        'is_posted'                    => 'boolean',
+        'admission_application_id' => 'integer',
+        'admission_criteria_id'    => 'integer',
+        'user_id'                  => 'integer',
+        'score'                    => 'decimal:2',
+        'comments'                 => 'string',
+        'is_posted'                => 'boolean',
     ];
 
 
@@ -140,13 +140,13 @@ class AdmissionApplicationScore extends Model
     }
 
     /**
-     * Get the academic program criteria that owns the score.
+     * Get the admission criteria that owns the score.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function academicProgramCriteria(): BelongsTo
+    public function admissionCriteria(): BelongsTo
     {
-        return $this->belongsTo(AcademicProgramCriteria::class);
+        return $this->belongsTo(AdmissionCriteria::class);
     }
 
     /**

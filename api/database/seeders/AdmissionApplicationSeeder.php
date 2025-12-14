@@ -29,10 +29,18 @@ class AdmissionApplicationSeeder extends Seeder
         $this->command->info('Creating admission applications for ' . $students->count() . ' students...');
 
         $applicationCount = 0;
+        
+        // Find BSCS program to prioritize it
+        $bscsProgram = \App\Models\AcademicProgram::where('short_name', 'BSCS')->first();
+        $bscsSchedules = $bscsProgram ? $admissionSchedules->where('academic_program_id', $bscsProgram->id) : collect();
 
-        foreach ($students as $student) {
-            // Get a random admission schedule
-            $admissionSchedule = $admissionSchedules->random();
+        foreach ($students as $index => $student) {
+            // Get a admission schedule - prioritize BSCS for first 70% of students
+            if ($bscsSchedules->isNotEmpty() && $index < ($students->count() * 0.7)) {
+                $admissionSchedule = $bscsSchedules->random();
+            } else {
+                $admissionSchedule = $admissionSchedules->random();
+            }
 
             // Check if student already has an application for this admission schedule
             $existingApplication = AdmissionApplication::where('user_id', $student->id)
@@ -89,7 +97,7 @@ class AdmissionApplicationSeeder extends Seeder
     /**
      * Generate a random middle name
      */
-    private function generateMiddleName(): string
+    private function generateMiddleName(): ?string
     {
         $middleNames = [
             'Santos', 'Reyes', 'Cruz', 'Garcia', 'Lopez', 'Martinez', 'Rodriguez', 'Gonzalez',
@@ -97,7 +105,8 @@ class AdmissionApplicationSeeder extends Seeder
             'Morales', 'Jimenez', 'Ruiz', 'Hernandez', 'Vargas', 'Mendoza', 'Castillo', 'Ramos'
         ];
 
-        return $middleNames[array_rand($middleNames)];
+        // Return null sometimes to match nullable field
+        return rand(0, 10) > 2 ? $middleNames[array_rand($middleNames)] : null;
     }
 
     /**

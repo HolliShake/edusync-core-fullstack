@@ -12,17 +12,15 @@ use OpenApi\Attributes as OA;
     title: "AdmissionSchedule",
     type: "object",
     required: [
-        // Override required
-        'school_year_id',
+        'university_admission_id',
         'academic_program_id',
         'intake_limit',
         'start_date',
         'end_date',
     ],
     properties: [
-        // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
-        new OA\Property(property: "school_year_id", type: "integer"),
+        new OA\Property(property: "university_admission_id", type: "integer"),
         new OA\Property(property: "academic_program_id", type: "integer"),
         new OA\Property(property: "intake_limit", type: "integer"),
         new OA\Property(property: "start_date", type: "string", format: "date"),
@@ -30,8 +28,9 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
         // Relationships
-        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
+        new OA\Property(property: "university_admission", ref: "#/components/schemas/UniversityAdmission"),
         new OA\Property(property: "academic_program", ref: "#/components/schemas/AcademicProgram"),
+        new OA\Property(property: "admission_criterias", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionCriteria")),
     ]
 )]
 
@@ -110,7 +109,7 @@ class AdmissionSchedule extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'school_year_id',
+        'university_admission_id',
         'academic_program_id',
         'intake_limit',
         'start_date',
@@ -120,44 +119,44 @@ class AdmissionSchedule extends Model
     protected $casts = [
         'start_date'     => 'date',
         'end_date'       => 'date',
-        'school_year_id' => 'integer',
+        'university_admission_id' => 'integer',
         'academic_program_id' => 'integer',
         'intake_limit' => 'integer',
     ];
 
     protected $appends = [
-        'school_year',
+        'university_admission',
         'academic_program',
     ];
 
     /**
-     * Get the school year that owns the admission schedule.
+     * Get the university admission that owns the admission schedule.
      *
-     * @return SchoolYear
+     * @return UniversityAdmission|null
      */
-    public function getSchoolYearAttribute(): SchoolYear
+    public function getUniversityAdmissionAttribute(): ?UniversityAdmission
     {
-        return $this->schoolYear()->first();
+        return $this->universityAdmission()->first();
     }
 
     /**
      * Get the academic program that owns the admission schedule.
      *
-     * @return AcademicProgram
+     * @return AcademicProgram|null
      */
-    public function getAcademicProgramAttribute(): AcademicProgram
+    public function getAcademicProgramAttribute(): ?AcademicProgram
     {
         return $this->academicProgram()->first();
     }
 
     /**
-     * Get the school year that owns the admission schedule.
+     * Get the university admission that owns the admission schedule.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function schoolYear(): BelongsTo
+    public function universityAdmission(): BelongsTo
     {
-        return $this->belongsTo(SchoolYear::class);
+        return $this->belongsTo(UniversityAdmission::class);
     }
 
     /**

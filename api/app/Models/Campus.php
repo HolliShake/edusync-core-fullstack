@@ -13,13 +13,15 @@ use OpenApi\Attributes as OA;
     required: [
         "name",
         "short_name",
-        "address"
+        "address",
+        "main_campus"
     ],
     properties: [
         new OA\Property(property: "id", type: "integer"),
         new OA\Property(property: "name", type: "string"),
         new OA\Property(property: "short_name", type: "string"),
         new OA\Property(property: "address", type: "string"),
+        new OA\Property(property: "main_campus", type: "boolean"),
     ]
 )]
 
@@ -98,7 +100,12 @@ class Campus extends Model
     protected $fillable = [
         'name',
         'short_name',
-        'address'
+        'address',
+        'main_campus',
+    ];
+
+    protected $casts = [
+        'main_campus' => 'boolean',
     ];
 
     /**

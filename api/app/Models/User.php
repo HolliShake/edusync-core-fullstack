@@ -32,7 +32,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         // attributes
-        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "string")),
+        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "string"), readOnly: true),
+        new OA\Property(property: "profile_weight", type: "number", format: "float", readOnly: true),
     ]
 )]
 
@@ -153,7 +154,40 @@ class User extends Authenticatable
      */
     protected function appends(): array
     {
-        return ['roles'];
+        return ['roles', 'profile_weight'];
+    }
+    
+    /**
+     * Calculate the profile completion weight as a percentage.
+     * 
+     * This accessor computes the profile completeness based on three key fields:
+     * - Email address
+     * - Full name
+     * - Family background records
+     * 
+     * @return float The profile completion percentage (0-100)
+     */
+    public function getProfileWeightAttribute(): float 
+    {
+        $weight = 0;
+        $totalFields = 3;
+
+        // Check if email is set
+        if (!empty($this->email)) {
+            $weight++;
+        }
+
+        // Check if fullname is set
+        if (!empty($this->name)) {
+            $weight++;
+        }
+
+        // Check if user has family background
+        if ($this->familyBackgrounds()->exists()) {
+            $weight++;
+        }
+
+        return ($weight / $totalFields) * 100;
     }
 
     /**
@@ -173,6 +207,7 @@ class User extends Authenticatable
         // Check designations with a single query
         $designations = $this->designitions()
             ->whereIn('designitionable_type', [Campus::class, College::class, AcademicProgram::class])
+            ->where('is_active', true)
             ->pluck('designitionable_type')
             ->toArray();
 
@@ -268,5 +303,15 @@ class User extends Authenticatable
     public function curriculumTaggings(): HasMany
     {
         return $this->hasMany(CurriculumTagging::class);
+    }
+
+    /**
+     * Get the family backgrounds for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function familyBackgrounds(): HasMany
+    {
+        return $this->hasMany(FamilyBackground::class);
     }
 }

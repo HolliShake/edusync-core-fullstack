@@ -139,6 +139,7 @@ class AuthController extends Controller
             "active_campus" => $designitions->get(Campus::class)?->designitionable_id ?? null,
             "active_college" => $designitions->get(College::class)?->designitionable_id ?? null,
             "active_academic_program" => $designitions->get(AcademicProgram::class)?->designitionable_id ?? null,
+            "profile_weight" => $user->profile_weight,
         ]);
     }
 }

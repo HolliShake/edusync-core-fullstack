@@ -1,15 +1,15 @@
-import Select from '@/components/custom/select.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
+import SelectAdmissionSchedule from '@/components/program-chair-only/admission/admission-schedule.select';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { encryptIdForUrl } from '@/lib/hash';
-import { useGetAdmissionApplicationPaginated, useGetSchoolYearPaginated } from '@rest/api';
-import { AdmissionApplicationLogTypeEnum, type SchoolYear } from '@rest/models';
+import { useGetAdmissionApplicationPaginated } from '@rest/api';
+import { AdmissionApplicationLogTypeEnum } from '@rest/models';
 import type { AdmissionApplication } from '@rest/models/admissionApplication';
 import type React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function ProgramChairAdmissionApplicationGenericTab({
@@ -19,7 +19,7 @@ export default function ProgramChairAdmissionApplicationGenericTab({
 }): React.ReactNode {
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
-  const [schoolYearId, setSchoolYearId] = useState<number | undefined>(undefined);
+  const [admissionScheduleId, setadmissionScheduleId] = useState<number | undefined>(undefined);
 
   const navigate = useNavigate();
 
@@ -28,46 +28,25 @@ export default function ProgramChairAdmissionApplicationGenericTab({
   const { data: applications, isLoading: isLoadingApplications } =
     useGetAdmissionApplicationPaginated(
       {
-        'filter[academic_program_id]': session?.active_academic_program ?? 0,
-        'filter[school_year_id]': schoolYearId ?? 0,
+        'filter[academic_program_id]': Number(session?.active_academic_program),
+        'filter[admission_schedule_id]': Number(admissionScheduleId),
         'filter[latest_status]': status,
         page,
         rows,
       },
-      { query: { enabled: !!schoolYearId || !!session?.active_academic_program } }
+      { query: { enabled: !!admissionScheduleId || !!session?.active_academic_program } }
     );
 
-  const { data: schoolYearResponse, isLoading: isLoadingSchoolYears } = useGetSchoolYearPaginated({
-    sort: '-start_date',
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
-
-  const schoolYearsList = useMemo(
-    () =>
-      schoolYearResponse?.data?.data?.map((data: SchoolYear) => ({
-        label: data.name,
-        value: String(data.id),
-      })) ?? [],
-    [schoolYearResponse]
-  );
-
-  useEffect(() => {
-    if (schoolYearsList.length > 0 && schoolYearId === undefined) {
-      setSchoolYearId(parseInt(schoolYearsList[0].value));
-    }
-  }, [schoolYearsList, schoolYearId]);
-
-  const getStatusVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'accepted':
+  const getStatusVariant = (status: AdmissionApplicationLogTypeEnum) => {
+    switch (status) {
+      case AdmissionApplicationLogTypeEnum.accepted:
         return 'default'; // green - final acceptance
-      case 'approved':
+      case AdmissionApplicationLogTypeEnum.approved:
         return 'secondary'; // blue/purple - approved for evaluation
-      case 'submitted':
+      case AdmissionApplicationLogTypeEnum.submitted:
         return 'outline'; // neutral - initial state
-      case 'rejected':
-      case 'cancelled':
+      case AdmissionApplicationLogTypeEnum.rejected:
+      case AdmissionApplicationLogTypeEnum.cancelled:
         return 'destructive'; // red - negative outcome
       default:
         return 'outline';
@@ -80,11 +59,6 @@ export default function ProgramChairAdmissionApplicationGenericTab({
 
   const columns = useMemo<TableColumn<AdmissionApplication>[]>(
     () => [
-      {
-        key: 'pool_no',
-        title: 'Pool No.',
-        render: (_, row) => row.pool_no ?? 'N/A',
-      },
       {
         key: 'name',
         title: 'Name',
@@ -107,12 +81,8 @@ export default function ProgramChairAdmissionApplicationGenericTab({
       {
         key: 'schoolYear',
         title: 'School Year',
-        render: (_, row) => row.admission_schedule?.school_year?.name ?? 'N/A',
-      },
-      {
-        key: 'year',
-        title: 'Year',
-        render: (_, row) => row.year ?? 'N/A',
+        render: (_, row) =>
+          row.admission_schedule?.university_admission?.school_year?.name ?? 'N/A',
       },
       {
         key: 'status',
@@ -120,7 +90,7 @@ export default function ProgramChairAdmissionApplicationGenericTab({
         render: (_, row) => {
           const status = row.latest_status || '';
           return (
-            <Badge variant={getStatusVariant(status)}>
+            <Badge variant={getStatusVariant(status as AdmissionApplicationLogTypeEnum)}>
               {status ? formatStatus(status) : 'No Status'}
             </Badge>
           );
@@ -133,7 +103,7 @@ export default function ProgramChairAdmissionApplicationGenericTab({
   const tableItems = useMemo(() => applications?.data?.data ?? [], [applications]);
   const paginationMeta = useMemo(() => applications?.data, [applications]);
 
-  if (isLoadingSchoolYears || isLoadingApplications) {
+  if (isLoadingApplications) {
     return (
       <div className="space-y-2">
         <div className="w-fit">
@@ -176,10 +146,9 @@ export default function ProgramChairAdmissionApplicationGenericTab({
   return (
     <div className="space-y-2">
       <div className="w-fit">
-        <Select
-          options={schoolYearsList}
-          value={schoolYearId?.toString()}
-          onValueChange={(value) => setSchoolYearId(parseInt(value))}
+        <SelectAdmissionSchedule
+          value={admissionScheduleId?.toString()}
+          onValueChange={(value) => setadmissionScheduleId(parseInt(value))}
           placeholder="Select school year"
         />
       </div>

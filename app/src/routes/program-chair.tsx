@@ -1,7 +1,8 @@
 import ProgramChairAdmissionApplication from '@/pages/program-chair/admission/application/page';
 import ProgramChairAdmissionApplicationStatus from '@/pages/program-chair/admission/application/status/page';
 import ProgramChairAdmissionEvaluation from '@/pages/program-chair/admission/evaluation/page';
-import ProgramChairAdmissionSchedule from '@/pages/program-chair/admission/schedule/page';
+import ProgramChairAdmissionInvitationDetail from '@/pages/program-chair/admission/program-admission-invitation/[id]/page';
+import ProgramChairAdmissionProgramAdmissionInvitation from '@/pages/program-chair/admission/program-admission-invitation/page';
 import ProgramChairCurriculumDetail from '@/pages/program-chair/curriculum/curriculum-detail/page';
 import ProgramChairCurriculum from '@/pages/program-chair/curriculum/page';
 import ProgramChairCurriculumStudent from '@/pages/program-chair/curriculum/student/page';
@@ -9,8 +10,6 @@ import ProgramChairEnrollment from '@/pages/program-chair/enrollment/page';
 import ProgramChairCommunityFaculty from '@/pages/program-chair/faculty/page';
 import GradebookDetailPage from '@/pages/program-chair/gradebook/[id]/page';
 import ProgramChairGradebookPage from '@/pages/program-chair/gradebook/page';
-import ProgramCriteria from '@/pages/program-chair/program-criteria/page';
-import ProgramRequirement from '@/pages/program-chair/program-requirement/page';
 import ProgramChairScheduleDetail from '@/pages/program-chair/schedule/[id]/page';
 import ProgramChairSchedule from '@/pages/program-chair/schedule/page';
 import ProgramChairCommunityStudent from '@/pages/program-chair/student/page';
@@ -20,15 +19,13 @@ import {
   BookMarkedIcon,
   BookOpenCheckIcon,
   BookOpenIcon,
-  CalendarDaysIcon,
+  CalendarFoldIcon,
   CalendarIcon,
   CheckCircleIcon,
   ClipboardListIcon,
   ClockIcon,
   FileTextIcon,
   GraduationCapIcon,
-  ListChecksIcon,
-  TrendingUpIcon,
   UserCheckIcon,
   Users2Icon,
   UsersIcon,
@@ -50,13 +47,22 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <UserCheckIcon className="h-4 w-4" />,
     children: [
       {
-        key: 'program-chair.admission.schedule',
-        title: 'Schedule',
-        path: '/program-chair/admission/schedule',
-        component: <ProgramChairAdmissionSchedule />,
-        icon: <CalendarDaysIcon className="h-4 w-4" />,
+        key: 'program-chair.admission.invitation',
+        title: 'Invitation',
+        path: '/program-chair/admission/invitation',
+        component: <ProgramChairAdmissionProgramAdmissionInvitation />,
+        icon: <CalendarFoldIcon className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
+        roles: [UserRoleEnum.program_chair],
+      },
+      {
+        key: 'program-chair.admission.invitation.detail',
+        title: 'Invitation Detail',
+        path: '/program-chair/admission/invitation/:admissionScheduleId',
+        component: <ProgramChairAdmissionInvitationDetail />,
+        layout: 'dashboard',
+        sidebar: false,
         roles: [UserRoleEnum.program_chair],
       },
       {
@@ -133,26 +139,6 @@ const PROGRAM_CHAIR: Route[] = [
     icon: <GraduationCapIcon className="h-4 w-4" />,
     layout: 'dashboard',
     sidebar: false,
-  },
-  {
-    key: 'program-chair.program-requirement',
-    title: 'Program Requirement',
-    path: '/program-chair/program-requirement',
-    component: <ProgramRequirement />,
-    icon: <ListChecksIcon className="h-4 w-4" />,
-    layout: 'dashboard',
-    sidebar: true,
-    roles: [UserRoleEnum.program_chair],
-  },
-  {
-    key: 'program-chair.program-criteria',
-    title: 'Program Criteria',
-    path: '/program-chair/program-criteria',
-    component: <ProgramCriteria />,
-    icon: <TrendingUpIcon className="h-4 w-4" />,
-    layout: 'dashboard',
-    sidebar: true,
-    roles: [UserRoleEnum.program_chair],
   },
   {
     key: 'program-chair.gradebook',

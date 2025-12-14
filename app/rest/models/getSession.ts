@@ -27,4 +27,5 @@ export interface GetSession {
   readonly active_specialization: number | null;
   /** @nullable */
   readonly active_campus: number | null;
+  readonly profile_weight: number;
 }

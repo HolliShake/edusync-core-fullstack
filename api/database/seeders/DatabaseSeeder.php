@@ -17,15 +17,18 @@ use Database\Seeders\BuildingSeeder;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\RequirementSeeder;
 use Database\Seeders\AdmissionScheduleSeeder;
-use Database\Seeders\AcademicProgramRequirementSeeder;
-use Database\Seeders\AcademicProgramCriteriaSeeder;
+use Database\Seeders\AdmissionCriteriaSeeder;
 use Database\Seeders\AdmissionApplicationSeeder;
 use Database\Seeders\SectionSeeder;
 use Database\Seeders\EnrollmentSeeder;
 use Database\Seeders\EnrollmentLogSeeder;
 use Database\Seeders\AdmissionApplicationLogSeeder;
 use Database\Seeders\AdmissionApplicationScoreSeeder;
+use Database\Seeders\UniversityAdmissionSeeder;
+use Database\Seeders\UniversityAdmissionCriteriaSeeder;
 use Database\Seeders\DesignitionSeeder;
+use Database\Seeders\TestingCenterSeeder;
+use Database\Seeders\UniversityAdmissionScheduleSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -49,16 +52,18 @@ class DatabaseSeeder extends Seeder
             // User and basic data
             UserSeeder::class,
             SchoolYearSeeder::class,
+            UniversityAdmissionSeeder::class,
+            UniversityAdmissionCriteriaSeeder::class,
             AcademicCalendarSeeder::class,
             BuildingSeeder::class,
             RoomSeeder::class,
+            TestingCenterSeeder::class,
+            UniversityAdmissionScheduleSeeder::class,
 
             // Academic programs and curriculum
             AcademicProgramSeeder::class,
             CurriculumSeeder::class,
             CurriculumDetailSeeder::class,
-            AcademicProgramRequirementSeeder::class,
-            AcademicProgramCriteriaSeeder::class,
 
             // Designations (needs AcademicProgram)
             DesignitionSeeder::class,
@@ -68,6 +73,7 @@ class DatabaseSeeder extends Seeder
 
             // Schedules (needs AcademicProgram, Users)
             AdmissionScheduleSeeder::class,
+            AdmissionCriteriaSeeder::class,
             AdmissionApplicationSeeder::class,
             AdmissionApplicationLogSeeder::class,
             AdmissionApplicationScoreSeeder::class,

@@ -1,12 +1,14 @@
+import { useConfirm } from '@/components/confirm.provider';
 import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import CampusRegistrarModal from '@/components/designition/campus-registrar.modal';
 import { Button } from '@/components/ui/button';
-import { useGetDesignitionPaginated } from '@rest/api';
+import { useDeleteDesignition, useGetDesignitionPaginated } from '@rest/api';
 import type { Designition } from '@rest/models/designition';
 import { DeleteIcon, EditIcon, EllipsisIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 export function CampusRegistrarTab() {
   const [page, setPage] = useState(1);
@@ -23,6 +25,23 @@ export function CampusRegistrarTab() {
     page,
     rows,
   });
+
+  const { mutateAsync: deleteDesignition } = useDeleteDesignition();
+
+  const confirm = useConfirm();
+
+  const handleDelete = async (row: Designition) => {
+    confirm.confirm(async () => {
+      try {
+        await deleteDesignition({ id: row.id as number });
+        toast.success('Campus Registrar deleted successfully');
+        refetch();
+      } catch (error) {
+        toast.error('Failed to delete Campus Registrar');
+        console.error('Delete error:', error);
+      }
+    });
+  };
 
   const tableDesignitions = useMemo(() => designitions?.data?.data ?? [], [designitions]);
   const paginationMeta = useMemo(() => {
@@ -78,7 +97,7 @@ export function CampusRegistrarTab() {
                 icon: <DeleteIcon />,
                 variant: 'destructive',
                 onClick: () => {
-                  console.log('Delete', row);
+                  handleDelete(row);
                 },
               },
             ]}

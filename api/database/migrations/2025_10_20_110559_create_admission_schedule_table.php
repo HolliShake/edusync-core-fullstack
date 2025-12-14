@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             // Fk
-            $table->foreignId('school_year_id')
-                ->constrained('school_year')
+            $table->foreignId('university_admission_id')
+                ->constrained('university_admission')
                 ->onDelete('cascade');
             // Fk
             $table->foreignId('academic_program_id')
@@ -26,6 +26,9 @@ return new class extends Migration
             $table->integer('intake_limit');
             $table->date('start_date');
             $table->date('end_date');
+
+            // Unique
+            $table->unique(['university_admission_id', 'academic_program_id'], 'admission_schedule_unique');
         });
     }
 

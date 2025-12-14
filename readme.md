@@ -551,7 +551,7 @@ DELETE /api/{resource}/delete/{id}  # Delete by ID
 - `College` - College/department management
 - `ProgramType` - Program type definitions
 - `AcademicProgram` - Academic programs
-- `AcademicProgramCriteria` - Admission evaluation criteria
+- `AdmissionCriteria` - Admission evaluation criteria
 - `AcademicProgramRequirement` - Program-specific requirements
 - `Curriculum` - Curricula
 - `CurriculumDetail` - Curriculum courses

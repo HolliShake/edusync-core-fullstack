@@ -30,8 +30,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "user_id", type: "integer"),
         new OA\Property(property: "admission_schedule_id", type: "integer"),
-        new OA\Property(property: "year", type: "integer"),
-        new OA\Property(property: "pool_no", type: "integer"),
         new OA\Property(property: "first_name", type: "string"),
         new OA\Property(property: "last_name", type: "string"),
         new OA\Property(property: "middle_name", type: "string", nullable: true),
@@ -127,8 +125,6 @@ class AdmissionApplication extends Model
     protected $fillable = [
         'user_id',
         'admission_schedule_id',
-        // 'year',
-        // 'pool_no',
         'first_name',
         'last_name',
         'middle_name',
@@ -260,24 +256,5 @@ class AdmissionApplication extends Model
     public function latestStatus(): HasOne
     {
         return $this->hasOne(AdmissionApplicationLog::class)->latestOfMany();
-    }
-
-    /********************************/
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            if (empty($model->year)) {
-                $model->year = now()->year;
-            }
-
-            // Ensure no duplicate during concurrency
-            $model->pool_no = DB::transaction(function () use ($model) {
-                $lastNo = self::where('year', $model->year)
-                    ->lockForUpdate()
-                    ->max('pool_no');
-
-                return $lastNo ? $lastNo + 1 : 1;
-            });
-        });
     }
 }

@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import AppConfig from '@/lib/app.config';
 import { useLogin } from '@rest/api';
 import { AlertCircle, BookOpen, GraduationCap, Loader2, LogIn, Users } from 'lucide-react';
 import type React from 'react';
@@ -64,7 +65,7 @@ export default function LoginPage(): React.ReactNode {
             <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
               <GraduationCap className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-white">EduPortal</h1>
+            <h1 className="text-3xl font-bold text-white">{AppConfig.App}</h1>
           </div>
           <h2 className="text-4xl font-bold text-white mb-4 leading-tight">
             Welcome to Your
@@ -122,7 +123,7 @@ export default function LoginPage(): React.ReactNode {
               <GraduationCap className="w-7 h-7 text-white" />
             </div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              EduPortal
+              {AppConfig.App}
             </h1>
           </div>
 

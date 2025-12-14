@@ -1,6 +1,7 @@
 import GuestAdmissionApplications from '@/pages/guest/admission-applications/page';
 import GuestAdmissionApplicationStatus from '@/pages/guest/admission-applications/status/page';
 import GuestAdmissionPage from '@/pages/guest/admission/page';
+import GuestAdmissionUniversity from '@/pages/guest/admission/university/page';
 import GuestEnrollment from '@/pages/guest/enrollment/accepted/application/page';
 import GuestAcceptedAdmission from '@/pages/guest/enrollment/accepted/page';
 import { default as GuestEnrollmentApplications } from '@/pages/guest/enrollment/applications/page';
@@ -9,6 +10,7 @@ import type { Route } from '@/types/route';
 import { UserRoleEnum } from '@rest/models';
 import {
   BookOpenIcon,
+  CalendarArrowDown,
   ClipboardListIcon,
   FileTextIcon,
   GraduationCapIcon,
@@ -31,6 +33,16 @@ const GUEST: Route[] = [
     title: 'Admission',
     path: '/guest/admission',
     children: [
+      {
+        key: 'guest.admission.invitation',
+        title: 'Invitation',
+        path: '/guest/admission/invitation',
+        component: <GuestAdmissionUniversity />,
+        icon: <CalendarArrowDown className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: true,
+        roles: [UserRoleEnum.guest],
+      },
       {
         key: 'guest.admission.journey',
         title: 'Journey',

@@ -7,7 +7,6 @@
  */
 import type { College } from './college';
 import type { ProgramType } from './programType';
-import type { AcademicProgramRequirement } from './academicProgramRequirement';
 
 export interface AcademicProgram {
   id?: number;
@@ -20,5 +19,4 @@ export interface AcademicProgram {
   updated_at?: string;
   college?: College;
   program_type?: ProgramType;
-  requirements?: AcademicProgramRequirement[];
 }

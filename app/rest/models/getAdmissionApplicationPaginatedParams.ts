@@ -32,9 +32,9 @@ rows?: number;
  */
 'filter[user_id]'?: number;
 /**
- * School Year ID
+ * Admission Schedule ID
  */
-'filter[school_year_id]'?: number;
+'filter[admission_schedule_id]'?: number;
 /**
  * Academic Program ID
  */

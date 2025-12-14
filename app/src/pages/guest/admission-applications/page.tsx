@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
-import { formatId } from '@/lib/formatter';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useGetAdmissionApplicationPaginated } from '@rest/api';
 import type { AcademicProgram, SchoolYear } from '@rest/models';
@@ -149,7 +148,7 @@ export default function GuestAdmissionApplications(): React.ReactNode {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                      {formatId(application.year!, application.pool_no!)}
+                      Application #{application.id}
                     </CardTitle>
                     <CardDescription className="mt-1">Application ID</CardDescription>
                   </div>
@@ -166,7 +165,10 @@ export default function GuestAdmissionApplications(): React.ReactNode {
                         ?.program_name ?? 'N/A'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {(application.admission_schedule?.school_year as SchoolYear)?.name ?? 'N/A'}
+                      {(
+                        application.admission_schedule?.university_admission
+                          ?.school_year as SchoolYear
+                      )?.name ?? 'N/A'}
                     </p>
                   </div>
                 </div>

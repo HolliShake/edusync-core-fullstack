@@ -159,7 +159,8 @@ class CampusController extends Controller
             $validator = Validator::make($request->all(), [
                 'name'       => 'required|string|max:50',
                 'short_name' => 'required|string|max:25',
-                'address'    => 'required|string|max:255'
+                'address'    => 'required|string|max:255',
+                'main_campus' => 'required|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -229,7 +230,8 @@ class CampusController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'short_name' => 'required|string|max:255',
-                'address' => 'required|string|max:255'
+                'address' => 'required|string|max:255',
+                'main_campus' => 'required|boolean',
             ]);
 
             if ($validator->fails()) {

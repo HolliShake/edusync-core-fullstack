@@ -21,15 +21,15 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
             // $data is an array of AdmissionApplicationScore objects
             // Extract all admission_application_ids and criteria IDs for batch query
             $applicationIds = array_unique(array_column($data, 'admission_application_id'));
-            $criteriaIds = array_unique(array_column($data, 'academic_program_criteria_id'));
+            $criteriaIds = array_unique(array_column($data, 'admission_criteria_id'));
 
             // Fetch all existing scores in one query
             $existingScores = $this->repository->query()
                 ->whereIn('admission_application_id', $applicationIds)
-                ->whereIn('academic_program_criteria_id', $criteriaIds)
+                ->whereIn('admission_criteria_id', $criteriaIds)
                 ->get()
                 ->keyBy(function ($score) {
-                    return $score->admission_application_id . '_' . $score->academic_program_criteria_id;
+                    return $score->admission_application_id . '_' . $score->admission_criteria_id;
                 });
 
             $toCreate = [];
@@ -37,7 +37,7 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
             $now = now();
 
             foreach ($data as $scoreData) {
-                $key = $scoreData['admission_application_id'] . '_' . $scoreData['academic_program_criteria_id'];
+                $key = $scoreData['admission_application_id'] . '_' . $scoreData['admission_criteria_id'];
                 $existingScore = $existingScores->get($key);
 
                 if ($existingScore) {
@@ -55,7 +55,7 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
                     // Pool for creation
                     $toCreate[] = [
                         'admission_application_id' => $scoreData['admission_application_id'],
-                        'academic_program_criteria_id' => $scoreData['academic_program_criteria_id'],
+                        'admission_criteria_id' => $scoreData['admission_criteria_id'],
                         'score' => $scoreData['score'],
                         'comments' => $scoreData['comments'] ?? null,
                         'created_at' => $now,
@@ -75,7 +75,7 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
                 // Fetch the newly created records
                 $createdScores = $this->repository->query()
                     ->whereIn('admission_application_id', array_column($toCreate, 'admission_application_id'))
-                    ->whereIn('academic_program_criteria_id', array_column($toCreate, 'academic_program_criteria_id'))
+                    ->whereIn('admission_criteria_id', array_column($toCreate, 'admission_criteria_id'))
                     ->where('created_at', '>=', $now)
                     ->get();
                 

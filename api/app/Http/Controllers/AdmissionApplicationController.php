@@ -69,9 +69,9 @@ class AdmissionApplicationController extends Controller
         schema: new OA\Schema(type: "integer", default: 0)
     )]
     #[OA\Parameter(
-        name: "filter[school_year_id]",
+        name: "filter[admission_schedule_id]",
         in: "query",
-        description: "School Year ID",
+        description: "Admission Schedule ID",
         required: false,
         schema: new OA\Schema(type: "integer", default: 0)
     )]

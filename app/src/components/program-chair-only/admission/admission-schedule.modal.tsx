@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useCreateAdmissionSchedule,
   useGetAcademicCalendarPaginated,
-  useGetSchoolYearPaginated,
+  useGetUniversityAdmissionPaginated,
   useUpdateAdmissionSchedule,
 } from '@rest/api';
 import { AcademicCalendarEventEnum } from '@rest/models';
@@ -22,7 +22,7 @@ import { z } from 'zod';
 
 const admissionScheduleSchema = z
   .object({
-    school_year_id: z.number().min(1, 'School year is required'),
+    university_admission_id: z.number().min(1, 'University admission is required'),
     intake_limit: z.number().min(1, 'Intake limit must be at least 1'),
     start_date: z.string().min(1, 'Start date is required'),
     end_date: z.string().min(1, 'End date is required'),
@@ -56,7 +56,7 @@ export default function AdmissionScheduleModal({
   } = useForm<AdmissionScheduleFormData>({
     resolver: zodResolver(admissionScheduleSchema),
     defaultValues: {
-      school_year_id: 0,
+      university_admission_id: 0,
       intake_limit: 1,
       start_date: '',
       end_date: '',
@@ -69,17 +69,28 @@ export default function AdmissionScheduleModal({
     suggestedEnd: string;
   } | null>(null);
 
+  const { data: universityAdmissionsResponse, isLoading: isLoadingUniversityAdmissions } =
+    useGetUniversityAdmissionPaginated({
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
+      sort: '-open_date',
+    });
+
   const { data: academicCalendarResponse } = useGetAcademicCalendarPaginated(
     {
       page: 1,
       rows: Number.MAX_SAFE_INTEGER,
-      'filter[school_year_id]': Number(watch('school_year_id')),
+      'filter[school_year_id]': Number(
+        universityAdmissionsResponse?.data?.data?.find(
+          (ua) => ua.id === watch('university_admission_id')
+        )?.school_year_id
+      ),
       'filter[event]': AcademicCalendarEventEnum.ENROLLMENT,
     },
     {
       query: {
-        enabled: !!watch('school_year_id'),
-        queryKey: ['/api/AcademicCalendar', watch('school_year_id')],
+        enabled: !!watch('university_admission_id'),
+        queryKey: ['/api/AcademicCalendar', watch('university_admission_id')],
       },
     }
   );
@@ -87,24 +98,19 @@ export default function AdmissionScheduleModal({
   const { mutateAsync: createAdmissionSchedule, isPending } = useCreateAdmissionSchedule();
   const { mutateAsync: updateAdmissionSchedule, isPending: isUpdating } =
     useUpdateAdmissionSchedule();
-  const { data: schoolYearsResponse, isLoading: isLoadingSchoolYears } = useGetSchoolYearPaginated({
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-    sort: '-start_date',
-  });
 
   const isSaving = useMemo(() => isPending || isUpdating, [isPending, isUpdating]);
   const isEdit = useMemo(() => !!controller.data?.id, [controller.data]);
 
-  const schoolYearOptions = useMemo(() => {
-    if (!schoolYearsResponse?.data) return [];
+  const universityAdmissionOptions = useMemo(() => {
+    if (!universityAdmissionsResponse?.data) return [];
     return (
-      schoolYearsResponse.data.data?.map((sy) => ({
-        label: sy.name,
-        value: String(sy.id),
+      universityAdmissionsResponse.data.data?.map((ua) => ({
+        label: `${ua.school_year?.name} - ${ua.is_open_override ? 'Open (Override)' : ua.is_ongoing ? 'Open' : 'Closed'}`,
+        value: String(ua.id),
       })) ?? []
     );
-  }, [schoolYearsResponse]);
+  }, [universityAdmissionsResponse]);
 
   useEffect(() => {
     if (isEdit) return; // disable time frame suggestion for edit
@@ -122,7 +128,7 @@ export default function AdmissionScheduleModal({
           }
         : null
     );
-  }, [academicCalendarResponse, watch('school_year_id')]);
+  }, [academicCalendarResponse, watch('university_admission_id'), isEdit]);
 
   const onFormSubmit = async (data: AdmissionScheduleFormData) => {
     const payload: AdmissionSchedule = {
@@ -160,7 +166,7 @@ export default function AdmissionScheduleModal({
     if (!controller.data) {
       setTimeFrameSuggestion(null);
       return reset({
-        school_year_id: 0,
+        university_admission_id: 0,
         intake_limit: 1,
         start_date: '',
         end_date: '',
@@ -169,10 +175,10 @@ export default function AdmissionScheduleModal({
 
     setTimeFrameSuggestion(null);
     reset({
-      school_year_id: controller.data.school_year_id,
+      university_admission_id: controller.data.university_admission_id,
       intake_limit: controller.data.intake_limit,
-      start_date: controller.data.start_date,
-      end_date: controller.data.end_date,
+      start_date: format(new Date(controller.data.start_date), 'yyyy-MM-dd'),
+      end_date: format(new Date(controller.data.end_date), 'yyyy-MM-dd'),
     });
   }, [controller.isOpen, controller.data, reset]);
 
@@ -185,22 +191,22 @@ export default function AdmissionScheduleModal({
     >
       <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="school_year_id">School Year</Label>
+          <Label htmlFor="university_admission_id">University Admission</Label>
           <Controller
-            name="school_year_id"
+            name="university_admission_id"
             control={control}
             render={({ field }) => (
               <Select
-                placeholder="Select school year"
-                options={schoolYearOptions}
+                placeholder="Select university admission"
+                options={universityAdmissionOptions}
                 value={String(field.value || '')}
                 onValueChange={(value) => field.onChange(Number(value))}
-                disabled={isLoadingSchoolYears}
+                disabled={isLoadingUniversityAdmissions}
               />
             )}
           />
-          {errors.school_year_id && (
-            <p className="text-sm text-destructive">{errors.school_year_id.message}</p>
+          {errors.university_admission_id && (
+            <p className="text-sm text-destructive">{errors.university_admission_id.message}</p>
           )}
         </div>
 

@@ -48,7 +48,8 @@ use OpenApi\Attributes as OA;
         "active_academic_program",
         "active_college",
         "active_specialization",
-        "active_campus"
+        "active_campus",
+        "profile_weight"
     ],
     properties: [
         // flags
@@ -67,7 +68,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "active_academic_program", type: "integer", nullable: true, readOnly: true),
         new OA\Property(property: "active_college", type: "integer", nullable: true, readOnly: true),
         new OA\Property(property: "active_specialization", type: "integer", nullable: true, readOnly: true),
-        new OA\Property(property: "active_campus", type: "integer", nullable: true, readOnly: true)
+        new OA\Property(property: "active_campus", type: "integer", nullable: true, readOnly: true),
+        new OA\Property(property: "profile_weight", type: "number", format: "float", readOnly: true)
     ]
 )]
 

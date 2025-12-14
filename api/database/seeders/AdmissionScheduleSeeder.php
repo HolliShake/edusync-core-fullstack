@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AdmissionSchedule;
-use App\Models\SchoolYear;
+use App\Models\UniversityAdmission;
 use App\Models\AcademicProgram;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -15,43 +15,43 @@ class AdmissionScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        $schoolYears = SchoolYear::all();
+        $universityAdmissions = UniversityAdmission::all();
         $academicPrograms = AcademicProgram::all();
 
-        // Define admission periods relative to school year start dates
-        // Typically admission opens 2-4 months before the school year starts
-        foreach ($schoolYears as $schoolYear) {
-            $schoolYearStart = Carbon::parse($schoolYear->start_date);
+        if ($universityAdmissions->isEmpty() || $academicPrograms->isEmpty()) {
+            $this->command->warn('Required data not found. Make sure UniversityAdmissionSeeder and AcademicProgramSeeder have been run.');
+            return;
+        }
 
-            // Create admission schedules for each academic program for this school year
+        $this->command->info('Creating admission schedules...');
+
+        $scheduleCount = 0;
+
+        // Create admission schedules for each university admission and academic program
+        foreach ($universityAdmissions as $universityAdmission) {
+            $admissionStart = Carbon::parse($universityAdmission->start_date);
+            $admissionEnd = Carbon::parse($universityAdmission->end_date);
+
             foreach ($academicPrograms as $academicProgram) {
-                // First admission window (Early Admission) - 4 months before to 2 months before
-                AdmissionSchedule::create([
-                    'school_year_id' => $schoolYear->id,
-                    'academic_program_id' => $academicProgram->id,
-                    'intake_limit' => 100,
-                    'start_date' => $schoolYearStart->copy()->subMonths(4),
-                    'end_date' => $schoolYearStart->copy()->subMonths(2),
-                ]);
+                // Check if schedule already exists
+                $existingSchedule = AdmissionSchedule::where('university_admission_id', $universityAdmission->id)
+                    ->where('academic_program_id', $academicProgram->id)
+                    ->first();
 
-                // Second admission window (Regular Admission) - 2 months before to 2 weeks before
-                AdmissionSchedule::create([
-                    'school_year_id' => $schoolYear->id,
-                    'academic_program_id' => $academicProgram->id,
-                    'intake_limit' => 100,
-                    'start_date' => $schoolYearStart->copy()->subMonths(2),
-                    'end_date' => $schoolYearStart->copy()->subWeeks(2),
-                ]);
+                if (!$existingSchedule) {
+                    AdmissionSchedule::create([
+                        'university_admission_id' => $universityAdmission->id,
+                        'academic_program_id' => $academicProgram->id,
+                        'intake_limit' => rand(50, 150),
+                        'start_date' => $admissionStart,
+                        'end_date' => $admissionEnd,
+                    ]);
 
-                // Third admission window (Late Admission) - 2 weeks before to 1 week after start
-                AdmissionSchedule::create([
-                    'school_year_id' => $schoolYear->id,
-                    'academic_program_id' => $academicProgram->id,
-                    'intake_limit' => 100,
-                    'start_date' => $schoolYearStart->copy()->subWeeks(2),
-                    'end_date' => $schoolYearStart->copy()->addWeek(),
-                ]);
+                    $scheduleCount++;
+                }
             }
         }
+
+        $this->command->info("Created {$scheduleCount} admission schedules successfully!");
     }
 }

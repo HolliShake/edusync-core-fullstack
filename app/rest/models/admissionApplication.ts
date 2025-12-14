@@ -14,8 +14,6 @@ export interface AdmissionApplication {
   readonly id?: number;
   user_id: number;
   admission_schedule_id: number;
-  year?: number;
-  pool_no?: number;
   first_name: string;
   last_name: string;
   /** @nullable */

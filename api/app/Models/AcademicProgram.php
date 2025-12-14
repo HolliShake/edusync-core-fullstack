@@ -29,8 +29,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2025-01-07T10:30:14.000000Z"),
         // Relations
         new OA\Property(property: "college", type: "object", ref: "#/components/schemas/College"),
-        new OA\Property(property: "program_type", type: "object", ref: "#/components/schemas/ProgramType"),
-        new OA\Property(property: "requirements", type: "array", items: new OA\Items(ref: "#/components/schemas/AcademicProgramRequirement")),
+        new OA\Property(property: "program_type", type: "object", ref: "#/components/schemas/ProgramType")
     ]
 )]
 
@@ -137,16 +136,6 @@ class AcademicProgram extends Model
     }
 
     /**
-     * Get the requirements for the academic program.
-     *
-     * @return array
-     */
-    public function getRequirementsAttribute(): array
-    {
-        return $this->programRequirements()->get()->toArray();
-    }
-
-    /**
      * Get the college that owns the academic program.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -164,16 +153,6 @@ class AcademicProgram extends Model
     public function programType(): BelongsTo
     {
         return $this->belongsTo(ProgramType::class);
-    }
-
-    /**
-     * Get the program requirements for the academic program.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function programRequirements(): HasMany
-    {
-        return $this->hasMany(AcademicProgramRequirement::class);
     }
 
     /**

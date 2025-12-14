@@ -11,4 +11,5 @@ export interface Campus {
   name: string;
   short_name: string;
   address: string;
+  main_campus: boolean;
 }

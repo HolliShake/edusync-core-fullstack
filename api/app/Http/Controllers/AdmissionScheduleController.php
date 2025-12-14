@@ -48,13 +48,6 @@ class AdmissionScheduleController extends Controller
         schema: new OA\Schema(type: "integer", default: 10)
     )]
     #[OA\Parameter(
-        name: "filter[school_year_id]",
-        in: "query",
-        description: "Filter by school year ID",
-        required: false,
-        schema: new OA\Schema(type: "integer")
-    )]
-    #[OA\Parameter(
         name: "filter[college_id]",
         in: "query",
         description: "Filter by college ID",
@@ -65,6 +58,13 @@ class AdmissionScheduleController extends Controller
         name: "filter[academic_program_id]",
         in: "query",
         description: "Filter by academic program ID",
+        required: false,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "filter[university_admission_id]",
+        in: "query",
+        description: "Filter by university admission ID",
         required: false,
         schema: new OA\Schema(type: "integer")
     )]
@@ -307,7 +307,7 @@ class AdmissionScheduleController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'school_year_id' => 'required|exists:school_year,id',
+                'university_admission_id' => 'required|exists:university_admission,id',
                 'academic_program_id' => 'required|exists:academic_program,id',
                 'intake_limit' => 'required|integer',
                 'start_date' => 'required|date',
@@ -379,7 +379,7 @@ class AdmissionScheduleController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'school_year_id' => 'required|exists:school_year,id',
+                'university_admission_id' => 'required|exists:university_admission,id',
                 'academic_program_id' => 'required|exists:academic_program,id',
                 'intake_limit' => 'required|integer',
                 'start_date' => 'required|date',

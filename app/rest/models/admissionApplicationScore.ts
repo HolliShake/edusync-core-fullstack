@@ -6,13 +6,13 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AdmissionApplication } from './admissionApplication';
-import type { AcademicProgramCriteria } from './academicProgramCriteria';
+import type { AdmissionCriteria } from './admissionCriteria';
 import type { User } from './user';
 
 export interface AdmissionApplicationScore {
   readonly id?: number;
   admission_application_id: number;
-  academic_program_criteria_id: number;
+  admission_criteria_id: number;
   user_id: number;
   score: number;
   /** @nullable */
@@ -21,6 +21,6 @@ export interface AdmissionApplicationScore {
   created_at?: string;
   updated_at?: string;
   admission_application?: AdmissionApplication;
-  academic_program_criteria?: AcademicProgramCriteria;
+  admission_criteria?: AdmissionCriteria;
   user?: User;
 }

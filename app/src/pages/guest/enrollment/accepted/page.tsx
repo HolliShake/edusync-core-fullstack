@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth.context';
-import { formatId } from '@/lib/formatter';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useGetAdmissionApplicationPaginated } from '@rest/api';
 import { AdmissionApplicationLogTypeEnum } from '@rest/models';
@@ -122,7 +121,7 @@ export default function GuestAcceptedAdmission(): React.ReactNode {
                       </div>
                       <CardDescription className="flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5" />
-                        {application.admission_schedule?.school_year?.name}
+                        {application.admission_schedule?.university_admission?.school_year?.name}
                       </CardDescription>
                     </div>
                     <Badge
@@ -144,9 +143,7 @@ export default function GuestAcceptedAdmission(): React.ReactNode {
                         <span className="text-muted-foreground block text-xs mb-0.5">
                           Application ID
                         </span>
-                        <span className="font-medium block truncate">
-                          {formatId(application.year!, application.pool_no!)}
-                        </span>
+                        <span className="font-medium block truncate">{application.id}</span>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">

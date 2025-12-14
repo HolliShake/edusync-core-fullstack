@@ -20,10 +20,6 @@ page?: number;
  */
 rows?: number;
 /**
- * Filter by school year ID
- */
-'filter[school_year_id]'?: number;
-/**
  * Filter by college ID
  */
 'filter[college_id]'?: number;
@@ -31,6 +27,10 @@ rows?: number;
  * Filter by academic program ID
  */
 'filter[academic_program_id]'?: number;
+/**
+ * Filter by university admission ID
+ */
+'filter[university_admission_id]'?: number;
 /**
  * Sort by start date and direction. Example: ?sort[start_date]=-start_date (descending), ?sort[start_date]=start_date (ascending)
  */

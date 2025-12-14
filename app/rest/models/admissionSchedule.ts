@@ -5,18 +5,20 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { SchoolYear } from './schoolYear';
+import type { UniversityAdmission } from './universityAdmission';
 import type { AcademicProgram } from './academicProgram';
+import type { AdmissionCriteria } from './admissionCriteria';
 
 export interface AdmissionSchedule {
   readonly id?: number;
-  school_year_id: number;
+  university_admission_id: number;
   academic_program_id: number;
   intake_limit: number;
   start_date: string;
   end_date: string;
   readonly created_at?: string;
   readonly updated_at?: string;
-  school_year?: SchoolYear;
+  university_admission?: UniversityAdmission;
   academic_program?: AcademicProgram;
+  admission_criterias?: AdmissionCriteria[];
 }

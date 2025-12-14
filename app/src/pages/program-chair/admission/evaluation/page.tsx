@@ -10,20 +10,19 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
-import { formatId } from '@/lib/formatter';
 import { cn } from '@/lib/utils';
 import {
   useCreateOrUpdateMultipleAdmissionApplicationScores,
-  useGetAcademicProgramCriteriaPaginated,
   useGetAdmissionApplicationPaginated,
   useGetAdmissionApplicationScorePaginated,
+  useGetAdmissionCriteriaPaginated,
 } from '@rest/api';
 import {
   AdmissionApplicationLogTypeEnum,
-  type AcademicProgramCriteria,
   type AdmissionApplication,
   type AdmissionApplicationScore,
 } from '@rest/models';
+import type { AdmissionCriteria } from '@rest/models/admissionCriteria';
 import {
   CheckCircleIcon,
   FileTextIcon,
@@ -58,23 +57,26 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
   const { mutateAsync: submitScores, isPending: isSubmittingScores } =
     useCreateOrUpdateMultipleAdmissionApplicationScores();
 
-  const { data: applicationsResponse, isLoading: isLoadingApplications } =
-    useGetAdmissionApplicationPaginated(
-      {
-        'filter[name]': debouncedSearchQuery,
-        'filter[latest_status]': selectedStatus,
-        'filter[academic_program_id]': Number(session?.active_academic_program),
-        page: 1,
-        rows: Number.MAX_SAFE_INTEGER,
-      },
-      { query: { enabled: !!debouncedSearchQuery || !!selectedStatus || !session } }
-    );
+  const {
+    data: applicationsResponse,
+    isLoading: isLoadingApplications,
+    refetch: refetchApplications,
+  } = useGetAdmissionApplicationPaginated(
+    {
+      'filter[name]': debouncedSearchQuery,
+      'filter[latest_status]': selectedStatus,
+      'filter[academic_program_id]': Number(session?.active_academic_program),
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
+    },
+    { query: { enabled: !!debouncedSearchQuery || !!selectedStatus || !session } }
+  );
 
   const { data: admissionProgramCriteriaResponse, isLoading: isLoadingCriteria } =
-    useGetAcademicProgramCriteriaPaginated(
+    useGetAdmissionCriteriaPaginated(
       {
         'filter[academic_program_id]': selectedApplication?.admission_schedule?.academic_program_id,
-        'filter[school_year_id]': selectedApplication?.admission_schedule?.school_year_id,
+        'filter[admission_schedule_id]': selectedApplication?.admission_schedule_id,
         page: 1,
         rows: Number.MAX_SAFE_INTEGER,
       },
@@ -112,6 +114,10 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
         value: AdmissionApplicationLogTypeEnum.approved,
       },
       {
+        label: 'Rejected',
+        value: AdmissionApplicationLogTypeEnum.rejected,
+      },
+      {
         label: 'Accepted',
         value: AdmissionApplicationLogTypeEnum.accepted,
       },
@@ -125,9 +131,9 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
     let fieldScores: AdmissionApplicationScore[] = [];
 
     for (let i = 0; i < admissionProgramCriteriaList.length; i++) {
-      const criteria: AcademicProgramCriteria = admissionProgramCriteriaList[i];
+      const criteria: AdmissionCriteria = admissionProgramCriteriaList[i];
       const score: AdmissionApplicationScore | undefined = scores?.find(
-        (score) => score.academic_program_criteria_id === criteria.id
+        (score) => score.admission_criteria_id === criteria.id
       );
 
       fieldScores.push({
@@ -135,7 +141,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
           score: 0,
           comments: '',
           is_posted: false,
-          academic_program_criteria_id: criteria.id!,
+          admission_criteria_id: criteria.id!,
           admission_application_id: selectedApplication?.id!,
           user_id: session?.id ?? 0,
         }),
@@ -143,7 +149,12 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
     }
     setField(fieldScores);
     setValidationErrors({});
-  }, [session, admissionApplicationScoreResponse, admissionProgramCriteriaList]);
+  }, [
+    session,
+    admissionApplicationScoreResponse,
+    admissionProgramCriteriaList,
+    selectedApplication,
+  ]);
 
   useEffect(() => {
     if (filteredApplications.length <= 0) {
@@ -273,6 +284,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
       await submitScores({ data: updatedField });
       setField(updatedField);
       toast.success(newIsPosted ? 'Scores posted successfully' : 'Scores unposted successfully');
+      refetchApplications();
     } catch (error) {
       console.error(error);
       toast.error(isPostedAll ? 'Failed to unpost scores' : 'Failed to post scores');
@@ -387,11 +399,6 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                               </div>
                             </div>
                             <div className="flex flex-wrap items-center gap-2">
-                              {application.pool_no && (
-                                <Badge variant="outline" className="h-5 text-[10px] font-medium">
-                                  Pool #{formatId(application.year!, application.pool_no!)}
-                                </Badge>
-                              )}
                               {application.latest_status && (
                                 <Badge
                                   variant={getStatusVariant(application.latest_status)}
@@ -520,16 +527,6 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                       </Label>
                       <p className="text-sm font-medium">{selectedApplication.email}</p>
                     </div>
-                    {selectedApplication.pool_no && (
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                          Pool Number
-                        </Label>
-                        <p className="text-sm font-medium">
-                          #{formatId(selectedApplication.year!, selectedApplication.pool_no!)}
-                        </p>
-                      </div>
-                    )}
                     {selectedApplication.latest_status && (
                       <div className="space-y-2 space-x-3">
                         <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -670,8 +667,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                                         )}
                                         value={
                                           field.find(
-                                            (score) =>
-                                              score.academic_program_criteria_id === criteria.id
+                                            (score) => score.admission_criteria_id === criteria.id
                                           )?.score
                                         }
                                         onChange={(e) => onChange(index, 'score', e.target.value)}
@@ -698,8 +694,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                                     className="min-h-[80px] resize-none"
                                     value={
                                       field.find(
-                                        (score) =>
-                                          score.academic_program_criteria_id === criteria.id
+                                        (score) => score.admission_criteria_id === criteria.id
                                       )?.comments || ''
                                     }
                                     onChange={(e) => onChange(index, 'comments', e.target.value)}

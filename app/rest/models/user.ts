@@ -17,5 +17,6 @@ export interface User {
   email_verified_at?: string | null;
   created_at?: string;
   updated_at?: string;
-  roles?: string[];
+  readonly roles?: readonly string[];
+  readonly profile_weight?: number;
 }

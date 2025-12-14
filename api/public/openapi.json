@@ -851,730 +851,6 @@
                 }
             }
         },
-        "\/api\/AcademicProgramCriteria": {
-            "get": {
-                "tags": [
-                    "AcademicProgramCriteria"
-                ],
-                "summary": "Get paginated list of AcademicProgramCriteria",
-                "description": "Retrieve a paginated list of AcademicProgramCriteria with optional search",
-                "operationId": "getAcademicProgramCriteriaPaginated",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "query",
-                        "description": "Search term",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 0
-                        }
-                    },
-                    {
-                        "name": "rows",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 10
-                        }
-                    },
-                    {
-                        "name": "filter[academic_program_id]",
-                        "in": "query",
-                        "description": "Academic program ID",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter[school_year_id]",
-                        "in": "query",
-                        "description": "School year ID",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/PaginatedAcademicProgramCriteriaResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "AcademicProgramCriteria"
-                ],
-                "summary": "Create a new AcademicProgramCriteria",
-                "description": " Create a new AcademicProgramCriteria with the provided details",
-                "operationId": "createAcademicProgramCriteria",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application\/json": {
-                            "schema": {
-                                "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "AcademicProgramCriteria created successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/CreateAcademicProgramCriteriaResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "\/api\/AcademicProgramCriteria\/{id}": {
-            "get": {
-                "tags": [
-                    "AcademicProgramCriteria"
-                ],
-                "summary": "Get a specific AcademicProgramCriteria",
-                "description": "Retrieve a AcademicProgramCriteria by its ID",
-                "operationId": "getAcademicProgramCriteriaById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/GetAcademicProgramCriteriaResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AcademicProgramCriteria not found"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "AcademicProgramCriteria"
-                ],
-                "summary": "Update a AcademicProgramCriteria",
-                "description": "Update an existing AcademicProgramCriteria with the provided details",
-                "operationId": "updateAcademicProgramCriteria",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application\/json": {
-                            "schema": {
-                                "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "AcademicProgramCriteria updated successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UpdateAcademicProgramCriteriaResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AcademicProgramCriteria not found"
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "AcademicProgramCriteria"
-                ],
-                "summary": "Delete a AcademicProgramCriteria",
-                "description": "Delete a AcademicProgramCriteria by its ID",
-                "operationId": "deleteAcademicProgramCriteria",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "AcademicProgramCriteria deleted successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/DeleteAcademicProgramCriteriaResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AcademicProgramCriteria not found"
-                    },
-                    "500": {
-                        "description": " Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "\/api\/AcademicProgramRequirement": {
-            "get": {
-                "tags": [
-                    "AcademicProgramRequirement"
-                ],
-                "summary": "Get paginated list of AcademicProgramRequirement",
-                "description": "Retrieve a paginated list of AcademicProgramRequirement with optional search",
-                "operationId": "getAcademicProgramRequirementPaginated",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "query",
-                        "description": "Search term",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 0
-                        }
-                    },
-                    {
-                        "name": "rows",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 10
-                        }
-                    },
-                    {
-                        "name": "filter[academic_program_id]",
-                        "in": "query",
-                        "description": "Academic program ID",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter[school_year_id]",
-                        "in": "query",
-                        "description": "School year ID",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/PaginatedAcademicProgramRequirementResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "AcademicProgramRequirement"
-                ],
-                "summary": "Create a new AcademicProgramRequirement",
-                "description": " Create a new AcademicProgramRequirement with the provided details",
-                "operationId": "createAcademicProgramRequirement",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application\/json": {
-                            "schema": {
-                                "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "AcademicProgramRequirement created successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/CreateAcademicProgramRequirementResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "\/api\/AcademicProgramRequirement\/{id}": {
-            "get": {
-                "tags": [
-                    "AcademicProgramRequirement"
-                ],
-                "summary": "Get a specific AcademicProgramRequirement",
-                "description": "Retrieve a AcademicProgramRequirement by its ID",
-                "operationId": "getAcademicProgramRequirementById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/GetAcademicProgramRequirementResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AcademicProgramRequirement not found"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "AcademicProgramRequirement"
-                ],
-                "summary": "Update a AcademicProgramRequirement",
-                "description": "Update an existing AcademicProgramRequirement with the provided details",
-                "operationId": "updateAcademicProgramRequirement",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application\/json": {
-                            "schema": {
-                                "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "AcademicProgramRequirement updated successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UpdateAcademicProgramRequirementResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AcademicProgramRequirement not found"
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "AcademicProgramRequirement"
-                ],
-                "summary": "Delete a AcademicProgramRequirement",
-                "description": "Delete a AcademicProgramRequirement by its ID",
-                "operationId": "deleteAcademicProgramRequirement",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "AcademicProgramRequirement deleted successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/DeleteAcademicProgramRequirementResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "AcademicProgramRequirement not found"
-                    },
-                    "500": {
-                        "description": " Internal server error",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "\/api\/AcademicTerm": {
             "get": {
                 "tags": [
@@ -1986,9 +1262,9 @@
                         }
                     },
                     {
-                        "name": "filter[school_year_id]",
+                        "name": "filter[admission_schedule_id]",
                         "in": "query",
-                        "description": "School Year ID",
+                        "description": "Admission Schedule ID",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -3094,6 +2370,377 @@
                 }
             }
         },
+        "\/api\/AdmissionCriteria": {
+            "get": {
+                "tags": [
+                    "AdmissionCriteria"
+                ],
+                "summary": "Get paginated list of AdmissionCriteria",
+                "description": "Retrieve a paginated list of AdmissionCriteria with optional search",
+                "operationId": "getAdmissionCriteriaPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[academic_program_id]",
+                        "in": "query",
+                        "description": "Academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[admission_schedule_id]",
+                        "in": "query",
+                        "description": "Admission schedule ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[requirement_id]",
+                        "in": "query",
+                        "description": "Requirement ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AdmissionCriteria"
+                ],
+                "summary": "Create a new AdmissionCriteria",
+                "description": " Create a new AdmissionCriteria with the provided details",
+                "operationId": "createAdmissionCriteria",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AdmissionCriteria created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/AdmissionCriteria\/{id}": {
+            "get": {
+                "tags": [
+                    "AdmissionCriteria"
+                ],
+                "summary": "Get a specific AdmissionCriteria",
+                "description": "Retrieve a AdmissionCriteria by its ID",
+                "operationId": "getAdmissionCriteriaById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AdmissionCriteria not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "AdmissionCriteria"
+                ],
+                "summary": "Update a AdmissionCriteria",
+                "description": "Update an existing AdmissionCriteria with the provided details",
+                "operationId": "updateAdmissionCriteria",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "AdmissionCriteria updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AdmissionCriteria not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AdmissionCriteria"
+                ],
+                "summary": "Delete a AdmissionCriteria",
+                "description": "Delete a AdmissionCriteria by its ID",
+                "operationId": "deleteAdmissionCriteria",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "AdmissionCriteria deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "AdmissionCriteria not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/AdmissionSchedule": {
             "get": {
                 "tags": [
@@ -3133,15 +2780,6 @@
                         }
                     },
                     {
-                        "name": "filter[school_year_id]",
-                        "in": "query",
-                        "description": "Filter by school year ID",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
                         "name": "filter[college_id]",
                         "in": "query",
                         "description": "Filter by college ID",
@@ -3154,6 +2792,15 @@
                         "name": "filter[academic_program_id]",
                         "in": "query",
                         "description": "Filter by academic program ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[university_admission_id]",
+                        "in": "query",
+                        "description": "Filter by university admission ID",
                         "required": false,
                         "schema": {
                             "type": "integer"
@@ -9833,6 +9480,350 @@
                 }
             }
         },
+        "\/api\/FamilyBackground": {
+            "get": {
+                "tags": [
+                    "FamilyBackground"
+                ],
+                "summary": "Get paginated list of FamilyBackground",
+                "description": "Retrieve a paginated list of FamilyBackground with optional search",
+                "operationId": "getFamilyBackgroundPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedFamilyBackgroundResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "FamilyBackground"
+                ],
+                "summary": "Create a new FamilyBackground",
+                "description": " Create a new FamilyBackground with the provided details",
+                "operationId": "createFamilyBackground",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/FamilyBackground"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "FamilyBackground created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateFamilyBackgroundResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/FamilyBackground\/{id}": {
+            "get": {
+                "tags": [
+                    "FamilyBackground"
+                ],
+                "summary": "Get a specific FamilyBackground",
+                "description": "Retrieve a FamilyBackground by its ID",
+                "operationId": "getFamilyBackgroundById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetFamilyBackgroundResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "FamilyBackground not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "FamilyBackground"
+                ],
+                "summary": "Update a FamilyBackground",
+                "description": "Update an existing FamilyBackground with the provided details",
+                "operationId": "updateFamilyBackground",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/FamilyBackground"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "FamilyBackground updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateFamilyBackgroundResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "FamilyBackground not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "FamilyBackground"
+                ],
+                "summary": "Delete a FamilyBackground",
+                "description": "Delete a FamilyBackground by its ID",
+                "operationId": "deleteFamilyBackground",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "FamilyBackground deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteFamilyBackgroundResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "FamilyBackground not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/FinalGrade": {
             "get": {
                 "tags": [
@@ -15932,6 +15923,1807 @@
                 }
             }
         },
+        "\/api\/TestingCenter": {
+            "get": {
+                "tags": [
+                    "TestingCenter"
+                ],
+                "summary": "Get paginated list of TestingCenter",
+                "description": "Retrieve a paginated list of TestingCenter with optional search",
+                "operationId": "getTestingCenterPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedTestingCenterResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "TestingCenter"
+                ],
+                "summary": "Create a new TestingCenter",
+                "description": " Create a new TestingCenter with the provided details",
+                "operationId": "createTestingCenter",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/TestingCenter"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "TestingCenter created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateTestingCenterResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/TestingCenter\/{id}": {
+            "get": {
+                "tags": [
+                    "TestingCenter"
+                ],
+                "summary": "Get a specific TestingCenter",
+                "description": "Retrieve a TestingCenter by its ID",
+                "operationId": "getTestingCenterById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetTestingCenterResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "TestingCenter not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "TestingCenter"
+                ],
+                "summary": "Update a TestingCenter",
+                "description": "Update an existing TestingCenter with the provided details",
+                "operationId": "updateTestingCenter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/TestingCenter"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "TestingCenter updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateTestingCenterResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "TestingCenter not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "TestingCenter"
+                ],
+                "summary": "Delete a TestingCenter",
+                "description": "Delete a TestingCenter by its ID",
+                "operationId": "deleteTestingCenter",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "TestingCenter deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteTestingCenterResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "TestingCenter not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionApplication": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Get paginated list of UniversityAdmissionApplication",
+                "description": "Retrieve a paginated list of UniversityAdmissionApplication with optional search",
+                "operationId": "getUniversityAdmissionApplicationPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionApplicationResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Create a new UniversityAdmissionApplication",
+                "description": " Create a new UniversityAdmissionApplication with the provided details",
+                "operationId": "createUniversityAdmissionApplication",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionApplication created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionApplicationResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionApplication\/{id}": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Get a specific UniversityAdmissionApplication",
+                "description": "Retrieve a UniversityAdmissionApplication by its ID",
+                "operationId": "getUniversityAdmissionApplicationById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetUniversityAdmissionApplicationResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionApplication not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Update a UniversityAdmissionApplication",
+                "description": "Update an existing UniversityAdmissionApplication with the provided details",
+                "operationId": "updateUniversityAdmissionApplication",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionApplication updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionApplicationResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionApplication not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Delete a UniversityAdmissionApplication",
+                "description": "Delete a UniversityAdmissionApplication by its ID",
+                "operationId": "deleteUniversityAdmissionApplication",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "UniversityAdmissionApplication deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteUniversityAdmissionApplicationResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionApplication not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmission": {
+            "get": {
+                "tags": [
+                    "UniversityAdmission"
+                ],
+                "summary": "Get paginated list of UniversityAdmission",
+                "description": "Retrieve a paginated list of UniversityAdmission with optional search",
+                "operationId": "getUniversityAdmissionPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by fields and direction. Example: ?sort=-open_date (descending), ?sort=open_date (ascending). Supports multiple fields: ?sort=-open_date,title",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "open_date",
+                            "example": "-open_date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "UniversityAdmission"
+                ],
+                "summary": "Create a new UniversityAdmission",
+                "description": " Create a new UniversityAdmission with the provided details",
+                "operationId": "createUniversityAdmission",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmission created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmission\/Invitation\/{userId}": {
+            "get": {
+                "tags": [
+                    "UniversityAdmission"
+                ],
+                "summary": "Get current user's university admission invitation",
+                "description": "Retrieve the current user's university admission invitation if they haven't applied yet",
+                "operationId": "getCurrentUserInvitation",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetUniversityAdmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmission\/{id}": {
+            "get": {
+                "tags": [
+                    "UniversityAdmission"
+                ],
+                "summary": "Get a specific UniversityAdmission",
+                "description": "Retrieve a UniversityAdmission by its ID",
+                "operationId": "getUniversityAdmissionById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetUniversityAdmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmission not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "UniversityAdmission"
+                ],
+                "summary": "Update a UniversityAdmission",
+                "description": "Update an existing UniversityAdmission with the provided details",
+                "operationId": "updateUniversityAdmission",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmission updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmission not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "UniversityAdmission"
+                ],
+                "summary": "Delete a UniversityAdmission",
+                "description": "Delete a UniversityAdmission by its ID",
+                "operationId": "deleteUniversityAdmission",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "UniversityAdmission deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteUniversityAdmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmission not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionCriteria": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionCriteria"
+                ],
+                "summary": "Get paginated list of UniversityAdmissionCriteria",
+                "description": "Retrieve a paginated list of UniversityAdmissionCriteria with optional search",
+                "operationId": "getUniversityAdmissionCriteriaPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[university_admission_id]",
+                        "in": "query",
+                        "description": "University admission ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "UniversityAdmissionCriteria"
+                ],
+                "summary": "Create a new UniversityAdmissionCriteria",
+                "description": " Create a new UniversityAdmissionCriteria with the provided details",
+                "operationId": "createUniversityAdmissionCriteria",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionCriteria created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionCriteria\/{id}": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionCriteria"
+                ],
+                "summary": "Get a specific UniversityAdmissionCriteria",
+                "description": "Retrieve a UniversityAdmissionCriteria by its ID",
+                "operationId": "getUniversityAdmissionCriteriaById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetUniversityAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionCriteria not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "UniversityAdmissionCriteria"
+                ],
+                "summary": "Update a UniversityAdmissionCriteria",
+                "description": "Update an existing UniversityAdmissionCriteria with the provided details",
+                "operationId": "updateUniversityAdmissionCriteria",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionCriteria updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionCriteria not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "UniversityAdmissionCriteria"
+                ],
+                "summary": "Delete a UniversityAdmissionCriteria",
+                "description": "Delete a UniversityAdmissionCriteria by its ID",
+                "operationId": "deleteUniversityAdmissionCriteria",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "UniversityAdmissionCriteria deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteUniversityAdmissionCriteriaResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionCriteria not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionSchedule": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionSchedule"
+                ],
+                "summary": "Get paginated list of UniversityAdmissionSchedule",
+                "description": "Retrieve a paginated list of UniversityAdmissionSchedule with optional search",
+                "operationId": "getUniversityAdmissionSchedulePaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "filter[university_admission_id]",
+                        "in": "query",
+                        "description": "University admission ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionScheduleResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "UniversityAdmissionSchedule"
+                ],
+                "summary": "Create a new UniversityAdmissionSchedule",
+                "description": " Create a new UniversityAdmissionSchedule with the provided details",
+                "operationId": "createUniversityAdmissionSchedule",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionSchedule created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionScheduleResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionSchedule\/{id}": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionSchedule"
+                ],
+                "summary": "Get a specific UniversityAdmissionSchedule",
+                "description": "Retrieve a UniversityAdmissionSchedule by its ID",
+                "operationId": "getUniversityAdmissionScheduleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetUniversityAdmissionScheduleResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionSchedule not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "UniversityAdmissionSchedule"
+                ],
+                "summary": "Update a UniversityAdmissionSchedule",
+                "description": "Update an existing UniversityAdmissionSchedule with the provided details",
+                "operationId": "updateUniversityAdmissionSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionSchedule updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionScheduleResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionSchedule not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "UniversityAdmissionSchedule"
+                ],
+                "summary": "Delete a UniversityAdmissionSchedule",
+                "description": "Delete a UniversityAdmissionSchedule by its ID",
+                "operationId": "deleteUniversityAdmissionSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "UniversityAdmissionSchedule deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteUniversityAdmissionScheduleResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionSchedule not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/User": {
             "get": {
                 "tags": [
@@ -16364,6 +18156,17 @@
                     "rejected"
                 ]
             },
+            "FamilyRelationshipTypeEnum": {
+                "title": "FamilyRelationshipTypeEnum",
+                "type": "string",
+                "enum": [
+                    "father",
+                    "mother",
+                    "brother",
+                    "guardian",
+                    "other"
+                ]
+            },
             "RequirementTypeEnum": {
                 "title": "RequirementTypeEnum",
                 "type": "string",
@@ -16776,12 +18579,6 @@
                     },
                     "program_type": {
                         "$ref": "#\/components\/schemas\/ProgramType"
-                    },
-                    "requirements": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                        }
                     }
                 },
                 "type": "object"
@@ -16867,333 +18664,6 @@
                 "type": "object"
             },
             "DeleteAcademicProgramResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    }
-                },
-                "type": "object"
-            },
-            "AcademicProgramCriteria": {
-                "title": "AcademicProgramCriteria",
-                "required": [
-                    "academic_program_id",
-                    "school_year_id",
-                    "title",
-                    "max_score",
-                    "min_score",
-                    "weight",
-                    "is_active"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "academic_program_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "school_year_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "title": {
-                        "type": "string",
-                        "example": "Academic Performance"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Evaluation based on academic records",
-                        "nullable": true
-                    },
-                    "max_score": {
-                        "type": "integer",
-                        "example": 100
-                    },
-                    "min_score": {
-                        "type": "integer",
-                        "example": 0
-                    },
-                    "weight": {
-                        "type": "integer",
-                        "example": 50
-                    },
-                    "is_active": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-01-01T00:00:00.000000Z"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-01-01T00:00:00.000000Z"
-                    },
-                    "academic_program": {
-                        "$ref": "#\/components\/schemas\/AcademicProgram"
-                    },
-                    "school_year": {
-                        "$ref": "#\/components\/schemas\/SchoolYear"
-                    }
-                },
-                "type": "object"
-            },
-            "PaginatedAcademicProgramCriteria": {
-                "title": "PaginatedAcademicProgramCriteria",
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                        }
-                    },
-                    "current_page": {
-                        "type": "integer"
-                    },
-                    "last_page": {
-                        "type": "integer"
-                    },
-                    "per_page": {
-                        "type": "integer"
-                    },
-                    "total": {
-                        "type": "integer"
-                    },
-                    "from": {
-                        "type": "integer",
-                        "nullable": true
-                    },
-                    "to": {
-                        "type": "integer",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "PaginatedAcademicProgramCriteriaResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/PaginatedAcademicProgramCriteria"
-                    }
-                },
-                "type": "object"
-            },
-            "GetAcademicProgramCriteriaResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                    }
-                },
-                "type": "object"
-            },
-            "GetAcademicProgramCriteriasResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                        }
-                    }
-                },
-                "type": "object"
-            },
-            "CreateAcademicProgramCriteriaResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                    }
-                },
-                "type": "object"
-            },
-            "UpdateAcademicProgramCriteriaResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
-                    }
-                },
-                "type": "object"
-            },
-            "DeleteAcademicProgramCriteriaResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    }
-                },
-                "type": "object"
-            },
-            "AcademicProgramRequirement": {
-                "title": "AcademicProgramRequirement",
-                "required": [
-                    "academic_program_id",
-                    "requirement_id",
-                    "school_year_id",
-                    "is_mandatory",
-                    "is_active"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "readOnly": true
-                    },
-                    "academic_program_id": {
-                        "type": "integer"
-                    },
-                    "requirement_id": {
-                        "type": "integer"
-                    },
-                    "school_year_id": {
-                        "type": "integer"
-                    },
-                    "is_mandatory": {
-                        "type": "boolean"
-                    },
-                    "is_active": {
-                        "type": "boolean"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "readOnly": true
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "readOnly": true
-                    },
-                    "academic_program": {
-                        "$ref": "#\/components\/schemas\/AcademicProgram"
-                    },
-                    "requirement": {
-                        "$ref": "#\/components\/schemas\/Requirement"
-                    },
-                    "school_year": {
-                        "$ref": "#\/components\/schemas\/SchoolYear"
-                    }
-                },
-                "type": "object"
-            },
-            "PaginatedAcademicProgramRequirement": {
-                "title": "PaginatedAcademicProgramRequirement",
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                        }
-                    },
-                    "current_page": {
-                        "type": "integer"
-                    },
-                    "last_page": {
-                        "type": "integer"
-                    },
-                    "per_page": {
-                        "type": "integer"
-                    },
-                    "total": {
-                        "type": "integer"
-                    },
-                    "from": {
-                        "type": "integer",
-                        "nullable": true
-                    },
-                    "to": {
-                        "type": "integer",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "PaginatedAcademicProgramRequirementResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/PaginatedAcademicProgramRequirement"
-                    }
-                },
-                "type": "object"
-            },
-            "GetAcademicProgramRequirementResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                    }
-                },
-                "type": "object"
-            },
-            "GetAcademicProgramRequirementsResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                        }
-                    }
-                },
-                "type": "object"
-            },
-            "CreateAcademicProgramRequirementResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                    }
-                },
-                "type": "object"
-            },
-            "UpdateAcademicProgramRequirementResponse200": {
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "example": true
-                    },
-                    "data": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramRequirement"
-                    }
-                },
-                "type": "object"
-            },
-            "DeleteAcademicProgramRequirementResponse200": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -17371,12 +18841,6 @@
                         "type": "integer"
                     },
                     "admission_schedule_id": {
-                        "type": "integer"
-                    },
-                    "year": {
-                        "type": "integer"
-                    },
-                    "pool_no": {
                         "type": "integer"
                     },
                     "first_name": {
@@ -17697,7 +19161,7 @@
                 "title": "AdmissionApplicationScore",
                 "required": [
                     "admission_application_id",
-                    "academic_program_criteria_id",
+                    "admission_criteria_id",
                     "user_id",
                     "score",
                     "is_posted"
@@ -17711,7 +19175,7 @@
                         "type": "integer",
                         "example": 1
                     },
-                    "academic_program_criteria_id": {
+                    "admission_criteria_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -17744,8 +19208,8 @@
                     "admission_application": {
                         "$ref": "#\/components\/schemas\/AdmissionApplication"
                     },
-                    "academic_program_criteria": {
-                        "$ref": "#\/components\/schemas\/AcademicProgramCriteria"
+                    "admission_criteria": {
+                        "$ref": "#\/components\/schemas\/AdmissionCriteria"
                     },
                     "user": {
                         "$ref": "#\/components\/schemas\/User"
@@ -17857,10 +19321,195 @@
                 },
                 "type": "object"
             },
+            "AdmissionCriteria": {
+                "title": "AdmissionCriteria",
+                "required": [
+                    "academic_program_id",
+                    "admission_schedule_id",
+                    "requirement_id",
+                    "title",
+                    "max_score",
+                    "min_score",
+                    "weight",
+                    "is_active",
+                    "file_suffix"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "academic_program_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "admission_schedule_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "requirement_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Academic Performance"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Evaluation based on academic records",
+                        "nullable": true
+                    },
+                    "max_score": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "min_score": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "weight": {
+                        "type": "integer",
+                        "example": 50
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "file_suffix": {
+                        "type": "string",
+                        "example": "pdf"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00.000000Z"
+                    },
+                    "academic_program": {
+                        "$ref": "#\/components\/schemas\/AcademicProgram"
+                    },
+                    "admission_schedule": {
+                        "$ref": "#\/components\/schemas\/AdmissionSchedule"
+                    },
+                    "requirement": {
+                        "$ref": "#\/components\/schemas\/Requirement"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAdmissionCriteria": {
+                "title": "PaginatedAdmissionCriteria",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedAdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAdmissionCriteriasResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "AdmissionSchedule": {
                 "title": "AdmissionSchedule",
                 "required": [
-                    "school_year_id",
+                    "university_admission_id",
                     "academic_program_id",
                     "intake_limit",
                     "start_date",
@@ -17871,7 +19520,7 @@
                         "type": "integer",
                         "readOnly": true
                     },
-                    "school_year_id": {
+                    "university_admission_id": {
                         "type": "integer"
                     },
                     "academic_program_id": {
@@ -17898,11 +19547,17 @@
                         "format": "date-time",
                         "readOnly": true
                     },
-                    "school_year": {
-                        "$ref": "#\/components\/schemas\/SchoolYear"
+                    "university_admission": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
                     },
                     "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
+                    },
+                    "admission_criterias": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AdmissionCriteria"
+                        }
                     }
                 },
                 "type": "object"
@@ -18055,7 +19710,8 @@
                     "active_academic_program",
                     "active_college",
                     "active_specialization",
-                    "active_campus"
+                    "active_campus",
+                    "profile_weight"
                 ],
                 "properties": {
                     "id": {
@@ -18135,6 +19791,11 @@
                         "type": "integer",
                         "readOnly": true,
                         "nullable": true
+                    },
+                    "profile_weight": {
+                        "type": "number",
+                        "format": "float",
+                        "readOnly": true
                     }
                 },
                 "type": "object"
@@ -18291,7 +19952,8 @@
                 "required": [
                     "name",
                     "short_name",
-                    "address"
+                    "address",
+                    "main_campus"
                 ],
                 "properties": {
                     "id": {
@@ -18305,6 +19967,9 @@
                     },
                     "address": {
                         "type": "string"
+                    },
+                    "main_campus": {
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
@@ -20374,6 +22039,163 @@
                 "type": "object"
             },
             "DeleteEnrollmentLogResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "FamilyBackground": {
+                "title": "FamilyBackground",
+                "required": [
+                    "user_id",
+                    "fullname",
+                    "relationship"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "fullname": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "relationship": {
+                        "type": "string",
+                        "enum": [
+                            "father",
+                            "mother",
+                            "brother",
+                            "guardian",
+                            "other"
+                        ],
+                        "example": "father"
+                    },
+                    "occupation": {
+                        "type": "string",
+                        "example": "Engineer",
+                        "nullable": true
+                    },
+                    "birthdate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1970-01-01",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedFamilyBackground": {
+                "title": "PaginatedFamilyBackground",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/FamilyBackground"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedFamilyBackgroundResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedFamilyBackground"
+                    }
+                },
+                "type": "object"
+            },
+            "GetFamilyBackgroundResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/FamilyBackground"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAllFamilyBackgroundsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/FamilyBackground"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateFamilyBackgroundResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/FamilyBackground"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateFamilyBackgroundResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/FamilyBackground"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteFamilyBackgroundResponse200": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -22539,6 +24361,771 @@
                 },
                 "type": "object"
             },
+            "TestingCenter": {
+                "title": "TestingCenter",
+                "required": [
+                    "room_id",
+                    "code"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "room_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "TC-001"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T00:00:00.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T00:00:00.000000Z"
+                    },
+                    "room": {
+                        "$ref": "#\/components\/schemas\/Room"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedTestingCenter": {
+                "title": "PaginatedTestingCenter",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/TestingCenter"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedTestingCenterResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedTestingCenter"
+                    }
+                },
+                "type": "object"
+            },
+            "GetTestingCenterResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/TestingCenter"
+                    }
+                },
+                "type": "object"
+            },
+            "GetTestingCentersResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/TestingCenter"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateTestingCenterResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/TestingCenter"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTestingCenterResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/TestingCenter"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteTestingCenterResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UniversityAdmission": {
+                "title": "UniversityAdmission",
+                "required": [
+                    "school_year_id",
+                    "open_date",
+                    "close_date",
+                    "is_open_override"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "school_year_id": {
+                        "type": "integer"
+                    },
+                    "open_date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "close_date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "is_open_override": {
+                        "type": "boolean"
+                    },
+                    "is_ongoing": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "school_year": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
+                    },
+                    "university_admission_criterias": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmission": {
+                "title": "PaginatedUniversityAdmission",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmission"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedUniversityAdmission"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmission"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUniversityAdmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteUniversityAdmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UniversityAdmissionApplication": {
+                "title": "UniversityAdmissionApplication",
+                "required": [
+                    "university_admission_id",
+                    "user_id",
+                    "remark"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "university_admission_id": {
+                        "type": "integer"
+                    },
+                    "university_admission_schedule_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "is_passed": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "score": {
+                        "type": "number",
+                        "format": "decimal",
+                        "nullable": true
+                    },
+                    "remark": {
+                        "type": "string"
+                    },
+                    "year": {
+                        "type": "integer"
+                    },
+                    "pool_no": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionApplication": {
+                "title": "PaginatedUniversityAdmissionApplication",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionApplicationResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionApplication"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionApplicationResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAllUniversityAdmissionApplicationsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUniversityAdmissionApplicationResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionApplicationResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteUniversityAdmissionApplicationResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UniversityAdmissionCriteria": {
+                "title": "UniversityAdmissionCriteria",
+                "required": [
+                    "university_admission_id",
+                    "requirement_id",
+                    "title",
+                    "max_score",
+                    "min_score",
+                    "weight",
+                    "is_active",
+                    "file_suffix"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "university_admission_id": {
+                        "type": "integer"
+                    },
+                    "requirement_id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "max_score": {
+                        "type": "integer"
+                    },
+                    "min_score": {
+                        "type": "integer"
+                    },
+                    "weight": {
+                        "type": "integer"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "file_suffix": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "university_admission": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
+                    },
+                    "requirement": {
+                        "$ref": "#\/components\/schemas\/Requirement"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionCriteria": {
+                "title": "PaginatedUniversityAdmissionCriteria",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionCriteriasResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUniversityAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteUniversityAdmissionCriteriaResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UniversityAdmissionSchedule": {
+                "title": "UniversityAdmissionSchedule",
+                "required": [
+                    "university_admission_id",
+                    "testing_center_id",
+                    "start_date",
+                    "end_date"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "university_admission_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "testing_center_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15 08:00:00"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15 17:00:00"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01 00:00:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01 00:00:00"
+                    },
+                    "university_admission": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
+                    },
+                    "testing_center": {
+                        "$ref": "#\/components\/schemas\/TestingCenter"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionSchedule": {
+                "title": "PaginatedUniversityAdmissionSchedule",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionScheduleResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionSchedule"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionScheduleResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionSchedulesResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUniversityAdmissionScheduleResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionScheduleResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteUniversityAdmissionScheduleResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "required": [
@@ -22582,7 +25169,13 @@
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "readOnly": true
+                    },
+                    "profile_weight": {
+                        "type": "number",
+                        "format": "float",
+                        "readOnly": true
                     }
                 },
                 "type": "object"
@@ -22822,14 +25415,6 @@
             "description": "AcademicProgram"
         },
         {
-            "name": "AcademicProgramCriteria",
-            "description": "AcademicProgramCriteria"
-        },
-        {
-            "name": "AcademicProgramRequirement",
-            "description": "AcademicProgramRequirement"
-        },
-        {
             "name": "AcademicTerm",
             "description": "AcademicTerm"
         },
@@ -22844,6 +25429,10 @@
         {
             "name": "AdmissionApplicationScore",
             "description": "AdmissionApplicationScore"
+        },
+        {
+            "name": "AdmissionCriteria",
+            "description": "AdmissionCriteria"
         },
         {
             "name": "AdmissionSchedule",
@@ -22910,6 +25499,10 @@
             "description": "EnrollmentLog"
         },
         {
+            "name": "FamilyBackground",
+            "description": "FamilyBackground"
+        },
+        {
             "name": "FinalGrade",
             "description": "FinalGrade"
         },
@@ -22964,6 +25557,26 @@
         {
             "name": "SectionTeacher",
             "description": "SectionTeacher"
+        },
+        {
+            "name": "TestingCenter",
+            "description": "TestingCenter"
+        },
+        {
+            "name": "UniversityAdmissionApplication",
+            "description": "UniversityAdmissionApplication"
+        },
+        {
+            "name": "UniversityAdmission",
+            "description": "UniversityAdmission"
+        },
+        {
+            "name": "UniversityAdmissionCriteria",
+            "description": "UniversityAdmissionCriteria"
+        },
+        {
+            "name": "UniversityAdmissionSchedule",
+            "description": "UniversityAdmissionSchedule"
         },
         {
             "name": "User",
