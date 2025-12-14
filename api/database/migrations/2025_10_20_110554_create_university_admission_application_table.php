@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             // Fk
             $table->foreignId('university_admission_schedule_id')
-                ->nullable() // the applicant will select if already passed!
+                ->nullable() // the applicant will select if already validated
                 ->constrained('university_admission_schedule', 'id', 'ua_sched_fk')
                 ->onDelete('set null');
             // Fk

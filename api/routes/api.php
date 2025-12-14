@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\AdmissionCriteriaController;
 use App\Http\Controllers\TestingCenterController;
+use App\Http\Controllers\UniversityAdmissionApplicationController;
+use App\Http\Controllers\UniversityAdmissionApplicationCriteriaSubmissionController;
 use App\Http\Controllers\UniversityAdmissionController;
 use App\Http\Controllers\UniversityAdmissionCriteriaController;
 use App\Http\Controllers\UniversityAdmissionScheduleController;
@@ -414,4 +416,21 @@ Route::controller(UniversityAdmissionCriteriaController::class)->group(function(
     Route::post('/UniversityAdmissionCriteria', 'store');
     Route::put('/UniversityAdmissionCriteria/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/UniversityAdmissionCriteria/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(UniversityAdmissionApplicationController::class)->group(function() {
+    Route::get('/UniversityAdmissionApplication', 'index');
+    Route::get('/UniversityAdmissionApplication/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/UniversityAdmissionApplication', 'store');
+    Route::post('/UniversityAdmissionApplication/submitApplicationForm', 'submitApplicationForm');
+    Route::put('/UniversityAdmissionApplication/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/UniversityAdmissionApplication/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(UniversityAdmissionApplicationCriteriaSubmissionController::class)->group(function() {
+    Route::get('/UniversityAdmissionApplicationCriteriaSubmission', 'index');
+    Route::get('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/UniversityAdmissionApplicationCriteriaSubmission', 'store');
+    Route::put('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'destroy')->where('id', '[0-9]+');
 });

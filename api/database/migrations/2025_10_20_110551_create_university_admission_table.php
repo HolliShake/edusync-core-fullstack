@@ -25,6 +25,7 @@ return new class extends Migration
 
 
             // Unique
+            // only one university admission per school year
             $table->unique('school_year_id', 'university_admission_school_year_unique');
         });
     }

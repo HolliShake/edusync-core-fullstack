@@ -1,5 +1,5 @@
 import Modal, { type ModalState } from '@/components/custom/modal.component';
-import Select from '@/components/custom/select.component';
+import SelectUniversityAdmission from '@/components/shared/university-admission.select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -196,9 +196,8 @@ export default function AdmissionScheduleModal({
             name="university_admission_id"
             control={control}
             render={({ field }) => (
-              <Select
+              <SelectUniversityAdmission
                 placeholder="Select university admission"
-                options={universityAdmissionOptions}
                 value={String(field.value || '')}
                 onValueChange={(value) => field.onChange(Number(value))}
                 disabled={isLoadingUniversityAdmissions}

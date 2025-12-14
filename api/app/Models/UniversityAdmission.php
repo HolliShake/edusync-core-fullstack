@@ -30,6 +30,7 @@ use OpenApi\Attributes as OA;
         // Relation
         new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
         new OA\Property(property: "university_admission_criterias", type: "array", items: new OA\Items(ref: "#/components/schemas/UniversityAdmissionCriteria")),
+        new OA\Property(property: "admission_schedules", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionSchedule")),
     ]
 )]
 
@@ -123,6 +124,7 @@ class UniversityAdmission extends Model
         'school_year',
         'is_ongoing',
         'university_admission_criterias',
+        'admission_schedules',
     ];
 
     /**
@@ -143,6 +145,16 @@ class UniversityAdmission extends Model
     public function getUniversityAdmissionCriteriasAttribute(): array
     {
         return $this->universityAdmissionCriterias()->get()->makeHidden(['university_admission'])->toArray();
+    }
+
+    /**
+     * Get the admission schedules for the university admission.
+     *
+     * @return array<AdmissionSchedule>
+     */
+    public function getAdmissionSchedulesAttribute(): array
+    {
+        return $this->admissionSchedules()->get()->makeHidden(['university_admission'])->toArray();
     }
 
     /**
@@ -171,5 +183,15 @@ class UniversityAdmission extends Model
     public function universityAdmissionCriterias():HasMany
     {
         return $this->hasMany(UniversityAdmissionCriteria::class);
+    }
+
+    /**
+     * Get the admission schedules for the university admission.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function admissionSchedules(): HasMany
+    {
+        return $this->hasMany(AdmissionSchedule::class);
     }
 }

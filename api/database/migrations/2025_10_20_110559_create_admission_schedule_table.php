@@ -28,6 +28,7 @@ return new class extends Migration
             $table->date('end_date');
 
             // Unique
+            // only one admission schedule per university admission and academic program
             $table->unique(['university_admission_id', 'academic_program_id'], 'admission_schedule_unique');
         });
     }

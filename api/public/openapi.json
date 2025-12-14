@@ -16611,6 +16611,446 @@
                 }
             }
         },
+        "\/api\/UniversityAdmissionApplication\/submitApplicationForm": {
+            "post": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Submit the application form",
+                "description": "Submit the application form with the provided details",
+                "operationId": "submitApplicationForm",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart\/form-data": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "required": [
+                                        "user_id",
+                                        "university_admission_id",
+                                        "criteria_id",
+                                        "file"
+                                    ],
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer"
+                                        },
+                                        "university_admission_id": {
+                                            "type": "integer"
+                                        },
+                                        "criteria_id": {
+                                            "type": "integer"
+                                        },
+                                        "file": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionApplication created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionApplicationResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionApplicationCriteriaSubmission": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionApplicationCriteriaSubmission"
+                ],
+                "summary": "Get paginated list of UniversityAdmissionApplicationCriteriaSubmission",
+                "description": "Retrieve a paginated list of UniversityAdmissionApplicationCriteriaSubmission with optional search",
+                "operationId": "getUniversityAdmissionApplicationCriteriaSubmissionPaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionApplicationCriteriaSubmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "UniversityAdmissionApplicationCriteriaSubmission"
+                ],
+                "summary": "Create a new UniversityAdmissionApplicationCriteriaSubmission",
+                "description": " Create a new UniversityAdmissionApplicationCriteriaSubmission with the provided details",
+                "operationId": "createUniversityAdmissionApplicationCriteriaSubmission",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionApplicationCriteriaSubmission created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionApplicationCriteriaSubmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionApplicationCriteriaSubmission\/{id}": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionApplicationCriteriaSubmission"
+                ],
+                "summary": "Get a specific UniversityAdmissionApplicationCriteriaSubmission",
+                "description": "Retrieve a UniversityAdmissionApplicationCriteriaSubmission by its ID",
+                "operationId": "getUniversityAdmissionApplicationCriteriaSubmissionById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetUniversityAdmissionApplicationCriteriaSubmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionApplicationCriteriaSubmission not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "UniversityAdmissionApplicationCriteriaSubmission"
+                ],
+                "summary": "Update a UniversityAdmissionApplicationCriteriaSubmission",
+                "description": "Update an existing UniversityAdmissionApplicationCriteriaSubmission with the provided details",
+                "operationId": "updateUniversityAdmissionApplicationCriteriaSubmission",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "UniversityAdmissionApplicationCriteriaSubmission updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionApplicationCriteriaSubmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionApplicationCriteriaSubmission not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "UniversityAdmissionApplicationCriteriaSubmission"
+                ],
+                "summary": "Delete a UniversityAdmissionApplicationCriteriaSubmission",
+                "description": "Delete a UniversityAdmissionApplicationCriteriaSubmission by its ID",
+                "operationId": "deleteUniversityAdmissionApplicationCriteriaSubmission",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "UniversityAdmissionApplicationCriteriaSubmission deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteUniversityAdmissionApplicationCriteriaSubmissionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "UniversityAdmissionApplicationCriteriaSubmission not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/UniversityAdmission": {
             "get": {
                 "tags": [
@@ -24539,6 +24979,12 @@
                         "items": {
                             "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
                         }
+                    },
+                    "admission_schedules": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/AdmissionSchedule"
+                        }
                     }
                 },
                 "type": "object"
@@ -24796,6 +25242,216 @@
                 "type": "object"
             },
             "DeleteUniversityAdmissionApplicationResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UniversityAdmissionApplicationCriteriaSubmission": {
+                "title": "UniversityAdmissionApplicationCriteriaSubmission",
+                "required": [
+                    "university_admission_application_id",
+                    "university_admission_criteria_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "university_admission_application_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "university_admission_criteria_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "university_admission_application": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                    },
+                    "university_admission_criteria": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionCriteria"
+                    },
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "model_type": {
+                                    "type": "string"
+                                },
+                                "model_id": {
+                                    "type": "integer"
+                                },
+                                "uuid": {
+                                    "type": "string",
+                                    "nullable": true
+                                },
+                                "collection_name": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "file_name": {
+                                    "type": "string"
+                                },
+                                "mime_type": {
+                                    "type": "string",
+                                    "nullable": true
+                                },
+                                "disk": {
+                                    "type": "string"
+                                },
+                                "conversions_disk": {
+                                    "type": "string",
+                                    "nullable": true
+                                },
+                                "size": {
+                                    "type": "integer"
+                                },
+                                "manipulations": {
+                                    "type": "object"
+                                },
+                                "custom_properties": {
+                                    "type": "object"
+                                },
+                                "generated_conversions": {
+                                    "type": "object"
+                                },
+                                "responsive_images": {
+                                    "type": "object"
+                                },
+                                "order_column": {
+                                    "type": "integer",
+                                    "nullable": true
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true
+                                },
+                                "updated_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionApplicationCriteriaSubmission": {
+                "title": "PaginatedUniversityAdmissionApplicationCriteriaSubmission",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionApplicationCriteriaSubmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionApplicationCriteriaSubmission"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionApplicationCriteriaSubmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionApplicationCriteriaSubmissionsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUniversityAdmissionApplicationCriteriaSubmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionApplicationCriteriaSubmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteUniversityAdmissionApplicationCriteriaSubmissionResponse200": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -25144,6 +25800,22 @@
                     "email": {
                         "type": "string",
                         "format": "email"
+                    },
+                    "address": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "contactno": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "studentno": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "facultyno": {
+                        "type": "string",
+                        "nullable": true
                     },
                     "password": {
                         "type": "string",
@@ -25565,6 +26237,10 @@
         {
             "name": "UniversityAdmissionApplication",
             "description": "UniversityAdmissionApplication"
+        },
+        {
+            "name": "UniversityAdmissionApplicationCriteriaSubmission",
+            "description": "UniversityAdmissionApplicationCriteriaSubmission"
         },
         {
             "name": "UniversityAdmission",

@@ -44,56 +44,47 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         return $hasApplied ? null : $admission;
     }
 
-    public function create(array $data): Model
+    public function beforeCreate(array $data): array
     {
         $schoolYear = $this->schoolYearRepo->getById($data['school_year_id']);
 
-        // Check if an admission already exists for this school year
-        $existingAdmission = $this->repository->query()
-            ->where('school_year_id', $data['school_year_id'])
-            ->first();
-        if ($existingAdmission) {
-            throw new \Exception('A university admission already exists for this school year');
+        if (!$schoolYear) {
+            throw new \Exception('School year not found');
         }
 
         $start_date = $data['open_date'];
-        $end_date = $data['close_date'];
+        $end_date   = $data['close_date'];
 
-        if ($start_date < $schoolYear->start_date || $end_date > $schoolYear->end_date) {
-            throw new \Exception('Open date and close date must be within the school year period');
+        if ($start_date < $schoolYear->start_date || $start_date > $schoolYear->end_date) {
+            throw new \Exception('Open date must be within the school year period');
         }
 
-        return parent::create($data);
+        if ($end_date < $schoolYear->start_date || $end_date > $schoolYear->end_date) {
+            throw new \Exception('Close date must be within the school year period');
+        }
+
+        return $data;
     }
 
-    // update
-    public function update(int|string $id, array $data, array $relations = []): Model
+    public function beforeUpdate(int|string $id, array $data): array
     {
-        $universityAdmission = $this->repository->getById($id);
+        $schoolYear = $this->schoolYearRepo->getById($data['school_year_id']);
 
-        // Check if school_year_id is being updated
-        if (isset($data['school_year_id']) && $data['school_year_id'] != $universityAdmission->school_year_id) {
-            // Check if an admission already exists for the new school year
-            $existingAdmission = $this->repository->query()
-                ->where('school_year_id', $data['school_year_id'])
-                ->where('id', '!=', $id)
-                ->first();
-
-            if ($existingAdmission) {
-                throw new \Exception('A university admission already exists for this school year');
-            }
+        if (!$schoolYear) {
+            throw new \Exception('School year not found');
         }
 
-        $schoolYearId = $data['school_year_id'] ?? $universityAdmission->school_year_id;
-        $schoolYear = $this->schoolYearRepo->getById($schoolYearId);
+        $start_date = $data['open_date'];
+        $end_date   = $data['close_date'];
 
-        $start_date = $data['open_date'] ?? $universityAdmission->open_date;
-        $end_date = $data['close_date'] ?? $universityAdmission->close_date;
-
-        if ($start_date < $schoolYear->start_date || $end_date > $schoolYear->end_date) {
-            throw new \Exception('Open date and close date must be within the school year period');
+        if ($start_date < $schoolYear->start_date || $start_date > $schoolYear->end_date) {
+            throw new \Exception('Open date must be within the school year period');
         }
 
-        return parent::update($id, $data, $relations);
+        if ($end_date < $schoolYear->start_date || $end_date > $schoolYear->end_date) {
+            throw new \Exception('Close date must be within the school year period');
+        }
+
+        return $data;
     }
 }

@@ -1,6 +1,7 @@
 import GuestAdmissionApplications from '@/pages/guest/admission-applications/page';
 import GuestAdmissionApplicationStatus from '@/pages/guest/admission-applications/status/page';
 import GuestAdmissionPage from '@/pages/guest/admission/page';
+import GuestAdmissionUniversityApply from '@/pages/guest/admission/university/apply/page';
 import GuestAdmissionUniversity from '@/pages/guest/admission/university/page';
 import GuestEnrollment from '@/pages/guest/enrollment/accepted/application/page';
 import GuestAcceptedAdmission from '@/pages/guest/enrollment/accepted/page';
@@ -41,6 +42,16 @@ const GUEST: Route[] = [
         icon: <CalendarArrowDown className="h-4 w-4" />,
         layout: 'dashboard',
         sidebar: true,
+        roles: [UserRoleEnum.guest],
+      },
+      {
+        key: 'guest.admission.university.apply',
+        title: 'Apply',
+        path: '/guest/admission/invitation/apply',
+        component: <GuestAdmissionUniversityApply />,
+        icon: <FileTextIcon className="h-4 w-4" />,
+        layout: 'dashboard',
+        sidebar: false,
         roles: [UserRoleEnum.guest],
       },
       {

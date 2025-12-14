@@ -27,10 +27,13 @@ import {
   GraduationCap,
   Info,
   Mail,
+  Users,
 } from 'lucide-react';
 import type React from 'react';
+import { useNavigate } from 'react-router';
 
 export default function GuestAdmissionUniversity(): React.ReactNode {
+  const navigate = useNavigate();
   const { session, isLoading: isAuthLoading } = useAuth();
   const { data: myInvitation, isLoading: isInvitationLoading } = useGetCurrentUserInvitation(
     Number(session?.id),
@@ -50,6 +53,10 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
 
   const isOpen = invitationData?.is_ongoing;
   const isUpcoming = startDate && today < startDate;
+
+  const onStartApplication = () => {
+    navigate('/guest/admission/invitation/apply');
+  };
 
   if (isAuthLoading || isInvitationLoading) {
     return (
@@ -146,7 +153,11 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
 
                     <div className="flex flex-wrap gap-4 pt-4">
                       {isOpen && (
-                        <Button size="lg" className="font-semibold shadow-lg shadow-primary/20">
+                        <Button
+                          size="lg"
+                          className="font-semibold shadow-lg shadow-primary/20"
+                          onClick={onStartApplication}
+                        >
                           Start Application <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                       )}
@@ -192,6 +203,86 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
             <div className="grid gap-6 md:grid-cols-3">
               {/* Requirements Column */}
               <div className="md:col-span-2 space-y-6">
+                {/* Available Programs */}
+                <Card className="border-none shadow-md">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <GraduationCap className="h-5 w-5 text-primary" />
+                      Available Programs
+                    </CardTitle>
+                    <CardDescription>
+                      Explore the academic programs accepting applications for this admission cycle.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {invitationData.admission_schedules &&
+                    invitationData.admission_schedules.length > 0 ? (
+                      <div className="grid gap-4">
+                        {invitationData.admission_schedules.map((schedule) => {
+                          const scheduleStartDate = new Date(schedule.start_date);
+                          const scheduleEndDate = new Date(schedule.end_date);
+                          const isProgramOpen =
+                            today >= scheduleStartDate && today <= scheduleEndDate;
+
+                          return (
+                            <div
+                              key={schedule.id}
+                              className="group flex items-start gap-4 rounded-lg border p-4 transition-all hover:bg-muted/50 hover:shadow-sm"
+                            >
+                              <div
+                                className={`mt-1 rounded-full p-2 ${
+                                  isProgramOpen
+                                    ? 'bg-primary/10 text-primary'
+                                    : 'bg-muted text-muted-foreground'
+                                }`}
+                              >
+                                <BookOpen className="h-4 w-4" />
+                              </div>
+                              <div className="flex-1 space-y-2">
+                                <div className="flex items-start justify-between gap-4">
+                                  <div>
+                                    <h4 className="font-semibold">
+                                      {schedule.academic_program?.program_name}
+                                    </h4>
+                                    <p className="text-sm text-muted-foreground">
+                                      {schedule.academic_program?.program_name}
+                                    </p>
+                                  </div>
+                                  <Badge variant={isProgramOpen ? 'default' : 'secondary'}>
+                                    {isProgramOpen ? 'Open' : 'Closed'}
+                                  </Badge>
+                                </div>
+                                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                                  <div className="flex items-center gap-1">
+                                    <Calendar className="h-3.5 w-3.5" />
+                                    <span>
+                                      {format(scheduleStartDate, 'MMM d')} -{' '}
+                                      {format(scheduleEndDate, 'MMM d, yyyy')}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <Users className="h-3.5 w-3.5" />
+                                    <span>Intake Limit: {schedule.intake_limit}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <Alert>
+                        <Info className="h-4 w-4" />
+                        <AlertTitle>No programs available</AlertTitle>
+                        <AlertDescription>
+                          Program schedules have not been announced yet. Please check back later.
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Admission Requirements */}
                 <Card className="border-none shadow-md">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">

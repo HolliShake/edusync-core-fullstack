@@ -174,6 +174,101 @@ class UniversityAdmissionApplicationController extends Controller
     }
 
     /**
+     * Submit the application form.
+     */
+    #[OA\Post(
+        path: "/api/UniversityAdmissionApplication/submitApplicationForm",
+        summary: "Submit the application form",
+        tags: ["UniversityAdmissionApplication"],
+        description: "Submit the application form with the provided details",
+        operationId: "submitApplicationForm",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: "multipart/form-data",
+            schema: new OA\Schema(
+                type: "array",
+                items: new OA\Items(
+                    type: "object",
+                    required: ["user_id", "university_admission_id", "criteria_id", "file"],
+                    properties: [
+                        new OA\Property(property: "user_id", type: "integer"),
+                        new OA\Property(property: "university_admission_id", type: "integer"),
+                        new OA\Property(property: "criteria_id", type: "integer"),
+                        new OA\Property(property: "file", type: "string", format: "binary"),
+                    ]
+                )
+            )
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "UniversityAdmissionApplication created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateUniversityAdmissionApplicationResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function submitApplicationForm(Request $request) {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id'                    => 'required|integer|exists:user,id',
+                'university_admission_id'    => 'required|integer|exists:university_admission,id',
+                'files.*'                    => 'required|file|max:10240',
+                'criteria_ids.*'             => 'required|integer|exists:university_admission_criteria,id',
+            ]);
+
+            throw new \Exception(json_encode($request->files->all()));
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            // Reconstruct the structure expected by the service
+            $criteriaFiles = [];
+            foreach ($validated['criteria_ids'] as $index => $criteriaId) {
+                if (isset($validated['files'][$index])) {
+                    $criteriaFiles[] = [
+                        'criteria_id' => $criteriaId,
+                        'file' => $validated['files'][$index]
+                    ];
+                }
+            }
+            
+            // Pass the reconstructed array to the service
+            $serviceData = [
+                'user_id' => $validated['user_id'],
+                'university_admission_id' => $validated['university_admission_id'],
+                'criteria_files' => $criteriaFiles
+            ];
+
+            return $this->ok($this->service->submitApplicationForm($serviceData));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     #[OA\Put(
@@ -295,3 +390,4 @@ class UniversityAdmissionApplicationController extends Controller
         }
     }
 }
+
