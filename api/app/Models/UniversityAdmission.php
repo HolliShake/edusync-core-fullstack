@@ -22,6 +22,7 @@ use OpenApi\Attributes as OA;
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "school_year_id", type: "integer"),
+        new OA\Property(property: "title", type: "string"),
         new OA\Property(property: "open_date", type: "string", format: "date-time"),
         new OA\Property(property: "close_date", type: "string", format: "date-time"),
         new OA\Property(property: "is_open_override", type: "boolean"),
@@ -108,6 +109,7 @@ class UniversityAdmission extends Model
 
     protected $fillable = [
         'school_year_id',
+        'title',
         'open_date',
         'close_date',
         'is_open_override',
@@ -115,6 +117,7 @@ class UniversityAdmission extends Model
 
     protected $casts = [
         'school_year_id' => 'integer',
+        'title' => 'string',
         'open_date' => 'datetime',
         'close_date' => 'datetime',
         'is_open_override' => 'boolean',

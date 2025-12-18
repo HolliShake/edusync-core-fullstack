@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Interface\IRepo\IUniversityAdmissionApplicationRepo;
 use App\Models\UniversityAdmissionApplication;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class UniversityAdmissionApplicationRepo extends GenericRepo implements IUniversityAdmissionApplicationRepo
 {
@@ -22,6 +23,12 @@ class UniversityAdmissionApplicationRepo extends GenericRepo implements IUnivers
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('university_admission_id'),
+            AllowedFilter::callback('latest_status', function ($query, $value) {
+                $query->whereHas('latestStatus', function ($q) use ($value) {
+                    $q->where('type', $value);
+                });
+            }),
         ];
     }
 

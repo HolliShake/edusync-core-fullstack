@@ -13,6 +13,7 @@ export interface AdmissionSchedule {
   readonly id?: number;
   university_admission_id: number;
   academic_program_id: number;
+  title?: string;
   intake_limit: number;
   start_date: string;
   end_date: string;

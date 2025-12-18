@@ -36,7 +36,7 @@ const SelectUniversityAdmission = React.forwardRef<
 
       return (
         admissions.data.data?.map((admission) => ({
-          label: `Admission For ${admission.school_year?.name}`,
+          label: String(admission.title),
           value: String(admission.id),
         })) ?? []
       );

@@ -11,22 +11,18 @@ import {
   useUpdateUniversityAdmission,
 } from '@rest/api';
 import type { UniversityAdmission } from '@rest/models';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, type ChangeEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const universityAdmissionSchema = z
-  .object({
-    school_year_id: z.number().min(1, 'School year is required'),
-    open_date: z.string().min(1, 'Open date is required'),
-    close_date: z.string().min(1, 'Close date is required'),
-    is_open_override: z.boolean(),
-  })
-  .refine((data) => new Date(data.close_date) > new Date(data.open_date), {
-    message: 'Close date must be after open date',
-    path: ['close_date'],
-  });
+const universityAdmissionSchema = z.object({
+  school_year_id: z.number().min(1, 'School year is required'),
+  title: z.string().min(1, 'Title is required'),
+  open_date: z.string().min(1, 'Open date is required'),
+  close_date: z.string().min(1, 'Close date is required'),
+  is_open_override: z.boolean(),
+});
 
 type UniversityAdmissionFormData = z.infer<typeof universityAdmissionSchema>;
 
@@ -44,12 +40,14 @@ export default function UniversityAdmissionModal({
     handleSubmit,
     reset,
     setError,
+    setValue,
     control,
     formState: { errors },
   } = useForm<UniversityAdmissionFormData>({
     resolver: zodResolver(universityAdmissionSchema),
     defaultValues: {
       school_year_id: 0,
+      title: '',
       open_date: '',
       close_date: '',
       is_open_override: false,
@@ -77,6 +75,22 @@ export default function UniversityAdmissionModal({
       })) ?? [],
     [schoolYears]
   );
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const digits = inputValue.replace(/\D/g, '').slice(0, 8);
+
+    if (digits.length === 0) {
+      setValue('title', '');
+      return;
+    }
+
+    let formatted = 'ADMISSION SY ' + digits.slice(0, 4);
+    if (digits.length > 4) {
+      formatted += '-' + digits.slice(4);
+    }
+    setValue('title', formatted);
+  };
 
   const onFormSubmit = async (data: UniversityAdmissionFormData) => {
     try {
@@ -106,6 +120,7 @@ export default function UniversityAdmissionModal({
     if (!controller.data) {
       return reset({
         school_year_id: 0,
+        title: '',
         open_date: '',
         close_date: '',
         is_open_override: false,
@@ -114,6 +129,7 @@ export default function UniversityAdmissionModal({
     reset({
       ...controller.data,
       school_year_id: controller.data.school_year_id,
+      title: controller.data.title,
       open_date: controller.data.open_date.split('T')[0],
       close_date: controller.data.close_date.split('T')[0],
       is_open_override: controller.data.is_open_override,
@@ -145,6 +161,18 @@ export default function UniversityAdmissionModal({
           {errors.school_year_id && (
             <p className="text-sm text-destructive">{errors.school_year_id.message}</p>
           )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            placeholder="ADMISSION SY YYYY-YYYY"
+            {...register('title', {
+              onChange: handleTitleChange,
+            })}
+          />
+          {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
         </div>
 
         <div className="space-y-2">

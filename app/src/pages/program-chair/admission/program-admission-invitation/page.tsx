@@ -64,6 +64,10 @@ export default function ProgramChairAdmissionInvitation(): React.ReactNode {
       //   render: (_, row) => row.academic_program?.program_name ?? 'Unknown',
       // },
       {
+        key: 'title',
+        title: 'Title',
+      },
+      {
         key: 'intake_limit',
         title: 'Intake Limit',
       },

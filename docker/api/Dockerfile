@@ -38,5 +38,8 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port
 EXPOSE 8000
 
+# Link storage
+CMD php artisan storage:link
+
 # Start Laravel development server
 CMD php artisan serve --host=0.0.0.0 --port=8000

@@ -1,3 +1,4 @@
+import CampusRegistrarUniversityAdmissionApplication from '@/pages/campus-registrar/admission/application/page';
 import CampusRegistrarUniversityAdmissionDetail from '@/pages/campus-registrar/admission/university-admission-invitation/[id]/page';
 import CampusRegistrarUniversityAdmissionInvitation from '@/pages/campus-registrar/admission/university-admission-invitation/page';
 import CampusRegistrarEnrollment from '@/pages/campus-registrar/enrollment/page';
@@ -68,6 +69,17 @@ const CAMPUS_REGISTRAR: Route[] = [
         component: <CampusRegistrarUniversityAdmissionDetail />,
         layout: 'dashboard',
         sidebar: false,
+        roles: [UserRoleEnum.campus_registrar],
+      },
+      //
+      {
+        key: 'campus-registrar.university-admission.application',
+        title: 'Application',
+        path: '/campus-registrar/admission/application',
+        icon: <FileTextIcon className="h-4 w-4" />,
+        component: <CampusRegistrarUniversityAdmissionApplication />,
+        layout: 'dashboard',
+        sidebar: true,
         roles: [UserRoleEnum.campus_registrar],
       },
     ],

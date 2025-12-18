@@ -19,6 +19,7 @@ return new class extends Migration
                 ->constrained('school_year')
                 ->onDelete('cascade');
             // Field
+            $table->string('title');
             $table->dateTime('open_date');
             $table->dateTime('close_date');
             $table->boolean('is_open_override');

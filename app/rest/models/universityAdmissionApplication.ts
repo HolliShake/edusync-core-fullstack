@@ -5,6 +5,12 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { UniversityAdmissionApplicationLatestStatus } from './universityAdmissionApplicationLatestStatus';
+import type { User } from './user';
+import type { UniversityAdmission } from './universityAdmission';
+import type { UniversityAdmissionApplicationUniversityAdmissionSchedule } from './universityAdmissionApplicationUniversityAdmissionSchedule';
+import type { UniversityAdmissionApplicationCriteriaSubmission } from './universityAdmissionApplicationCriteriaSubmission';
+import type { UniversityAdmissionApplicationLog } from './universityAdmissionApplicationLog';
 
 export interface UniversityAdmissionApplication {
   readonly id?: number;
@@ -21,4 +27,13 @@ export interface UniversityAdmissionApplication {
   pool_no?: number;
   readonly created_at?: string;
   readonly updated_at?: string;
+  readonly temporary_id?: string;
+  readonly latest_status?: UniversityAdmissionApplicationLatestStatus;
+  readonly latest_status_label?: string;
+  user?: User;
+  university_admission?: UniversityAdmission;
+  /** @nullable */
+  university_admission_schedule?: UniversityAdmissionApplicationUniversityAdmissionSchedule;
+  university_admission_criteria_submissions?: UniversityAdmissionApplicationCriteriaSubmission[];
+  logs?: UniversityAdmissionApplicationLog[];
 }

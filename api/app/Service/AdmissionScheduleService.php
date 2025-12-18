@@ -70,30 +70,28 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
     {
         $universityAdmission = $this->universityAdmissionRepo->getById($data['university_admission_id']);
 
-        if (!$universityAdmission) {
-            throw new \Exception('University admission not found');
+        // Convert dates to Carbon instances for proper comparison
+        $admissionOpenDate = \Carbon\Carbon::parse($universityAdmission->open_date)->startOfDay();
+        $admissionCloseDate = \Carbon\Carbon::parse($universityAdmission->close_date)->endOfDay();
+        $scheduleStartDate = \Carbon\Carbon::parse($data['start_date'])->startOfDay();
+        $scheduleEndDate = \Carbon\Carbon::parse($data['end_date'])->endOfDay();
+
+        // Format dates for error messages
+        $minDate = $admissionOpenDate->format('F j, Y');
+        $maxDate = $admissionCloseDate->format('F j, Y');
+        $givenStartDate = $scheduleStartDate->format('F j, Y');
+        $givenEndDate = $scheduleEndDate->format('F j, Y');
+
+        if ($scheduleStartDate->lt($admissionOpenDate) || $scheduleStartDate->gt($admissionCloseDate)) {
+            throw new \Exception('Start date (' . $givenStartDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
-        if (!$universityAdmission->is_open_override && !$universityAdmission->is_ongoing) {
-            throw new \Exception('University admission is not open');
+        if ($scheduleEndDate->lt($scheduleStartDate)) {
+            throw new \Exception('End date (' . $givenEndDate . ') must be after the start date (' . $givenStartDate . ')');
         }
 
-        $startDate = $data['start_date'];
-        $endDate = $data['end_date'];
-
-        if ($startDate > $endDate) {
-            throw new \Exception('Start date must be before or equal to end date');
-        }
-
-        $openDate  = $universityAdmission->open_date;
-        $closeDate = $universityAdmission->close_date;
-
-        if ($startDate < $openDate || $startDate > $closeDate) {
-            throw new \Exception('Start date must be between university admission open and close dates');
-        }
-
-        if ($endDate < $openDate || $endDate > $closeDate) {
-            throw new \Exception('End date must be between university admission open and close dates');
+        if ($scheduleEndDate->gt($admissionCloseDate)) {
+            throw new \Exception('End date (' . $givenEndDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
         return $data;
@@ -103,30 +101,30 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
     {
         $universityAdmission = $this->universityAdmissionRepo->getById($data['university_admission_id']);
 
-        if (!$universityAdmission) {
-            throw new \Exception('University admission not found');
-        }
-
-        if (!$universityAdmission->is_open_override && !$universityAdmission->is_ongoing) {
-            throw new \Exception('University admission is not open');
-        }
-
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
+        // Convert dates to Carbon instances for proper comparison
+        $admissionOpenDate = \Carbon\Carbon::parse($universityAdmission->open_date)->startOfDay();
+        $admissionCloseDate = \Carbon\Carbon::parse($universityAdmission->close_date)->endOfDay();
+        $scheduleStartDate = \Carbon\Carbon::parse($startDate)->startOfDay();
+        $scheduleEndDate = \Carbon\Carbon::parse($endDate)->endOfDay();
 
-        if ($startDate > $endDate) {
-            throw new \Exception('Start date must be before or equal to end date');
+        // Format dates for error messages
+        $minDate = $admissionOpenDate->format('F j, Y');
+        $maxDate = $admissionCloseDate->format('F j, Y');
+        $givenStartDate = $scheduleStartDate->format('F j, Y');
+        $givenEndDate = $scheduleEndDate->format('F j, Y');
+
+        if ($scheduleStartDate->lt($admissionOpenDate) || $scheduleStartDate->gt($admissionCloseDate)) {
+            throw new \Exception('Start date (' . $givenStartDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
-        $openDate  = $universityAdmission->open_date;
-        $closeDate = $universityAdmission->close_date;
-
-        if ($startDate < $openDate || $startDate > $closeDate) {
-            throw new \Exception('Start date must be between university admission open and close dates');
+        if ($scheduleEndDate->lt($scheduleStartDate)) {
+            throw new \Exception('End date (' . $givenEndDate . ') must be after the start date (' . $givenStartDate . ')');
         }
 
-        if ($endDate < $openDate || $endDate > $closeDate) {
-            throw new \Exception('End date must be between university admission open and close dates');
+        if ($scheduleEndDate->gt($admissionCloseDate)) {
+            throw new \Exception('End date (' . $givenEndDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
         return $data;

@@ -313,7 +313,7 @@ import type {
   Section,
   SectionTeacher,
   SessionResponse200,
-  SubmitApplicationFormBodyItem,
+  SubmitUniversityAdmissionApplicationFormBody,
   SuccessResponse,
   SyncFinalGrade,
   SyncGradeBookScore,
@@ -17734,15 +17734,26 @@ export const useDeleteUniversityAdmissionApplication = <TError = Unauthenticated
  * Submit the application form with the provided details
  * @summary Submit the application form
  */
-export const submitApplicationForm = (
-    submitApplicationFormBodyItem: SubmitApplicationFormBodyItem[],
+export const submitUniversityAdmissionApplicationForm = (
+    submitUniversityAdmissionApplicationFormBody: SubmitUniversityAdmissionApplicationFormBody,
  signal?: AbortSignal
 ) => {
       
       const formData = new FormData();
-submitApplicationFormBody.forEach(value => formData.append('data', JSON.stringify(value)))
+if(submitUniversityAdmissionApplicationFormBody['user_id[]'] !== undefined) {
+ submitUniversityAdmissionApplicationFormBody['user_id[]'].forEach(value => formData.append(`user_id[]`, value.toString()));
+ }
+if(submitUniversityAdmissionApplicationFormBody['university_admission_id[]'] !== undefined) {
+ submitUniversityAdmissionApplicationFormBody['university_admission_id[]'].forEach(value => formData.append(`university_admission_id[]`, value.toString()));
+ }
+if(submitUniversityAdmissionApplicationFormBody['university_admission_criteria_id[]'] !== undefined) {
+ submitUniversityAdmissionApplicationFormBody['university_admission_criteria_id[]'].forEach(value => formData.append(`university_admission_criteria_id[]`, value.toString()));
+ }
+if(submitUniversityAdmissionApplicationFormBody['file[]'] !== undefined) {
+ submitUniversityAdmissionApplicationFormBody['file[]'].forEach(value => formData.append(`file[]`, value));
+ }
 
-      return fetchData<CreateUniversityAdmissionApplicationResponse200>(
+      return fetchData<unknown>(
       {url: `/api/UniversityAdmissionApplication/submitApplicationForm`, method: 'POST',
       headers: {'Content-Type': 'multipart/form-data', },
        data: formData, signal
@@ -17752,11 +17763,11 @@ submitApplicationFormBody.forEach(value => formData.append('data', JSON.stringif
   
 
 
-export const getSubmitApplicationFormMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitApplicationForm>>, TError,{data: SubmitApplicationFormBodyItem[]}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof submitApplicationForm>>, TError,{data: SubmitApplicationFormBodyItem[]}, TContext> => {
+export const getSubmitUniversityAdmissionApplicationFormMutationOptions = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitUniversityAdmissionApplicationForm>>, TError,{data: SubmitUniversityAdmissionApplicationFormBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof submitUniversityAdmissionApplicationForm>>, TError,{data: SubmitUniversityAdmissionApplicationFormBody}, TContext> => {
 
-const mutationKey = ['submitApplicationForm'];
+const mutationKey = ['submitUniversityAdmissionApplicationForm'];
 const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -17766,10 +17777,10 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitApplicationForm>>, {data: SubmitApplicationFormBodyItem[]}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitUniversityAdmissionApplicationForm>>, {data: SubmitUniversityAdmissionApplicationFormBody}> = (props) => {
           const {data} = props ?? {};
 
-          return  submitApplicationForm(data,)
+          return  submitUniversityAdmissionApplicationForm(data,)
         }
 
         
@@ -17777,23 +17788,23 @@ const {mutation: mutationOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type SubmitApplicationFormMutationResult = NonNullable<Awaited<ReturnType<typeof submitApplicationForm>>>
-    export type SubmitApplicationFormMutationBody = SubmitApplicationFormBodyItem[]
-    export type SubmitApplicationFormMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+    export type SubmitUniversityAdmissionApplicationFormMutationResult = NonNullable<Awaited<ReturnType<typeof submitUniversityAdmissionApplicationForm>>>
+    export type SubmitUniversityAdmissionApplicationFormMutationBody = SubmitUniversityAdmissionApplicationFormBody
+    export type SubmitUniversityAdmissionApplicationFormMutationError = ValidationErrorResponse | InternalServerErrorResponse
 
     /**
  * @summary Submit the application form
  */
-export const useSubmitApplicationForm = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitApplicationForm>>, TError,{data: SubmitApplicationFormBodyItem[]}, TContext>, }
+export const useSubmitUniversityAdmissionApplicationForm = <TError = ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitUniversityAdmissionApplicationForm>>, TError,{data: SubmitUniversityAdmissionApplicationFormBody}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof submitApplicationForm>>,
+        Awaited<ReturnType<typeof submitUniversityAdmissionApplicationForm>>,
         TError,
-        {data: SubmitApplicationFormBodyItem[]},
+        {data: SubmitUniversityAdmissionApplicationFormBody},
         TContext
       > => {
 
-      const mutationOptions = getSubmitApplicationFormMutationOptions(options);
+      const mutationOptions = getSubmitUniversityAdmissionApplicationFormMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

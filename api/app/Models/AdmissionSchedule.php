@@ -22,6 +22,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "university_admission_id", type: "integer"),
         new OA\Property(property: "academic_program_id", type: "integer"),
+        new OA\Property(property: "title", type: "string"),
         new OA\Property(property: "intake_limit", type: "integer"),
         new OA\Property(property: "start_date", type: "string", format: "date"),
         new OA\Property(property: "end_date", type: "string", format: "date"),
@@ -111,6 +112,7 @@ class AdmissionSchedule extends Model
     protected $fillable = [
         'university_admission_id',
         'academic_program_id',
+        'title',
         'intake_limit',
         'start_date',
         'end_date',
@@ -121,6 +123,7 @@ class AdmissionSchedule extends Model
         'end_date'       => 'date',
         'university_admission_id' => 'integer',
         'academic_program_id' => 'integer',
+        'title' => 'string',
         'intake_limit' => 'integer',
     ];
 

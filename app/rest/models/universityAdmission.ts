@@ -12,6 +12,7 @@ import type { AdmissionSchedule } from './admissionSchedule';
 export interface UniversityAdmission {
   readonly id?: number;
   school_year_id: number;
+  title?: string;
   open_date: string;
   close_date: string;
   is_open_override: boolean;

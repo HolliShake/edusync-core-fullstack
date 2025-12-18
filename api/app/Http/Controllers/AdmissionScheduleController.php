@@ -309,6 +309,7 @@ class AdmissionScheduleController extends Controller
             $validator = Validator::make($request->all(), [
                 'university_admission_id' => 'required|exists:university_admission,id',
                 'academic_program_id' => 'required|exists:academic_program,id',
+                'title' => 'required|string',
                 'intake_limit' => 'required|integer',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date',
@@ -381,6 +382,7 @@ class AdmissionScheduleController extends Controller
             $validator = Validator::make($request->all(), [
                 'university_admission_id' => 'required|exists:university_admission,id',
                 'academic_program_id' => 'required|exists:academic_program,id',
+                'title' => 'required|string',
                 'intake_limit' => 'required|integer',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date',

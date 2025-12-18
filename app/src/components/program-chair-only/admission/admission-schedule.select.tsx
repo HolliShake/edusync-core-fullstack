@@ -32,7 +32,7 @@ const SelectAdmissionSchedule = React.forwardRef<HTMLButtonElement, SelectAdmiss
 
       return (
         admissionSchedules.data.data?.map((admission) => ({
-          label: `Admission For ${admission?.university_admission?.school_year?.name}`,
+          label: String(admission.title),
           value: String(admission.id),
         })) ?? []
       );

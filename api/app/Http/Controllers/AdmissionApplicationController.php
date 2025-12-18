@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\AdmissionApplicationLogTypeEnum;
 use App\Service\AdmissionApplicationService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -59,7 +60,7 @@ class AdmissionApplicationController extends Controller
         in: "query",
         description: "Latest Status",
         required: false,
-        schema: new OA\Schema(type: "string")
+        schema: new OA\Schema(type: "string", enum: AdmissionApplicationLogTypeEnum::class)
     )]
     #[OA\Parameter(
         name: "filter[user_id]",

@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { GetAdmissionApplicationPaginatedFilterLatestStatus } from './getAdmissionApplicationPaginatedFilterLatestStatus';
 
 export type GetAdmissionApplicationPaginatedParams = {
 /**
@@ -26,7 +27,7 @@ rows?: number;
 /**
  * Latest Status
  */
-'filter[latest_status]'?: string;
+'filter[latest_status]'?: GetAdmissionApplicationPaginatedFilterLatestStatus;
 /**
  * User ID
  */

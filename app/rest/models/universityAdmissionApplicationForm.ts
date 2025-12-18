@@ -6,9 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SubmitApplicationFormBodyItem = {
-  user_id: number;
+export interface UniversityAdmissionApplicationForm {
   university_admission_id: number;
-  criteria_id: number;
+  user_id: number;
   file: Blob;
-};
+  university_admission_criteria_id: number;
+}

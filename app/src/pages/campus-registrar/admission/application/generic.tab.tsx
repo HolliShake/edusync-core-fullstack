@@ -1,40 +1,38 @@
 import Table, { type TableColumn } from '@/components/custom/table.component';
-import SelectAdmissionSchedule from '@/components/program-chair-only/admission/admission-schedule.select';
+import SelectUniversityAdmission from '@/components/shared/university-admission.select';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import { encryptIdForUrl } from '@/lib/hash';
-import { useGetAdmissionApplicationPaginated } from '@rest/api';
-import { AdmissionApplicationLogTypeEnum } from '@rest/models';
-import type { AdmissionApplication } from '@rest/models/admissionApplication';
+import { useGetUniversityAdmissionApplicationPaginated } from '@rest/api';
+import { AdmissionApplicationLogTypeEnum, type UniversityAdmissionApplication } from '@rest/models';
 import type React from 'react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function ProgramChairAdmissionApplicationGenericTab({
+export default function CampusRegistrarAdmissionApplicationGenericTab({
   status,
 }: {
   status: AdmissionApplicationLogTypeEnum;
 }): React.ReactNode {
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
-  const [admissionScheduleId, setadmissionScheduleId] = useState<number | undefined>(undefined);
+  const [universityAdmissionId, setUniversityAdmissionId] = useState<number | undefined>(undefined);
 
   const navigate = useNavigate();
 
   const { session } = useAuth();
 
   const { data: applications, isLoading: isLoadingApplications } =
-    useGetAdmissionApplicationPaginated(
+    useGetUniversityAdmissionApplicationPaginated(
       {
-        'filter[academic_program_id]': Number(session?.active_academic_program),
-        'filter[admission_schedule_id]': Number(admissionScheduleId),
+        'filter[university_admission_id]': Number(universityAdmissionId),
         'filter[latest_status]': status,
         page,
         rows,
       },
-      { query: { enabled: !!admissionScheduleId || !!session?.active_academic_program } }
+      { query: { enabled: !!universityAdmissionId || !!session?.active_academic_program } }
     );
 
   const getStatusVariant = (status: AdmissionApplicationLogTypeEnum) => {
@@ -57,32 +55,31 @@ export default function ProgramChairAdmissionApplicationGenericTab({
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
-  const columns = useMemo<TableColumn<AdmissionApplication>[]>(
+  const columns = useMemo<TableColumn<UniversityAdmissionApplication>[]>(
     () => [
+      //   {
+      //     key: 'university_admission',
+      //     title: 'University Admission',
+      //     render: (_, row) => row.university_admission?.title ?? 'N/A',
+      //   },
+      {
+        key: 'temporary_id',
+        title: 'Temporary ID',
+      },
       {
         key: 'name',
         title: 'Name',
-        render: (_, row) =>
-          `${row.first_name} ${row.middle_name ? row.middle_name + ' ' : ''}${row.last_name}`,
+        render: (_, row) => row.user?.name ?? 'N/A',
       },
       {
-        key: 'email',
-        title: 'Email',
+        key: 'is_passed',
+        title: 'Passed',
+        render: (_, row) => (row.is_passed ? 'Yes' : 'No'),
       },
       {
-        key: 'phone',
-        title: 'Phone',
-      },
-      {
-        key: 'academicProgram',
-        title: 'Program',
-        render: (_, row) => row.admission_schedule?.academic_program?.program_name ?? 'N/A',
-      },
-      {
-        key: 'schoolYear',
-        title: 'School Year',
-        render: (_, row) =>
-          row.admission_schedule?.university_admission?.school_year?.name ?? 'N/A',
+        key: 'score',
+        title: 'Score',
+        render: (_, row) => row.score ?? 'N/A',
       },
       {
         key: 'status',
@@ -146,10 +143,10 @@ export default function ProgramChairAdmissionApplicationGenericTab({
   return (
     <div className="space-y-2">
       <div className="w-fit">
-        <SelectAdmissionSchedule
-          value={admissionScheduleId?.toString()}
-          onValueChange={(value) => setadmissionScheduleId(parseInt(value))}
-          placeholder="Select admission schedule"
+        <SelectUniversityAdmission
+          value={universityAdmissionId?.toString()}
+          onValueChange={(value) => setUniversityAdmissionId(parseInt(value))}
+          placeholder="Select university admission"
         />
       </div>
       <Table
@@ -160,7 +157,7 @@ export default function ProgramChairAdmissionApplicationGenericTab({
         onPageChange={setPage}
         showPagination={true}
         onClickRow={(row) => {
-          navigate(`/program-chair/admission/application/${encryptIdForUrl(row.id as number)}`);
+          navigate(`/campus-registrar/admission/application/${encryptIdForUrl(row.id as number)}`);
         }}
       />
     </div>

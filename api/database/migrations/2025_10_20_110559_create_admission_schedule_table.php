@@ -23,6 +23,7 @@ return new class extends Migration
                 ->constrained('academic_program')
                 ->onDelete('cascade');
             // Field
+            $table->string('title');
             $table->integer('intake_limit');
             $table->date('start_date');
             $table->date('end_date');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\AdmissionApplicationLogTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Service\UniversityAdmissionApplicationService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -47,6 +48,20 @@ class UniversityAdmissionApplicationController extends Controller
         description: "Number of items per page",
         required: false,
         schema: new OA\Schema(type: "integer", default: 10)
+    )]
+    #[OA\Parameter(
+        name: "filter[university_admission_id]",
+        in: "query",
+        description: "University admission ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
+        name: "filter[latest_status]",
+        in: "query",
+        description: "Latest status",
+        required: false,
+        schema: new OA\Schema(type: "string", enum: AdmissionApplicationLogTypeEnum::class)
     )]
     #[OA\Response(
         response: 200,
@@ -181,41 +196,45 @@ class UniversityAdmissionApplicationController extends Controller
         summary: "Submit the application form",
         tags: ["UniversityAdmissionApplication"],
         description: "Submit the application form with the provided details",
-        operationId: "submitApplicationForm",
+        operationId: "submitUniversityAdmissionApplicationForm",
     )]
     #[OA\RequestBody(
+        request: "MultiFileUploadRequest",
         required: true,
         content: new OA\MediaType(
             mediaType: "multipart/form-data",
             schema: new OA\Schema(
-                type: "array",
-                items: new OA\Items(
-                    type: "object",
-                    required: ["user_id", "university_admission_id", "criteria_id", "file"],
-                    properties: [
-                        new OA\Property(property: "user_id", type: "integer"),
-                        new OA\Property(property: "university_admission_id", type: "integer"),
-                        new OA\Property(property: "criteria_id", type: "integer"),
-                        new OA\Property(property: "file", type: "string", format: "binary"),
-                    ]
-                )
+                type: "object",
+                required: [
+                    "user_id",
+                    "university_admission_id",
+                    "university_admission_criteria_id",
+                    "file"
+                ],
+                properties: [
+                    new OA\Property(
+                        property: "user_id[]",
+                        type: "array",
+                        items: new OA\Items(type: "integer")
+                    ),
+                    new OA\Property(
+                        property: "university_admission_id[]",
+                        type: "array",
+                        items: new OA\Items(type: "integer")
+                    ),
+                    new OA\Property(
+                        property: "university_admission_criteria_id[]",
+                        type: "array",
+                        items: new OA\Items(type: "integer")
+                    ),
+                    new OA\Property(
+                        property: "file[]",
+                        type: "array",
+                        items: new OA\Items(type: "string", format: "binary")
+                    ),
+                ]
             )
         )
-    )]
-    #[OA\Response(
-        response: 200,
-        description: "UniversityAdmissionApplication created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateUniversityAdmissionApplicationResponse200")
-    )]
-    #[OA\Response(
-        response: 401,
-        description: "Unauthenticated",
-        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
-    )]
-    #[OA\Response(
-        response: 403,
-        description: "Forbidden",
-        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
     )]
     #[OA\Response(
         response: 422,
@@ -229,14 +248,27 @@ class UniversityAdmissionApplicationController extends Controller
     )]
     public function submitApplicationForm(Request $request) {
         try {
-            $validator = Validator::make($request->all(), [
-                'user_id'                    => 'required|integer|exists:user,id',
-                'university_admission_id'    => 'required|integer|exists:university_admission,id',
-                'files.*'                    => 'required|file|max:10240',
-                'criteria_ids.*'             => 'required|integer|exists:university_admission_criteria,id',
-            ]);
-
-            throw new \Exception(json_encode($request->files->all()));
+            // Validate the 'data' array structure. 
+            // The schema is now an object with a 'data' property containing the array.
+            $validator = Validator::make(
+                array_merge(
+                    $request->all(),
+                    ['file' => $request->file('file')]
+                ),
+                [
+                    'user_id' => 'required|array',
+                    'user_id.*' => 'required|integer|exists:user,id',
+            
+                    'university_admission_id' => 'required|array',
+                    'university_admission_id.*' => 'required|integer|exists:university_admission,id',
+            
+                    'university_admission_criteria_id' => 'required|array',
+                    'university_admission_criteria_id.*' => 'required|integer|exists:university_admission_criteria,id',
+            
+                    'file' => 'required|array',
+                    'file.*' => 'required|file|max:10240',
+                ]
+            );
 
             if ($validator->fails()) {
                 return $this->validationError($validator->errors());
@@ -244,25 +276,7 @@ class UniversityAdmissionApplicationController extends Controller
 
             $validated = $validator->validated();
 
-            // Reconstruct the structure expected by the service
-            $criteriaFiles = [];
-            foreach ($validated['criteria_ids'] as $index => $criteriaId) {
-                if (isset($validated['files'][$index])) {
-                    $criteriaFiles[] = [
-                        'criteria_id' => $criteriaId,
-                        'file' => $validated['files'][$index]
-                    ];
-                }
-            }
-            
-            // Pass the reconstructed array to the service
-            $serviceData = [
-                'user_id' => $validated['user_id'],
-                'university_admission_id' => $validated['university_admission_id'],
-                'criteria_files' => $criteriaFiles
-            ];
-
-            return $this->ok($this->service->submitApplicationForm($serviceData));
+            return $this->ok($this->service->submitApplicationForm($validated));
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

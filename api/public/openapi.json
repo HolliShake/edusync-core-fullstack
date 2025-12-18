@@ -1248,7 +1248,14 @@
                         "description": "Latest Status",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "submitted",
+                                "cancelled",
+                                "approved",
+                                "rejected",
+                                "accepted"
+                            ]
                         }
                     },
                     {
@@ -16304,6 +16311,32 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "filter[university_admission_id]",
+                        "in": "query",
+                        "description": "University admission ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "filter[latest_status]",
+                        "in": "query",
+                        "description": "Latest status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "submitted",
+                                "cancelled",
+                                "approved",
+                                "rejected",
+                                "accepted"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -16618,72 +16651,51 @@
                 ],
                 "summary": "Submit the application form",
                 "description": "Submit the application form with the provided details",
-                "operationId": "submitApplicationForm",
+                "operationId": "submitUniversityAdmissionApplicationForm",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart\/form-data": {
                             "schema": {
-                                "type": "array",
-                                "items": {
-                                    "required": [
-                                        "user_id",
-                                        "university_admission_id",
-                                        "criteria_id",
-                                        "file"
-                                    ],
-                                    "properties": {
-                                        "user_id": {
+                                "required": [
+                                    "user_id",
+                                    "university_admission_id",
+                                    "university_admission_criteria_id",
+                                    "file"
+                                ],
+                                "properties": {
+                                    "user_id[]": {
+                                        "type": "array",
+                                        "items": {
                                             "type": "integer"
-                                        },
-                                        "university_admission_id": {
+                                        }
+                                    },
+                                    "university_admission_id[]": {
+                                        "type": "array",
+                                        "items": {
                                             "type": "integer"
-                                        },
-                                        "criteria_id": {
+                                        }
+                                    },
+                                    "university_admission_criteria_id[]": {
+                                        "type": "array",
+                                        "items": {
                                             "type": "integer"
-                                        },
-                                        "file": {
+                                        }
+                                    },
+                                    "file[]": {
+                                        "type": "array",
+                                        "items": {
                                             "type": "string",
                                             "format": "binary"
                                         }
-                                    },
-                                    "type": "object"
-                                }
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "UniversityAdmissionApplication created successfully",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/CreateUniversityAdmissionApplicationResponse200"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application\/json": {
-                                "schema": {
-                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Validation error",
                         "content": {
@@ -19965,6 +19977,9 @@
                     },
                     "academic_program_id": {
                         "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
                     },
                     "intake_limit": {
                         "type": "integer"
@@ -24956,6 +24971,9 @@
                     "school_year_id": {
                         "type": "integer"
                     },
+                    "title": {
+                        "type": "string"
+                    },
                     "open_date": {
                         "type": "string",
                         "format": "date-time"
@@ -25142,6 +25160,77 @@
                         "type": "string",
                         "format": "date-time",
                         "readOnly": true
+                    },
+                    "temporary_id": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "latest_status": {
+                        "type": "string",
+                        "enum": [
+                            "submitted",
+                            "cancelled",
+                            "approved",
+                            "rejected",
+                            "accepted"
+                        ],
+                        "readOnly": true
+                    },
+                    "latest_status_label": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "user": {
+                        "$ref": "#\/components\/schemas\/User"
+                    },
+                    "university_admission": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmission"
+                    },
+                    "university_admission_schedule": {
+                        "oneOf": [
+                            {
+                                "$ref": "#\/components\/schemas\/UniversityAdmissionSchedule"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "university_admission_criteria_submissions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                        }
+                    },
+                    "logs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationLog"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SubmitUniversityAdmissionApplicationForm": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "user_id": {
+                                    "type": "integer"
+                                },
+                                "university_admission_id": {
+                                    "type": "integer"
+                                },
+                                "university_admission_criteria_id": {
+                                    "type": "integer"
+                                },
+                                "file": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -25452,6 +25541,156 @@
                 "type": "object"
             },
             "DeleteUniversityAdmissionApplicationCriteriaSubmissionResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UniversityAdmissionApplicationLog": {
+                "title": "UniversityAdmissionApplicationLog",
+                "required": [
+                    "university_admission_application_id",
+                    "user_id",
+                    "type"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "university_admission_application_id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "$ref": "#\/components\/schemas\/AdmissionApplicationLogTypeEnum"
+                    },
+                    "note": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "type_label": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "university_admission_application": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplication"
+                    },
+                    "user": {
+                        "$ref": "#\/components\/schemas\/User"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionApplicationLog": {
+                "title": "PaginatedUniversityAdmissionApplicationLog",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationLog"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedUniversityAdmissionApplicationLogResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedUniversityAdmissionApplicationLog"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionApplicationLogResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationLog"
+                    }
+                },
+                "type": "object"
+            },
+            "GetUniversityAdmissionApplicationLogsResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationLog"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUniversityAdmissionApplicationLogResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationLog"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionApplicationLogResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationLog"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteUniversityAdmissionApplicationLogResponse200": {
                 "properties": {
                     "success": {
                         "type": "boolean",

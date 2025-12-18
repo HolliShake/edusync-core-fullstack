@@ -206,7 +206,8 @@ class UniversityAdmissionController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'school_year_id' => 'required|integer|exists:school_year,id',
-                'open_date' => 'required|date',
+                'title' => 'required|string',
+                'open_date' => 'required|date|after:now',
                 'close_date' => 'required|date|after:open_date',
                 'is_open_override' => 'required|boolean',
             ]);
@@ -277,6 +278,7 @@ class UniversityAdmissionController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'school_year_id' => 'required|integer|exists:school_year,id',
+                'title' => 'required|string',
                 'open_date' => 'required|date',
                 'close_date' => 'required|date|after:open_date',
                 'is_open_override' => 'required|boolean',

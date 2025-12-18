@@ -4,7 +4,7 @@ import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import UniversityAdmissionModal from '@/components/universisty-admission/universisty-admission.modal';
+import UniversityAdmissionModal from '@/components/university-admission/university-admission.modal';
 import { dateToWord } from '@/lib/formatter';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useGetUniversityAdmissionPaginated } from '@rest/api';
@@ -19,7 +19,11 @@ export default function CampusRegistrarUniversityAdmissionInvitation(): React.Re
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
 
-  const { data: admissions, refetch } = useGetUniversityAdmissionPaginated({
+  const {
+    data: admissions,
+    refetch,
+    isLoading: isLoadingAdmissions,
+  } = useGetUniversityAdmissionPaginated({
     sort: '-open_date',
     page,
     rows,
@@ -30,9 +34,9 @@ export default function CampusRegistrarUniversityAdmissionInvitation(): React.Re
   const columns = useMemo<TableColumn<UniversityAdmission>[]>(
     () => [
       {
-        key: 'school_year',
-        title: 'School Year',
-        render: (_, row) => row.school_year?.name ?? 'N/A',
+        key: 'title',
+        title: 'Title',
+        render: (_, row) => row.title ?? 'N/A',
       },
       {
         key: 'open_date',
@@ -116,6 +120,7 @@ export default function CampusRegistrarUniversityAdmissionInvitation(): React.Re
         pagination={paginationMeta}
         onPageChange={setPage}
         showPagination={true}
+        loading={isLoadingAdmissions}
       />
       <UniversityAdmissionModal controller={controller} onSubmit={() => refetch()} />
     </TitledPage>

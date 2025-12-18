@@ -55,12 +55,28 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         $start_date = $data['open_date'];
         $end_date   = $data['close_date'];
 
-        if ($start_date < $schoolYear->start_date || $start_date > $schoolYear->end_date) {
-            throw new \Exception('Open date must be within the school year period');
+        // Convert dates to Carbon instances for proper comparison
+        $schoolYearStart = \Carbon\Carbon::parse($schoolYear->start_date)->startOfDay();
+        $schoolYearEnd = \Carbon\Carbon::parse($schoolYear->end_date)->endOfDay();
+        $openDate = \Carbon\Carbon::parse($start_date)->startOfDay();
+        $closeDate = \Carbon\Carbon::parse($end_date)->endOfDay();
+
+        // Format dates for error messages
+        $minDate = $schoolYearStart->format('F j, Y');
+        $maxDate = $schoolYearEnd->format('F j, Y');
+        $givenOpenDate = $openDate->format('F j, Y');
+        $givenCloseDate = $closeDate->format('F j, Y');
+
+        if ($openDate->lt($schoolYearStart) || $openDate->gt($schoolYearEnd)) {
+            throw new \Exception('Open date (' . $givenOpenDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
-        if ($end_date < $schoolYear->start_date || $end_date > $schoolYear->end_date) {
-            throw new \Exception('Close date must be within the school year period');
+        if ($closeDate->lt($openDate)) {
+            throw new \Exception('Close date (' . $givenCloseDate . ') must be after the open date (' . $givenOpenDate . ')');
+        }
+
+        if ($closeDate->gt($schoolYearEnd)) {
+            throw new \Exception('Close date (' . $givenCloseDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
         return $data;
@@ -73,16 +89,31 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         if (!$schoolYear) {
             throw new \Exception('School year not found');
         }
-
         $start_date = $data['open_date'];
         $end_date   = $data['close_date'];
 
-        if ($start_date < $schoolYear->start_date || $start_date > $schoolYear->end_date) {
-            throw new \Exception('Open date must be within the school year period');
+        // Convert dates to Carbon instances for proper comparison
+        $schoolYearStart = \Carbon\Carbon::parse($schoolYear->start_date)->startOfDay();
+        $schoolYearEnd = \Carbon\Carbon::parse($schoolYear->end_date)->endOfDay();
+        $openDate = \Carbon\Carbon::parse($start_date)->startOfDay();
+        $closeDate = \Carbon\Carbon::parse($end_date)->endOfDay();
+
+        // Format dates for error messages
+        $minDate = $schoolYearStart->format('F j, Y');
+        $maxDate = $schoolYearEnd->format('F j, Y');
+        $givenOpenDate = $openDate->format('F j, Y');
+        $givenCloseDate = $closeDate->format('F j, Y');
+
+        if ($openDate->lt($schoolYearStart) || $openDate->gt($schoolYearEnd)) {
+            throw new \Exception('Open date (' . $givenOpenDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
-        if ($end_date < $schoolYear->start_date || $end_date > $schoolYear->end_date) {
-            throw new \Exception('Close date must be within the school year period');
+        if ($closeDate->lt($openDate)) {
+            throw new \Exception('Close date (' . $givenCloseDate . ') must be after the open date (' . $givenOpenDate . ')');
+        }
+
+        if ($closeDate->gt($schoolYearEnd)) {
+            throw new \Exception('Close date (' . $givenCloseDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
         }
 
         return $data;

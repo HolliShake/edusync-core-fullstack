@@ -9,13 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useCreateAdmissionSchedule,
   useGetAcademicCalendarPaginated,
+  useGetAcademicProgramById,
   useGetUniversityAdmissionPaginated,
   useUpdateAdmissionSchedule,
 } from '@rest/api';
 import { AcademicCalendarEventEnum } from '@rest/models';
 import type { AdmissionSchedule } from '@rest/models/admissionSchedule';
 import { format } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -23,6 +24,7 @@ import { z } from 'zod';
 const admissionScheduleSchema = z
   .object({
     university_admission_id: z.number().min(1, 'University admission is required'),
+    title: z.string().min(1, 'Title is required'),
     intake_limit: z.number().min(1, 'Intake limit must be at least 1'),
     start_date: z.string().min(1, 'Start date is required'),
     end_date: z.string().min(1, 'End date is required'),
@@ -57,6 +59,7 @@ export default function AdmissionScheduleModal({
     resolver: zodResolver(admissionScheduleSchema),
     defaultValues: {
       university_admission_id: 0,
+      title: '',
       intake_limit: 1,
       start_date: '',
       end_date: '',
@@ -68,6 +71,15 @@ export default function AdmissionScheduleModal({
     suggestedStart: string;
     suggestedEnd: string;
   } | null>(null);
+
+  const { data: academicProgramsResponse } = useGetAcademicProgramById(
+    Number(session?.active_academic_program),
+    {
+      query: {
+        enabled: !!session?.active_academic_program,
+      },
+    }
+  );
 
   const { data: universityAdmissionsResponse, isLoading: isLoadingUniversityAdmissions } =
     useGetUniversityAdmissionPaginated({
@@ -102,15 +114,10 @@ export default function AdmissionScheduleModal({
   const isSaving = useMemo(() => isPending || isUpdating, [isPending, isUpdating]);
   const isEdit = useMemo(() => !!controller.data?.id, [controller.data]);
 
-  const universityAdmissionOptions = useMemo(() => {
-    if (!universityAdmissionsResponse?.data) return [];
-    return (
-      universityAdmissionsResponse.data.data?.map((ua) => ({
-        label: `${ua.school_year?.name} - ${ua.is_open_override ? 'Open (Override)' : ua.is_ongoing ? 'Open' : 'Closed'}`,
-        value: String(ua.id),
-      })) ?? []
-    );
-  }, [universityAdmissionsResponse]);
+  const programShortName = useMemo(
+    () => academicProgramsResponse?.data?.short_name,
+    [academicProgramsResponse]
+  );
 
   useEffect(() => {
     if (isEdit) return; // disable time frame suggestion for edit
@@ -119,6 +126,7 @@ export default function AdmissionScheduleModal({
         ac.event === AcademicCalendarEventEnum.ENROLLMENT &&
         new Date(ac.end_date) >= new Date(Date.now())
     );
+
     setTimeFrameSuggestion(
       enrollment
         ? {
@@ -129,6 +137,22 @@ export default function AdmissionScheduleModal({
         : null
     );
   }, [academicCalendarResponse, watch('university_admission_id'), isEdit]);
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const digits = inputValue.replace(/\D/g, '').slice(0, 8);
+
+    if (digits.length === 0) {
+      setValue('title', '');
+      return;
+    }
+
+    let formatted = `${programShortName ? programShortName + ' ' : ''}SY ` + digits.slice(0, 4);
+    if (digits.length > 4) {
+      formatted += '-' + digits.slice(4);
+    }
+    setValue('title', formatted);
+  };
 
   const onFormSubmit = async (data: AdmissionScheduleFormData) => {
     const payload: AdmissionSchedule = {
@@ -163,24 +187,33 @@ export default function AdmissionScheduleModal({
   };
 
   useEffect(() => {
-    if (!controller.data) {
+    if (isEdit) {
+      if (controller.data?.start_date) {
+        setValue('start_date', format(new Date(controller.data.start_date), 'yyyy-MM-dd'));
+      }
+      if (controller.data?.end_date) {
+        setValue('end_date', format(new Date(controller.data.end_date), 'yyyy-MM-dd'));
+      }
+    } else {
       setTimeFrameSuggestion(null);
-      return reset({
+      reset({
         university_admission_id: 0,
+        title: '',
         intake_limit: 1,
         start_date: '',
         end_date: '',
       });
     }
 
-    setTimeFrameSuggestion(null);
-    reset({
-      university_admission_id: controller.data.university_admission_id,
-      intake_limit: controller.data.intake_limit,
-      start_date: format(new Date(controller.data.start_date), 'yyyy-MM-dd'),
-      end_date: format(new Date(controller.data.end_date), 'yyyy-MM-dd'),
-    });
-  }, [controller.isOpen, controller.data, reset]);
+    if (!isEdit && !controller.data) {
+      // reset called above
+    } else if (controller.data) {
+      setValue('university_admission_id', controller.data.university_admission_id);
+      setValue('title', controller.data.title || '');
+      setValue('intake_limit', controller.data.intake_limit);
+      // start_date and end_date handled above
+    }
+  }, [controller.isOpen, controller.data, reset, isEdit, setValue]);
 
   return (
     <Modal
@@ -207,6 +240,18 @@ export default function AdmissionScheduleModal({
           {errors.university_admission_id && (
             <p className="text-sm text-destructive">{errors.university_admission_id.message}</p>
           )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            placeholder={`${programShortName ? programShortName + ' ' : ''}SY YYYY-YYYY`}
+            {...register('title', {
+              onChange: handleTitleChange,
+            })}
+          />
+          {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
         </div>
 
         <div className="space-y-2">

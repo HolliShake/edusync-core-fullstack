@@ -8,7 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
-import { useGetCurrentUserInvitation, useGetUserById, useSubmitApplicationForm } from '@rest/api';
+import {
+  useGetCurrentUserInvitation,
+  useGetUserById,
+  useSubmitUniversityAdmissionApplicationForm,
+} from '@rest/api';
+import type { UniversityAdmissionApplicationForm } from '@rest/models';
 import { format } from 'date-fns';
 import {
   AlertCircle,
@@ -49,7 +54,7 @@ export default function GuestAdmissionUniversityApply(): React.ReactNode {
   });
 
   const { mutateAsync: submitApplicationForm, isPending: isSubmitting } =
-    useSubmitApplicationForm();
+    useSubmitUniversityAdmissionApplicationForm();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -131,16 +136,27 @@ export default function GuestAdmissionUniversityApply(): React.ReactNode {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload: any[] = Object.entries(criteriaFiles).map(([criteriaId, uploadedFile]) => ({
-      user_id: Number(session?.id),
-      university_admission_id: Number(invitationData?.id),
-      criteria_id: Number(criteriaId),
-      file: uploadedFile.file,
-    }));
+    const payload: UniversityAdmissionApplicationForm[] = Object.entries(criteriaFiles).map(
+      ([criteriaId, uploadedFile]) => ({
+        user_id: Number(session?.id),
+        university_admission_id: Number(invitationData?.id),
+        university_admission_criteria_id: Number(criteriaId),
+        file: uploadedFile.file as Blob,
+      })
+    );
+
+    console.log(JSON.stringify(payload));
 
     try {
       await submitApplicationForm({
-        data: payload,
+        data: {
+          'user_id[]': payload.map((item) => item.user_id),
+          'university_admission_id[]': payload.map((item) => item.university_admission_id),
+          'university_admission_criteria_id[]': payload.map(
+            (item) => item.university_admission_criteria_id
+          ),
+          'file[]': payload.map((item) => item.file),
+        },
       });
       toast.success('Application submitted');
       navigate(-1);
