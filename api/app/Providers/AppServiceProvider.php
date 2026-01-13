@@ -40,6 +40,7 @@ use App\Interface\IRepo\ISectionRepo;
 use App\Interface\IRepo\ISectionTeacherRepo;
 use App\Interface\IRepo\ITestingCenterRepo;
 use App\Interface\IRepo\IUniversityAdmissionApplicationCriteriaSubmissionRepo;
+use App\Interface\IRepo\IUniversityAdmissionApplicationLogRepo;
 use App\Interface\IRepo\IUniversityAdmissionApplicationRepo;
 use App\Interface\IRepo\IUniversityAdmissionCriteriaRepo;
 use App\Interface\IRepo\IUniversityAdmissionRepo;
@@ -82,6 +83,7 @@ use App\Interface\IService\ISectionService;
 use App\Interface\IService\ISectionTeacherService;
 use App\Interface\IService\ITestingCenterService;
 use App\Interface\IService\IUniversityAdmissionApplicationCriteriaSubmissionService;
+use App\Interface\IService\IUniversityAdmissionApplicationLogService;
 use App\Interface\IService\IUniversityAdmissionApplicationService;
 use App\Interface\IService\IUniversityAdmissionCriteriaService;
 use App\Interface\IService\IUniversityAdmissionScheduleService;
@@ -125,6 +127,7 @@ use App\Repo\SectionRepo;
 use App\Repo\SectionTeacherRepo;
 use App\Repo\TestingCenterRepo;
 use App\Repo\UniversityAdmissionApplicationCriteriaSubmissionRepo;
+use App\Repo\UniversityAdmissionApplicationLogRepo;
 use App\Repo\UniversityAdmissionApplicationRepo;
 use App\Repo\UniversityAdmissionCriteriaRepo;
 use App\Repo\UniversityAdmissionRepo;
@@ -167,6 +170,7 @@ use App\Service\SectionService;
 use App\Service\SectionTeacherService;
 use App\Service\TestingCenterService;
 use App\Service\UniversityAdmissionApplicationCriteriaSubmissionService;
+use App\Service\UniversityAdmissionApplicationLogService;
 use App\Service\UniversityAdmissionApplicationService;
 use App\Service\UniversityAdmissionCriteriaService;
 use App\Service\UniversityAdmissionScheduleService;
@@ -225,6 +229,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IUniversityAdmissionCriteriaRepo::class, UniversityAdmissionCriteriaRepo::class);
         $this->app->bind(IUniversityAdmissionApplicationRepo::class, UniversityAdmissionApplicationRepo::class);
         $this->app->bind(IUniversityAdmissionApplicationCriteriaSubmissionRepo::class, UniversityAdmissionApplicationCriteriaSubmissionRepo::class);
+        $this->app->bind(IUniversityAdmissionApplicationLogRepo::class, UniversityAdmissionApplicationLogRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -269,6 +274,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IUniversityAdmissionCriteriaService::class, UniversityAdmissionCriteriaService::class);
         $this->app->bind(IUniversityAdmissionApplicationService::class, UniversityAdmissionApplicationService::class);
         $this->app->bind(IUniversityAdmissionApplicationCriteriaSubmissionService::class, UniversityAdmissionApplicationCriteriaSubmissionService::class);
+        $this->app->bind(IUniversityAdmissionApplicationLogService::class, UniversityAdmissionApplicationLogService::class);
     }
 
     /**

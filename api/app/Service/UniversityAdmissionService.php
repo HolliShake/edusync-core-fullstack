@@ -27,10 +27,9 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         $now = now();
         
         $admission = $this->repository->query()
-            ->whereYear('open_date', $now->year)
-            ->where('close_date', '>=', $now)
+            ->where('close_date', '>=', $now->format('Y-m-d'))
             ->first();
-        
+
         if (!$admission) {
             return null;
         }

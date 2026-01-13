@@ -284,6 +284,7 @@ export * from './getTestingCentersResponse200';
 export * from './getUniversityAdmissionApplicationCriteriaSubmissionPaginatedParams';
 export * from './getUniversityAdmissionApplicationCriteriaSubmissionResponse200';
 export * from './getUniversityAdmissionApplicationCriteriaSubmissionsResponse200';
+export * from './getUniversityAdmissionApplicationLogPaginatedParams';
 export * from './getUniversityAdmissionApplicationLogResponse200';
 export * from './getUniversityAdmissionApplicationLogsResponse200';
 export * from './getUniversityAdmissionApplicationPaginatedFilterLatestStatus';

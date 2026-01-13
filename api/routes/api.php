@@ -3,6 +3,7 @@ use App\Http\Controllers\AdmissionCriteriaController;
 use App\Http\Controllers\TestingCenterController;
 use App\Http\Controllers\UniversityAdmissionApplicationController;
 use App\Http\Controllers\UniversityAdmissionApplicationCriteriaSubmissionController;
+use App\Http\Controllers\UniversityAdmissionApplicationLogController;
 use App\Http\Controllers\UniversityAdmissionController;
 use App\Http\Controllers\UniversityAdmissionCriteriaController;
 use App\Http\Controllers\UniversityAdmissionScheduleController;
@@ -433,4 +434,12 @@ Route::controller(UniversityAdmissionApplicationCriteriaSubmissionController::cl
     Route::post('/UniversityAdmissionApplicationCriteriaSubmission', 'store');
     Route::put('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(UniversityAdmissionApplicationLogController::class)->group(function() {
+    Route::get('/UniversityAdmissionApplicationLog', 'index');
+    Route::get('/UniversityAdmissionApplicationLog/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/UniversityAdmissionApplicationLog', 'store');
+    Route::put('/UniversityAdmissionApplicationLog/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/UniversityAdmissionApplicationLog/{id}', 'destroy')->where('id', '[0-9]+');
 });
