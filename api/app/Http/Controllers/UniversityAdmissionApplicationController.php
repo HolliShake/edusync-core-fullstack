@@ -57,6 +57,13 @@ class UniversityAdmissionApplicationController extends Controller
         schema: new OA\Schema(type: "integer", default: 0)
     )]
     #[OA\Parameter(
+        name: "filter[university_admission_schedule_id]",
+        in: "query",
+        description: "University admission schedule ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
         name: "filter[latest_status]",
         in: "query",
         description: "Latest status",

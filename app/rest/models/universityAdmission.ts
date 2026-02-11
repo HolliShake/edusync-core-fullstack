@@ -8,6 +8,7 @@
 import type { SchoolYear } from './schoolYear';
 import type { UniversityAdmissionCriteria } from './universityAdmissionCriteria';
 import type { AdmissionSchedule } from './admissionSchedule';
+import type { UniversityAdmissionSchedule } from './universityAdmissionSchedule';
 
 export interface UniversityAdmission {
   readonly id?: number;
@@ -20,4 +21,5 @@ export interface UniversityAdmission {
   school_year?: SchoolYear;
   university_admission_criterias?: UniversityAdmissionCriteria[];
   admission_schedules?: AdmissionSchedule[];
+  university_admission_schedules?: UniversityAdmissionSchedule[];
 }

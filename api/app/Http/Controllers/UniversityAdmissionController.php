@@ -101,7 +101,7 @@ class UniversityAdmissionController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetUniversityAdmissionResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetUniversityAdmissionsResponse200")
     )]
     #[OA\Response(
         response: 401,

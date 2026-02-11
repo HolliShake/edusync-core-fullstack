@@ -25,6 +25,10 @@ rows?: number;
  */
 'filter[university_admission_id]'?: number;
 /**
+ * University admission schedule ID
+ */
+'filter[university_admission_schedule_id]'?: number;
+/**
  * Latest status
  */
 'filter[latest_status]'?: GetUniversityAdmissionApplicationPaginatedFilterLatestStatus;

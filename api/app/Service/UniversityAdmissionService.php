@@ -26,21 +26,21 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
     {  
         $now = now();
         
-        $admission = $this->repository->query()
+        $openInvitations = $this->repository->query()
             ->where('close_date', '>=', $now->format('Y-m-d'))
-            ->first();
+            ->orWhere('is_open_override', true)
+            ->get();
 
-        if (!$admission) {
-            return null;
-        }
+        // Extract IDs for whereIn query
+        $openInvitationIds = $openInvitations->pluck('id')->toArray();
 
         // Check if user already applied
-        $hasApplied = $this->universityAdmissionApplicationRepo->query()
-            ->where('university_admission_id', $admission->id)
+        $hasApplied = !empty($openInvitationIds) && $this->universityAdmissionApplicationRepo->query()
+            ->whereIn('university_admission_schedule_id', $openInvitationIds)
             ->where('user_id', $userId)
             ->exists();
         
-        return $hasApplied ? null : $admission;
+        return $hasApplied ? null : $openInvitations->toArray();
     }
 
     public function beforeCreate(array $data): array

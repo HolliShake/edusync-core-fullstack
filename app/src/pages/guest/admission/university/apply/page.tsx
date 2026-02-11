@@ -20,6 +20,7 @@ import {
   ArrowLeft,
   Calendar,
   CheckCircle2,
+  Clock,
   FileText,
   GraduationCap,
   Info,
@@ -29,8 +30,8 @@ import {
   X,
 } from 'lucide-react';
 import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 interface UploadedFile {
@@ -40,6 +41,8 @@ interface UploadedFile {
 
 export default function GuestAdmissionUniversityApply(): React.ReactNode {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const admissionId = searchParams.get('admission_id');
   const { session } = useAuth();
   const { data: myInvitation, isLoading } = useGetCurrentUserInvitation(Number(session?.id), {
     query: {
@@ -67,7 +70,18 @@ export default function GuestAdmissionUniversityApply(): React.ReactNode {
   const [criteriaFiles, setCriteriaFiles] = useState<Record<number, UploadedFile>>({});
   const [draggedOver, setDraggedOver] = useState<number | null>(null);
 
-  const invitationData = myInvitation?.data;
+  const invitationData = useMemo(() => {
+    const allInvitations = Array.isArray(myInvitation?.data)
+      ? myInvitation?.data
+      : myInvitation?.data
+        ? [myInvitation?.data]
+        : [];
+    
+    if (admissionId) {
+      return allInvitations.find((inv) => inv.id === Number(admissionId)) || allInvitations[0];
+    }
+    return allInvitations[0];
+  }, [myInvitation?.data, admissionId]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -486,9 +500,13 @@ export default function GuestAdmissionUniversityApply(): React.ReactNode {
                     Please review all information before submitting
                   </p>
                 </div>
-                <Button type="submit" size="lg" className="w-full sm:w-auto">
-                  <Send className="mr-2 h-4 w-4" />
-                  Submit Application
+                <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <Clock className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="mr-2 h-4 w-4" />
+                  )}
+                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </Button>
               </div>
             </CardContent>

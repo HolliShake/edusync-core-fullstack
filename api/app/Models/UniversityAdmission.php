@@ -32,6 +32,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
         new OA\Property(property: "university_admission_criterias", type: "array", items: new OA\Items(ref: "#/components/schemas/UniversityAdmissionCriteria")),
         new OA\Property(property: "admission_schedules", type: "array", items: new OA\Items(ref: "#/components/schemas/AdmissionSchedule")),
+        new OA\Property(property: "university_admission_schedules", type: "array", items: new OA\Items(ref: "#/components/schemas/UniversityAdmissionSchedule")),
     ]
 )]
 
@@ -128,6 +129,7 @@ class UniversityAdmission extends Model
         'is_ongoing',
         'university_admission_criterias',
         'admission_schedules',
+        'university_admission_schedules',
     ];
 
     /**
@@ -137,7 +139,7 @@ class UniversityAdmission extends Model
      */
     public function getIsOngoingAttribute(): bool
     {
-        return now()->between($this->open_date, $this->close_date);
+        return now()->between($this->open_date, $this->close_date) || $this->is_open_override;
     }
 
     /**
@@ -158,6 +160,16 @@ class UniversityAdmission extends Model
     public function getAdmissionSchedulesAttribute(): array
     {
         return $this->admissionSchedules()->get()->makeHidden(['university_admission'])->toArray();
+    }
+
+    /**
+     * Get the university admission schedules for the university admission.
+     *
+     * @return array<UniversityAdmissionSchedule>
+     */
+    public function getUniversityAdmissionSchedulesAttribute(): array
+    {
+        return $this->universityAdmissionSchedules()->get()->makeHidden(['university_admission'])->toArray();
     }
 
     /**
@@ -196,5 +208,15 @@ class UniversityAdmission extends Model
     public function admissionSchedules(): HasMany
     {
         return $this->hasMany(AdmissionSchedule::class);
+    }
+
+    /**
+     * Get the university admission schedules for the university admission.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function universityAdmissionSchedules(): HasMany
+    {
+        return $this->hasMany(UniversityAdmissionSchedule::class);
     }
 }

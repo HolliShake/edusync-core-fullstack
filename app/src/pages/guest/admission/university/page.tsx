@@ -12,16 +12,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from '@/components/ui/carousel';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import AppConfig from '@/lib/app.config';
 import { useGetCurrentUserInvitation } from '@rest/api';
+import type { AdmissionSchedule } from '@rest/models';
 import { format, formatDistanceToNow } from 'date-fns';
 import {
   ArrowRight,
   BookOpen,
-  Calendar,
+  Calendar as CalendarIcon,
   CheckCircle2,
   Clock,
   GraduationCap,
@@ -30,6 +39,7 @@ import {
   Users,
 } from 'lucide-react';
 import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function GuestAdmissionUniversity(): React.ReactNode {
@@ -44,7 +54,41 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
     }
   );
 
-  const invitationData = myInvitation?.data;
+  const [selectedAdmissionId, setSelectedAdmissionId] = useState<number | null>(null);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+
+  const allInvitations = Array.isArray(myInvitation?.data)
+    ? myInvitation?.data
+    : myInvitation?.data
+      ? [myInvitation?.data]
+      : [];
+
+  useEffect(() => {
+    if (allInvitations && allInvitations.length > 0 && selectedAdmissionId === null) {
+      const firstId = allInvitations[0].id;
+      if (firstId !== undefined) {
+        setSelectedAdmissionId(firstId);
+      }
+    }
+  }, [allInvitations, selectedAdmissionId]);
+
+  useEffect(() => {
+    if (!carouselApi || !allInvitations) {
+      return;
+    }
+
+    carouselApi.on('select', () => {
+      const selectedIndex = carouselApi.selectedScrollSnap();
+      const selectedInvitation = allInvitations[selectedIndex];
+      if (selectedInvitation && selectedInvitation.id !== undefined) {
+        setSelectedAdmissionId(selectedInvitation.id);
+      }
+    });
+  }, [carouselApi, allInvitations]);
+
+  const invitationData = useMemo(() => {
+    return allInvitations?.find((inv) => inv.id === selectedAdmissionId);
+  }, [allInvitations, selectedAdmissionId]);
 
   // Calculate status helpers
   const today = new Date();
@@ -52,10 +96,28 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
   const endDate = invitationData ? new Date(invitationData.close_date) : null;
 
   const isOpen = invitationData?.is_ongoing;
-  const isUpcoming = startDate && today < startDate;
+  const isUpcoming = startDate && today < startDate && !invitationData?.is_ongoing;
+
+  const groupedPrograms = useMemo(() => {
+    if (!invitationData?.admission_schedules) return {};
+
+    const grouped: Record<string, { campusName: string; programs: AdmissionSchedule[] }> = {};
+
+    invitationData.admission_schedules.forEach((schedule) => {
+      const campusName = schedule.academic_program?.college?.campus?.name || 'Unknown Campus';
+      if (!grouped[campusName]) {
+        grouped[campusName] = { campusName, programs: [] };
+      }
+      grouped[campusName].programs.push(schedule);
+    });
+
+    return grouped;
+  }, [invitationData]);
 
   const onStartApplication = () => {
-    navigate('/guest/admission/invitation/apply');
+    if (selectedAdmissionId) {
+      navigate(`/guest/admission/invitation/apply?admission_id=${selectedAdmissionId}`);
+    }
   };
 
   if (isAuthLoading || isInvitationLoading) {
@@ -127,78 +189,178 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         {invitationData ? (
           <>
-            {/* Hero Section */}
-            <div className="relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow">
-              <div className="absolute top-0 right-0 -mt-16 -mr-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-              <div className="absolute bottom-0 left-0 -mb-16 -ml-16 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
+            {allInvitations && allInvitations.length > 1 ? (
+              <div className="relative">
+                <Carousel setApi={setCarouselApi} className="w-full">
+                  <CarouselContent>
+                    {allInvitations.map((inv) => (
+                      <CarouselItem key={inv.id}>
+                        <div className="relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow">
+                          <div className="absolute top-0 right-0 -mt-16 -mr-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+                          <div className="absolute bottom-0 left-0 -mb-16 -ml-16 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
 
-              <div className="relative p-8 md:p-12">
-                <div className="flex flex-col md:flex-row justify-between gap-6">
-                  <div className="space-y-4 max-w-2xl">
-                    <div className="space-y-2">
-                      <Badge
-                        variant={isOpen ? 'default' : 'secondary'}
-                        className="text-sm px-3 py-1"
-                      >
-                        {invitationData.school_year?.school_year_code} Academic Year
-                      </Badge>
-                      <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                        {invitationData.school_year?.name} Admission
-                      </h1>
-                      <p className="text-muted-foreground text-lg">
-                        We are looking for exceptional students to join our community. Review the
-                        requirements below and submit your application before the deadline.
-                      </p>
-                    </div>
+                          <div className="relative p-8 md:p-12">
+                            <div className="flex flex-col md:flex-row justify-between gap-6">
+                              <div className="space-y-4 max-w-2xl">
+                                <div className="space-y-2">
+                                  <Badge
+                                    variant={inv.is_ongoing ? 'default' : 'secondary'}
+                                    className="text-sm px-3 py-1"
+                                  >
+                                    {inv.school_year?.school_year_code} Academic Year
+                                  </Badge>
+                                  <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                                    {inv.school_year?.name} Admission
+                                  </h1>
+                                  <p className="text-muted-foreground text-lg">
+                                    We are looking for exceptional students to join our community.
+                                    Review the requirements below and submit your application before
+                                    the deadline.
+                                  </p>
+                                </div>
 
-                    <div className="flex flex-wrap gap-4 pt-4">
-                      {isOpen && (
-                        <Button
-                          size="lg"
-                          className="font-semibold shadow-lg shadow-primary/20"
-                          onClick={onStartApplication}
+                                <div className="flex flex-wrap gap-4 pt-4">
+                                  {inv.is_ongoing && (
+                                    <Button
+                                      size="lg"
+                                      className="font-semibold shadow-lg shadow-primary/20"
+                                      onClick={onStartApplication}
+                                    >
+                                      Start Application <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                  )}
+                                  {!inv.is_ongoing && (
+                                    <Button size="lg" variant="outline" disabled>
+                                      {new Date(inv.open_date) > new Date()
+                                        ? 'Opening Soon'
+                                        : 'Admission Closed'}
+                                    </Button>
+                                  )}
+                                  <Button variant="outline" size="lg">
+                                    Download Course Catalog
+                                  </Button>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col gap-4 min-w-[240px] bg-background/50 backdrop-blur-sm p-6 rounded-xl border">
+                                <div className="space-y-1">
+                                  <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
+                                    <CalendarIcon className="h-4 w-4" /> Opening Date
+                                  </div>
+                                  <div className="font-semibold text-lg">
+                                    {inv.open_date
+                                      ? format(new Date(inv.open_date), 'MMMM do, yyyy')
+                                      : 'TBA'}
+                                  </div>
+                                </div>
+                                <Separator />
+                                <div className="space-y-1">
+                                  <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
+                                    <Clock className="h-4 w-4" /> Deadline
+                                  </div>
+                                  <div
+                                    className={`font-semibold text-lg ${
+                                      inv.is_ongoing ? 'text-primary' : ''
+                                    }`}
+                                  >
+                                    {inv.close_date
+                                      ? format(new Date(inv.close_date), 'MMMM do, yyyy')
+                                      : 'TBA'}
+                                  </div>
+                                  {inv.is_ongoing && inv.close_date && (
+                                    <p className="text-xs text-muted-foreground">
+                                      Closes{' '}
+                                      {formatDistanceToNow(new Date(inv.close_date), {
+                                        addSuffix: true,
+                                      })}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-8" />
+                  <CarouselNext className="right-8" />
+                </Carousel>
+              </div>
+            ) : (
+              <div className="relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow">
+                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+                <div className="absolute bottom-0 left-0 -mb-16 -ml-16 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
+
+                <div className="relative p-8 md:p-12">
+                  <div className="flex flex-col md:flex-row justify-between gap-6">
+                    <div className="space-y-4 max-w-2xl">
+                      <div className="space-y-2">
+                        <Badge
+                          variant={isOpen ? 'default' : 'secondary'}
+                          className="text-sm px-3 py-1"
                         >
-                          Start Application <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      )}
-                      {!isOpen && (
-                        <Button size="lg" variant="outline" disabled>
-                          {isUpcoming ? 'Opening Soon' : 'Admission Closed'}
-                        </Button>
-                      )}
-                      <Button variant="outline" size="lg">
-                        Download Course Catalog
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-4 min-w-[240px] bg-background/50 backdrop-blur-sm p-6 rounded-xl border">
-                    <div className="space-y-1">
-                      <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
-                        <Calendar className="h-4 w-4" /> Opening Date
-                      </div>
-                      <div className="font-semibold text-lg">
-                        {startDate ? format(startDate, 'MMMM do, yyyy') : 'TBA'}
-                      </div>
-                    </div>
-                    <Separator />
-                    <div className="space-y-1">
-                      <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
-                        <Clock className="h-4 w-4" /> Deadline
-                      </div>
-                      <div className={`font-semibold text-lg ${isOpen ? 'text-primary' : ''}`}>
-                        {endDate ? format(endDate, 'MMMM do, yyyy') : 'TBA'}
-                      </div>
-                      {isOpen && endDate && (
-                        <p className="text-xs text-muted-foreground">
-                          Closes {formatDistanceToNow(endDate, { addSuffix: true })}
+                          {invitationData.school_year?.school_year_code} Academic Year
+                        </Badge>
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                          {invitationData.school_year?.name} Admission
+                        </h1>
+                        <p className="text-muted-foreground text-lg">
+                          We are looking for exceptional students to join our community. Review the
+                          requirements below and submit your application before the deadline.
                         </p>
-                      )}
+                      </div>
+
+                      <div className="flex flex-wrap gap-4 pt-4">
+                        {isOpen && (
+                          <Button
+                            size="lg"
+                            className="font-semibold shadow-lg shadow-primary/20"
+                            onClick={onStartApplication}
+                          >
+                            Start Application <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        )}
+                        {!isOpen && (
+                          <Button size="lg" variant="outline" disabled>
+                            {isUpcoming ? 'Opening Soon' : 'Admission Closed'}
+                          </Button>
+                        )}
+                        <Button variant="outline" size="lg">
+                          Download Course Catalog
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4 min-w-[240px] bg-background/50 backdrop-blur-sm p-6 rounded-xl border">
+                      <div className="space-y-1">
+                        <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
+                          <CalendarIcon className="h-4 w-4" /> Opening Date
+                        </div>
+                        <div className="font-semibold text-lg">
+                          {startDate ? format(startDate, 'MMMM do, yyyy') : 'TBA'}
+                        </div>
+                      </div>
+                      <Separator />
+                      <div className="space-y-1">
+                        <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
+                          <Clock className="h-4 w-4" /> Deadline
+                        </div>
+                        <div className={`font-semibold text-lg ${isOpen ? 'text-primary' : ''}`}>
+                          {endDate ? format(endDate, 'MMMM do, yyyy') : 'TBA'}
+                        </div>
+                        {isOpen && endDate && (
+                          <p className="text-xs text-muted-foreground">
+                            Closes {formatDistanceToNow(endDate, { addSuffix: true })}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
 
             <div className="grid gap-6 md:grid-cols-3">
               {/* Requirements Column */}
@@ -214,62 +376,72 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
                       Explore the academic programs accepting applications for this admission cycle.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    {invitationData.admission_schedules &&
-                    invitationData.admission_schedules.length > 0 ? (
-                      <div className="grid gap-4">
-                        {invitationData.admission_schedules.map((schedule) => {
-                          const scheduleStartDate = new Date(schedule.start_date);
-                          const scheduleEndDate = new Date(schedule.end_date);
-                          const isProgramOpen =
-                            today >= scheduleStartDate && today <= scheduleEndDate;
+                  <CardContent className="space-y-8">
+                    {Object.keys(groupedPrograms).length > 0 ? (
+                      Object.values(groupedPrograms).map(({ campusName, programs }) => (
+                        <div key={campusName} className="space-y-4">
+                          <h3 className="font-semibold text-lg border-b pb-2 flex items-center gap-2">
+                            <div className="h-2 w-2 rounded-full bg-primary" />
+                            {campusName}
+                          </h3>
+                          <div className="grid gap-4">
+                            {programs.map((schedule) => {
+                              const scheduleStartDate = new Date(schedule.start_date);
+                              const scheduleEndDate = new Date(schedule.end_date);
+                              const isProgramOpen =
+                                today >= scheduleStartDate && today <= scheduleEndDate;
 
-                          return (
-                            <div
-                              key={schedule.id}
-                              className="group flex items-start gap-4 rounded-lg border p-4 transition-all hover:bg-muted/50 hover:shadow-sm"
-                            >
-                              <div
-                                className={`mt-1 rounded-full p-2 ${
-                                  isProgramOpen
-                                    ? 'bg-primary/10 text-primary'
-                                    : 'bg-muted text-muted-foreground'
-                                }`}
-                              >
-                                <BookOpen className="h-4 w-4" />
-                              </div>
-                              <div className="flex-1 space-y-2">
-                                <div className="flex items-start justify-between gap-4">
-                                  <div>
-                                    <h4 className="font-semibold">
-                                      {schedule.academic_program?.program_name}
-                                    </h4>
-                                    <p className="text-sm text-muted-foreground">
-                                      {schedule.academic_program?.program_name}
-                                    </p>
+                              return (
+                                <div
+                                  key={schedule.id}
+                                  className="group flex items-start gap-4 rounded-lg border p-4 transition-all hover:bg-muted/50 hover:shadow-sm"
+                                >
+                                  <div
+                                    className={`mt-1 rounded-full p-2 ${
+                                      isProgramOpen
+                                        ? 'bg-primary/10 text-primary'
+                                        : 'bg-muted text-muted-foreground'
+                                    }`}
+                                  >
+                                    <BookOpen className="h-4 w-4" />
                                   </div>
-                                  <Badge variant={isProgramOpen ? 'default' : 'secondary'}>
-                                    {isProgramOpen ? 'Open' : 'Closed'}
-                                  </Badge>
+                                  <div className="flex-1 space-y-2">
+                                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                                      <div>
+                                        <h4 className="font-semibold">
+                                          {schedule.academic_program?.program_name}
+                                        </h4>
+                                        <p className="text-sm text-muted-foreground">
+                                          {schedule.academic_program?.program_type?.name}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                          {schedule.academic_program?.college?.college_name}
+                                        </p>
+                                      </div>
+                                      <Badge variant={isProgramOpen ? 'default' : 'secondary'}>
+                                        {isProgramOpen ? 'Open' : 'Closed'}
+                                      </Badge>
+                                    </div>
+                                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                                      <div className="flex items-center gap-1">
+                                        <CalendarIcon className="h-3.5 w-3.5" />
+                                        <span>
+                                          {format(scheduleStartDate, 'MMM d')} -{' '}
+                                          {format(scheduleEndDate, 'MMM d, yyyy')}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <Users className="h-3.5 w-3.5" />
+                                        <span>Intake Limit: {schedule.intake_limit}</span>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                                  <div className="flex items-center gap-1">
-                                    <Calendar className="h-3.5 w-3.5" />
-                                    <span>
-                                      {format(scheduleStartDate, 'MMM d')} -{' '}
-                                      {format(scheduleEndDate, 'MMM d, yyyy')}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <Users className="h-3.5 w-3.5" />
-                                    <span>Intake Limit: {schedule.intake_limit}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))
                     ) : (
                       <Alert>
                         <Info className="h-4 w-4" />
@@ -392,7 +564,7 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
             <div className="relative mb-8 group cursor-default">
               <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-50 group-hover:opacity-75 transition-opacity duration-500" />
               <div className="relative bg-card p-8 rounded-full border shadow-xl ring-1 ring-border/50">
-                <Calendar className="h-16 w-16 text-muted-foreground/80" />
+                <CalendarIcon className="h-16 w-16 text-muted-foreground/80" />
                 <div className="absolute -bottom-2 -right-2 bg-background rounded-full p-2 border shadow-sm">
                   <Clock className="h-6 w-6 text-primary" />
                 </div>

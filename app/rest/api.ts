@@ -254,6 +254,7 @@ import type {
   GetUniversityAdmissionResponse200,
   GetUniversityAdmissionSchedulePaginatedParams,
   GetUniversityAdmissionScheduleResponse200,
+  GetUniversityAdmissionsResponse200,
   GetUserPaginatedParams,
   GetUserResponse200,
   GradeBook,
@@ -18755,7 +18756,7 @@ export const getCurrentUserInvitation = (
 ) => {
       
       
-      return fetchData<GetUniversityAdmissionResponse200>(
+      return fetchData<GetUniversityAdmissionsResponse200>(
       {url: `/api/UniversityAdmission/Invitation/${userId}`, method: 'GET', signal
     },
       );

@@ -108,6 +108,20 @@ class Building extends Model
         'campus_id' => 'integer',
     ];
 
+    protected $appends = [
+        'campus',
+    ];
+
+    /**
+     * Get the campus that owns the building.
+     *
+     * @return Campus
+     */
+    public function getCampusAttribute(): Campus
+    {
+        return $this->campus()->first();
+    }
+
     /**
      * Get the campus that owns the building.
      *
