@@ -50,6 +50,13 @@ class UniversityAdmissionApplicationController extends Controller
         schema: new OA\Schema(type: "integer", default: 10)
     )]
     #[OA\Parameter(
+        name: "filter[user_id]",
+        in: "query",
+        description: "User ID",
+        required: false,
+        schema: new OA\Schema(type: "integer", default: 0)
+    )]
+    #[OA\Parameter(
         name: "filter[university_admission_id]",
         in: "query",
         description: "University admission ID",
@@ -255,7 +262,7 @@ class UniversityAdmissionApplicationController extends Controller
     )]
     public function submitApplicationForm(Request $request) {
         try {
-            // Validate the 'data' array structure. 
+            // Validate the 'data' array structure.
             // The schema is now an object with a 'data' property containing the array.
             $validator = Validator::make(
                 array_merge(
@@ -265,13 +272,13 @@ class UniversityAdmissionApplicationController extends Controller
                 [
                     'user_id' => 'required|array',
                     'user_id.*' => 'required|integer|exists:user,id',
-            
+
                     'university_admission_id' => 'required|array',
                     'university_admission_id.*' => 'required|integer|exists:university_admission,id',
-            
+
                     'university_admission_criteria_id' => 'required|array',
                     'university_admission_criteria_id.*' => 'required|integer|exists:university_admission_criteria,id',
-            
+
                     'file' => 'required|array',
                     'file.*' => 'required|file|max:10240',
                 ]

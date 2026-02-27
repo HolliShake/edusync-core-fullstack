@@ -21,6 +21,10 @@ page?: number;
  */
 rows?: number;
 /**
+ * User ID
+ */
+'filter[user_id]'?: number;
+/**
  * University admission ID
  */
 'filter[university_admission_id]'?: number;
