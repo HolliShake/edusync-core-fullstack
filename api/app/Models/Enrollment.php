@@ -36,6 +36,7 @@ use OpenApi\Attributes as OA;
         ),
         new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
         new OA\Property(property: "is_enrollment_valid", type: "boolean", readOnly: true),
+        new OA\Property(property: "is_officially_enrolled", type: "boolean", readOnly: true),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "section", ref: "#/components/schemas/Section"),
@@ -134,7 +135,8 @@ class Enrollment extends Model
         'section',
         'latest_status',
         'latest_status_label',
-        'is_enrollment_valid'
+        'is_enrollment_valid',
+        'is_officially_enrolled',
     ];
 
     /**
@@ -165,8 +167,8 @@ class Enrollment extends Model
             ->get()
             ->makeHidden(['enrollment', 'user'])
             ->pluck('action');
-        return $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED)
-            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED)
+        return $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED) // program chair approved
+            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED) // registrar approved
             && !$this->is_dropped;
     }
 
@@ -181,8 +183,8 @@ class Enrollment extends Model
             ->get()
             ->makeHidden(['enrollment', 'user'])
             ->pluck('action');
-        return $logs->contains(EnrollmentLogActionEnum::DROPPED->value)
-            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value);
+        return $logs->contains(EnrollmentLogActionEnum::DROPPED->value) // user requested to drop
+            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value); // registrar approved the drop
     }
 
     /**
@@ -214,6 +216,24 @@ class Enrollment extends Model
     {
         // If enrollment is already passed, or course is already credited, then return false
         return true;
+    }
+
+    /**
+     * Get the is officially enrolled attribute.
+     *
+     * @return bool
+     */
+    public function getIsOfficallyEnrolledAttribute()
+    {
+        $logs = $this->enrollmentLogs()
+            ->get()
+            ->makeHidden(['enrollment', 'user'])
+            ->pluck('action');
+        return (!$logs->contains(EnrollmentLogActionEnum::DROPPED->value))
+            && (!$logs->contains(EnrollmentLogActionEnum::REJECTED->value)) // student not rejected by program chair or registrar
+            && $logs->contains(EnrollmentLogActionEnum::ENROLL->value) // student requested to enroll
+            && $logs->contains(EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value) // program chair approved
+            && $logs->contains(EnrollmentLogActionEnum::REGISTRAR_APPROVED->value); // registrar approved
     }
 
     /**

@@ -24,6 +24,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
 import AppConfig from '@/lib/app.config';
+import { encryptIdForUrl } from '@/lib/hash';
 import { useGetCurrentUserInvitation } from '@rest/api';
 import type { AdmissionSchedule } from '@rest/models';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -116,7 +117,7 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
 
   const onStartApplication = () => {
     if (selectedAdmissionId) {
-      navigate(`/guest/admission/invitation/apply?admission_id=${selectedAdmissionId}`);
+      navigate(`/guest/admission/invitation/apply/${encryptIdForUrl(selectedAdmissionId)}`);
     }
   };
 
@@ -361,7 +362,6 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
               </div>
             )}
 
-
             <div className="grid gap-6 md:grid-cols-3">
               {/* Requirements Column */}
               <div className="md:col-span-2 space-y-6">
@@ -481,6 +481,9 @@ export default function GuestAdmissionUniversity(): React.ReactNode {
                             <div className="flex-1 space-y-1">
                               <div className="flex items-center justify-between">
                                 <h4 className="font-semibold">{criteria.title}</h4>
+                                <Badge variant="secondary" className="ml-2">
+                                  weight {criteria.weight}%
+                                </Badge>
                               </div>
                               <p className="text-sm text-muted-foreground">
                                 {criteria.requirement?.requirement_name}

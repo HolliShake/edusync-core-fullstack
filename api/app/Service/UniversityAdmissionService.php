@@ -7,7 +7,9 @@ use App\Interface\IRepo\IUniversityAdmissionRepo;
 use App\Interface\IRepo\ISchoolYearRepo;
 use App\Interface\IRepo\IUniversityAdmissionApplicationRepo;
 use Auth;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UniversityAdmissionService extends GenericService implements IUniversityAdmissionService
 {
@@ -23,9 +25,9 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
 
 
     public function getCurrentUserInvitation(int $userId)
-    {  
+    {
         $now = now();
-        
+
         $openInvitations = $this->repository->query()
             ->where('close_date', '>=', $now->format('Y-m-d'))
             ->orWhere('is_open_override', true)
@@ -36,10 +38,10 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
 
         // Check if user already applied
         $hasApplied = !empty($openInvitationIds) && $this->universityAdmissionApplicationRepo->query()
-            ->whereIn('university_admission_schedule_id', $openInvitationIds)
+            ->whereIn('university_admission_id', $openInvitationIds)
             ->where('user_id', $userId)
             ->exists();
-        
+
         return $hasApplied ? null : $openInvitations->toArray();
     }
 
@@ -48,17 +50,19 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         $schoolYear = $this->schoolYearRepo->getById($data['school_year_id']);
 
         if (!$schoolYear) {
-            throw new \Exception('School year not found');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('school_year_id', 'School year not found');
+            throw new ValidationException($validator);
         }
 
         $start_date = $data['open_date'];
         $end_date   = $data['close_date'];
 
         // Convert dates to Carbon instances for proper comparison
-        $schoolYearStart = \Carbon\Carbon::parse($schoolYear->start_date)->startOfDay();
-        $schoolYearEnd = \Carbon\Carbon::parse($schoolYear->end_date)->endOfDay();
-        $openDate = \Carbon\Carbon::parse($start_date)->startOfDay();
-        $closeDate = \Carbon\Carbon::parse($end_date)->endOfDay();
+        $schoolYearStart = Carbon::parse($schoolYear->start_date)->startOfDay();
+        $schoolYearEnd = Carbon::parse($schoolYear->end_date)->endOfDay();
+        $openDate = Carbon::parse($start_date)->startOfDay();
+        $closeDate = Carbon::parse($end_date)->endOfDay();
 
         // Format dates for error messages
         $minDate = $schoolYearStart->format('F j, Y');
@@ -67,15 +71,21 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         $givenCloseDate = $closeDate->format('F j, Y');
 
         if ($openDate->lt($schoolYearStart) || $openDate->gt($schoolYearEnd)) {
-            throw new \Exception('Open date (' . $givenOpenDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('open_date', 'Open date (' . $givenOpenDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($closeDate->lt($openDate)) {
-            throw new \Exception('Close date (' . $givenCloseDate . ') must be after the open date (' . $givenOpenDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('close_date', 'Close date (' . $givenCloseDate . ') must be after the open date (' . $givenOpenDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($closeDate->gt($schoolYearEnd)) {
-            throw new \Exception('Close date (' . $givenCloseDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('close_date', 'Close date (' . $givenCloseDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         return $data;
@@ -86,16 +96,18 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         $schoolYear = $this->schoolYearRepo->getById($data['school_year_id']);
 
         if (!$schoolYear) {
-            throw new \Exception('School year not found');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('school_year_id', 'School year not found');
+            throw new ValidationException($validator);
         }
         $start_date = $data['open_date'];
         $end_date   = $data['close_date'];
 
         // Convert dates to Carbon instances for proper comparison
-        $schoolYearStart = \Carbon\Carbon::parse($schoolYear->start_date)->startOfDay();
-        $schoolYearEnd = \Carbon\Carbon::parse($schoolYear->end_date)->endOfDay();
-        $openDate = \Carbon\Carbon::parse($start_date)->startOfDay();
-        $closeDate = \Carbon\Carbon::parse($end_date)->endOfDay();
+        $schoolYearStart = Carbon::parse($schoolYear->start_date)->startOfDay();
+        $schoolYearEnd = Carbon::parse($schoolYear->end_date)->endOfDay();
+        $openDate = Carbon::parse($start_date)->startOfDay();
+        $closeDate = Carbon::parse($end_date)->endOfDay();
 
         // Format dates for error messages
         $minDate = $schoolYearStart->format('F j, Y');
@@ -104,15 +116,21 @@ class UniversityAdmissionService extends GenericService implements IUniversityAd
         $givenCloseDate = $closeDate->format('F j, Y');
 
         if ($openDate->lt($schoolYearStart) || $openDate->gt($schoolYearEnd)) {
-            throw new \Exception('Open date (' . $givenOpenDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('open_date', 'Open date (' . $givenOpenDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($closeDate->lt($openDate)) {
-            throw new \Exception('Close date (' . $givenCloseDate . ') must be after the open date (' . $givenOpenDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('close_date', 'Close date (' . $givenCloseDate . ') must be after the open date (' . $givenOpenDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($closeDate->gt($schoolYearEnd)) {
-            throw new \Exception('Close date (' . $givenCloseDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('close_date', 'Close date (' . $givenCloseDate . ') must be within the school year period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         return $data;

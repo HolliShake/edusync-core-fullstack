@@ -158,6 +158,12 @@ class UniversityAdmissionApplication extends Model
         'logs',
     ];
 
+    public function getNextStepAttribute(): string
+    {
+        $latestLog = $this->latestStatus()->first();
+        return $latestLog?->type_label ?? AdmissionApplicationLogTypeEnum::SUBMITTED->value;
+    }
+
     public function getTemporaryIdAttribute(): string
     {
        $pool = $this->pool_no;
@@ -216,11 +222,11 @@ class UniversityAdmissionApplication extends Model
     public function getUniversityAdmissionScheduleAttribute(): ?UniversityAdmissionSchedule
     {
         $schedule = $this->universityAdmissionSchedule()->first();
-        
+
         if (!$schedule) {
             return null;
         }
-        
+
         return $schedule->makeHidden(['university_admission']);
     }
 
@@ -246,7 +252,7 @@ class UniversityAdmissionApplication extends Model
             ->makeHidden(['university_admission_application', 'user'])
             ->toArray();
     }
-    
+
     /**
      * Get the user that owns the university admission application.
      *

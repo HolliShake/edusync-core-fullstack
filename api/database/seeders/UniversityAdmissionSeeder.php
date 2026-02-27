@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\SchoolYear;
 use App\Models\UniversityAdmission;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class UniversityAdmissionSeeder extends Seeder
@@ -22,8 +23,11 @@ class UniversityAdmissionSeeder extends Seeder
         }
 
         if ($schoolYear) {
+            $startYear = Carbon::parse($schoolYear->start_date)->year;
+            $endedYear = $startYear + 1;
             UniversityAdmission::create([
                 'school_year_id' => $schoolYear->id,
+                'title' => 'ADMISSION SY ' . $startYear . '-' . $endedYear,
                 'open_date' => $schoolYear->start_date,
                 'close_date' => $schoolYear->end_date,
                 'is_open_override' => false,

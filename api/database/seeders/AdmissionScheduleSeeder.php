@@ -39,8 +39,11 @@ class AdmissionScheduleSeeder extends Seeder
                     ->first();
 
                 if (!$existingSchedule) {
+                    $startYear = Carbon::parse($universityAdmission->schoolYear->start_date)->year;
+                    $endedYear = $startYear + 1;
                     AdmissionSchedule::create([
                         'university_admission_id' => $universityAdmission->id,
+                        'title' => $academicProgram->short_name . ' SY ' . $startYear . '-' . $endedYear,
                         'academic_program_id' => $academicProgram->id,
                         'intake_limit' => rand(50, 150),
                         'start_date' => $admissionStart,

@@ -230,6 +230,8 @@ class AcademicCalendarController extends Controller
             return $this->ok($this->service->create($validated));
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->validationError($e->errors());
         }
     }
 
@@ -328,6 +330,8 @@ class AcademicCalendarController extends Controller
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
             return $this->notFound('AcademicCalendar not found');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->validationError($e->errors());
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

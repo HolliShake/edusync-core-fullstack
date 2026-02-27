@@ -219,6 +219,8 @@ class UniversityAdmissionController extends Controller
             $validated = $validator->validated();
 
             return $this->ok($this->service->create($validated));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->validationError($e->errors());
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -293,6 +295,8 @@ class UniversityAdmissionController extends Controller
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
             return $this->notFound('UniversityAdmission not found');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->validationError($e->errors());
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

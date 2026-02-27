@@ -149,6 +149,28 @@ class AdmissionApplication extends Model
         'logs',
     ];
 
+    public function getIsLockedForSelection()
+    {
+        // locked if user is already enrolled to the program
+        $user = $this->user()->first();
+        if (!$user) {
+            return false;
+        }
+
+        $schedule = $this->admissionSchedule()->first();
+        if (!$schedule) {
+            return false;
+        }
+
+        $hasMatchingEnrollment = $user->officialEnrollments()
+            ->whereHas('section.curriculumDetail.curriculum', function ($query) use ($schedule) {
+                $query->where('academic_program_id', $schedule->academic_program_id);
+            })
+            ->exists();
+
+        return $hasMatchingEnrollment;
+    }
+
     /**
      * Check if the admission application is open for enrollment.
      *

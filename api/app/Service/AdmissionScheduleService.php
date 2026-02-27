@@ -5,7 +5,10 @@ namespace App\Service;
 use App\Interface\IRepo\IUniversityAdmissionRepo;
 use App\Interface\IService\IAdmissionScheduleService;
 use App\Interface\IRepo\IAdmissionScheduleRepo;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AdmissionScheduleService extends GenericService implements IAdmissionScheduleService
 {
@@ -70,11 +73,17 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
     {
         $universityAdmission = $this->universityAdmissionRepo->getById($data['university_admission_id']);
 
+        if (!$universityAdmission) {
+            $validator = Validator::make([], []);
+            $validator->errors()->add('university_admission_id', 'University admission not found');
+            throw new ValidationException($validator);
+        }
+
         // Convert dates to Carbon instances for proper comparison
-        $admissionOpenDate = \Carbon\Carbon::parse($universityAdmission->open_date)->startOfDay();
-        $admissionCloseDate = \Carbon\Carbon::parse($universityAdmission->close_date)->endOfDay();
-        $scheduleStartDate = \Carbon\Carbon::parse($data['start_date'])->startOfDay();
-        $scheduleEndDate = \Carbon\Carbon::parse($data['end_date'])->endOfDay();
+        $admissionOpenDate = Carbon::parse($universityAdmission->open_date)->startOfDay();
+        $admissionCloseDate = Carbon::parse($universityAdmission->close_date)->endOfDay();
+        $scheduleStartDate = Carbon::parse($data['start_date'])->startOfDay();
+        $scheduleEndDate = Carbon::parse($data['end_date'])->endOfDay();
 
         // Format dates for error messages
         $minDate = $admissionOpenDate->format('F j, Y');
@@ -83,15 +92,21 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
         $givenEndDate = $scheduleEndDate->format('F j, Y');
 
         if ($scheduleStartDate->lt($admissionOpenDate) || $scheduleStartDate->gt($admissionCloseDate)) {
-            throw new \Exception('Start date (' . $givenStartDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('start_date', 'Start date (' . $givenStartDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($scheduleEndDate->lt($scheduleStartDate)) {
-            throw new \Exception('End date (' . $givenEndDate . ') must be after the start date (' . $givenStartDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('end_date', 'End date (' . $givenEndDate . ') must be after the start date (' . $givenStartDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($scheduleEndDate->gt($admissionCloseDate)) {
-            throw new \Exception('End date (' . $givenEndDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('end_date', 'End date (' . $givenEndDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         return $data;
@@ -101,13 +116,19 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
     {
         $universityAdmission = $this->universityAdmissionRepo->getById($data['university_admission_id']);
 
+        if (!$universityAdmission) {
+            $validator = Validator::make([], []);
+            $validator->errors()->add('university_admission_id', 'University admission not found');
+            throw new ValidationException($validator);
+        }
+
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
         // Convert dates to Carbon instances for proper comparison
-        $admissionOpenDate = \Carbon\Carbon::parse($universityAdmission->open_date)->startOfDay();
-        $admissionCloseDate = \Carbon\Carbon::parse($universityAdmission->close_date)->endOfDay();
-        $scheduleStartDate = \Carbon\Carbon::parse($startDate)->startOfDay();
-        $scheduleEndDate = \Carbon\Carbon::parse($endDate)->endOfDay();
+        $admissionOpenDate = Carbon::parse($universityAdmission->open_date)->startOfDay();
+        $admissionCloseDate = Carbon::parse($universityAdmission->close_date)->endOfDay();
+        $scheduleStartDate = Carbon::parse($startDate)->startOfDay();
+        $scheduleEndDate = Carbon::parse($endDate)->endOfDay();
 
         // Format dates for error messages
         $minDate = $admissionOpenDate->format('F j, Y');
@@ -116,15 +137,21 @@ class AdmissionScheduleService extends GenericService implements IAdmissionSched
         $givenEndDate = $scheduleEndDate->format('F j, Y');
 
         if ($scheduleStartDate->lt($admissionOpenDate) || $scheduleStartDate->gt($admissionCloseDate)) {
-            throw new \Exception('Start date (' . $givenStartDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('start_date', 'Start date (' . $givenStartDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($scheduleEndDate->lt($scheduleStartDate)) {
-            throw new \Exception('End date (' . $givenEndDate . ') must be after the start date (' . $givenStartDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('end_date', 'End date (' . $givenEndDate . ') must be after the start date (' . $givenStartDate . ')');
+            throw new ValidationException($validator);
         }
 
         if ($scheduleEndDate->gt($admissionCloseDate)) {
-            throw new \Exception('End date (' . $givenEndDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            $validator = Validator::make([], []);
+            $validator->errors()->add('end_date', 'End date (' . $givenEndDate . ') must be within the university admission period (' . $minDate . ' to ' . $maxDate . ')');
+            throw new ValidationException($validator);
         }
 
         return $data;

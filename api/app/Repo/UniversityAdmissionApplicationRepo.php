@@ -23,6 +23,7 @@ class UniversityAdmissionApplicationRepo extends GenericRepo implements IUnivers
             // Add campus-specific filters here
             // Example: AllowedFilter::exact('status'),
             // Example: AllowedFilter::partial('name'),
+            AllowedFilter::exact('user_id'),
             AllowedFilter::exact('university_admission_id'),
             AllowedFilter::callback('university_admission_schedule_id', function ($query, $value) {
                 $query->whereHas('universityAdmissionSchedule', function ($q) use ($value) {

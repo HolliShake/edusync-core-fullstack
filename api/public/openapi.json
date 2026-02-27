@@ -22589,6 +22589,10 @@
                         "type": "boolean",
                         "readOnly": true
                     },
+                    "is_officially_enrolled": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
                     "user": {
                         "$ref": "#\/components\/schemas\/User"
                     },

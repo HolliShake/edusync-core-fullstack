@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enum\EnrollmentLogActionEnum;
 use App\Enum\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -160,18 +161,18 @@ class User extends Authenticatable
     {
         return ['roles', 'profile_weight'];
     }
-    
+
     /**
      * Calculate the profile completion weight as a percentage.
-     * 
+     *
      * This accessor computes the profile completeness based on three key fields:
      * - Email address
      * - Full name
      * - Family background records
-     * 
+     *
      * @return float The profile completion percentage (0-100)
      */
-    public function getProfileWeightAttribute(): float 
+    public function getProfileWeightAttribute(): float
     {
         $weight = 0;
         $totalFields = 3;
@@ -277,6 +278,25 @@ class User extends Authenticatable
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    /**
+     * Get all official enrollments for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function officialEnrollments()
+    {
+        return $this->enrollments()
+            ->whereHas('enrollmentLogs', function ($query) {
+                $query->where('action', EnrollmentLogActionEnum::ENROLL->value)
+                    ->orWhere('action', EnrollmentLogActionEnum::PROGRAM_CHAIR_APPROVED->value)
+                    ->orWhere('action', EnrollmentLogActionEnum::REGISTRAR_APPROVED->value);
+            })
+            ->whereDoesntHave('enrollmentLogs', function ($query) {
+                $query->where('action', EnrollmentLogActionEnum::REGISTRAR_DROPPED_APPROVED->value)
+                    ->orWhere('action', EnrollmentLogActionEnum::REJECTED->value);
+            });
     }
 
     /**

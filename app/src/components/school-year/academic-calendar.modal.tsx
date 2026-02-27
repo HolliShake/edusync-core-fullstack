@@ -36,6 +36,7 @@ const academicCalendarSchema = z.object({
     })
     .min(1, 'School Year is required'),
   event: z.enum(events),
+  order: z.number().min(0, 'Order is required'),
 });
 
 type AcademicCalendarFormData = z.infer<typeof academicCalendarSchema>;
@@ -83,6 +84,7 @@ export default function AcademicCalendarModal({
       end_date: '',
       school_year_id: getDefaultSchoolYearId(),
       event: undefined,
+      order: 0,
     },
   });
 
@@ -123,17 +125,21 @@ export default function AcademicCalendarModal({
         end_date: '',
         school_year_id: getDefaultSchoolYearId(),
         event: undefined,
+        order: 0,
       });
     }
-    // Patch values from edit row
+
+    const jsStartDate = controller.data.start_date ? new Date(controller.data.start_date) : null;
+    const jsEndDate = controller.data.end_date ? new Date(controller.data.end_date) : null;
     reset({
       name: controller.data.name ?? '',
       description:
         typeof controller.data.description === 'string' ? controller.data.description : '',
-      start_date: controller.data.start_date ?? '',
-      end_date: controller.data.end_date ?? '',
+      start_date: jsStartDate ? jsStartDate.toISOString().slice(0, 10) : '',
+      end_date: jsEndDate ? jsEndDate.toISOString().slice(0, 10) : '',
       school_year_id: controller.data.school_year_id ?? schoolYear?.id ?? 0,
       event: controller.data.event ?? undefined,
+      order: controller.data.order ?? 0,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller.isOpen, reset, schoolYear, controller.data]);
