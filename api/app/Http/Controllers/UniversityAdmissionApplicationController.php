@@ -349,7 +349,12 @@ class UniversityAdmissionApplicationController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-
+                'university_admission_id' => 'sometimes|required|integer|exists:university_admission,id',
+                'university_admission_schedule_id' => 'sometimes|required|integer|exists:university_admission_schedule,id',
+                'user_id' => 'sometimes|required|integer|exists:user,id',
+                'is_passed' => 'sometimes|nullable|boolean',
+                'score' => 'sometimes|nullable|numeric',
+                'remark' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -361,6 +366,8 @@ class UniversityAdmissionApplicationController extends Controller
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
             return $this->notFound('UniversityAdmissionApplication not found');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->validationError($e->errors());
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

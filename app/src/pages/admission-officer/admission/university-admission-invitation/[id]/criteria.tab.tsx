@@ -3,21 +3,20 @@ import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import { Button } from '@/components/ui/button';
-import UniversityAdmissionScheduleModal from '@/components/university-admission-schedule/university-admission-schedule.modal';
-import { dateToWord } from '@/lib/formatter';
+import UniversityAdmissionCriteriaModal from '@/components/university-admission-criteria/university-admission-criteria.modal';
 import { decryptIdFromUrl } from '@/lib/hash';
 import {
-  useDeleteUniversityAdmissionSchedule,
-  useGetUniversityAdmissionSchedulePaginated,
+  useDeleteUniversityAdmissionCriteria,
+  useGetUniversityAdmissionCriteriaPaginated,
 } from '@rest/api';
-import type { UniversityAdmissionSchedule } from '@rest/models';
+import type { UniversityAdmissionCriteria } from '@rest/models';
 import { EditIcon, EllipsisIcon, Plus, Trash2Icon } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'sonner';
 
-export default function CampusRegistrarUniversityAdmissionDetailScheduleTab(): React.ReactNode {
+export default function AdmissionOfficerUniversityAdmissionDetailCriteriaTab(): React.ReactNode {
   const { universityAdmissionId } = useParams<{ universityAdmissionId: string }>();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
@@ -28,10 +27,10 @@ export default function CampusRegistrarUniversityAdmissionDetailScheduleTab(): R
   );
 
   const {
-    data: schedulesData,
+    data: criteriaData,
     refetch,
     isLoading,
-  } = useGetUniversityAdmissionSchedulePaginated({
+  } = useGetUniversityAdmissionCriteriaPaginated({
     page,
     rows,
     'filter[university_admission_id]': Number(parsedUniversityAdmissionId),
@@ -39,48 +38,67 @@ export default function CampusRegistrarUniversityAdmissionDetailScheduleTab(): R
 
   const confirm = useConfirm();
 
-  const deleteScheduleMutation = useDeleteUniversityAdmissionSchedule();
+  const deleteCriteriaMutation = useDeleteUniversityAdmissionCriteria();
 
-  const controller = useModal<UniversityAdmissionSchedule>();
+  const controller = useModal<UniversityAdmissionCriteria>();
 
-  const schedules = useMemo(() => schedulesData?.data?.data ?? [], [schedulesData]);
-  const paginationMeta = useMemo(() => schedulesData?.data, [schedulesData]);
+  const criteria = useMemo(() => criteriaData?.data?.data ?? [], [criteriaData]);
+  const paginationMeta = useMemo(() => criteriaData?.data, [criteriaData]);
 
-  const handleDelete = async (schedule: UniversityAdmissionSchedule) => {
+  const handleDelete = async (criteriaItem: UniversityAdmissionCriteria) => {
     confirm.confirm(async () => {
       try {
-        await deleteScheduleMutation.mutateAsync({ id: schedule.id! });
-        toast.success('Schedule deleted successfully');
+        await deleteCriteriaMutation.mutateAsync({ id: criteriaItem.id! });
+        toast.success('Criteria deleted successfully');
         refetch();
       } catch (error) {
-        toast.error('Failed to delete schedule');
+        toast.error('Failed to delete criteria');
         console.error('Delete error:', error);
       }
     });
   };
 
-  const columns = useMemo<TableColumn<UniversityAdmissionSchedule>[]>(
+  const columns = useMemo<TableColumn<UniversityAdmissionCriteria>[]>(
     () => [
       {
-        key: 'testing_center_id',
-        title: 'Testing Center',
-        render: (_, row) => {
-          const testingCenter = row.testing_center;
-          if (testingCenter?.room?.building?.name && testingCenter?.room?.room_code) {
-            return `${testingCenter.room.building.name} - ${testingCenter.room.room_code}`;
-          }
-          return testingCenter?.code ?? `Testing Center #${row.testing_center_id}`;
-        },
+        key: 'title',
+        title: 'Title',
+        render: (_, row) => row.title,
       },
       {
-        key: 'start_date',
-        title: 'Start Date',
-        render: (_, row) => dateToWord(row.start_date),
+        key: 'requirement',
+        title: 'Requirement',
+        render: (_, row) => row.requirement?.requirement_name ?? 'N/A',
       },
       {
-        key: 'end_date',
-        title: 'End Date',
-        render: (_, row) => dateToWord(row.end_date),
+        key: 'score_range',
+        title: 'Score Range',
+        render: (_, row) => `${row.min_score} - ${row.max_score}`,
+      },
+      {
+        key: 'weight',
+        title: 'Weight',
+        render: (_, row) => row.weight,
+      },
+      {
+        key: 'file_suffix',
+        title: 'File Suffix',
+        render: (_, row) => row.file_suffix,
+      },
+      {
+        key: 'is_active',
+        title: 'Status',
+        render: (_, row) => (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+              row.is_active
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+            }`}
+          >
+            {row.is_active ? 'Active' : 'Inactive'}
+          </span>
+        ),
       },
       {
         key: 'actions',
@@ -122,26 +140,26 @@ export default function CampusRegistrarUniversityAdmissionDetailScheduleTab(): R
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Schedules</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Admission Criteria</h2>
           <p className="text-muted-foreground">
-            Manage admission testing schedules and testing centers
+            Manage admission criteria and requirements for evaluation
           </p>
         </div>
         <Button onClick={() => controller.openFn()}>
           <Plus className="h-4 w-4 mr-2" />
-          Add Schedule
+          Add Criteria
         </Button>
       </div>
       <Table
         columns={columns}
-        rows={schedules}
+        rows={criteria}
         loading={isLoading}
         showPagination={true}
         pagination={paginationMeta}
         onPageChange={setPage}
-        emptyState="No schedules found. Add a schedule to get started."
+        emptyState="No criteria found. Add a criteria to get started."
       />
-      <UniversityAdmissionScheduleModal
+      <UniversityAdmissionCriteriaModal
         controller={controller}
         universityAdmissionId={parsedUniversityAdmissionId}
         onSubmit={() => refetch()}

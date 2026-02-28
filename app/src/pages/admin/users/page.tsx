@@ -2,6 +2,7 @@ import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { AdmissionOfficerTab } from './admission-officer.tab';
 import { CampusRegistrarTab } from './campus-registrar.tab';
 import { CollegeDeanTab } from './college-dean.tab';
 import { UserListTab } from './list.tab';
@@ -26,6 +27,10 @@ export default function AdminUsers(): React.ReactNode {
       {
         label: 'Program Chair',
         value: 'program_chair',
+      },
+      {
+        label: 'Admission Officer',
+        value: 'admission_officer',
       },
     ],
     []
@@ -72,6 +77,10 @@ export default function AdminUsers(): React.ReactNode {
         {/* Program Chair */}
         <TabsContent value="program_chair">
           <ProgramChairTab />
+        </TabsContent>
+        {/* Admission Officer */}
+        <TabsContent value="admission_officer">
+          <AdmissionOfficerTab />
         </TabsContent>
       </Tabs>
     </TitledPage>

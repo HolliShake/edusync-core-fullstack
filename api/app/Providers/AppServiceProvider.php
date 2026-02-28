@@ -31,6 +31,7 @@ use App\Interface\IRepo\IGradeBookItemRepo;
 use App\Interface\IRepo\IGradeBookRepo;
 use App\Interface\IRepo\IGradeBookScoreRepo;
 use App\Interface\IRepo\IGradingPeriodGradeRepo;
+use App\Interface\IRepo\IOfficeRepo;
 use App\Interface\IRepo\IProgramTypeRepo;
 use App\Interface\IRepo\IRequirementRepo;
 use App\Interface\IRepo\IRoomRepo;
@@ -74,6 +75,7 @@ use App\Interface\IService\IGradeBookItemDetailService;
 use App\Interface\IService\IGradeBookItemService;
 use App\Interface\IService\IGradeBookService;
 use App\Interface\IService\IGradingPeriodGradeService;
+use App\Interface\IService\IOfficeService;
 use App\Interface\IService\IProgramTypeService;
 use App\Interface\IService\IRequirementService;
 use App\Interface\IService\IRoomService;
@@ -118,6 +120,7 @@ use App\Repo\GradeBookItemRepo;
 use App\Repo\GradeBookRepo;
 use App\Repo\GradeBookScoreRepo;
 use App\Repo\GradingPeriodGradeRepo;
+use App\Repo\OfficeRepo;
 use App\Repo\ProgramTypeRepo;
 use App\Repo\RequirementRepo;
 use App\Repo\RoomRepo;
@@ -161,6 +164,7 @@ use App\Service\GradeBookItemDetailService;
 use App\Service\GradeBookItemService;
 use App\Service\GradeBookService;
 use App\Service\GradingPeriodGradeService;
+use App\Service\OfficeService;
 use App\Service\ProgramTypeService;
 use App\Service\RequirementService;
 use App\Service\RoomService;
@@ -230,6 +234,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IUniversityAdmissionApplicationRepo::class, UniversityAdmissionApplicationRepo::class);
         $this->app->bind(IUniversityAdmissionApplicationCriteriaSubmissionRepo::class, UniversityAdmissionApplicationCriteriaSubmissionRepo::class);
         $this->app->bind(IUniversityAdmissionApplicationLogRepo::class, UniversityAdmissionApplicationLogRepo::class);
+        $this->app->bind(IOfficeRepo::class, OfficeRepo::class);
         // Service
         $this->app->bind(IAcademicCalendarService::class, AcademicCalendarService::class);
         $this->app->bind(IAcademicProgramService::class, AcademicProgramService::class);
@@ -275,6 +280,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IUniversityAdmissionApplicationService::class, UniversityAdmissionApplicationService::class);
         $this->app->bind(IUniversityAdmissionApplicationCriteriaSubmissionService::class, UniversityAdmissionApplicationCriteriaSubmissionService::class);
         $this->app->bind(IUniversityAdmissionApplicationLogService::class, UniversityAdmissionApplicationLogService::class);
+        $this->app->bind(IOfficeService::class, OfficeService::class);
     }
 
     /**

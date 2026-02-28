@@ -1,4 +1,5 @@
 import ADMIN from './admin';
+import ADMISSION_OFFICER from './admission-officer';
 import AUTH from './auth';
 import CAMPUS_REGISTRAR from './campus-registrar';
 import FACULTY from './faculty';
@@ -12,6 +13,7 @@ export const ROUTES = Object.freeze([
   ...GUEST,
   ...PROGRAM_CHAIR,
   ...CAMPUS_REGISTRAR,
+  ...ADMISSION_OFFICER,
 ]);
 
 export default ROUTES;

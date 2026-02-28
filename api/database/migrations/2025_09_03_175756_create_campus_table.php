@@ -1,7 +1,9 @@
 <?php
 
+use App\Constant\MainCampus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,6 +22,17 @@ return new class extends Migration
             $table->boolean('main_campus')
                 ->default(false);
         });
+
+        // Insert default campus
+        DB::table('campus')->insert([
+            'id' => MainCampus::ID,
+            'name' => MainCampus::NAME,
+            'short_name' => MainCampus::SHORTNAME,
+            'address' => MainCampus::ADDRESS,
+            'main_campus' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**
@@ -28,5 +41,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('campus');
+
+        // Delete default campus
+        DB::table('campus')
+            ->where('id', MainCampus::ID)
+            ->delete();
     }
 };

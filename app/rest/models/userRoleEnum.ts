@@ -17,6 +17,7 @@ export const UserRoleEnum = {
   specialization_chair: 'specialization_chair',
   campus_scheduler: 'campus_scheduler',
   campus_registrar: 'campus_registrar',
+  admission_officer: 'admission_officer',
   student: 'student',
   faculty: 'faculty',
   guest: 'guest',

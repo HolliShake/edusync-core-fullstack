@@ -1,10 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  safelist: [
+    'text-blue-600',
+    'bg-blue-50',
+    'text-yellow-600',
+    'bg-yellow-50',
+    'text-green-600',
+    'bg-green-50',
+    'text-red-600',
+    'bg-red-50',
+    'text-gray-600',
+    'bg-gray-50',
+    'text-purple-600',
+    'bg-purple-50',
+  ],
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
+    './views/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
   prefix: '',

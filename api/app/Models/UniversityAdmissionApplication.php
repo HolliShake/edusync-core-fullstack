@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Enum\AdmissionApplicationLogTypeEnum;
-use DB;
+use App\Enum\UniversityAdmissionStepEnum;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,7 +32,9 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "pool_no", type: "integer"),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
+        // Computed
         new OA\Property(property: "temporary_id", type: "string", readOnly: true),
+        new OA\Property(property: "next_step", type: "string", enum: UniversityAdmissionStepEnum::class, readOnly: true),
         new OA\Property(property: "latest_status", type: "string", enum: AdmissionApplicationLogTypeEnum::class, readOnly: true),
         new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
         // Relations
@@ -148,6 +151,7 @@ class UniversityAdmissionApplication extends Model
     ];
 
     protected $appends = [
+        'next_step',
         'latest_status',
         'latest_status_label',
         'user',
@@ -158,12 +162,68 @@ class UniversityAdmissionApplication extends Model
         'logs',
     ];
 
-    public function getNextStepAttribute(): string
+
+    /**
+     * Get the next step for the university admission application.
+     *
+     * @return string
+     */
+    public function getNextStepAttribute(): UniversityAdmissionStepEnum
     {
-        $latestLog = $this->latestStatus()->first();
-        return $latestLog?->type_label ?? AdmissionApplicationLogTypeEnum::SUBMITTED->value;
+        // Get logs for this application
+        $logs = $this->logs()->get();
+
+        // If no logs exist, user is not eligible
+        if ($logs->isEmpty()) {
+            return UniversityAdmissionStepEnum::NOT_ELIGIBLE;
+        }
+
+        // Check if user has already applied to the program
+        // Get academic program IDs from admission schedules once
+        $admissionProgramIds = $this->universityAdmission
+            ->admissionSchedules()
+            ->pluck('academic_program_id')
+            ->toArray();
+
+        // Check if user has official enrollment in any of these programs
+        $hasEnrollment = $this->user
+            ->officialEnrollments()
+            ->whereHas('section.curriculumDetail.curriculum.academicProgram', function ($query) use ($admissionProgramIds) {
+                $query->whereIn('id', $admissionProgramIds);
+            })
+            ->exists();
+
+        if ($hasEnrollment) {
+            return UniversityAdmissionStepEnum::LOCKED;
+        }
+
+        // Check if exam is passed - then apply to program
+        if ($this->is_passed) {
+            return UniversityAdmissionStepEnum::APPLY_TO_PROGRAM;
+        }
+
+        // Check if schedule is selected - then take exam
+        if ($this->university_admission_schedule_id) {
+            return UniversityAdmissionStepEnum::TAKE_EXAM;
+        }
+
+        // Check if criteria is approved - then schedule selection
+        $isApproved = $logs->contains('type', AdmissionApplicationLogTypeEnum::APPROVED)
+            && !$logs->contains('type', AdmissionApplicationLogTypeEnum::REJECTED);
+        if ($isApproved) {
+            return UniversityAdmissionStepEnum::SCHEDULE_SELECTION;
+        }
+
+        // Default: not eligible
+        return UniversityAdmissionStepEnum::NOT_ELIGIBLE;
     }
 
+    /**
+     * Get the temporary ID for the university admission application.
+     * Format: YYYY + 6-digit zero-padded pool number (e.g., 2024000123)
+     *
+     * @return string
+     */
     public function getTemporaryIdAttribute(): string
     {
        $pool = $this->pool_no;

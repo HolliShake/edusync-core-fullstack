@@ -5,6 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
+import type { UniversityAdmissionApplicationNextStep } from './universityAdmissionApplicationNextStep';
 import type { UniversityAdmissionApplicationLatestStatus } from './universityAdmissionApplicationLatestStatus';
 import type { User } from './user';
 import type { UniversityAdmission } from './universityAdmission';
@@ -28,6 +29,7 @@ export interface UniversityAdmissionApplication {
   readonly created_at?: string;
   readonly updated_at?: string;
   readonly temporary_id?: string;
+  readonly next_step?: UniversityAdmissionApplicationNextStep;
   readonly latest_status?: UniversityAdmissionApplicationLatestStatus;
   readonly latest_status_label?: string;
   user?: User;

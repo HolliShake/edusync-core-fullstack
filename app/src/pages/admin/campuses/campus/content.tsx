@@ -3,21 +3,28 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCampusContext } from '@/context/campus.context';
-import { Building2, Hash, MapPin, School } from 'lucide-react';
+import { Building2, BuildingIcon, Hash, MapPin, School } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import AdminBuildingTab from './building.tab';
 import AdminCollegeTab from './college.tab';
+import AdminOfficeTab from './office.tab';
 
 export default function AdminCampusDetailContent(): React.ReactNode {
   const campus = useCampusContext();
   const isLoading = useMemo(() => !campus, [campus]);
-  const [activeTab, setActiveTab] = useState('colleges');
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState('offices');
   const navigate = useNavigate();
 
   const tabs = useMemo(
     () => [
+      {
+        label: 'Offices',
+        value: 'offices',
+        icon: <BuildingIcon className="h-4 w-4" />,
+      },
       {
         label: 'Colleges',
         value: 'colleges',
@@ -39,11 +46,18 @@ export default function AdminCampusDetailContent(): React.ReactNode {
   };
 
   useEffect(() => {
-    const tab = localStorage.getItem(window.location.href + '_campus_tab');
-    if (tabs.some((t) => t.value === tab)) {
-      setActiveTab(tab as string);
+    const urlTab = searchParams.get('campus_tab');
+    const storedTab = localStorage.getItem(window.location.href + '_campus_tab');
+    const tabToUse = urlTab || storedTab || 'offices';
+
+    if (tabs.some((t) => t.value === tabToUse)) {
+      setActiveTab(tabToUse);
+      // Update URL if it doesn't match
+      if (!urlTab && tabToUse !== 'offices') {
+        navigate(`?campus_tab=${tabToUse}`, { replace: true });
+      }
     }
-  }, [tabs]);
+  }, [tabs, searchParams, navigate]);
 
   if (isLoading) {
     return (
@@ -214,10 +228,12 @@ export default function AdminCampusDetailContent(): React.ReactNode {
             </TabsTrigger>
           ))}
         </TabsList>
+        <TabsContent value="offices">
+          <AdminOfficeTab />
+        </TabsContent>
         <TabsContent value="colleges">
           <AdminCollegeTab />
         </TabsContent>
-        {/* Building */}
         <TabsContent value="building">
           <AdminBuildingTab />
         </TabsContent>

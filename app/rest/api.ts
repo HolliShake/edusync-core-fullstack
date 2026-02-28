@@ -69,6 +69,7 @@ import type {
   CreateGradeBookResponse200,
   CreateGradeBookScoreResponse200,
   CreateGradingPeriodGradeResponse200,
+  CreateOfficeResponse200,
   CreateProgramTypeResponse200,
   CreateRequirementResponse200,
   CreateRoomResponse200,
@@ -117,6 +118,7 @@ import type {
   DeleteGradeBookResponse200,
   DeleteGradeBookScoreResponse200,
   DeleteGradingPeriodGradeResponse200,
+  DeleteOfficeResponse200,
   DeleteProgramTypeResponse200,
   DeleteRequirementResponse200,
   DeleteRoomResponse200,
@@ -212,6 +214,8 @@ import type {
   GetGradeBookScoreResponse200,
   GetGradingPeriodGradePaginatedParams,
   GetGradingPeriodGradeResponse200,
+  GetOfficePaginatedParams,
+  GetOfficeResponse200,
   GetProgramTypePaginatedParams,
   GetProgramTypeResponse200,
   GetRequirementPaginatedParams,
@@ -266,6 +270,7 @@ import type {
   InternalServerErrorResponse,
   LoginResponse200,
   MultipleCurriculumDetail,
+  Office,
   PaginatedAcademicCalendarResponse200,
   PaginatedAcademicProgramResponse200,
   PaginatedAcademicTermResponse200,
@@ -296,6 +301,7 @@ import type {
   PaginatedGradeBookResponse200,
   PaginatedGradeBookScoreResponse200,
   PaginatedGradingPeriodGradeResponse200,
+  PaginatedOfficeResponse200,
   PaginatedProgramTypeResponse200,
   PaginatedRequirementResponse200,
   PaginatedRoomResponse200,
@@ -363,6 +369,7 @@ import type {
   UpdateGradeBookResponse200,
   UpdateGradeBookScoreResponse200,
   UpdateGradingPeriodGradeResponse200,
+  UpdateOfficeResponse200,
   UpdateProgramTypeResponse200,
   UpdateRequirementResponse200,
   UpdateRoomResponse200,
@@ -7842,6 +7849,72 @@ export const useCreateCampusRegistrar = <TError = UnauthenticatedResponse | Forb
     }
     
 /**
+ * Create a new Admission Officer with the provided details
+ * @summary Create a new Admission Officer
+ */
+export const createAdmissionOfficer = (
+    designition: Designition,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateDesignitionResponse200>(
+      {url: `/api/Designition/create-admission-officer`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: designition, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateAdmissionOfficerMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionOfficer>>, TError,{data: Designition}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createAdmissionOfficer>>, TError,{data: Designition}, TContext> => {
+
+const mutationKey = ['createAdmissionOfficer'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAdmissionOfficer>>, {data: Designition}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAdmissionOfficer(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAdmissionOfficerMutationResult = NonNullable<Awaited<ReturnType<typeof createAdmissionOfficer>>>
+    export type CreateAdmissionOfficerMutationBody = Designition
+    export type CreateAdmissionOfficerMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Admission Officer
+ */
+export const useCreateAdmissionOfficer = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdmissionOfficer>>, TError,{data: Designition}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createAdmissionOfficer>>,
+        TError,
+        {data: Designition},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAdmissionOfficerMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Retrieve a paginated list of DocumentRequest with optional search
  * @summary Get paginated list of DocumentRequest
  */
@@ -13851,6 +13924,390 @@ export const useSyncGradingPeriodGradeForSection = <TError = UnauthenticatedResp
       > => {
 
       const mutationOptions = getSyncGradingPeriodGradeForSectionMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Retrieve a paginated list of Office with optional search
+ * @summary Get paginated list of Office
+ */
+export const getOfficePaginated = (
+    params?: GetOfficePaginatedParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<PaginatedOfficeResponse200>(
+      {url: `/api/Office`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+
+
+export const getGetOfficePaginatedQueryKey = (params?: GetOfficePaginatedParams,) => {
+    return [
+    `/api/Office`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetOfficePaginatedQueryOptions = <TData = Awaited<ReturnType<typeof getOfficePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(params?: GetOfficePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficePaginated>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOfficePaginatedQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOfficePaginated>>> = ({ signal }) => getOfficePaginated(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOfficePaginated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOfficePaginatedQueryResult = NonNullable<Awaited<ReturnType<typeof getOfficePaginated>>>
+export type GetOfficePaginatedQueryError = UnauthenticatedResponse | ForbiddenResponse
+
+
+export function useGetOfficePaginated<TData = Awaited<ReturnType<typeof getOfficePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params: undefined |  GetOfficePaginatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficePaginated>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOfficePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getOfficePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOfficePaginated<TData = Awaited<ReturnType<typeof getOfficePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetOfficePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficePaginated>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOfficePaginated>>,
+          TError,
+          Awaited<ReturnType<typeof getOfficePaginated>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOfficePaginated<TData = Awaited<ReturnType<typeof getOfficePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetOfficePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of Office
+ */
+
+export function useGetOfficePaginated<TData = Awaited<ReturnType<typeof getOfficePaginated>>, TError = UnauthenticatedResponse | ForbiddenResponse>(
+ params?: GetOfficePaginatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficePaginated>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetOfficePaginatedQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ *  Create a new Office with the provided details
+ * @summary Create a new Office
+ */
+export const createOffice = (
+    office: NonReadonly<Office>,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<CreateOfficeResponse200>(
+      {url: `/api/Office`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: office, signal
+    },
+      );
+    }
+  
+
+
+export const getCreateOfficeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOffice>>, TError,{data: NonReadonly<Office>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createOffice>>, TError,{data: NonReadonly<Office>}, TContext> => {
+
+const mutationKey = ['createOffice'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOffice>>, {data: NonReadonly<Office>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createOffice(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateOfficeMutationResult = NonNullable<Awaited<ReturnType<typeof createOffice>>>
+    export type CreateOfficeMutationBody = NonReadonly<Office>
+    export type CreateOfficeMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Create a new Office
+ */
+export const useCreateOffice = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOffice>>, TError,{data: NonReadonly<Office>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createOffice>>,
+        TError,
+        {data: NonReadonly<Office>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateOfficeMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Retrieve a Office by its ID
+ * @summary Get a specific Office
+ */
+export const getOfficeById = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<GetOfficeResponse200>(
+      {url: `/api/Office/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+
+
+export const getGetOfficeByIdQueryKey = (id?: number,) => {
+    return [
+    `/api/Office/${id}`
+    ] as const;
+    }
+
+    
+export const getGetOfficeByIdQueryOptions = <TData = Awaited<ReturnType<typeof getOfficeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | void>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficeById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOfficeByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOfficeById>>> = ({ signal }) => getOfficeById(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOfficeById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOfficeByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOfficeById>>>
+export type GetOfficeByIdQueryError = UnauthenticatedResponse | ForbiddenResponse | void
+
+
+export function useGetOfficeById<TData = Awaited<ReturnType<typeof getOfficeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | void>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficeById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOfficeById>>,
+          TError,
+          Awaited<ReturnType<typeof getOfficeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOfficeById<TData = Awaited<ReturnType<typeof getOfficeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | void>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficeById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getOfficeById>>,
+          TError,
+          Awaited<ReturnType<typeof getOfficeById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOfficeById<TData = Awaited<ReturnType<typeof getOfficeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | void>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficeById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a specific Office
+ */
+
+export function useGetOfficeById<TData = Awaited<ReturnType<typeof getOfficeById>>, TError = UnauthenticatedResponse | ForbiddenResponse | void>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOfficeById>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetOfficeByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Update an existing Office with the provided details
+ * @summary Update a Office
+ */
+export const updateOffice = (
+    id: number,
+    office: NonReadonly<Office>,
+ ) => {
+      
+      
+      return fetchData<UpdateOfficeResponse200>(
+      {url: `/api/Office/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: office
+    },
+      );
+    }
+  
+
+
+export const getUpdateOfficeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | void | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOffice>>, TError,{id: number;data: NonReadonly<Office>}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateOffice>>, TError,{id: number;data: NonReadonly<Office>}, TContext> => {
+
+const mutationKey = ['updateOffice'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOffice>>, {id: number;data: NonReadonly<Office>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateOffice(id,data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateOfficeMutationResult = NonNullable<Awaited<ReturnType<typeof updateOffice>>>
+    export type UpdateOfficeMutationBody = NonReadonly<Office>
+    export type UpdateOfficeMutationError = UnauthenticatedResponse | ForbiddenResponse | void | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update a Office
+ */
+export const useUpdateOffice = <TError = UnauthenticatedResponse | ForbiddenResponse | void | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOffice>>, TError,{id: number;data: NonReadonly<Office>}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateOffice>>,
+        TError,
+        {id: number;data: NonReadonly<Office>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateOfficeMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Delete a Office by its ID
+ * @summary Delete a Office
+ */
+export const deleteOffice = (
+    id: number,
+ ) => {
+      
+      
+      return fetchData<DeleteOfficeResponse200>(
+      {url: `/api/Office/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteOfficeMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | void | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteOffice>>, TError,{id: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteOffice>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteOffice'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteOffice>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteOffice(id,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteOfficeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteOffice>>>
+    
+    export type DeleteOfficeMutationError = UnauthenticatedResponse | ForbiddenResponse | void | InternalServerErrorResponse
+
+    /**
+ * @summary Delete a Office
+ */
+export const useDeleteOffice = <TError = UnauthenticatedResponse | ForbiddenResponse | void | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteOffice>>, TError,{id: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteOffice>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteOfficeMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

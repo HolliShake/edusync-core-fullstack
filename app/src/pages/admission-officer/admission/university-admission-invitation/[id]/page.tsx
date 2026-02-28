@@ -2,10 +2,10 @@ import TitledPage from '@/components/pages/titled.page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import CampusRegistrarUniversityAdmissionDetailCriteriaTab from './criteria.tab';
-import CampusRegistrarUniversityAdmissionDetailScheduleTab from './schedule.tab';
+import AdmissionOfficerUniversityAdmissionDetailCriteriaTab from './criteria.tab';
+import AdmissionOfficerUniversityAdmissionDetailScheduleTab from './schedule.tab';
 
-export default function CampusRegistrarUniversityAdmissionDetail(): React.ReactNode {
+export default function AdmissionOfficerUniversityAdmissionDetail(): React.ReactNode {
   const tabStorageKey = `${window.location.pathname}_tab`;
 
   const [activeTab, setActiveTab] = useState(() => {
@@ -21,12 +21,12 @@ export default function CampusRegistrarUniversityAdmissionDetail(): React.ReactN
       {
         label: 'Schedules',
         value: 'schedules',
-        component: <CampusRegistrarUniversityAdmissionDetailScheduleTab />,
+        component: <AdmissionOfficerUniversityAdmissionDetailScheduleTab />,
       },
       {
         label: 'Criteria',
         value: 'criteria',
-        component: <CampusRegistrarUniversityAdmissionDetailCriteriaTab />,
+        component: <AdmissionOfficerUniversityAdmissionDetailCriteriaTab />,
       },
     ],
     []

@@ -44,6 +44,7 @@ use App\Http\Controllers\GradeBookItemController;
 use App\Http\Controllers\GradeBookItemDetailController;
 use App\Http\Controllers\GradeBookScoreController;
 use App\Http\Controllers\GradingPeriodGradeController;
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\ScheduleAssignmentController;
 use App\Http\Controllers\SectionTeacherController;
 
@@ -202,6 +203,7 @@ Route::controller(DesignitionController::class)->group(function() {
     Route::post('/Designition/create-program-chair', 'create_program_chair');
     Route::post('/Designition/create-college-dean', 'create_college_dean');
     Route::post('/Designition/create-campus-registrar', 'create_campus_registrar');
+    Route::post('/Designition/create-admission-officer', 'create_admission_officer');
     Route::put('/Designition/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/Designition/{id}', 'destroy')->where('id', '[0-9]+');
 });
@@ -442,4 +444,12 @@ Route::controller(UniversityAdmissionApplicationLogController::class)->group(fun
     Route::post('/UniversityAdmissionApplicationLog', 'store');
     Route::put('/UniversityAdmissionApplicationLog/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/UniversityAdmissionApplicationLog/{id}', 'destroy')->where('id', '[0-9]+');
+});
+
+Route::controller(OfficeController::class)->group(function() {
+    Route::get('/Office', 'index');
+    Route::get('/Office/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/Office', 'store');
+    Route::put('/Office/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/Office/{id}', 'destroy')->where('id', '[0-9]+');
 });

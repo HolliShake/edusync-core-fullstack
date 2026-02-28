@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Constant\AdmissionAndScholarshipOffice;
 use App\Enum\EnrollmentLogActionEnum;
 use App\Enum\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -211,7 +212,7 @@ class User extends Authenticatable
 
         // Check designations with a single query
         $designations = $this->designitions()
-            ->whereIn('designitionable_type', [Campus::class, College::class, AcademicProgram::class])
+            ->whereIn('designitionable_type', [Campus::class, College::class, AcademicProgram::class, Office::class])
             ->where('is_active', true)
             ->pluck('designitionable_type')
             ->toArray();
@@ -223,6 +224,17 @@ class User extends Authenticatable
 
         if (count($teachers) > 0) {
             $roles[] = UserRoleEnum::FACULTY->value;
+        }
+
+        if (in_array(Office::class, $designations)) {
+            $office = $this->designitions()
+                ->where('designitionable_type', Office::class)
+                ->where('is_active', true)
+                ->first();
+
+            if ($office->designitionable_id == AdmissionAndScholarshipOffice::ID) {
+                $roles[] = UserRoleEnum::ADMISSION_OFFICER->value;
+            }
         }
 
         if (in_array(Campus::class, $designations)) {

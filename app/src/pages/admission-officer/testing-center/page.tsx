@@ -13,7 +13,7 @@ import type React from 'react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function CampusRegistrarTestingCenter(): React.ReactNode {
+export default function AdmissionOfficerTestingCenter(): React.ReactNode {
   const [page] = useState(1);
   const [rows] = useState(1000);
 

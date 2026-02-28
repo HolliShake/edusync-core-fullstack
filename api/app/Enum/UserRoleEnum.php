@@ -18,6 +18,7 @@ enum UserRoleEnum: string
     case SPECIALIZATION_CHAIR = 'specialization_chair';
     case CAMPUS_SCHEDULER = 'campus_scheduler';
     case CAMPUS_REGISTRAR = 'campus_registrar';
+    case ADMISSION_OFFICER = 'admission_officer';
     case STUDENT = 'student';
     case FACULTY = 'faculty';
     case GUEST = 'guest';

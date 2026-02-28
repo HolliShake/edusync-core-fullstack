@@ -6423,7 +6423,8 @@
                             "enum": [
                                 "App\\Models\\AcademicProgram",
                                 "App\\Models\\College",
-                                "App\\Models\\Campus"
+                                "App\\Models\\Campus",
+                                "App\\Models\\Office"
                             ]
                         }
                     }
@@ -6898,6 +6899,78 @@
                 "responses": {
                     "200": {
                         "description": "Campus Registrar created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateDesignitionResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Designition\/create-admission-officer": {
+            "post": {
+                "tags": [
+                    "Designition"
+                ],
+                "summary": "Create a new Admission Officer",
+                "description": "Create a new Admission Officer with the provided details",
+                "operationId": "createAdmissionOfficer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Designition"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admission Officer created successfully",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -12772,6 +12845,359 @@
                     },
                     "500": {
                         "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Office": {
+            "get": {
+                "tags": [
+                    "Office"
+                ],
+                "summary": "Get paginated list of Office",
+                "description": "Retrieve a paginated list of Office with optional search",
+                "operationId": "getOfficePaginated",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[campus_id]",
+                        "in": "query",
+                        "description": "Campus ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "rows",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/PaginatedOfficeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Office"
+                ],
+                "summary": "Create a new Office",
+                "description": " Create a new Office with the provided details",
+                "operationId": "createOffice",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Office"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Office created successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/CreateOfficeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/Office\/{id}": {
+            "get": {
+                "tags": [
+                    "Office"
+                ],
+                "summary": "Get a specific Office",
+                "description": "Retrieve a Office by its ID",
+                "operationId": "getOfficeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/GetOfficeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Office not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Office"
+                ],
+                "summary": "Update a Office",
+                "description": "Update an existing Office with the provided details",
+                "operationId": "updateOffice",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/Office"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Office updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateOfficeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Office not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Office"
+                ],
+                "summary": "Delete a Office",
+                "description": "Delete a Office by its ID",
+                "operationId": "deleteOffice",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Office deleted successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DeleteOfficeResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Office not found"
+                    },
+                    "500": {
+                        "description": " Internal server error",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -18995,6 +19421,17 @@
                     "general"
                 ]
             },
+            "UniversityAdmissionStepEnum": {
+                "title": "UniversityAdmissionStepEnum",
+                "type": "string",
+                "enum": [
+                    "not_eligible",
+                    "schedule_selection",
+                    "take_exam",
+                    "apply_to_program",
+                    "locked"
+                ]
+            },
             "UserRoleEnum": {
                 "title": "UserRoleEnum",
                 "type": "string",
@@ -19005,6 +19442,7 @@
                     "specialization_chair",
                     "campus_scheduler",
                     "campus_registrar",
+                    "admission_officer",
                     "student",
                     "faculty",
                     "guest"
@@ -22273,7 +22711,16 @@
                         "example": 1
                     },
                     "action": {
-                        "$ref": "#\/components\/schemas\/DocumentRequestLogActionEnum"
+                        "type": "string",
+                        "enum": [
+                            "submitted",
+                            "cancelled",
+                            "paid",
+                            "rejected",
+                            "processing",
+                            "pickup",
+                            "completed"
+                        ]
                     },
                     "note": {
                         "type": "string",
@@ -24146,6 +24593,162 @@
                 },
                 "type": "object"
             },
+            "Office": {
+                "title": "Office",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "website": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "campus_id": {
+                        "type": "integer"
+                    },
+                    "campus": {
+                        "$ref": "#\/components\/schemas\/Campus"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedOffice": {
+                "title": "PaginatedOffice",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Office"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "to": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedOfficeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/PaginatedOffice"
+                    }
+                },
+                "type": "object"
+            },
+            "GetOfficeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Office"
+                    }
+                },
+                "type": "object"
+            },
+            "GetOfficesResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Office"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CreateOfficeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Office"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateOfficeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#\/components\/schemas\/Office"
+                    }
+                },
+                "type": "object"
+            },
+            "DeleteOfficeResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "ProgramType": {
                 "title": "ProgramType",
                 "required": [
@@ -25539,6 +26142,17 @@
                         "type": "string",
                         "readOnly": true
                     },
+                    "next_step": {
+                        "type": "string",
+                        "enum": [
+                            "not_eligible",
+                            "schedule_selection",
+                            "take_exam",
+                            "apply_to_program",
+                            "locked"
+                        ],
+                        "readOnly": true
+                    },
                     "latest_status": {
                         "type": "string",
                         "enum": [
@@ -26287,6 +26901,10 @@
                     },
                     "testing_center": {
                         "$ref": "#\/components\/schemas\/TestingCenter"
+                    },
+                    "remaining_slots": {
+                        "type": "integer",
+                        "example": 50
                     }
                 },
                 "type": "object"
@@ -26814,6 +27432,10 @@
         {
             "name": "GradingPeriodGrade",
             "description": "GradingPeriodGrade"
+        },
+        {
+            "name": "Office",
+            "description": "Office"
         },
         {
             "name": "ProgramType",

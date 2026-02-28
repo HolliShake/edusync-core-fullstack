@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -29,6 +30,7 @@ use OpenApi\Attributes as OA;
         // Relation
         new OA\Property(property: "university_admission", ref: "#/components/schemas/UniversityAdmission"),
         new OA\Property(property: "testing_center", ref: "#/components/schemas/TestingCenter"),
+        new OA\Property(property: "remaining_slots", type: "integer", example: 50),
     ]
 )]
 
@@ -123,7 +125,31 @@ class UniversityAdmissionSchedule extends Model
     protected $appends = [
         'university_admission',
         'testing_center',
+        'remaining_slots',
     ];
+
+    /**
+     * Get the remaining slots for the university admission schedule.
+     *
+     * @return int
+     */
+    public function getRemainingSlotsAttribute(): int
+    {
+        $capacity = $this->testingCenter->room->room_capacity ?? 0;
+        $used = $this->applications()->count();
+        return max(0, $capacity - $used);
+    }
+
+    /**
+     * Get the applications for the university admission schedule.
+     *
+     * @return HasMany
+     */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(UniversityAdmissionApplication::class);
+    }
+
 
     /**
      * Get the university admission that owns the university admission schedule.

@@ -3,9 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AdmissionApplicationLogTypeEnum } from '@rest/models';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import CampusRegistrarAdmissionApplicationGenericTab from './generic.tab';
+import AdmissionOfficerAdmissionApplicationGenericTab from './generic.tab';
 
-export default function CampusRegistrarAdmissionApplication(): React.ReactNode {
+export default function AdmissionOfficerAdmissionApplication(): React.ReactNode {
   const [selectedTab, setSelectedTab] = useState<AdmissionApplicationLogTypeEnum>(() => {
     const saved = localStorage.getItem(window.location.pathname + '_tab');
     return saved
@@ -66,7 +66,7 @@ export default function CampusRegistrarAdmissionApplication(): React.ReactNode {
         </TabsList>
         {tabs.map((tab) => (
           <TabsContent key={tab.value} value={tab.value}>
-            <CampusRegistrarAdmissionApplicationGenericTab status={tab.value} />
+            <AdmissionOfficerAdmissionApplicationGenericTab status={tab.value} />
           </TabsContent>
         ))}
       </Tabs>

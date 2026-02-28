@@ -18,4 +18,5 @@ export interface UniversityAdmissionSchedule {
   updated_at?: string;
   university_admission?: UniversityAdmission;
   testing_center?: TestingCenter;
+  remaining_slots?: number;
 }

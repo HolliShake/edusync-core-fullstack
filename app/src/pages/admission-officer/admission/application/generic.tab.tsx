@@ -18,7 +18,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
-export default function CampusRegistrarAdmissionApplicationGenericTab({
+export default function AdmissionOfficerAdmissionApplicationGenericTab({
   status,
 }: {
   status: AdmissionApplicationLogTypeEnum;
@@ -234,7 +234,7 @@ export default function CampusRegistrarAdmissionApplicationGenericTab({
         onPageChange={setPage}
         showPagination={true}
         onClickRow={(row) => {
-          navigate(`/campus-registrar/admission/application/${encryptIdForUrl(row.id as number)}`);
+          navigate(`/admission-officer/admission/application/${encryptIdForUrl(row.id as number)}`);
         }}
       />
     </div>

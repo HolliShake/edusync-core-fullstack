@@ -14,4 +14,5 @@ export const GetDesignitionPaginatedFilterDesignitionableType = {
   'App\Models\AcademicProgram': 'App\Models\AcademicProgram',
   'App\Models\College': 'App\Models\College',
   'App\Models\Campus': 'App\Models\Campus',
+  'App\Models\Office': 'App\Models\Office',
 } as const;

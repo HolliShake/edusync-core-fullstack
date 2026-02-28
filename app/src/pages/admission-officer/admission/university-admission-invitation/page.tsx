@@ -14,7 +14,7 @@ import type React from 'react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function CampusRegistrarUniversityAdmissionInvitation(): React.ReactNode {
+export default function AdmissionOfficerUniversityAdmissionInvitation(): React.ReactNode {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
@@ -69,7 +69,7 @@ export default function CampusRegistrarUniversityAdmissionInvitation(): React.Re
                 variant: 'default',
                 onClick: () => {
                   navigate(
-                    `/campus-registrar/admission/invitation/${encryptIdForUrl(row.id as number)}`
+                    `/admission-officer/admission/invitation/${encryptIdForUrl(row.id as number)}`
                   );
                 },
               },

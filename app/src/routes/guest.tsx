@@ -132,9 +132,9 @@ const GUEST: Route[] = [
     roles: [UserRoleEnum.guest],
   },
   {
-    key: 'guest.setting',
+    key: 'guest.request',
     title: 'Request A Document',
-    path: '/guest/setting',
+    path: '/guest/request',
     component: <GuestRequestDocument />,
     icon: <FileTextIcon className="h-4 w-4" />,
     layout: 'dashboard',

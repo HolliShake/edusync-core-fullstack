@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Constant\AdmissionAndScholarshipOffice;
 use App\Models\AcademicProgram;
 use App\Models\Campus;
 use App\Models\College;
+use App\Models\Office;
 use App\Service\DesignitionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -58,7 +60,8 @@ class DesignitionController extends Controller
         schema: new OA\Schema(type: "string", enum: [
             'App\\Models\\AcademicProgram',
             'App\\Models\\College',
-            'App\\Models\\Campus'
+            'App\\Models\\Campus',
+            'App\\Models\\Office'
         ]),
     )]
     #[OA\Response(
@@ -366,6 +369,69 @@ class DesignitionController extends Controller
             return $this->ok($this->service->create([
                 ...$validated,
                 'designitionable_type' => Campus::class,
+            ]));
+        }
+        catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    #[OA\Post(
+        path: "/api/Designition/create-admission-officer",
+        summary: "Create a new Admission Officer",
+        tags: ["Designition"],
+        description: "Create a new Admission Officer with the provided details",
+        operationId: "createAdmissionOfficer",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/Designition")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Admission Officer created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateDesignitionResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function create_admission_officer(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required|integer|exists:user,id',
+                // 'designitionable_id' => 'required|integer|exists:office,id',
+                // 'designitionable_type' => 'required|string',
+                'is_active' => 'boolean',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->create([
+                ...$validated,
+                'designitionable_id' => AdmissionAndScholarshipOffice::ID,
+                'designitionable_type' => Office::class,
             ]));
         }
         catch (\Exception $e) {

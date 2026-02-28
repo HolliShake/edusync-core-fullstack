@@ -42,33 +42,17 @@
  * ```
  */
 
+import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
+import Select from '@/components/custom/select.component';
+import Table, { type PaginationMeta, type TableColumn } from '@/components/custom/table.component';
+import { Timeline, type TimelineLog } from '@/components/custom/timeline.component';
 import DocumentRequestUserModal from '@/components/document/document-request-user.modal';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sheet,
   SheetContent,
@@ -76,19 +60,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { useAuth } from '@/context/auth.context';
 import { useCreateDocumentRequestLog, useGetDocumentRequestPaginated } from '@rest/api';
 import { DocumentRequestLogActionEnum, type DocumentRequest } from '@rest/models';
-import { AlertCircle, Building2, Clock, FileText, MoreHorizontal, Plus } from 'lucide-react';
+import { AlertCircle, Building2, Clock, EllipsisIcon, FileText, Plus } from 'lucide-react';
 import type React from 'react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -123,9 +98,19 @@ export default function RequestDocumentView(): React.ReactNode {
     [documentRequestResponse]
   );
 
-  const totalPages = useMemo(
-    () => Math.ceil((documentRequestResponse?.data?.total ?? 0) / rowsPerPage),
-    [documentRequestResponse, rowsPerPage]
+  const paginationMeta: PaginationMeta = useMemo(
+    () => ({
+      current_page: page,
+      last_page: Math.ceil((documentRequestResponse?.data?.total ?? 0) / rowsPerPage),
+      per_page: rowsPerPage,
+      total: documentRequestResponse?.data?.total ?? 0,
+      from: allDocumentRequests.length > 0 ? (page - 1) * rowsPerPage + 1 : null,
+      to:
+        allDocumentRequests.length > 0
+          ? Math.min(page * rowsPerPage, documentRequestResponse?.data?.total ?? 0)
+          : null,
+    }),
+    [page, rowsPerPage, documentRequestResponse, allDocumentRequests.length]
   );
 
   const getStatusConfig = (status: string) => {
@@ -141,44 +126,44 @@ export default function RequestDocumentView(): React.ReactNode {
       [DocumentRequestLogActionEnum.submitted]: {
         variant: 'outline',
         label: 'Submitted',
-        colorClass: 'text-blue-600',
-        bgClass: 'bg-blue-50',
+        colorClass: 'text-blue-700',
+        bgClass: 'bg-blue-200',
       },
       [DocumentRequestLogActionEnum.paid]: {
         variant: 'default',
         label: 'Paid',
-        colorClass: 'text-emerald-600',
-        bgClass: 'bg-emerald-50',
+        colorClass: 'text-green-700',
+        bgClass: 'bg-green-200',
       },
       [DocumentRequestLogActionEnum.processing]: {
         variant: 'secondary',
         label: 'Processing',
-        colorClass: 'text-yellow-600',
-        bgClass: 'bg-yellow-50',
+        colorClass: 'text-yellow-700',
+        bgClass: 'bg-yellow-200',
       },
       [DocumentRequestLogActionEnum.completed]: {
         variant: 'default',
         label: 'Completed',
-        colorClass: 'text-green-600',
-        bgClass: 'bg-green-50',
+        colorClass: 'text-purple-700',
+        bgClass: 'bg-purple-200',
       },
       [DocumentRequestLogActionEnum.rejected]: {
         variant: 'destructive',
         label: 'Rejected',
-        colorClass: 'text-red-600',
-        bgClass: 'bg-red-50',
+        colorClass: 'text-red-700',
+        bgClass: 'bg-red-200',
       },
       [DocumentRequestLogActionEnum.cancelled]: {
         variant: 'destructive',
         label: 'Cancelled',
-        colorClass: 'text-gray-600',
-        bgClass: 'bg-gray-50',
+        colorClass: 'text-gray-700',
+        bgClass: 'bg-gray-300',
       },
       [DocumentRequestLogActionEnum.pickup]: {
         variant: 'secondary',
         label: 'Ready for Pickup',
-        colorClass: 'text-purple-600',
-        bgClass: 'bg-purple-50',
+        colorClass: 'text-violet-700',
+        bgClass: 'bg-violet-200',
       },
     };
 
@@ -236,139 +221,170 @@ export default function RequestDocumentView(): React.ReactNode {
     setPage(1);
   };
 
-  const renderPaginationItems = () => {
-    const items = [];
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  const rowsPerPageOptions = [
+    { value: '5', label: '5' },
+    { value: '10', label: '10' },
+    { value: '20', label: '20' },
+    { value: '50', label: '50' },
+  ];
 
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
+  const columns: Array<TableColumn<DocumentRequest>> = useMemo(
+    () => [
+      {
+        key: 'id',
+        title: 'ID',
+        width: 100,
+        render: (_value, row) => (
+          <span className="font-mono text-xs text-muted-foreground">#{row.id}</span>
+        ),
+      },
+      {
+        key: 'document_type.document_type_name',
+        title: 'Document Type',
+        render: (_, row) => (
+          <div className="flex flex-col">
+            <span className="font-medium text-sm">
+              {row.document_type?.document_type_name ?? 'Document Request'}
+            </span>
+            {row.purpose && (
+              <span className="text-[10px] text-muted-foreground line-clamp-1 md:hidden">
+                {row.purpose}
+              </span>
+            )}
+          </div>
+        ),
+      },
+      {
+        key: 'campus.name',
+        title: 'Campus',
+        className: 'hidden md:table-cell',
+        headerClassName: 'hidden md:table-cell',
+        render: (_, row) => (
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <Building2 className="h-3.5 w-3.5" />
+            <span className="line-clamp-1">{row.campus?.name ?? 'N/A'}</span>
+          </div>
+        ),
+      },
+      {
+        key: 'created_at',
+        title: 'Date',
+        className: 'hidden md:table-cell',
+        headerClassName: 'hidden md:table-cell',
+        render: (_value, row) => (
+          <div className="flex flex-col text-xs text-muted-foreground">
+            <span>{formatDate(row.created_at)}</span>
+          </div>
+        ),
+      },
+      {
+        key: 'latest_status_label',
+        title: 'Status',
+        render: (_, row) => {
+          const statusConfig = getStatusConfig(row.latest_status || 'pending');
+          return (
+            <Badge
+              variant="outline"
+              className={`text-[10px] h-5 px-2 font-medium ${statusConfig.bgClass} ${statusConfig.colorClass} border-transparent whitespace-nowrap`}
+            >
+              {row.latest_status_label}
+            </Badge>
+          );
+        },
+      },
+      {
+        key: 'actions',
+        title: 'Actions',
+        render: (_, row) => (
+          <Menu
+            trigger={
+              <Button variant="outline" size="icon">
+                <EllipsisIcon />
+              </Button>
+            }
+            items={[
+              {
+                label: 'View Status',
+                icon: <Clock />,
+                onClick: () => handleViewStatus(row),
+              },
+              ...(row.is_cancellable
+                ? [
+                    {
+                      label: 'Edit Details',
+                      icon: <FileText />,
+                      onClick: () => documentRequestModal.openFn(row),
+                    },
+                    {
+                      label: 'Cancel Request',
+                      icon: <AlertCircle />,
+                      onClick: () => handleCancelRequest(row),
+                      disabled: isCancellingRequest,
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        ),
+      },
+    ],
+    [isCancellingRequest, documentRequestModal, handleViewStatus, handleCancelRequest]
+  );
 
-    if (startPage > 1) {
-      items.push(
-        <PaginationItem key="1">
-          <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
-        </PaginationItem>
-      );
-      if (startPage > 2) {
-        items.push(
-          <PaginationItem key="ellipsis-start">
-            <PaginationEllipsis />
-          </PaginationItem>
-        );
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      items.push(
-        <PaginationItem key={i}>
-          <PaginationLink onClick={() => handlePageChange(i)} isActive={page === i}>
-            {i}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        items.push(
-          <PaginationItem key="ellipsis-end">
-            <PaginationEllipsis />
-          </PaginationItem>
-        );
-      }
-      items.push(
-        <PaginationItem key={totalPages}>
-          <PaginationLink onClick={() => handlePageChange(totalPages)}>{totalPages}</PaginationLink>
-        </PaginationItem>
-      );
-    }
-
-    return items;
-  };
-
-  const getStatusColor = (action: string) => {
-    switch (action) {
-      case DocumentRequestLogActionEnum.completed:
-        return 'bg-green-500';
-      case DocumentRequestLogActionEnum.paid:
-        return 'bg-emerald-500';
-      case DocumentRequestLogActionEnum.rejected:
-        return 'bg-red-500';
-      case DocumentRequestLogActionEnum.cancelled:
-        return 'bg-gray-500';
-      case DocumentRequestLogActionEnum.submitted:
-        return 'bg-blue-500';
-      case DocumentRequestLogActionEnum.processing:
-        return 'bg-yellow-500';
-      case DocumentRequestLogActionEnum.pickup:
-        return 'bg-purple-500';
-      default:
-        return 'bg-gray-400';
-    }
-  };
+  const timelineItems: TimelineLog[] = useMemo(() => {
+    if (!viewingStatus?.logs) return [];
+    return viewingStatus.logs.map((log) => {
+      const cfg = getStatusConfig(log.action);
+      return {
+        key: String(log.id),
+        dateTime: log.created_at ?? '',
+        label: cfg.label,
+        description: log.note,
+        user: log.user?.name,
+        color: cfg.colorClass,
+        background: cfg.bgClass,
+      };
+    });
+  }, [viewingStatus]);
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-8 w-32" />
-        </div>
-        <div className="border rounded-md">
-          <div className="p-4 border-b">
-            <div className="grid grid-cols-4 gap-4">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mr-2">
+              <span className="text-xs text-muted-foreground hidden sm:inline">Rows:</span>
+              <Select
+                value={rowsPerPage.toString()}
+                onValueChange={handleRowsPerPageChange}
+                options={rowsPerPageOptions}
+                className="w-[70px] h-8 text-xs"
+              />
             </div>
+            <Button onClick={() => documentRequestModal.openFn()} size="sm" className="h-9">
+              <Plus className="mr-1.5 h-4 w-4" />
+              New Request
+            </Button>
           </div>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="p-4 border-b last:border-0">
-              <div className="grid grid-cols-4 gap-4">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-              </div>
-            </div>
-          ))}
         </div>
+        <Table
+          columns={columns}
+          rows={[]}
+          loading={true}
+          showPagination={true}
+          pagination={paginationMeta}
+          onPageChange={handlePageChange}
+        />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight">My Requests</h2>
-          <p className="text-sm text-muted-foreground">Manage and track your document requests</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 mr-2">
-            <span className="text-xs text-muted-foreground hidden sm:inline">Rows:</span>
-            <Select value={rowsPerPage.toString()} onValueChange={handleRowsPerPageChange}>
-              <SelectTrigger className="w-[70px] h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5</SelectItem>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <Button onClick={() => documentRequestModal.openFn()} size="sm" className="h-9">
-            <Plus className="mr-1.5 h-4 w-4" />
-            New Request
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-4">
+      <Button onClick={() => documentRequestModal.openFn()}>
+        <Plus />
+        New Request
+      </Button>
 
       {allDocumentRequests.length === 0 ? (
         <Alert className="border-dashed py-12 flex flex-col items-center justify-center text-center">
@@ -385,131 +401,17 @@ export default function RequestDocumentView(): React.ReactNode {
           </Button>
         </Alert>
       ) : (
-        <div className="border rounded-md bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">ID</TableHead>
-                <TableHead>Document Type</TableHead>
-                <TableHead className="hidden md:table-cell">Campus</TableHead>
-                <TableHead className="hidden md:table-cell">Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allDocumentRequests.map((request: DocumentRequest) => {
-                const statusConfig = getStatusConfig(request.latest_status_label || 'pending');
-
-                return (
-                  <TableRow
-                    key={request.id}
-                    className="group hover:bg-muted/50 cursor-pointer"
-                    onClick={() => handleViewStatus(request)}
-                  >
-                    <TableCell className="font-mono text-xs text-muted-foreground">
-                      #{request.id}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-medium text-sm">
-                          {request.document_type?.document_type_name ?? 'Document Request'}
-                        </span>
-                        {request.purpose && (
-                          <span className="text-[10px] text-muted-foreground line-clamp-1 md:hidden">
-                            {request.purpose}
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <Building2 className="h-3.5 w-3.5" />
-                        <span className="line-clamp-1">{request.campus?.name ?? 'N/A'}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      <div className="flex flex-col text-xs text-muted-foreground">
-                        <span>{formatDate(request.created_at)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`text-[10px] h-5 px-2 font-medium ${statusConfig.bgClass} ${statusConfig.colorClass} border-transparent whitespace-nowrap`}
-                      >
-                        {statusConfig.label}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div
-                        className="flex justify-end items-center"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleViewStatus(request)}>
-                              <Clock className="mr-2 h-4 w-4" /> View Status
-                            </DropdownMenuItem>
-                            {request.is_cancellable && (
-                              <DropdownMenuItem
-                                onClick={() => documentRequestModal.openFn(request)}
-                              >
-                                <FileText className="mr-2 h-4 w-4" /> Edit Details
-                              </DropdownMenuItem>
-                            )}
-                            {request.is_cancellable && (
-                              <DropdownMenuItem
-                                className="text-destructive focus:text-destructive"
-                                onClick={() => handleCancelRequest(request)}
-                                disabled={isCancellingRequest}
-                              >
-                                <AlertCircle className="mr-2 h-4 w-4" /> Cancel Request
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-
-          {totalPages > 1 && (
-            <div className="py-4 border-t">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => handlePageChange(Math.max(1, page - 1))}
-                      className={page === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                    />
-                  </PaginationItem>
-                  {renderPaginationItems()}
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
-                      className={
-                        page === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-                      }
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
-          )}
-        </div>
+        <Table
+          columns={columns}
+          rows={allDocumentRequests}
+          rowKey={(row) => row.id!}
+          onClickRow={handleViewStatus}
+          showPagination={true}
+          pagination={paginationMeta}
+          onPageChange={handlePageChange}
+          hoverable={true}
+          trClassName="cursor-pointer"
+        />
       )}
 
       <DocumentRequestUserModal controller={documentRequestModal} onSubmit={handleModalSubmit} />
@@ -522,7 +424,7 @@ export default function RequestDocumentView(): React.ReactNode {
               {viewingStatus && (
                 <Badge
                   variant="outline"
-                  className={`${getStatusConfig(viewingStatus.latest_status_label || '').colorClass} bg-background`}
+                  className={`${getStatusConfig(viewingStatus.latest_status || '').colorClass} bg-background`}
                 >
                   {viewingStatus.latest_status_label}
                 </Badge>
@@ -535,96 +437,71 @@ export default function RequestDocumentView(): React.ReactNode {
           </SheetHeader>
 
           {viewingStatus && (
-            <div className="flex-1 min-h-0 overflow-y-auto">
-              <div className="p-6 space-y-8">
+            <ScrollArea className="flex-1 h-full">
+              <div className="p-6 space-y-6">
                 {/* Request Details Section */}
-                <div className="grid gap-5">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                      <FileText className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                        Document Type
-                      </h3>
-                      <p className="font-semibold text-foreground">
-                        {viewingStatus.document_type?.document_type_name}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                      <Building2 className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-1">Campus</h3>
-                      <p className="font-semibold text-foreground">{viewingStatus.campus?.name}</p>
-                    </div>
-                  </div>
-
-                  {viewingStatus.purpose && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base">Request Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid gap-5 pt-0">
                     <div className="flex items-start gap-4">
                       <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                        <AlertCircle className="h-5 w-5 text-primary" />
+                        <FileText className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">Purpose</h3>
-                        <p className="text-sm text-foreground leading-relaxed">
-                          {viewingStatus.purpose}
+                        <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                          Document Type
+                        </h3>
+                        <p className="font-semibold text-foreground">
+                          {viewingStatus.document_type?.document_type_name}
                         </p>
                       </div>
                     </div>
-                  )}
-                </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                        <Building2 className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-muted-foreground mb-1">Campus</h3>
+                        <p className="font-semibold text-foreground">
+                          {viewingStatus.campus?.name}
+                        </p>
+                      </div>
+                    </div>
+
+                    {viewingStatus.purpose && (
+                      <div className="flex items-start gap-4">
+                        <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                          <AlertCircle className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                            Purpose
+                          </h3>
+                          <p className="text-sm text-foreground leading-relaxed">
+                            {viewingStatus.purpose}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
 
                 {/* Timeline Section */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    <Clock className="h-4 w-4" /> Timeline History
-                  </h3>
-                  <div className="relative">
-                    <div className="absolute left-[9px] top-2 bottom-2 w-[2px] bg-border" />
-                    <div className="space-y-6">
-                      {viewingStatus.logs?.map((log, index) => (
-                        <div key={index} className="relative pl-8 group">
-                          <div
-                            className={`absolute left-0 top-1.5 w-5 h-5 rounded-full border-4 border-background ${getStatusColor(log.action)} z-10 shadow-sm`}
-                          />
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-semibold capitalize text-foreground">
-                                {log.action.replace('_', ' ')}
-                              </span>
-                              <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                                {new Date(log.created_at ?? '').toLocaleTimeString([], {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                })}
-                              </span>
-                            </div>
-                            <span className="text-xs text-muted-foreground">
-                              {new Date(log.created_at ?? '').toLocaleDateString(undefined, {
-                                weekday: 'short',
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                              })}
-                              {log.user?.name ? ` • by ${log.user.name}` : ''}
-                            </span>
-                            {log.note && (
-                              <p className="text-xs text-muted-foreground mt-1 bg-muted/30 p-2 rounded border border-border/50">
-                                {log.note}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Clock className="h-4 w-4" /> Timeline History
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <Timeline logs={timelineItems} />
+                  </CardContent>
+                </Card>
               </div>
-            </div>
+            </ScrollArea>
           )}
         </SheetContent>
       </Sheet>
