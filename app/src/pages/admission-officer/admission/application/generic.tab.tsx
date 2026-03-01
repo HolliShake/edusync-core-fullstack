@@ -217,7 +217,7 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
     if (isUpdatedScores) toast.success('Scores updated successfully');
   }, [isUpdatedScores]);
 
-  const isPending = true; //status === AdmissionApplicationLogTypeEnum.submitted;
+  const isPending = status === AdmissionApplicationLogTypeEnum.submitted;
 
   const handleSubmitScores = useMemo(
     () =>
