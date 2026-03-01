@@ -1,21 +1,25 @@
 import Menu from '@/components/custom/menu.component';
+import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
+import EvaluationModal, {
+  type CriteriaSubmission,
+  type EvaluationData,
+} from '@/components/evaluation/evaluation.modal';
 import SelectUniversityAdmission from '@/components/shared/university-admission.select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth.context';
-import { encryptIdForUrl } from '@/lib/hash';
 import {
   useCreateUniversityAdmissionApplicationLog,
   useGetUniversityAdmissionApplicationPaginated,
+  useUpdateUniversityAdmissionApplicationCriteriaSubmissionScores,
 } from '@rest/api';
 import { AdmissionApplicationLogTypeEnum, type UniversityAdmissionApplication } from '@rest/models';
 import { Check, EllipsisIcon, X } from 'lucide-react';
 import type React from 'react';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function AdmissionOfficerAdmissionApplicationGenericTab({
@@ -26,8 +30,7 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
   const [page, setPage] = useState(1);
   const [rows] = useState(10);
   const [universityAdmissionId, setUniversityAdmissionId] = useState<number | undefined>(undefined);
-
-  const navigate = useNavigate();
+  const evaluationModalController = useModal<EvaluationData>();
 
   const { session } = useAuth();
 
@@ -47,6 +50,17 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
 
   const { mutateAsync: createUniversityAdmissionApplicationLog, isPending: isCreatingLog } =
     useCreateUniversityAdmissionApplicationLog();
+
+  const {
+    mutateAsync: updateUniversityAdmissionApplicationCriteriaSubmissionScores,
+    isPending: isUpdatingScores,
+    isSuccess: isUpdatedScores,
+  } = useUpdateUniversityAdmissionApplicationCriteriaSubmissionScores();
+
+  const isLoadingAction = useMemo(
+    () => isCreatingLog || isUpdatingScores,
+    [isCreatingLog, isUpdatingScores]
+  );
 
   const hideAction = useMemo(() => {
     return status !== AdmissionApplicationLogTypeEnum.submitted;
@@ -87,6 +101,7 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
       });
       refetch();
       toast.success('Log created successfully');
+      evaluationModalController.closeFn();
     } catch (error) {
       toast.error('Failed to create log');
     }
@@ -177,6 +192,68 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
   const tableItems = useMemo(() => applications?.data?.data ?? [], [applications]);
   const paginationMeta = useMemo(() => applications?.data, [applications]);
 
+  const handleOpenEvaluationModal = (application: UniversityAdmissionApplication) => {
+    evaluationModalController.openFn({
+      applicationId: application.id!,
+      user: application.user!,
+      criteriaSubmissions: (application.university_admission_criteria_submissions ?? []).map(
+        (s) =>
+          ({
+            id: s.id!,
+            label: s.university_admission_criteria?.requirement?.requirement_name ?? '',
+            description: s.university_admission_criteria?.description ?? '',
+            min: s.university_admission_criteria?.min_score ?? 0,
+            max: s.university_admission_criteria?.max_score ?? 0,
+            weight: s.university_admission_criteria?.weight ?? 0,
+            score: s.score,
+            file: s.files?.[0]?.file_name ?? '',
+            requirement: s.university_admission_criteria?.requirement ?? {},
+          }) as CriteriaSubmission
+      ),
+    });
+  };
+
+  useEffect(() => {
+    if (isUpdatedScores) toast.success('Scores updated successfully');
+  }, [isUpdatedScores]);
+
+  const isPending = true; //status === AdmissionApplicationLogTypeEnum.submitted;
+
+  const handleSubmitScores = useMemo(
+    () =>
+      isPending
+        ? (scores: CriteriaSubmission[]) => {
+            updateUniversityAdmissionApplicationCriteriaSubmissionScores({
+              data: {
+                scores: scores.map((s) => ({
+                  university_admission_criteria_submission_id: s.id,
+                  score: s.score,
+                })),
+              },
+            });
+          }
+        : undefined,
+    [isPending]
+  );
+
+  const handleApprove = useMemo(
+    () =>
+      isPending
+        ? (applicationId: number) =>
+            handleCreateLog(applicationId, AdmissionApplicationLogTypeEnum.approved)
+        : undefined,
+    [isPending, session]
+  );
+
+  const handleReject = useMemo(
+    () =>
+      isPending
+        ? (applicationId: number) =>
+            handleCreateLog(applicationId, AdmissionApplicationLogTypeEnum.rejected)
+        : undefined,
+    [isPending, session]
+  );
+
   if (isLoadingApplications) {
     return (
       <div className="space-y-2">
@@ -234,8 +311,16 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
         onPageChange={setPage}
         showPagination={true}
         onClickRow={(row) => {
-          navigate(`/admission-officer/admission/application/${encryptIdForUrl(row.id as number)}`);
+          handleOpenEvaluationModal(row);
         }}
+      />
+
+      <EvaluationModal
+        controller={evaluationModalController}
+        isSubmitting={isLoadingAction}
+        onSubmit={handleSubmitScores}
+        onApprove={handleApprove}
+        onReject={handleReject}
       />
     </div>
   );

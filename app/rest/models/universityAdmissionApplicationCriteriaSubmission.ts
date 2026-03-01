@@ -13,6 +13,8 @@ export interface UniversityAdmissionApplicationCriteriaSubmission {
   id?: number;
   university_admission_application_id: number;
   university_admission_criteria_id: number;
+  /** @nullable */
+  score?: number | null;
   created_at?: string;
   updated_at?: string;
   university_admission_application?: UniversityAdmissionApplication;

@@ -350,7 +350,8 @@ class UniversityAdmissionApplication extends Model
      */
     public function universityAdmissionCriteriaSubmissions(): HasMany
     {
-        return $this->hasMany(UniversityAdmissionApplicationCriteriaSubmission::class);
+        return $this->hasMany(UniversityAdmissionApplicationCriteriaSubmission::class)
+            ->with('universityAdmissionCriteria.requirement');
     }
 
 

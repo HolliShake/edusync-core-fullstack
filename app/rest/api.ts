@@ -379,6 +379,8 @@ import type {
   UpdateSectionTeacherResponse200,
   UpdateTestingCenterResponse200,
   UpdateUniversityAdmissionApplicationCriteriaSubmissionResponse200,
+  UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest,
+  UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresResponse200,
   UpdateUniversityAdmissionApplicationLogResponse200,
   UpdateUniversityAdmissionApplicationResponse200,
   UpdateUniversityAdmissionCriteriaResponse200,
@@ -18654,6 +18656,71 @@ export const useDeleteUniversityAdmissionApplicationCriteriaSubmission = <TError
       > => {
 
       const mutationOptions = getDeleteUniversityAdmissionApplicationCriteriaSubmissionMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Update scores for multiple UniversityAdmissionApplicationCriteriaSubmission records
+ * @summary Update scores for multiple criteria submissions
+ */
+export const updateUniversityAdmissionApplicationCriteriaSubmissionScores = (
+    updateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest: UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest,
+ ) => {
+      
+      
+      return fetchData<UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresResponse200>(
+      {url: `/api/UniversityAdmissionApplicationCriteriaSubmission/scores`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest
+    },
+      );
+    }
+  
+
+
+export const getUpdateUniversityAdmissionApplicationCriteriaSubmissionScoresMutationOptions = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUniversityAdmissionApplicationCriteriaSubmissionScores>>, TError,{data: UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateUniversityAdmissionApplicationCriteriaSubmissionScores>>, TError,{data: UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest}, TContext> => {
+
+const mutationKey = ['updateUniversityAdmissionApplicationCriteriaSubmissionScores'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUniversityAdmissionApplicationCriteriaSubmissionScores>>, {data: UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateUniversityAdmissionApplicationCriteriaSubmissionScores(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresMutationResult = NonNullable<Awaited<ReturnType<typeof updateUniversityAdmissionApplicationCriteriaSubmissionScores>>>
+    export type UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresMutationBody = UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest
+    export type UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresMutationError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse
+
+    /**
+ * @summary Update scores for multiple criteria submissions
+ */
+export const useUpdateUniversityAdmissionApplicationCriteriaSubmissionScores = <TError = UnauthenticatedResponse | ForbiddenResponse | ValidationErrorResponse | InternalServerErrorResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUniversityAdmissionApplicationCriteriaSubmissionScores>>, TError,{data: UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateUniversityAdmissionApplicationCriteriaSubmissionScores>>,
+        TError,
+        {data: UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateUniversityAdmissionApplicationCriteriaSubmissionScoresMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

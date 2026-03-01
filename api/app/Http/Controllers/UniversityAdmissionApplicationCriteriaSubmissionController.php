@@ -244,6 +244,66 @@ class UniversityAdmissionApplicationCriteriaSubmissionController extends Control
     }
 
     /**
+     * Update scores for multiple criteria submissions.
+     */
+    #[OA\Put(
+        path: "/api/UniversityAdmissionApplicationCriteriaSubmission/scores",
+        summary: "Update scores for multiple criteria submissions",
+        tags: ["UniversityAdmissionApplicationCriteriaSubmission"],
+        description: "Update scores for multiple UniversityAdmissionApplicationCriteriaSubmission records",
+        operationId: "updateUniversityAdmissionApplicationCriteriaSubmissionScores",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest")
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Scores updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresResponse200")
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "Unauthenticated",
+        content: new OA\JsonContent(ref: "#/components/schemas/UnauthenticatedResponse")
+    )]
+    #[OA\Response(
+        response: 403,
+        description: "Forbidden",
+        content: new OA\JsonContent(ref: "#/components/schemas/ForbiddenResponse")
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error",
+        content: new OA\JsonContent(ref: "#/components/schemas/ValidationErrorResponse")
+    )]
+    #[OA\Response(
+        response: 500,
+        description: "Internal server error",
+        content: new OA\JsonContent(ref: "#/components/schemas/InternalServerErrorResponse")
+    )]
+    public function updateScores(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'scores' => 'required|array',
+                'scores.*.university_admission_criteria_submission_id' => 'required|integer|exists:university_admission_application_criteria_submission,id',
+                'scores.*.score' => 'nullable|numeric|min:0',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->updateScores($validated['scores']));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     #[OA\Delete(

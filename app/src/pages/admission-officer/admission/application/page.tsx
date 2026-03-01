@@ -27,10 +27,6 @@ export default function AdmissionOfficerAdmissionApplication(): React.ReactNode 
         label: 'Rejected',
         value: AdmissionApplicationLogTypeEnum.rejected,
       },
-      {
-        label: 'Accepted',
-        value: AdmissionApplicationLogTypeEnum.accepted,
-      },
     ],
     []
   );

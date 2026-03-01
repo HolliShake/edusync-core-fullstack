@@ -435,6 +435,7 @@ Route::controller(UniversityAdmissionApplicationCriteriaSubmissionController::cl
     Route::get('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/UniversityAdmissionApplicationCriteriaSubmission', 'store');
     Route::put('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'update')->where('id', '[0-9]+');
+    Route::put('/UniversityAdmissionApplicationCriteriaSubmission/scores', 'updateScores');
     Route::delete('/UniversityAdmissionApplicationCriteriaSubmission/{id}', 'destroy')->where('id', '[0-9]+');
 });
 

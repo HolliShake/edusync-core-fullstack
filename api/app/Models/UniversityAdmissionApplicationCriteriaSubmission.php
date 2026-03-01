@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
         new OA\Property(property: "id", type: "integer", example: 1),
         new OA\Property(property: "university_admission_application_id", type: "integer", example: 1),
         new OA\Property(property: "university_admission_criteria_id", type: "integer", example: 1),
+        new OA\Property(property: "score", type: "number", example: 100.00, nullable: true),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         // Relations
@@ -108,6 +109,36 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 )]
 
 #[OA\Schema(
+    schema: "UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest",
+    type: "object",
+    properties: [
+        new OA\Property(
+            property: "scores",
+            type: "array",
+            items: new OA\Items(
+                type: "object",
+                properties: [
+                    new OA\Property(property: "university_admission_criteria_submission_id", type: "integer", example: 1),
+                    new OA\Property(property: "score", type: "number", format: "float", nullable: true, example: 85.5)
+                ],
+                required: ["university_admission_criteria_submission_id"]
+            )
+        )
+    ],
+    required: ["scores"]
+)]
+
+#[OA\Schema(
+    schema: "UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresResponse200",
+    type: "object",
+    properties: [
+        new OA\Property(property: "success", type: "boolean", example: true),
+        new OA\Property(property: "data", type: "array", items: new OA\Items(ref: "#/components/schemas/UniversityAdmissionApplicationCriteriaSubmission"))
+    ]
+)]
+
+
+#[OA\Schema(
     schema: "UpdateUniversityAdmissionApplicationCriteriaSubmissionResponse200",
     type: "object",
     properties: [
@@ -150,7 +181,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
 
     /**
      * Get the university admission application associated with this criteria submission.
-     * 
+     *
      * @return UniversityAdmissionApplication
      */
     public function getUniversityAdmissionApplicationAttribute(): UniversityAdmissionApplication
@@ -160,7 +191,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
 
     /**
      * Get the university admission criteria associated with this submission.
-     * 
+     *
      * @return UniversityAdmissionCriteria
      */
     public function getUniversityAdmissionCriteriaAttribute(): UniversityAdmissionCriteria
@@ -170,7 +201,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
 
     /**
      * Get all files associated with this criteria submission.
-     * 
+     *
      * @return array
      */
     public function getFilesAttribute(): array
@@ -180,7 +211,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
 
     /**
      * Define the relationship to the university admission application.
-     * 
+     *
      * @return BelongsTo
      */
     public function universityAdmissionApplication(): BelongsTo
@@ -190,7 +221,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
 
     /**
      * Define the relationship to the university admission criteria.
-     * 
+     *
      * @return BelongsTo
      */
     public function universityAdmissionCriteria(): BelongsTo
@@ -200,7 +231,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
 
     /**
      * Get all media files in the 'files' collection.
-     * 
+     *
      * @return MorphMany
      */
     public function files(): MorphMany
@@ -211,7 +242,7 @@ class UniversityAdmissionApplicationCriteriaSubmission extends Model implements 
     /**
      * Register media collections for this model.
      * Configures the 'files' collection to accept a single file.
-     * 
+     *
      * @return void
      */
     public function registerMediaCollections(): void

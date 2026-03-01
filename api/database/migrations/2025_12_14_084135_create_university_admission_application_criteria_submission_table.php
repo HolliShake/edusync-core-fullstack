@@ -24,6 +24,9 @@ return new class extends Migration
                 ->constrained('university_admission_criteria')
                 ->onDelete('cascade')
                 ->name('uaacs_criteria_id_foreign');
+            // Score
+            $table->decimal('score', 10, 2)
+                ->nullable();
         });
     }
 

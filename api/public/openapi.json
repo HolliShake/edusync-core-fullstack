@@ -17509,6 +17509,78 @@
                 }
             }
         },
+        "\/api\/UniversityAdmissionApplicationCriteriaSubmission\/scores": {
+            "put": {
+                "tags": [
+                    "UniversityAdmissionApplicationCriteriaSubmission"
+                ],
+                "summary": "Update scores for multiple criteria submissions",
+                "description": "Update scores for multiple UniversityAdmissionApplicationCriteriaSubmission records",
+                "operationId": "updateUniversityAdmissionApplicationCriteriaSubmissionScores",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Scores updated successfully",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresResponse200"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/UnauthenticatedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "\/api\/UniversityAdmissionApplicationLog": {
             "get": {
                 "tags": [
@@ -26346,6 +26418,11 @@
                         "type": "integer",
                         "example": 1
                     },
+                    "score": {
+                        "type": "number",
+                        "example": 100,
+                        "nullable": true
+                    },
                     "created_at": {
                         "type": "string",
                         "format": "date-time"
@@ -26512,6 +26589,50 @@
                     },
                     "data": {
                         "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresRequest": {
+                "required": [
+                    "scores"
+                ],
+                "properties": {
+                    "scores": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "university_admission_criteria_submission_id"
+                            ],
+                            "properties": {
+                                "university_admission_criteria_submission_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "score": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 85.5,
+                                    "nullable": true
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUniversityAdmissionApplicationCriteriaSubmissionScoresResponse200": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/UniversityAdmissionApplicationCriteriaSubmission"
+                        }
                     }
                 },
                 "type": "object"

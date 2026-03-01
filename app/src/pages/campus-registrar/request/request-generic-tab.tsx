@@ -13,9 +13,10 @@ import type { DocumentRequest } from '@rest/models/documentRequest';
 import type { DocumentType } from '@rest/models/documentType';
 import { CalendarIcon, FileTextIcon, InfoIcon, UserIcon } from 'lucide-react';
 import type React from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // For demonstration, use Button from shadcn or your own button component
+import Pagination from '@/components/custom/pagination.component';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -72,18 +73,21 @@ function InfoRow({
   );
 }
 
+const ROWS_PER_PAGE = 10;
+
 export default function RequestGenericTab({
   filter,
 }: {
   filter: DocumentRequestLogActionEnum;
 }): React.ReactNode {
   const { session } = useAuth();
+  const [page, setPage] = useState(1);
   const { data, isLoading, isError, refetch } = useGetDocumentRequestPaginated(
     {
       'filter[campus_id]': session?.active_campus ?? 0,
       'filter[latest_status]': filter,
-      page: 1,
-      rows: 10,
+      page,
+      rows: ROWS_PER_PAGE,
     },
     {
       query: {
@@ -96,6 +100,20 @@ export default function RequestGenericTab({
     useCreateDocumentRequestLog();
 
   const requests = useMemo<DocumentRequest[]>(() => data?.data?.data ?? [], [data]);
+  const paginationMeta = useMemo(
+    () => ({
+      current_page: data?.data?.current_page ?? 1,
+      last_page: data?.data?.last_page ?? 1,
+      total: data?.data?.total ?? 0,
+      from: data?.data?.from ?? null,
+      to: data?.data?.to ?? null,
+    }),
+    [data]
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [filter]);
 
   const positiveActionLabel = useMemo(() => {
     switch (filter) {
@@ -264,15 +282,17 @@ export default function RequestGenericTab({
                         >
                           {positiveActionLabel}
                         </Button>
-                        <Button
-                          disabled={isCreatingLogs || !req.is_actionable}
-                          variant="destructive"
-                          className="text-[11px] px-2 py-0.5 h-6 min-h-0 rounded"
-                          onClick={() => handleReject(req.id!)}
-                          data-testid={`reject-btn-${req.id}`}
-                        >
-                          Reject
-                        </Button>
+                        {filter === DocumentRequestLogActionEnum.submitted && (
+                          <Button
+                            disabled={isCreatingLogs || !req.is_actionable}
+                            variant="destructive"
+                            className="text-[11px] px-2 py-0.5 h-6 min-h-0 rounded"
+                            onClick={() => handleReject(req.id!)}
+                            data-testid={`reject-btn-${req.id}`}
+                          >
+                            Reject
+                          </Button>
+                        )}
                       </div>
                     )}
                   </AccordionContent>
@@ -282,6 +302,17 @@ export default function RequestGenericTab({
           </Accordion>
         )}
       </div>
+
+      {requests.length > 0 && (
+        <Pagination
+          currentPage={page}
+          totalPages={paginationMeta.last_page ?? 1}
+          perPage={ROWS_PER_PAGE}
+          total={paginationMeta.total}
+          onPageChange={setPage}
+          className="mt-4"
+        />
+      )}
     </div>
   );
 }

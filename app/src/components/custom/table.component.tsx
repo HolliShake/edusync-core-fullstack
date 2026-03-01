@@ -1,13 +1,4 @@
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   TableBody,
@@ -19,6 +10,7 @@ import {
 } from '@/components/ui/table';
 import React from 'react';
 import { Card, CardContent } from '../ui/card';
+import Pagination from './pagination.component';
 
 export type TableColumn<RowType> = {
   key: keyof RowType | string;
@@ -207,129 +199,32 @@ export default function Table<RowType extends Record<string, any>>({
     const {
       current_page = 1,
       last_page = 1,
+      per_page = 10,
       total = 0,
     } = pagination ?? {
       current_page: 1,
       last_page: 1,
+      per_page: 10,
       total: 0,
     };
-    const currentPage = current_page;
-    const totalPages = last_page;
 
     // Don't show pagination if showPagination is false
     if (!showPagination) return null;
 
-    const getVisiblePages = () => {
-      // If there's only one page, just return that page
-      if (totalPages <= 1) {
-        return [1];
-      }
-
-      const delta = 2;
-      const range = [];
-      const rangeWithDots = [];
-
-      for (
-        let i = Math.max(2, currentPage - delta);
-        i <= Math.min(totalPages - 1, currentPage + delta);
-        i++
-      ) {
-        range.push(i);
-      }
-
-      if (currentPage - delta > 2) {
-        rangeWithDots.push(1, '...');
-      } else {
-        rangeWithDots.push(1);
-      }
-
-      rangeWithDots.push(...range);
-
-      if (currentPage + delta < totalPages - 1) {
-        rangeWithDots.push('...', totalPages);
-      } else if (totalPages > 1) {
-        rangeWithDots.push(totalPages);
-      }
-
-      return rangeWithDots;
-    };
-
-    const visiblePages = getVisiblePages();
-
     return (
-      <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-background/50">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          {loading ? (
-            <Skeleton className="h-5 w-48" />
-          ) : (
-            <span>
-              Showing {pagination?.from || 0} to {pagination?.to || 0} of {total} results
-            </span>
-          )}
-        </div>
-        <div className="flex items-center">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (currentPage > 1 && !loading) {
-                      onPageChange?.(currentPage - 1);
-                    }
-                  }}
-                  className={
-                    currentPage <= 1 || loading
-                      ? 'pointer-events-none opacity-50'
-                      : 'cursor-pointer'
-                  }
-                  href="#"
-                />
-              </PaginationItem>
-              {visiblePages.map((page, index) => (
-                <PaginationItem key={index}>
-                  {page === '...' ? (
-                    <PaginationEllipsis />
-                  ) : (
-                    <PaginationLink
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (!loading) {
-                          onPageChange?.(page as number);
-                        }
-                      }}
-                      isActive={currentPage === page}
-                      className={
-                        loading
-                          ? 'pointer-events-none opacity-50 cursor-not-allowed'
-                          : 'cursor-pointer'
-                      }
-                      href="#"
-                    >
-                      {page}
-                    </PaginationLink>
-                  )}
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (currentPage < totalPages && !loading) {
-                      onPageChange?.(currentPage + 1);
-                    }
-                  }}
-                  className={
-                    currentPage >= totalPages || loading
-                      ? 'pointer-events-none opacity-50'
-                      : 'cursor-pointer'
-                  }
-                  href="#"
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+      <div className="border-t border-border bg-background/50">
+        <Pagination
+          currentPage={current_page}
+          totalPages={last_page}
+          perPage={per_page}
+          total={total}
+          onPageChange={(page) => {
+            if (!loading) {
+              onPageChange?.(page);
+            }
+          }}
+          className="px-4 py-3"
+        />
       </div>
     );
   };
