@@ -433,6 +433,7 @@ export * from './schoolYear';
 export * from './section';
 export * from './sectionTeacher';
 export * from './sessionResponse200';
+export * from './submitAdmissionApplicationFormBody';
 export * from './submitApplicationFormBody';
 export * from './submitUniversityAdmissionApplicationForm';
 export * from './submitUniversityAdmissionApplicationFormBody';

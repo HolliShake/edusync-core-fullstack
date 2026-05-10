@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OpenApi\Attributes as OA;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 #[OA\Schema(
     schema: "AdmissionApplicationCriteriaSubmission",
@@ -25,6 +27,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_posted", type: "boolean", example: false),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
+        new OA\Property(property: "file", type: "string", format: "binary", nullable: true),
         new OA\Property(property: "admission_application", ref: "#/components/schemas/AdmissionApplication"),
         new OA\Property(property: "admission_criteria", ref: "#/components/schemas/AdmissionCriteria"),
     ]
@@ -98,8 +101,9 @@ use OpenApi\Attributes as OA;
     ]
 )]
 
-class AdmissionApplicationCriteriaSubmission extends Model
+class AdmissionApplicationCriteriaSubmission extends Model implements HasMedia
 {
+    use InteractsWithMedia;
     protected $table = 'admission_application_criteria_submission';
 
     public $timestamps = true;

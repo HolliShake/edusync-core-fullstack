@@ -18,6 +18,8 @@ export interface AdmissionApplicationCriteriaSubmission {
   is_posted: boolean;
   created_at?: string;
   updated_at?: string;
+  /** @nullable */
+  file?: Blob | null;
   admission_application?: AdmissionApplication;
   admission_criteria?: AdmissionCriteria;
 }

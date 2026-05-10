@@ -348,4 +348,92 @@ class AdmissionApplicationController extends Controller
             return $this->internalServerError($e->getMessage());
         }
     }
+
+    #[OA\Post(
+        path: "/api/AdmissionApplication/submitApplicationForm",
+        summary: "Submit an admission application form",
+        tags: ["AdmissionApplication"],
+        description: "Submit a comprehensive admission application along with criteria files.",
+        operationId: "submitAdmissionApplicationForm",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\MediaType(
+            mediaType: "multipart/form-data",
+            schema: new OA\Schema(
+                required: [
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'phone',
+                    'address',
+                    'user_id',
+                    'admission_schedule_id',
+                ],
+                properties: [
+                    new OA\Property(property: "first_name", type: "string"),
+                    new OA\Property(property: "middle_name", type: "string", nullable: true),
+                    new OA\Property(property: "last_name", type: "string"),
+                    new OA\Property(property: "email", type: "string"),
+                    new OA\Property(property: "phone", type: "string"),
+                    new OA\Property(property: "address", type: "string"),
+                    new OA\Property(
+                        property: "user_id",
+                        type: "array",
+                        items: new OA\Items(type: "integer")
+                    ),
+                    new OA\Property(
+                        property: "admission_schedule_id",
+                        type: "array",
+                        items: new OA\Items(type: "integer")
+                    ),
+                    new OA\Property(
+                        property: "admission_criteria_id",
+                        type: "array",
+                        items: new OA\Items(type: "integer")
+                    ),
+                    new OA\Property(
+                        property: "file",
+                        type: "array",
+                        items: new OA\Items(type: "string", format: "binary")
+                    )
+                ]
+            )
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Application submitted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateAdmissionApplicationResponse200")
+    )]
+    public function submitApplicationForm(Request $request) {
+        try {
+            $validator = Validator::make($request->all(), [
+                'first_name' => 'required|string|max:255',
+                'middle_name' => 'nullable|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone' => 'required|string|max:255',
+                'address' => 'required|string|max:255',
+                'user_id' => 'required|array',
+                'user_id.*' => 'required|integer',
+                'admission_schedule_id' => 'required|array',
+                'admission_schedule_id.*' => 'required|integer',
+                'admission_criteria_id' => 'nullable|array',
+                'admission_criteria_id.*' => 'required|integer',
+                'file' => 'nullable|array',
+                'file.*' => 'nullable|file',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->submitApplicationForm($validated));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
 }
