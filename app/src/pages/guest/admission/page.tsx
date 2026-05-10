@@ -30,10 +30,25 @@ export default function GuestAdmission(): React.ReactNode {
     }
   };
 
+  const handleScheduleSelected = (scheduleId: number) => {
+    setSelectedApplication((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        university_admission_schedule_id: scheduleId,
+        next_step: UniversityAdmissionStepEnum.take_exam,
+      };
+    });
+    setView(2);
+  };
+
   const steps = useMemo(
     () => [
       <GuestAdmissionViewStep1 onSelectApplication={onSelectApplication} />,
-      <GuestAdmissionSelectScheduleStep2 selectedApplication={selectedApplication} />,
+      <GuestAdmissionSelectScheduleStep2
+        selectedApplication={selectedApplication}
+        onScheduleSelected={handleScheduleSelected}
+      />,
       <GuestAdmissionExamBannerStep3 selectedApplication={selectedApplication} />,
       <GuestAdmissionSelectProgramStep4 selectedApplication={selectedApplication} />,
     ],

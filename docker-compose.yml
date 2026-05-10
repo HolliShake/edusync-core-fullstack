@@ -1,4 +1,3 @@
-
 services:
   # React TypeScript App
   frontend:

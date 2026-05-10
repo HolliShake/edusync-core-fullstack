@@ -1,4 +1,5 @@
 import Modal, { type ModalState } from '@/components/custom/modal.component';
+import Select from '@/components/custom/select.component';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,9 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-// MASKED INPUT UTILITIES FOR 2024-2025 FORMAT
 function formatSchoolYearCode(value: string) {
-  // Remove all non-digits
   const numbers = value.replace(/\D/g, '');
   const part1 = numbers.substring(0, 4);
   const part2 = numbers.substring(4, 8);
@@ -27,10 +26,8 @@ function formatSchoolYearCode(value: string) {
   return '';
 }
 
-// --- MASKED INPUT HANDLER FOR AY NAME FORMAT e.g. "AY 2024-2025" ---
 function formatSchoolYearName(value: string) {
-  // Remove all non-digits
-  let clean = value.replace(/[^0-9]/g, '');
+  const clean = value.replace(/[^0-9]/g, '');
   const year1 = clean.substring(0, 4);
   const year2 = clean.substring(4, 8);
 
@@ -47,7 +44,6 @@ function formatSchoolYearName(value: string) {
 }
 
 const schoolYearSchema = z.object({
-  // Regex for strict "YYYY-YYYY" format, e.g. 2024-2025
   school_year_code: z
     .string()
     .min(9, 'Code is required')
@@ -58,6 +54,11 @@ const schoolYearSchema = z.object({
     .regex(/^AY \d{4}-\d{4}$/, 'Name must be in "AY 2024-2025" format'),
   start_date: z.string().min(1, 'Start date is required'),
   end_date: z.string().min(1, 'End date is required'),
+  cycle_number: z
+    .number()
+    .int('Cycle number must be a whole number')
+    .min(1, 'Cycle number must be between 1 and 4')
+    .max(4, 'Cycle number must be between 1 and 4'),
   is_active: z.boolean(),
 });
 
@@ -68,6 +69,13 @@ interface SchoolYearModalProps {
   onSubmit: () => void;
 }
 
+const cycleNumberOptions = [
+  { label: '1', value: '1' },
+  { label: '2', value: '2' },
+  { label: '3', value: '3' },
+  { label: '4', value: '4' },
+];
+
 export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModalProps) {
   const {
     register,
@@ -76,6 +84,7 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
     setError,
     control,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<SchoolYearFormData>({
     resolver: zodResolver(schoolYearSchema),
@@ -84,6 +93,7 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
       name: '',
       start_date: '',
       end_date: '',
+      cycle_number: 1,
       is_active: false,
     },
   });
@@ -93,6 +103,7 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
 
   const isSaving = useMemo(() => isPending || isUpdating, [isPending, isUpdating]);
   const isEdit = useMemo(() => !!controller.data?.id, [controller.data]);
+  const cycleNumber = watch('cycle_number');
 
   useEffect(() => {
     if (!controller.data) {
@@ -101,21 +112,27 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
         name: '',
         start_date: '',
         end_date: '',
+        cycle_number: 1,
         is_active: false,
       });
-    } else {
-      reset({
-        ...controller.data,
-        start_date: controller.data.start_date
-          ? String(controller.data.start_date).substring(0, 10)
-          : '',
-        end_date: controller.data.end_date ? String(controller.data.end_date).substring(0, 10) : '',
-        is_active:
-          typeof controller.data.is_active === 'boolean'
-            ? controller.data.is_active
-            : controller.data.is_active === '1' || controller.data.is_active === 'true',
-      });
+      return;
     }
+
+    const normalizedCycleNumber = Number(controller.data.cycle_number);
+
+    reset({
+      ...controller.data,
+      start_date: controller.data.start_date
+        ? String(controller.data.start_date).substring(0, 10)
+        : '',
+      end_date: controller.data.end_date ? String(controller.data.end_date).substring(0, 10) : '',
+      cycle_number:
+        normalizedCycleNumber >= 1 && normalizedCycleNumber <= 4 ? normalizedCycleNumber : 1,
+      is_active:
+        typeof controller.data.is_active === 'boolean'
+          ? controller.data.is_active
+          : controller.data.is_active === '1' || controller.data.is_active === 'true',
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller.isOpen, reset, controller.data]);
 
@@ -123,8 +140,10 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
     try {
       const submitData = {
         ...data,
+        cycle_number: Number(data.cycle_number),
         is_active: !!data.is_active,
       };
+
       if (isEdit) {
         await updateSchoolYear({
           id: controller.data.id,
@@ -135,6 +154,7 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
           data: submitData,
         });
       }
+
       toast.success(`School Year ${isEdit ? 'updated' : 'created'} successfully`);
       controller.closeFn();
       onSubmit();
@@ -144,13 +164,11 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
     }
   };
 
-  // --- MASKED INPUT HANDLER FOR SCHOOL-YEAR-CODE ---
   const handleSchoolYearCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatSchoolYearCode(e.target.value);
     setValue('school_year_code', formatted, { shouldValidate: true });
   };
 
-  // --- MASKED INPUT HANDLER FOR AY NAME ---
   const handleSchoolYearNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatSchoolYearName(e.target.value);
     setValue('name', formatted, { shouldValidate: true });
@@ -220,6 +238,21 @@ export default function SchoolYearModal({ controller, onSubmit }: SchoolYearModa
               <p className="text-sm text-destructive">{errors.end_date.message}</p>
             )}
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="cycle_number">Cycle Number</Label>
+          <Select
+            options={cycleNumberOptions}
+            placeholder="Select cycle number"
+            value={String(cycleNumber || '')}
+            onValueChange={(value: string) =>
+              setValue('cycle_number', Number(value), { shouldValidate: true })
+            }
+          />
+          {errors.cycle_number && (
+            <p className="text-sm text-destructive">{errors.cycle_number.message}</p>
+          )}
         </div>
 
         <div className="flex items-center space-x-2 pt-2">

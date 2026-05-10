@@ -48,7 +48,7 @@ export default function GuestAdmissionViewStep1({
   const [selectedApplication, setSelectedApplication] =
     useState<UniversityAdmissionApplication | null>(null);
 
-  const { data: applicationsResponse } = useGetUniversityAdmissionApplicationPaginated({
+  const { data: applicationsResponse, isLoading } = useGetUniversityAdmissionApplicationPaginated({
     'filter[user_id]': Number(session?.id),
     page,
     rows,
@@ -175,6 +175,7 @@ export default function GuestAdmissionViewStep1({
         pagination={paginationMeta}
         onPageChange={setPage}
         showPagination={true}
+        loading={isLoading}
         onClickRow={(row) => {
           (row.next_step == UniversityAdmissionStepEnum.not_eligible && handleViewDetails(row)) ||
             onSelectApplication?.(row);

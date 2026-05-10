@@ -32,12 +32,14 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "min_students", type: "integer"),
         new OA\Property(property: "max_students", type: "integer"),
         new OA\Property(property: "is_posted", type: "boolean"),
+        new OA\Property(property: "school_year_id", type: "integer", example: 1),
         // Computed
         new OA\Property(property: "has_grade_book", type: "boolean", readOnly: true),
         // Relations
         new OA\Property(property: "curriculum_detail", ref: "#/components/schemas/CurriculumDetail"),
         new OA\Property(property: "available_slots", type: "integer", readOnly: true),
         new OA\Property(property: "grade_book", ref: "#/components/schemas/GradeBook"),
+        new OA\Property(property: "school_year", ref: "#/components/schemas/SchoolYear"),
 
     ]
 )]
@@ -137,12 +139,14 @@ class Section extends Model
         'min_students',
         'max_students',
         'is_posted',
+        'school_year_id',
     ];
 
     protected $casts = [
         'is_posted'    => 'boolean',
         'min_students' => 'integer',
         'max_students' => 'integer',
+        'school_year_id' => 'integer',
     ];
 
     protected $appends = [
@@ -150,6 +154,7 @@ class Section extends Model
         'available_slots',
         'has_grade_book',
         'grade_book',
+        'school_year',
     ];
 
     /**
@@ -206,6 +211,30 @@ class Section extends Model
     public function getCurriculumDetailAttribute(): CurriculumDetail
     {
         return $this->curriculumDetail()->first();
+    }
+
+    /**
+     * Get the school year that owns the section.
+     *
+     * @return SchoolYear
+     */
+    public function getSchoolYearAttribute(): ?SchoolYear
+    {
+        $schoolYear = $this->schoolYear()->first();
+        if ($schoolYear) {
+            return $schoolYear->makeHidden(['curriculums', 'sections']);
+        }
+        return null;
+    }
+
+    /**
+     * Get the section that owns the curriculum detail.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function Section(): BelongsTo
+    {
+        return $this->belongsTo(Section::class);
     }
 
     /**

@@ -25,10 +25,12 @@ import { toast } from 'sonner';
 
 interface GuestAdmissionSelectScheduleStep2Props {
   selectedApplication: UniversityAdmissionApplication | null;
+  onScheduleSelected?: (scheduleId: number) => void;
 }
 
 export default function GuestAdmissionSelectScheduleStep2({
   selectedApplication,
+  onScheduleSelected,
 }: GuestAdmissionSelectScheduleStep2Props): React.ReactNode {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedCampusId, setSelectedCampusId] = useState<string>('');
@@ -128,7 +130,7 @@ export default function GuestAdmissionSelectScheduleStep2({
         },
       });
       toast.success('Schedule selected successfully');
-      //   window.location.reload();
+      onScheduleSelected?.(scheduleId);
     } catch (error) {
       toast.error('Failed to select schedule');
       console.error(error);

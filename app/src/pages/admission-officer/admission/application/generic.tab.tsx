@@ -1,5 +1,7 @@
+import TemplateDownload from '@/components/admission/template-download';
+import TemplateUpload from '@/components/admission/template-upload';
 import Menu from '@/components/custom/menu.component';
-import { useModal } from '@/components/custom/modal.component';
+import Modal, { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import EvaluationModal, {
   type CriteriaSubmission,
@@ -17,7 +19,7 @@ import {
   useUpdateUniversityAdmissionApplicationCriteriaSubmissionScores,
 } from '@rest/api';
 import { AdmissionApplicationLogTypeEnum, type UniversityAdmissionApplication } from '@rest/models';
-import { Check, EllipsisIcon, X } from 'lucide-react';
+import { Check, Download, EllipsisIcon, X } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -33,6 +35,11 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
   const evaluationModalController = useModal<EvaluationData>();
 
   const { session } = useAuth();
+  const templateModalController = useModal();
+
+  const isApprovedView = useMemo(() => {
+    return status === AdmissionApplicationLogTypeEnum.approved;
+  }, [status]);
 
   const {
     data: applications,
@@ -296,12 +303,25 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
 
   return (
     <div className="space-y-2">
-      <div className="w-fit">
-        <SelectUniversityAdmission
-          value={universityAdmissionId?.toString()}
-          onValueChange={(value) => setUniversityAdmissionId(parseInt(value))}
-          placeholder="Select university admission"
-        />
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="w-full sm:max-w-sm">
+          <SelectUniversityAdmission
+            value={universityAdmissionId?.toString()}
+            onValueChange={(value) => setUniversityAdmissionId(parseInt(value))}
+            placeholder="Select university admission"
+          />
+        </div>
+
+        {isApprovedView && (
+          <Button
+            variant="outline"
+            className="w-full gap-2 sm:w-auto"
+            onClick={() => templateModalController.openFn()}
+          >
+            <Download className="h-4 w-4" />
+            Score Template
+          </Button>
+        )}
       </div>
       <Table
         columns={columns}
@@ -322,6 +342,18 @@ export default function AdmissionOfficerAdmissionApplicationGenericTab({
         onApprove={handleApprove}
         onReject={handleReject}
       />
+
+      <Modal controller={templateModalController} title="Score Template" size="lg" closable>
+        <div className="space-y-4">
+          <TemplateDownload />
+          <TemplateUpload
+            onUploadSuccess={() => {
+              refetch();
+              templateModalController.closeFn();
+            }}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

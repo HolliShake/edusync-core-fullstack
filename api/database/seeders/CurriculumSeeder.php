@@ -61,7 +61,6 @@ class CurriculumSeeder extends Seeder
                 $schoolYear = $schoolYears->random();
 
                 Curriculum::create([
-                    'school_year_id' => $schoolYear->id,
                     'academic_program_id' => $program->id,
                     'academic_term_id' => $academicTerm->id,
                     'curriculum_code' => $curriculumData['curriculum_code'],

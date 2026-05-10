@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import type { Requirement, User } from '@rest/models';
@@ -420,176 +419,174 @@ export default function EvaluationModal({
             </span>
           </div>
 
-          <ScrollArea className="h-[calc(95vh-12rem)]">
-            <div className="space-y-3 pr-3">
-              {criteriaList.length === 0 ? (
-                <Card>
-                  <CardContent className="flex flex-col items-center justify-center py-20">
-                    <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                      <FileText className="h-8 w-8 text-muted-foreground/40" />
-                    </div>
-                    <p className="font-medium">No Evaluation Criteria</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      There are no criteria configured for this applicant.
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                currentScores.map((criteria, index) => {
-                  const error = errors[criteria.id];
-                  const cScore = Number(criteria.score) || 0;
-                  const cMin = Number(criteria.min) || 0;
-                  const cMax = Number(criteria.max) || 0;
-                  const cRange = cMax - cMin;
-                  const scorePercent =
-                    cRange > 0
-                      ? ((cScore - cMin) / cRange) * 100
-                      : cMax > 0
-                        ? (cScore / cMax) * 100
-                        : 0;
-                  const clampedPercent = Math.max(0, Math.min(100, scorePercent));
+          <div className="space-y-3 pr-3">
+            {criteriaList.length === 0 ? (
+              <Card>
+                <CardContent className="flex flex-col items-center justify-center py-20">
+                  <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                    <FileText className="h-8 w-8 text-muted-foreground/40" />
+                  </div>
+                  <p className="font-medium">No Evaluation Criteria</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    There are no criteria configured for this applicant.
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              currentScores.map((criteria, index) => {
+                const error = errors[criteria.id];
+                const cScore = Number(criteria.score) || 0;
+                const cMin = Number(criteria.min) || 0;
+                const cMax = Number(criteria.max) || 0;
+                const cRange = cMax - cMin;
+                const scorePercent =
+                  cRange > 0
+                    ? ((cScore - cMin) / cRange) * 100
+                    : cMax > 0
+                      ? (cScore / cMax) * 100
+                      : 0;
+                const clampedPercent = Math.max(0, Math.min(100, scorePercent));
 
-                  return (
-                    <div
-                      key={criteria.id}
-                      className={cn(
-                        'group rounded-xl border bg-card transition-all duration-200 hover:shadow-sm',
-                        error
-                          ? 'border-destructive/50 bg-destructive/[0.02]'
-                          : 'hover:border-primary/20'
-                      )}
-                    >
-                      {/* Header */}
-                      <div className="flex items-start gap-3 p-4 pb-3">
-                        <div
-                          className={cn(
-                            'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors',
-                            error
-                              ? 'bg-destructive/10 text-destructive'
-                              : clampedPercent >= 75
-                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                                : 'bg-primary/10 text-primary'
-                          )}
-                        >
-                          {index + 1}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold leading-tight">{criteria.label}</p>
-                          {criteria.description && (
-                            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                              {criteria.description}
-                            </p>
-                          )}
-                        </div>
-                        <Badge
-                          variant="outline"
-                          className="shrink-0 text-[10px] font-semibold tabular-nums"
-                        >
-                          {criteria.weight}%
-                        </Badge>
-                      </div>
-
-                      <div className="px-4 pb-4 space-y-3">
-                        {/* File attachment */}
-                        {criteria.file && (
-                          <button
-                            type="button"
-                            onClick={() => handleViewFile(criteria.file)}
-                            className="flex items-center gap-3 w-full rounded-lg border border-dashed bg-muted/20 p-2.5 text-left transition-colors hover:bg-muted/40 hover:border-primary/30"
-                          >
-                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 shrink-0">
-                              <FileText className="h-4 w-4" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium truncate">
-                                {criteria.requirement?.requirement_name ?? 'Submitted Document'}
-                              </p>
-                              <p className="text-[10px] text-muted-foreground truncate">
-                                {getFileName(criteria.file)}
-                              </p>
-                            </div>
-                            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                          </button>
+                return (
+                  <div
+                    key={criteria.id}
+                    className={cn(
+                      'group rounded-xl border bg-card transition-all duration-200 hover:shadow-sm',
+                      error
+                        ? 'border-destructive/50 bg-destructive/[0.02]'
+                        : 'hover:border-primary/20'
+                    )}
+                  >
+                    {/* Header */}
+                    <div className="flex items-start gap-3 p-4 pb-3">
+                      <div
+                        className={cn(
+                          'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors',
+                          error
+                            ? 'bg-destructive/10 text-destructive'
+                            : clampedPercent >= 75
+                              ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                              : 'bg-primary/10 text-primary'
                         )}
+                      >
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold leading-tight">{criteria.label}</p>
+                        {criteria.description && (
+                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                            {criteria.description}
+                          </p>
+                        )}
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="shrink-0 text-[10px] font-semibold tabular-nums"
+                      >
+                        {criteria.weight}%
+                      </Badge>
+                    </div>
 
-                        {/* Score section */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor={`score-${criteria.id}`} className="text-xs font-medium">
-                              Score
-                            </Label>
-                            <span className="text-[10px] text-muted-foreground font-medium tabular-nums">
-                              {criteria.min} – {criteria.max} range
-                            </span>
+                    <div className="px-4 pb-4 space-y-3">
+                      {/* File attachment */}
+                      {criteria.file && (
+                        <button
+                          type="button"
+                          onClick={() => handleViewFile(criteria.file)}
+                          className="flex items-center gap-3 w-full rounded-lg border border-dashed bg-muted/20 p-2.5 text-left transition-colors hover:bg-muted/40 hover:border-primary/30"
+                        >
+                          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 shrink-0">
+                            <FileText className="h-4 w-4" />
                           </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium truncate">
+                              {criteria.requirement?.requirement_name ?? 'Submitted Document'}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground truncate">
+                              {getFileName(criteria.file)}
+                            </p>
+                          </div>
+                          <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                        </button>
+                      )}
 
-                          <div className="flex items-center gap-3">
-                            <div className="relative">
-                              <Input
-                                id={`score-${criteria.id}`}
-                                type="number"
-                                min={criteria.min}
-                                max={criteria.max}
-                                step="0.01"
-                                value={criteria.score}
-                                onChange={(e) =>
-                                  handleScoreChange(
-                                    criteria.id,
-                                    e.target.value,
-                                    criteria.min,
-                                    criteria.max
-                                  )
-                                }
+                      {/* Score section */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor={`score-${criteria.id}`} className="text-xs font-medium">
+                            Score
+                          </Label>
+                          <span className="text-[10px] text-muted-foreground font-medium tabular-nums">
+                            {criteria.min} – {criteria.max} range
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="relative">
+                            <Input
+                              id={`score-${criteria.id}`}
+                              type="number"
+                              min={criteria.min}
+                              max={criteria.max}
+                              step="0.01"
+                              value={criteria.score}
+                              onChange={(e) =>
+                                handleScoreChange(
+                                  criteria.id,
+                                  e.target.value,
+                                  criteria.min,
+                                  criteria.max
+                                )
+                              }
+                              className={cn(
+                                'w-24 text-right tabular-nums pr-3 font-medium [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+                                error && 'border-destructive focus-visible:ring-destructive'
+                              )}
+                            />
+                          </div>
+                          <span className="text-xs text-muted-foreground shrink-0 font-medium">
+                            / {criteria.max}
+                          </span>
+                          <div className="flex-1 flex items-center gap-2">
+                            <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                              <div
                                 className={cn(
-                                  'w-24 text-right tabular-nums pr-3 font-medium',
-                                  error && 'border-destructive focus-visible:ring-destructive'
+                                  'h-full rounded-full transition-all duration-500 ease-out',
+                                  error
+                                    ? 'bg-destructive'
+                                    : clampedPercent >= 75
+                                      ? 'bg-emerald-500'
+                                      : clampedPercent >= 50
+                                        ? 'bg-amber-500'
+                                        : 'bg-red-500'
                                 )}
+                                style={{ width: `${clampedPercent}%` }}
                               />
                             </div>
-                            <span className="text-xs text-muted-foreground shrink-0 font-medium">
-                              / {criteria.max}
+                            <span
+                              className={cn(
+                                'text-[10px] font-bold tabular-nums w-8 text-right',
+                                error ? 'text-destructive' : 'text-muted-foreground'
+                              )}
+                            >
+                              {clampedPercent.toFixed(0)}%
                             </span>
-                            <div className="flex-1 flex items-center gap-2">
-                              <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
-                                <div
-                                  className={cn(
-                                    'h-full rounded-full transition-all duration-500 ease-out',
-                                    error
-                                      ? 'bg-destructive'
-                                      : clampedPercent >= 75
-                                        ? 'bg-emerald-500'
-                                        : clampedPercent >= 50
-                                          ? 'bg-amber-500'
-                                          : 'bg-red-500'
-                                  )}
-                                  style={{ width: `${clampedPercent}%` }}
-                                />
-                              </div>
-                              <span
-                                className={cn(
-                                  'text-[10px] font-bold tabular-nums w-8 text-right',
-                                  error ? 'text-destructive' : 'text-muted-foreground'
-                                )}
-                              >
-                                {clampedPercent.toFixed(0)}%
-                              </span>
-                            </div>
                           </div>
-
-                          {error && (
-                            <p className="text-xs text-destructive flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                              <XCircle className="h-3 w-3 shrink-0" />
-                              {error}
-                            </p>
-                          )}
                         </div>
+
+                        {error && (
+                          <p className="text-xs text-destructive flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                            <XCircle className="h-3 w-3 shrink-0" />
+                            {error}
+                          </p>
+                        )}
                       </div>
                     </div>
-                  );
-                })
-              )}
-            </div>
-          </ScrollArea>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
     </Modal>

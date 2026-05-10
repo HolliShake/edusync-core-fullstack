@@ -26,6 +26,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "is_active", type: "boolean", example: false),
         new OA\Property(property: "created_at", type: "string", format: "date-time", readOnly: true),
         new OA\Property(property: "updated_at", type: "string", format: "date-time", readOnly: true),
+        new OA\Property(property: "cycle_number", type: "integer", example: 1),
         // Computed props
         new OA\Property(property: "is_locked", type: "boolean", readOnly: true),
         new OA\Property(property: "is_current", type: "boolean", readOnly: true),

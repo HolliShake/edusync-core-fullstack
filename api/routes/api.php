@@ -425,6 +425,8 @@ Route::controller(UniversityAdmissionApplicationController::class)->group(functi
     Route::get('/UniversityAdmissionApplication', 'index');
     Route::get('/UniversityAdmissionApplication/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/UniversityAdmissionApplication', 'store');
+    Route::get('/UniversityAdmissionApplication/template/download', 'downloadTemplate');
+    Route::post('/UniversityAdmissionApplication/scores/upload', 'uploadScores');
     Route::post('/UniversityAdmissionApplication/submitApplicationForm', 'submitApplicationForm');
     Route::put('/UniversityAdmissionApplication/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/UniversityAdmissionApplication/{id}', 'destroy')->where('id', '[0-9]+');

@@ -513,6 +513,7 @@ export * from './updateUniversityAdmissionCriteriaResponse200';
 export * from './updateUniversityAdmissionResponse200';
 export * from './updateUniversityAdmissionScheduleResponse200';
 export * from './updateUserResponse200';
+export * from './uploadUniversityAdmissionScoresBody';
 export * from './user';
 export * from './userRoleEnum';
 export * from './validationErrorResponse';

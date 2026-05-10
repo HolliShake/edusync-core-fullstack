@@ -6,13 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CurriculumStateEnum } from './curriculumStateEnum';
-import type { SchoolYear } from './schoolYear';
 import type { AcademicProgram } from './academicProgram';
 import type { AcademicTerm } from './academicTerm';
 
 export interface Curriculum {
   id?: number;
-  school_year_id?: number;
   academic_program_id: number;
   academic_term_id: number;
   curriculum_code: string;
@@ -27,7 +25,6 @@ export interface Curriculum {
   approved_date: string | null;
   created_at?: string;
   updated_at?: string;
-  school_year?: SchoolYear;
   academic_program?: AcademicProgram;
   academic_term?: AcademicTerm;
 }

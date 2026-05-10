@@ -15,6 +15,7 @@ export interface SchoolYear {
   is_active: boolean;
   readonly created_at?: string;
   readonly updated_at?: string;
+  cycle_number?: number;
   readonly is_locked?: boolean;
   readonly is_current?: boolean;
 }

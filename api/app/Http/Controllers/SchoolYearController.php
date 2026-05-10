@@ -180,6 +180,7 @@ class SchoolYearController extends Controller
                 'start_date' => 'required|string|date',
                 'end_date' => 'required|string|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
+                'cycle_number' => 'required|integer|min:1|max:4'
             ]);
 
             // Return validation errors if the initial validation fails
@@ -278,6 +279,7 @@ class SchoolYearController extends Controller
                 'start_date' => 'required|string|date',
                 'end_date' => 'required|string|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
+                'cycle_number' => 'required|integer|min:1|max:4'
             ]);
 
             // Return validation errors if the initial validation fails

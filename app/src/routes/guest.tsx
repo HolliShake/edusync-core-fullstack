@@ -56,7 +56,7 @@ const GUEST: Route[] = [
       },
       {
         key: 'guest.admission.journey',
-        title: 'Journey',
+        title: 'Admission Process',
         path: '/guest/admission/process',
         component: <GuestAdmissionPage />,
         icon: <MapPinnedIcon className="h-4 w-4" />,

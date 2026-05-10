@@ -7,25 +7,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
 import { renderError } from '@/lib/error';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  useCreateCurriculum,
-  useGetAcademicTermPaginated,
-  useGetSchoolYearPaginated,
-  useUpdateCurriculum,
-} from '@rest/api';
-import {
-  CurriculumStateEnum,
-  type AcademicTerm,
-  type Curriculum,
-  type SchoolYear,
-} from '@rest/models';
+import { useCreateCurriculum, useGetAcademicTermPaginated, useUpdateCurriculum } from '@rest/api';
+import { CurriculumStateEnum, type AcademicTerm, type Curriculum } from '@rest/models';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 const curriculumSchema = z.object({
-  school_year_id: z.number().min(1, 'School year is required'),
   academic_program_id: z.number().min(1, 'Academic program is required'),
   academic_term_id: z.number().min(1, 'Academic term is required'),
   curriculum_code: z.string().min(1, 'Curriculum code is required'),
@@ -64,7 +53,6 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
   } = useForm<CurriculumFormData>({
     resolver: zodResolver(curriculumSchema),
     defaultValues: {
-      school_year_id: 0,
       academic_program_id: active_academic_program ?? 0,
       academic_term_id: 0,
       curriculum_code: '',
@@ -76,12 +64,6 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
       status: 'active',
       approved_date: null,
     },
-  });
-
-  const { data: schoolYearResponse } = useGetSchoolYearPaginated({
-    sort: '-start_date',
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
   });
 
   const { mutateAsync: createCurriculum, isPending } = useCreateCurriculum();
@@ -101,22 +83,12 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
     [listOfAcademicTermsResponse]
   );
 
-  const listOfSchoolYears = useMemo(
-    () =>
-      schoolYearResponse?.data?.data?.map((schoolYear: SchoolYear) => ({
-        label: schoolYear.name,
-        value: String(schoolYear.id),
-      })) ?? [],
-    [schoolYearResponse]
-  );
-
   const isSaving = useMemo(() => isPending || isUpdating, [isPending, isUpdating]);
 
   const isEdit = useMemo(() => !!controller.data?.id, [controller.data]);
 
   const status = watch('status');
   const academicTermId = watch('academic_term_id');
-  const schoolYearId = watch('school_year_id');
 
   const statusOptions = [
     { label: 'Active', value: CurriculumStateEnum.active },
@@ -148,7 +120,6 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
   useEffect(() => {
     if (!controller.data) {
       return reset({
-        school_year_id: 0,
         academic_program_id: active_academic_program ?? 0,
         academic_term_id: 0,
         curriculum_code: '',
@@ -213,32 +184,17 @@ export default function CurriculumModal({ controller, onSubmit }: CurriculumModa
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="school_year_id">School Year</Label>
-            <Select
-              value={String(schoolYearId)}
-              onValueChange={(value) => setValue('school_year_id', Number(value))}
-              options={listOfSchoolYears}
-              placeholder="Select school year"
-            />
-            {errors.school_year_id && (
-              <p className="text-sm text-destructive">{errors.school_year_id.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="academic_term_id">Academic Term</Label>
-            <Select
-              value={String(academicTermId)}
-              onValueChange={(value) => setValue('academic_term_id', Number(value))}
-              options={listOfAcademicTerms}
-              placeholder="Select academic term"
-            />
-            {errors.academic_term_id && (
-              <p className="text-sm text-destructive">{errors.academic_term_id.message}</p>
-            )}
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="academic_term_id">Academic Term</Label>
+          <Select
+            value={String(academicTermId)}
+            onValueChange={(value) => setValue('academic_term_id', Number(value))}
+            options={listOfAcademicTerms}
+            placeholder="Select academic term"
+          />
+          {errors.academic_term_id && (
+            <p className="text-sm text-destructive">{errors.academic_term_id.message}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

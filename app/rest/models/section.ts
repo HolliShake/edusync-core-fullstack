@@ -7,6 +7,7 @@
  */
 import type { CurriculumDetail } from './curriculumDetail';
 import type { GradeBook } from './gradeBook';
+import type { SchoolYear } from './schoolYear';
 
 export interface Section {
   readonly id?: number;
@@ -17,8 +18,10 @@ export interface Section {
   min_students: number;
   max_students: number;
   is_posted: boolean;
+  school_year_id?: number;
   readonly has_grade_book?: boolean;
   curriculum_detail?: CurriculumDetail;
   readonly available_slots?: number;
   grade_book?: GradeBook;
+  school_year?: SchoolYear;
 }

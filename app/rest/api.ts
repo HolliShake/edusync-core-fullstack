@@ -387,6 +387,7 @@ import type {
   UpdateUniversityAdmissionResponse200,
   UpdateUniversityAdmissionScheduleResponse200,
   UpdateUserResponse200,
+  UploadUniversityAdmissionScoresBody,
   User,
   ValidationErrorResponse
 } from './models';
@@ -17809,6 +17810,168 @@ export const useDeleteTestingCenter = <TError = UnauthenticatedResponse | Forbid
       > => {
 
       const mutationOptions = getDeleteTestingCenterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Download the XLSX template for uploading admission scores
+ * @summary Download scoring template
+ */
+export const downloadUniversityAdmissionTemplate = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return fetchData<void>(
+      {url: `/api/UniversityAdmissionApplication/template/download`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+
+
+export const getDownloadUniversityAdmissionTemplateQueryKey = () => {
+    return [
+    `/api/UniversityAdmissionApplication/template/download`
+    ] as const;
+    }
+
+    
+export const getDownloadUniversityAdmissionTemplateQueryOptions = <TData = Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError = void>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDownloadUniversityAdmissionTemplateQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>> = ({ signal }) => downloadUniversityAdmissionTemplate(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DownloadUniversityAdmissionTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>>
+export type DownloadUniversityAdmissionTemplateQueryError = void
+
+
+export function useDownloadUniversityAdmissionTemplate<TData = Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError = void>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDownloadUniversityAdmissionTemplate<TData = Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError = void>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDownloadUniversityAdmissionTemplate<TData = Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError = void>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Download scoring template
+ */
+
+export function useDownloadUniversityAdmissionTemplate<TData = Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError = void>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadUniversityAdmissionTemplate>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDownloadUniversityAdmissionTemplateQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Upload admission scores from XLSX file
+ * @summary Upload admission scores
+ */
+export const uploadUniversityAdmissionScores = (
+    uploadUniversityAdmissionScoresBody: UploadUniversityAdmissionScoresBody,
+ signal?: AbortSignal
+) => {
+      
+      const formData = new FormData();
+formData.append(`file`, uploadUniversityAdmissionScoresBody.file)
+
+      return fetchData<void>(
+      {url: `/api/UniversityAdmissionApplication/scores/upload`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
+    },
+      );
+    }
+  
+
+
+export const getUploadUniversityAdmissionScoresMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadUniversityAdmissionScores>>, TError,{data: UploadUniversityAdmissionScoresBody}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof uploadUniversityAdmissionScores>>, TError,{data: UploadUniversityAdmissionScoresBody}, TContext> => {
+
+const mutationKey = ['uploadUniversityAdmissionScores'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadUniversityAdmissionScores>>, {data: UploadUniversityAdmissionScoresBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadUniversityAdmissionScores(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadUniversityAdmissionScoresMutationResult = NonNullable<Awaited<ReturnType<typeof uploadUniversityAdmissionScores>>>
+    export type UploadUniversityAdmissionScoresMutationBody = UploadUniversityAdmissionScoresBody
+    export type UploadUniversityAdmissionScoresMutationError = void
+
+    /**
+ * @summary Upload admission scores
+ */
+export const useUploadUniversityAdmissionScores = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadUniversityAdmissionScores>>, TError,{data: UploadUniversityAdmissionScoresBody}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadUniversityAdmissionScores>>,
+        TError,
+        {data: UploadUniversityAdmissionScoresBody},
+        TContext
+      > => {
+
+      const mutationOptions = getUploadUniversityAdmissionScoresMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

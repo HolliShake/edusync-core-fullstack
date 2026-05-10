@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Service\UniversityAdmissionApplicationService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 #[OA\PathItem(
     path: "/UniversityAdmissionApplication"
@@ -16,6 +18,97 @@ use OpenApi\Attributes as OA;
 class UniversityAdmissionApplicationController extends Controller
 {
     public function __construct(protected UniversityAdmissionApplicationService $service) {
+    }
+
+    /**
+     * Download the scoring template
+     */
+    #[OA\Get(
+        path: "/api/UniversityAdmissionApplication/template/download",
+        summary: "Download scoring template",
+        tags: ["UniversityAdmissionApplication"],
+        description: "Download the XLSX template for uploading admission scores",
+        operationId: "downloadUniversityAdmissionTemplate",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "XLSX template file"
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Template not found"
+    )]
+    public function downloadTemplate()
+    {
+        try {
+            $templatePath = 'university_admission_application_score_template.xlsx';
+            
+            if (Storage::disk('public')->exists($templatePath)) {
+                $filename = basename($templatePath);
+                return Storage::disk('public')->download($templatePath, $filename);
+            }
+
+            return $this->notFound('XLSX template file not found');
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
+    }
+
+    /**
+     * Upload admission scores from template
+     */
+    #[OA\Post(
+        path: "/api/UniversityAdmissionApplication/scores/upload",
+        summary: "Upload admission scores",
+        tags: ["UniversityAdmissionApplication"],
+        description: "Upload admission scores from XLSX file",
+        operationId: "uploadUniversityAdmissionScores",
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: [
+            new OA\MediaType(
+                mediaType: "multipart/form-data",
+                schema: new OA\Schema(
+                    type: "object",
+                    required: ["file"],
+                    properties: [
+                        new OA\Property(
+                            property: "file",
+                            type: "string",
+                            format: "binary",
+                            description: "XLSX file containing scores"
+                        ),
+                    ]
+                )
+            ),
+        ]
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Scores uploaded successfully"
+    )]
+    #[OA\Response(
+        response: 422,
+        description: "Validation error"
+    )]
+    public function uploadScores(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'file' => 'required|file|mimes:xlsx|max:10240',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->validationError($validator->errors());
+            }
+
+            $validated = $validator->validated();
+
+            return $this->ok($this->service->uploadResult($validated['file']));
+        } catch (\Exception $e) {
+            return $this->internalServerError($e->getMessage());
+        }
     }
 
     /**

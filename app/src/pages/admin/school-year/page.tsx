@@ -3,7 +3,7 @@ import Menu from '@/components/custom/menu.component';
 import { useModal } from '@/components/custom/modal.component';
 import Table, { type TableColumn } from '@/components/custom/table.component';
 import TitledPage from '@/components/pages/titled.page';
-import SchoolYearModal from '@/components/school-year/school-year.modal'; // Ensure this path is correct
+import SchoolYearModal from '@/components/school-year/school-year.modal';
 import { Button } from '@/components/ui/button';
 import { encryptIdForUrl } from '@/lib/hash';
 import { useDeleteSchoolYear, useGetSchoolYearPaginated } from '@rest/api';
@@ -57,6 +57,12 @@ export default function AdminSchoolYear(): React.ReactNode {
         title: 'Name',
         dataIndex: 'name',
         render: (_value, row) => row.name,
+      },
+      {
+        key: 'cycle_number',
+        title: 'Cycle Number',
+        dataIndex: 'cycle_number',
+        render: (_value, row) => row.cycle_number ?? '-',
       },
       {
         key: 'start_date',

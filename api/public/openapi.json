@@ -16700,6 +16700,62 @@
                 }
             }
         },
+        "\/api\/UniversityAdmissionApplication\/template\/download": {
+            "get": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Download scoring template",
+                "description": "Download the XLSX template for uploading admission scores",
+                "operationId": "downloadUniversityAdmissionTemplate",
+                "responses": {
+                    "200": {
+                        "description": "XLSX template file"
+                    },
+                    "404": {
+                        "description": "Template not found"
+                    }
+                }
+            }
+        },
+        "\/api\/UniversityAdmissionApplication\/scores\/upload": {
+            "post": {
+                "tags": [
+                    "UniversityAdmissionApplication"
+                ],
+                "summary": "Upload admission scores",
+                "description": "Upload admission scores from XLSX file",
+                "operationId": "uploadUniversityAdmissionScores",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart\/form-data": {
+                            "schema": {
+                                "required": [
+                                    "file"
+                                ],
+                                "properties": {
+                                    "file": {
+                                        "description": "XLSX file containing scores",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Scores uploaded successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
         "\/api\/UniversityAdmissionApplication": {
             "get": {
                 "tags": [
@@ -21876,10 +21932,6 @@
                         "type": "integer",
                         "example": 1
                     },
-                    "school_year_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
                     "academic_program_id": {
                         "type": "integer",
                         "example": 1
@@ -21931,9 +21983,6 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2024-01-01T12:00:00Z"
-                    },
-                    "school_year": {
-                        "$ref": "#\/components\/schemas\/SchoolYear"
                     },
                     "academic_program": {
                         "$ref": "#\/components\/schemas\/AcademicProgram"
@@ -25435,6 +25484,10 @@
                         "format": "date-time",
                         "readOnly": true
                     },
+                    "cycle_number": {
+                        "type": "integer",
+                        "example": 1
+                    },
                     "is_locked": {
                         "type": "boolean",
                         "readOnly": true
@@ -25587,6 +25640,10 @@
                     "is_posted": {
                         "type": "boolean"
                     },
+                    "school_year_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
                     "has_grade_book": {
                         "type": "boolean",
                         "readOnly": true
@@ -25600,6 +25657,9 @@
                     },
                     "grade_book": {
                         "$ref": "#\/components\/schemas\/GradeBook"
+                    },
+                    "school_year": {
+                        "$ref": "#\/components\/schemas\/SchoolYear"
                     }
                 },
                 "type": "object"
@@ -26239,6 +26299,11 @@
                     "latest_status_label": {
                         "type": "string",
                         "readOnly": true
+                    },
+                    "qr_code": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
                     },
                     "user": {
                         "$ref": "#\/components\/schemas\/User"

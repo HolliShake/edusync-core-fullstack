@@ -37,6 +37,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: "next_step", type: "string", enum: UniversityAdmissionStepEnum::class, readOnly: true),
         new OA\Property(property: "latest_status", type: "string", enum: AdmissionApplicationLogTypeEnum::class, readOnly: true),
         new OA\Property(property: "latest_status_label", type: "string", readOnly: true),
+        new OA\Property(property: "qr_code", type: "string", nullable: true, readOnly: true),
         // Relations
         new OA\Property(property: "user", ref: "#/components/schemas/User"),
         new OA\Property(property: "university_admission", ref: "#/components/schemas/UniversityAdmission"),

@@ -32,6 +32,8 @@ export interface UniversityAdmissionApplication {
   readonly next_step?: UniversityAdmissionApplicationNextStep;
   readonly latest_status?: UniversityAdmissionApplicationLatestStatus;
   readonly latest_status_label?: string;
+  /** @nullable */
+  readonly qr_code?: string | null;
   user?: User;
   university_admission?: UniversityAdmission;
   /** @nullable */

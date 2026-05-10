@@ -1,19 +1,24 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import type { UniversityAdmissionApplication } from '@rest/models';
 import { format, formatDistanceToNow, isPast, parseISO } from 'date-fns';
+import jsPDF from 'jspdf';
 import {
   Building2,
   CalendarCheck,
   Clock,
   DoorOpen,
+  Download,
   GraduationCap,
   MapPin,
+  QrCode,
+  Share2,
   Timer,
 } from 'lucide-react';
 import type React from 'react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 interface GuestAdmissionExamBannerStep3Props {
   selectedApplication: UniversityAdmissionApplication | null;
@@ -42,6 +47,256 @@ export default function GuestAdmissionExamBannerStep3({
     if (isPast(examDate)) return 'Exam day has passed';
     return formatDistanceToNow(examDate, { addSuffix: true });
   }, [examDate]);
+
+  const handleDownloadQR = useCallback(async () => {
+    if (!selectedApplication?.qr_code || !examDate) return;
+
+    try {
+      // Convert SVG to canvas image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const img = new Image();
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imgData = canvas.toDataURL('image/png');
+
+        // Create PDF
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 15;
+        let yPosition = margin;
+
+        // Title
+        pdf.setFontSize(24);
+        pdf.setTextColor(20, 20, 20);
+        pdf.text('Admission Examination', margin, yPosition);
+        yPosition += 10;
+
+        // Subtitle
+        pdf.setFontSize(12);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text('QR Code & Instructions', margin, yPosition);
+        yPosition += 12;
+
+        // Separator line
+        pdf.setDrawColor(200, 200, 200);
+        pdf.line(margin, yPosition - 2, pageWidth - margin, yPosition - 2);
+        yPosition += 8;
+
+        // Application ID
+        pdf.setFontSize(10);
+        pdf.setTextColor(60, 60, 60);
+        pdf.text(`Application ID: ${selectedApplication.temporary_id}`, margin, yPosition);
+        yPosition += 8;
+
+        // Candidate Name
+        if (selectedApplication.user?.name) {
+          pdf.text(`Candidate: ${selectedApplication.user.name}`, margin, yPosition);
+          yPosition += 8;
+        }
+
+        // Exam Date
+        pdf.text(`Date: ${format(examDate, 'MMMM d, yyyy (EEEE)')}`, margin, yPosition);
+        yPosition += 12;
+
+        // QR Code Section Header
+        pdf.setFontSize(12);
+        pdf.setTextColor(20, 20, 20);
+        pdf.text('Your QR Code', margin, yPosition);
+        yPosition += 8;
+
+        // Add QR code image centered
+        const qrSize = 60;
+        const qrX = (pageWidth - qrSize) / 2;
+        pdf.addImage(imgData, 'PNG', qrX, yPosition, qrSize, qrSize);
+        yPosition += qrSize + 12;
+
+        // Instructions Section
+        pdf.setFontSize(11);
+        pdf.setTextColor(20, 20, 20);
+        pdf.text('Instructions:', margin, yPosition);
+        yPosition += 7;
+
+        // Instructions text with wrapping
+        pdf.setFontSize(9);
+        pdf.setTextColor(60, 60, 60);
+
+        const instructions = [
+          '• Present this QR code at the testing center for verification',
+          '• Keep a copy of this document or screenshot on your phone',
+          '• Arrive at least 30 minutes before your scheduled time',
+          '• Bring a valid ID and this application confirmation',
+        ];
+
+        instructions.forEach((instruction) => {
+          const wrapped = pdf.splitTextToSize(instruction, pageWidth - 2 * margin);
+          pdf.text(wrapped, margin, yPosition);
+          yPosition += 6;
+        });
+
+        yPosition += 8;
+
+        // Footer
+        pdf.setFontSize(8);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text(
+          `Generated on ${format(new Date(), 'MMMM d, yyyy h:mm a')}`,
+          margin,
+          pageHeight - 10
+        );
+
+        // Save PDF
+        pdf.save(`admission-qr-${selectedApplication.temporary_id}.pdf`);
+      };
+
+      img.src = selectedApplication.qr_code;
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+    }
+  }, [
+    selectedApplication?.qr_code,
+    selectedApplication?.temporary_id,
+    selectedApplication?.user?.name,
+    examDate,
+  ]);
+
+  const handleShareQR = useCallback(async () => {
+    if (
+      !selectedApplication?.qr_code ||
+      typeof navigator === 'undefined' ||
+      !('share' in navigator)
+    )
+      return;
+
+    try {
+      // Convert SVG to canvas image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const img = new Image();
+      img.onload = async () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imgData = canvas.toDataURL('image/png');
+
+        // Create PDF
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const margin = 15;
+        let yPosition = margin;
+
+        // Title
+        pdf.setFontSize(24);
+        pdf.setTextColor(20, 20, 20);
+        pdf.text('Admission Examination', margin, yPosition);
+        yPosition += 10;
+
+        // Subtitle
+        pdf.setFontSize(12);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text('QR Code & Instructions', margin, yPosition);
+        yPosition += 12;
+
+        // Separator line
+        pdf.setDrawColor(200, 200, 200);
+        pdf.line(margin, yPosition - 2, pageWidth - margin, yPosition - 2);
+        yPosition += 8;
+
+        // Application ID
+        pdf.setFontSize(10);
+        pdf.setTextColor(60, 60, 60);
+        pdf.text(`Application ID: ${selectedApplication.temporary_id}`, margin, yPosition);
+        yPosition += 8;
+
+        // Candidate Name
+        if (selectedApplication.user?.name) {
+          pdf.text(`Candidate: ${selectedApplication.user.name}`, margin, yPosition);
+          yPosition += 8;
+        }
+
+        // Exam Date
+        if (examDate) {
+          pdf.text(`Date: ${format(examDate, 'MMMM d, yyyy (EEEE)')}`, margin, yPosition);
+          yPosition += 12;
+        }
+
+        // QR Code Section Header
+        pdf.setFontSize(12);
+        pdf.setTextColor(20, 20, 20);
+        pdf.text('Your QR Code', margin, yPosition);
+        yPosition += 8;
+
+        // Add QR code image centered
+        const qrSize = 60;
+        const qrX = (pageWidth - qrSize) / 2;
+        pdf.addImage(imgData, 'PNG', qrX, yPosition, qrSize, qrSize);
+        yPosition += qrSize + 12;
+
+        // Instructions Section
+        pdf.setFontSize(11);
+        pdf.setTextColor(20, 20, 20);
+        pdf.text('Instructions:', margin, yPosition);
+        yPosition += 7;
+
+        // Instructions text with wrapping
+        pdf.setFontSize(9);
+        pdf.setTextColor(60, 60, 60);
+
+        const instructions = [
+          '• Present this QR code at the testing center for verification',
+          '• Keep a copy of this document or screenshot on your phone',
+          '• Arrive at least 30 minutes before your scheduled time',
+          '• Bring a valid ID and this application confirmation',
+        ];
+
+        instructions.forEach((instruction) => {
+          const wrapped = pdf.splitTextToSize(instruction, pageWidth - 2 * margin);
+          pdf.text(wrapped, margin, yPosition);
+          yPosition += 6;
+        });
+
+        // Convert PDF to blob for sharing
+        const pdfBlob = pdf.output('blob');
+        const file = new File([pdfBlob], `admission-qr-${selectedApplication.temporary_id}.pdf`, {
+          type: 'application/pdf',
+        });
+
+        navigator.share({
+          title: 'My Admission QR Code',
+          text: `My admission examination QR code for ${selectedApplication.temporary_id}`,
+          files: [file],
+        });
+      };
+
+      img.src = selectedApplication.qr_code;
+    } catch (error) {
+      console.error('Failed to share QR code:', error);
+    }
+  }, [
+    selectedApplication?.qr_code,
+    selectedApplication?.temporary_id,
+    selectedApplication?.user?.name,
+    examDate,
+  ]);
 
   if (!selectedApplication) {
     return (
@@ -107,6 +362,72 @@ export default function GuestAdmissionExamBannerStep3({
           </div>
         </CardContent>
       </Card>
+
+      {/* QR Code Section */}
+      {selectedApplication?.qr_code && (
+        <Card className="overflow-hidden border-0 shadow-md">
+          <CardContent className="p-6 sm:p-8">
+            <div className="grid gap-8 sm:grid-cols-2 items-center">
+              {/* QR Code Display */}
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-primary/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative bg-white p-4 rounded-xl shadow-md border border-primary/10">
+                    <img
+                      src={selectedApplication.qr_code}
+                      alt="Admission QR Code"
+                      className="w-48 h-48 sm:w-56 sm:h-56"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground text-center">
+                  ID: {selectedApplication.temporary_id}
+                </p>
+              </div>
+
+              {/* Information & Actions */}
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <QrCode className="h-5 w-5 text-primary" />
+                    <h3 className="text-lg font-semibold">Your Admission QR Code</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Save or download this QR code. You'll need to present it on your exam day for
+                    quick verification at the testing center.
+                  </p>
+                </div>
+
+                <Separator />
+
+                <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3 space-y-2">
+                  <p className="text-xs font-semibold text-blue-900 dark:text-blue-200 uppercase tracking-wider">
+                    What's in the code?
+                  </p>
+                  <ul className="text-xs text-blue-800 dark:text-blue-300 space-y-1">
+                    <li>✓ Your Application ID</li>
+                    <li>✓ Your Full Name</li>
+                    <li>✓ Test Center Verification</li>
+                  </ul>
+                </div>
+
+                <div className="flex flex-col gap-2 pt-2">
+                  <Button onClick={handleDownloadQR} variant="default" className="w-full gap-2">
+                    <Download className="h-4 w-4" />
+                    Download QR Code
+                  </Button>
+                  {typeof navigator !== 'undefined' && 'share' in navigator && (
+                    <Button onClick={handleShareQR} variant="outline" className="w-full gap-2">
+                      <Share2 className="h-4 w-4" />
+                      Share QR Code
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Detail cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

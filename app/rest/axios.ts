@@ -26,7 +26,14 @@ api.interceptors.request.use(
 
 // Fetch data
 export const fetchData = async <T>(config: AxiosRequestConfig): Promise<T> => {
-  //   config.url = config.url!.replace(/^\/Api/, '/api');
+  if (
+    config.method?.toUpperCase() === 'GET' &&
+    typeof config.url === 'string' &&
+    config.url.includes('/UniversityAdmissionApplication/template/download')
+  ) {
+    config.responseType = 'blob';
+  }
+
   const response = await api.request<T>({
     ...config,
   });
