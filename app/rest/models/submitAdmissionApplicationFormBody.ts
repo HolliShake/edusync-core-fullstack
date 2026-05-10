@@ -7,15 +7,8 @@
  */
 
 export type SubmitAdmissionApplicationFormBody = {
-  first_name: string;
-  /** @nullable */
-  middle_name?: string | null;
-  last_name: string;
-  email: string;
-  phone: string;
-  address: string;
-  user_id: number[];
-  admission_schedule_id: number[];
-  admission_criteria_id?: number[];
-  file?: Blob[];
+  'user_id[]'?: number[];
+  'admission_schedule_id[]'?: number[];
+  'admission_criteria_id[]'?: number[];
+  'file[]'?: Blob[];
 };

@@ -22,13 +22,6 @@ return new class extends Migration
             $table->foreignId('admission_schedule_id')
                 ->constrained('admission_schedule')
                 ->onDelete('cascade');
-            // Fields
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('middle_name')->nullable();
-            $table->string('email');
-            $table->string('phone');
-            $table->text('address');
 
             // Unique
             $table->unique(['user_id', 'admission_schedule_id'], 'admission_application_unique');

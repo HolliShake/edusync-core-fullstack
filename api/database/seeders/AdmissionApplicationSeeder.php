@@ -52,12 +52,6 @@ class AdmissionApplicationSeeder extends Seeder
                 $application = AdmissionApplication::create([
                     'user_id' => $student->id,
                     'admission_schedule_id' => $admissionSchedule->id,
-                    'first_name' => $this->extractFirstName($student->name),
-                    'last_name' => $this->extractLastName($student->name),
-                    'middle_name' => $this->generateMiddleName(),
-                    'email' => $student->email,
-                    'phone' => $this->generatePhoneNumber(),
-                    'address' => $this->generateAddress(),
                 ]);
 
                 // Note: The "submitted" log is automatically created by the database trigger
@@ -74,64 +68,5 @@ class AdmissionApplicationSeeder extends Seeder
         }
 
         $this->command->info("Created {$applicationCount} admission applications successfully!");
-    }
-
-    /**
-     * Extract first name from full name
-     */
-    private function extractFirstName(string $fullName): string
-    {
-        $parts = explode(' ', trim($fullName));
-        return $parts[0] ?? 'Unknown';
-    }
-
-    /**
-     * Extract last name from full name
-     */
-    private function extractLastName(string $fullName): string
-    {
-        $parts = explode(' ', trim($fullName));
-        return end($parts) ?? 'Unknown';
-    }
-
-    /**
-     * Generate a random middle name
-     */
-    private function generateMiddleName(): ?string
-    {
-        $middleNames = [
-            'Santos', 'Reyes', 'Cruz', 'Garcia', 'Lopez', 'Martinez', 'Rodriguez', 'Gonzalez',
-            'Perez', 'Sanchez', 'Ramirez', 'Torres', 'Flores', 'Rivera', 'Gomez', 'Diaz',
-            'Morales', 'Jimenez', 'Ruiz', 'Hernandez', 'Vargas', 'Mendoza', 'Castillo', 'Ramos'
-        ];
-
-        // Return null sometimes to match nullable field
-        return rand(0, 10) > 2 ? $middleNames[array_rand($middleNames)] : null;
-    }
-
-    /**
-     * Generate a random phone number
-     */
-    private function generatePhoneNumber(): string
-    {
-        $prefixes = ['+63 912', '+63 917', '+63 918', '+63 919', '+63 920', '+63 921'];
-        $prefix = $prefixes[array_rand($prefixes)];
-        $number = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
-
-        return $prefix . ' ' . substr($number, 0, 3) . ' ' . substr($number, 3, 4);
-    }
-
-    /**
-     * Generate a random address
-     */
-    private function generateAddress(): string
-    {
-        $streets = ['Main Street', 'Rizal Avenue', 'Quezon Boulevard', 'Taft Avenue', 'EDSA', 'Ortigas Avenue'];
-        $cities = ['Quezon City', 'Makati City', 'Manila', 'Taguig City', 'Pasig City', 'Mandaluyong City'];
-        $street = $streets[array_rand($streets)];
-        $city = $cities[array_rand($cities)];
-        $number = rand(100, 9999);
-
-        return "{$number} {$street}, {$city}, Metro Manila";
     }
 }

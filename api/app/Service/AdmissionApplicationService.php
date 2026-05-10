@@ -28,35 +28,26 @@ class AdmissionApplicationService extends GenericService implements IAdmissionAp
                 $applicationData = [
                     'user_id' => $data['user_id'][0],
                     'admission_schedule_id' => $data['admission_schedule_id'][0],
-                    'first_name' => $data['first_name'],
-                    'middle_name' => $data['middle_name'] ?? null,
-                    'last_name' => $data['last_name'],
-                    'email' => $data['email'],
-                    'phone' => $data['phone'],
-                    'address' => $data['address'],
+                    'remark' => 'Pending',
                 ];
 
                 $admissionApplication = $this->repository->create($applicationData);
 
-                if (!empty($data['admission_criteria_id']) && !empty($data['file'])) {
-                    foreach (array_map(null, $data['admission_criteria_id'], $data['file']) as [$criteriaId, $file]) {
-                        if (!$criteriaId || !$file) continue;
+                foreach (array_map(null, $data['admission_criteria_id'], $data['file']) as [$criteriaId, $file]) {
+                    $criteriaSubmission = $this->admissionApplicationCriteriaSubmissionRepository->create([
+                        'admission_application_id' => $admissionApplication->id,
+                        'admission_criteria_id' => $criteriaId,
+                        'score' => 0,
+                        'is_posted' => false,
+                    ]);
 
-                        $criteriaSubmission = $this->admissionApplicationCriteriaSubmissionRepository->create([
-                            'admission_application_id' => $admissionApplication->id,
-                            'admission_criteria_id' => $criteriaId,
-                            'score' => 0, // Default or mock
-                            'is_posted' => false,
-                        ]);
-
-                        if ($file instanceof \Illuminate\Http\UploadedFile) {
-                            $criteriaSubmission->addMedia($file)
-                                ->preservingOriginal()
-                                ->usingFileName($file->getClientOriginalName())
-                                ->toMediaCollection(AdmissionApplicationCriteriaSubmission::$COLLECTION_NAME ?? 'default');
-                        } else {
-                            throw new \Exception('File is not an instance of Illuminate\\Http\\UploadedFile');
-                        }
+                    if ($file instanceof \Illuminate\Http\UploadedFile) {
+                        $criteriaSubmission->addMedia($file)
+                            ->preservingOriginal()
+                            ->usingFileName($file->getClientOriginalName())
+                            ->toMediaCollection(AdmissionApplicationCriteriaSubmission::$COLLECTION_NAME);
+                    } else {
+                        throw new \Exception('File is not an instance of Illuminate\\Http\\UploadedFile');
                     }
                 }
 

@@ -19,23 +19,12 @@ use OpenApi\Attributes as OA;
         // Override required
         'user_id',
         'admission_schedule_id',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'address',
     ],
     properties: [
         // Override fillables
         new OA\Property(property: "id", type: "integer", readOnly: true),
         new OA\Property(property: "user_id", type: "integer"),
         new OA\Property(property: "admission_schedule_id", type: "integer"),
-        new OA\Property(property: "first_name", type: "string"),
-        new OA\Property(property: "last_name", type: "string"),
-        new OA\Property(property: "middle_name", type: "string", nullable: true),
-        new OA\Property(property: "email", type: "string"),
-        new OA\Property(property: "phone", type: "string"),
-        new OA\Property(property: "address", type: "string"),
         new OA\Property(property: "created_at", type: "string", format: "date-time"),
         new OA\Property(property: "updated_at", type: "string", format: "date-time"),
         new OA\Property(property: "latest_status", type: "string", enum: AdmissionApplicationLogTypeEnum::class, readOnly: true),
@@ -125,19 +114,11 @@ class AdmissionApplication extends Model
     protected $fillable = [
         'user_id',
         'admission_schedule_id',
-        'first_name',
-        'last_name',
-        'middle_name',
-        'email',
-        'phone',
-        'address',
     ];
 
     protected $casts = [
         'user_id'               => 'integer',
         'admission_schedule_id' => 'integer',
-        'year'                  => 'integer',
-        'pool_no'               => 'integer',
     ];
 
     protected $appends = [

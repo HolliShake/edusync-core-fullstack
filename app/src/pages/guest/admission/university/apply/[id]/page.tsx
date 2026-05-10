@@ -3,10 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
 import { decryptIdFromUrl } from '@/lib/hash';
 import {
@@ -27,7 +24,6 @@ import {
   Info,
   Send,
   Upload,
-  User,
   X,
 } from 'lucide-react';
 import type React from 'react';
@@ -90,10 +86,6 @@ export default function GuestAdmissionUniversityApply(): React.ReactNode {
     }
     return allInvitations[0];
   }, [myInvitation?.data, parsedUniversityAdmissionId]);
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
 
   const handleFileUpload = (criteriaId: number, file: File) => {
     let finalFile = file;
@@ -307,94 +299,6 @@ export default function GuestAdmissionUniversityApply(): React.ReactNode {
                       format(new Date(invitationData.close_date), 'MMM d, yyyy')}
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Personal Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5 text-primary" />
-                Personal Information
-              </CardTitle>
-              <CardDescription>Provide your personal details</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name *</Label>
-                  <Input
-                    id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    placeholder="Enter your first name"
-                    required
-                    readOnly
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name *</Label>
-                  <Input
-                    id="lastName"
-                    value={formData.lastName}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    placeholder="Enter your last name"
-                    required
-                    readOnly
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="middleName">Middle Name</Label>
-                <Input
-                  id="middleName"
-                  value={formData.middleName}
-                  onChange={(e) => handleInputChange('middleName', e.target.value)}
-                  placeholder="Enter your middle name (optional)"
-                  readOnly
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    placeholder="your.email@example.com"
-                    required
-                    readOnly
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number *</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="+1 (555) 000-0000"
-                    required
-                    readOnly
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="address">Address *</Label>
-                <Textarea
-                  id="address"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
-                  placeholder="Enter your complete address"
-                  rows={3}
-                  required
-                  readOnly
-                />
               </div>
             </CardContent>
           </Card>

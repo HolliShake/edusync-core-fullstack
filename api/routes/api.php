@@ -212,6 +212,7 @@ Route::controller(AdmissionApplicationController::class)->group(function() {
     Route::get('/AdmissionApplication', 'index');
     Route::get('/AdmissionApplication/{id}', 'show')->where('id', '[0-9]+');
     Route::post('/AdmissionApplication', 'store');
+    Route::post('/AdmissionApplication/submitApplicationForm', 'submitApplicationForm');
     Route::put('/AdmissionApplication/{id}', 'update')->where('id', '[0-9]+');
     Route::delete('/AdmissionApplication/{id}', 'destroy')->where('id', '[0-9]+');
 });

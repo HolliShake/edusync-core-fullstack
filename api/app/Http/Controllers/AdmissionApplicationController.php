@@ -362,38 +362,27 @@ class AdmissionApplicationController extends Controller
             mediaType: "multipart/form-data",
             schema: new OA\Schema(
                 required: [
-                    'first_name',
-                    'last_name',
-                    'email',
-                    'phone',
-                    'address',
                     'user_id',
                     'admission_schedule_id',
                 ],
                 properties: [
-                    new OA\Property(property: "first_name", type: "string"),
-                    new OA\Property(property: "middle_name", type: "string", nullable: true),
-                    new OA\Property(property: "last_name", type: "string"),
-                    new OA\Property(property: "email", type: "string"),
-                    new OA\Property(property: "phone", type: "string"),
-                    new OA\Property(property: "address", type: "string"),
                     new OA\Property(
-                        property: "user_id",
+                        property: "user_id[]",
                         type: "array",
                         items: new OA\Items(type: "integer")
                     ),
                     new OA\Property(
-                        property: "admission_schedule_id",
+                        property: "admission_schedule_id[]",
                         type: "array",
                         items: new OA\Items(type: "integer")
                     ),
                     new OA\Property(
-                        property: "admission_criteria_id",
+                        property: "admission_criteria_id[]",
                         type: "array",
                         items: new OA\Items(type: "integer")
                     ),
                     new OA\Property(
-                        property: "file",
+                        property: "file[]",
                         type: "array",
                         items: new OA\Items(type: "string", format: "binary")
                     )
@@ -409,12 +398,6 @@ class AdmissionApplicationController extends Controller
     public function submitApplicationForm(Request $request) {
         try {
             $validator = Validator::make($request->all(), [
-                'first_name' => 'required|string|max:255',
-                'middle_name' => 'nullable|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'phone' => 'required|string|max:255',
-                'address' => 'required|string|max:255',
                 'user_id' => 'required|array',
                 'user_id.*' => 'required|integer',
                 'admission_schedule_id' => 'required|array',

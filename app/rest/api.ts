@@ -2032,21 +2032,17 @@ export const submitAdmissionApplicationForm = (
 ) => {
       
       const formData = new FormData();
-formData.append(`first_name`, submitAdmissionApplicationFormBody.first_name)
-if(submitAdmissionApplicationFormBody.middle_name !== undefined && submitAdmissionApplicationFormBody.middle_name !== null) {
- formData.append(`middle_name`, submitAdmissionApplicationFormBody.middle_name)
+if(submitAdmissionApplicationFormBody['user_id[]'] !== undefined) {
+ submitAdmissionApplicationFormBody['user_id[]'].forEach(value => formData.append(`user_id[]`, value.toString()));
  }
-formData.append(`last_name`, submitAdmissionApplicationFormBody.last_name)
-formData.append(`email`, submitAdmissionApplicationFormBody.email)
-formData.append(`phone`, submitAdmissionApplicationFormBody.phone)
-formData.append(`address`, submitAdmissionApplicationFormBody.address)
-submitAdmissionApplicationFormBody.user_id.forEach(value => formData.append(`user_id`, value.toString()));
-submitAdmissionApplicationFormBody.admission_schedule_id.forEach(value => formData.append(`admission_schedule_id`, value.toString()));
-if(submitAdmissionApplicationFormBody.admission_criteria_id !== undefined) {
- submitAdmissionApplicationFormBody.admission_criteria_id.forEach(value => formData.append(`admission_criteria_id`, value.toString()));
+if(submitAdmissionApplicationFormBody['admission_schedule_id[]'] !== undefined) {
+ submitAdmissionApplicationFormBody['admission_schedule_id[]'].forEach(value => formData.append(`admission_schedule_id[]`, value.toString()));
  }
-if(submitAdmissionApplicationFormBody.file !== undefined) {
- submitAdmissionApplicationFormBody.file.forEach(value => formData.append(`file`, value));
+if(submitAdmissionApplicationFormBody['admission_criteria_id[]'] !== undefined) {
+ submitAdmissionApplicationFormBody['admission_criteria_id[]'].forEach(value => formData.append(`admission_criteria_id[]`, value.toString()));
+ }
+if(submitAdmissionApplicationFormBody['file[]'] !== undefined) {
+ submitAdmissionApplicationFormBody['file[]'].forEach(value => formData.append(`file[]`, value));
  }
 
       return fetchData<CreateAdmissionApplicationResponse200>(
