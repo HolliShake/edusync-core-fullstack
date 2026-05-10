@@ -9,7 +9,7 @@ type AppConfig = {
 };
 
 const AppConfig: AppConfig = {
-  App: 'EduSync',
+  App: 'EduPortal',
   Version: 'v1.0.0',
   Subtitle: 'Learning Management System',
   Mobile: '09455477865',
