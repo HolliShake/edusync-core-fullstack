@@ -100,7 +100,7 @@ use OpenApi\Attributes as OA;
 
 class AdmissionApplicationCriteriaSubmission extends Model
 {
-    protected $table = 'admission_application_score';
+    protected $table = 'admission_application_criteria_submission';
 
     public $timestamps = true;
 

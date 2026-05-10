@@ -21,6 +21,8 @@ services:
       dockerfile: ../docker/api/Dockerfile
     ports:
       - '8000:8000'
+    cpus: 4
+    mem_limit: 4g
     volumes:
       - ./api:/var/www/html:cached
       - ./api/public:/var/www/html/public
@@ -43,20 +45,26 @@ services:
     image: mysql:8.0
     ports:
       - '3306:3306'
+    cpus: 4
+    mem_limit: 4g
+    shm_size: 2g
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=edusync
       - MYSQL_USER=edusync
       - MYSQL_PASSWORD=password
     command: >
-      --innodb-buffer-pool-size=512M
-      --slow-query-log=1
+      --innodb-buffer-pool-size=1G
       --long-query-time=2
       --innodb-log-file-size=128M
       --innodb-flush-log-at-trx-commit=2
+      --skip-log-bin
       --log-bin-trust-function-creators=1
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./docker/mysql-data-nocow:/var/lib/mysql
+    tmpfs:
+      - /tmp
+      - /var/tmp
 
   # phpMyAdmin
   phpmyadmin:
