@@ -120,6 +120,7 @@ class SchoolYear extends Model
         'start_date' => 'date',
         'end_date'   => 'date',
         'is_active'  => 'boolean',
+        'cycle_number' => 'integer',
     ];
 
     protected $appends = [
