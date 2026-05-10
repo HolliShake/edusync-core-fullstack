@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\AdmissionCriteria;
-use App\Models\AcademicProgram;
 use App\Models\AdmissionSchedule;
 use App\Models\Requirement;
 use Illuminate\Database\Seeder;
@@ -15,9 +15,12 @@ class AdmissionCriteriaSeeder extends Seeder
      */
     public function run(): void
     {
-        $academicPrograms = AcademicProgram::all();
-        $admissionSchedules = AdmissionSchedule::all();
-        $requirements = Requirement::all();
+        $admissionSchedules = AdmissionSchedule::query()->get(['id', 'academic_program_id']);
+        $requirementIds = Requirement::query()->pluck('id')->all();
+
+        if ($admissionSchedules->isEmpty() || $requirementIds === []) {
+            return;
+        }
 
         // Define exactly 5 criteria that will be used for each program
         $criteriaTemplates = [
@@ -68,27 +71,31 @@ class AdmissionCriteriaSeeder extends Seeder
             ],
         ];
 
-        // Create exactly 5 criteria for each academic program and admission schedule
-        foreach ($academicPrograms as $program) {
-            foreach ($admissionSchedules as $admissionSchedule) {
-                foreach ($criteriaTemplates as $index => $template) {
-                    // Use a requirement if available, otherwise use the first one or null
-                    $requirement = $requirements->get($index % $requirements->count());
-                    
-                    AdmissionCriteria::create([
-                        'academic_program_id' => $program->id,
-                        'admission_schedule_id' => $admissionSchedule->id,
-                        'requirement_id' => $requirement ? $requirement->id : $requirements->first()->id,
-                        'title' => $template['title'],
-                        'description' => $template['description'],
-                        'max_score' => $template['max_score'],
-                        'min_score' => $template['min_score'],
-                        'weight' => $template['weight'],
-                        'is_active' => $template['is_active'],
-                        'file_suffix' => $template['file_suffix'],
-                    ]);
-                }
+        $rows = [];
+        $now = Carbon::now();
+        $requirementCount = count($requirementIds);
+
+        foreach ($admissionSchedules as $admissionSchedule) {
+            foreach ($criteriaTemplates as $index => $template) {
+                $rows[] = [
+                    'academic_program_id' => $admissionSchedule->academic_program_id,
+                    'admission_schedule_id' => $admissionSchedule->id,
+                    'requirement_id' => $requirementIds[$index % $requirementCount],
+                    'title' => $template['title'],
+                    'description' => $template['description'],
+                    'max_score' => $template['max_score'],
+                    'min_score' => $template['min_score'],
+                    'weight' => $template['weight'],
+                    'is_active' => $template['is_active'],
+                    'file_suffix' => $template['file_suffix'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
+        }
+
+        foreach (array_chunk($rows, 500) as $chunk) {
+            AdmissionCriteria::query()->insertOrIgnore($chunk);
         }
     }
 }

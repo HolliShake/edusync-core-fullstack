@@ -7,13 +7,11 @@
  */
 import type { AdmissionApplication } from './admissionApplication';
 import type { AdmissionCriteria } from './admissionCriteria';
-import type { User } from './user';
 
-export interface AdmissionApplicationScore {
+export interface AdmissionApplicationCriteriaSubmission {
   readonly id?: number;
   admission_application_id: number;
   admission_criteria_id: number;
-  user_id: number;
   score: number;
   /** @nullable */
   comments?: string | null;
@@ -22,5 +20,4 @@ export interface AdmissionApplicationScore {
   updated_at?: string;
   admission_application?: AdmissionApplication;
   admission_criteria?: AdmissionCriteria;
-  user?: User;
 }

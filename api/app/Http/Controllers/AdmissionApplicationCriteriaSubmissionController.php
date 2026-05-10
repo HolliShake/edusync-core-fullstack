@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\AdmissionApplicationScoreService;
+use App\Service\AdmissionApplicationCriteriaSubmissionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
 #[OA\PathItem(
-    path: "/AdmissionApplicationScore"
+    path: "/AdmissionApplicationCriteriaSubmission"
 )]
-class AdmissionApplicationScoreController extends Controller
+class AdmissionApplicationCriteriaSubmissionController extends Controller
 {
-    public function __construct(protected AdmissionApplicationScoreService $service) {
+    public function __construct(protected AdmissionApplicationCriteriaSubmissionService $service) {
     }
 
     /**
      * Display a listing of the resource.
      */
     #[OA\Get(
-        path: "/api/AdmissionApplicationScore",
-        summary: "Get paginated list of AdmissionApplicationScore",
-        tags: ["AdmissionApplicationScore"],
-        description: "Retrieve a paginated list of AdmissionApplicationScore with optional search",
-        operationId:"getAdmissionApplicationScorePaginated",
+        path: "/api/AdmissionApplicationCriteriaSubmission",
+        summary: "Get paginated list of AdmissionApplicationCriteriaSubmission",
+        tags: ["AdmissionApplicationCriteriaSubmission"],
+        description: "Retrieve a paginated list of AdmissionApplicationCriteriaSubmission with optional search",
+        operationId:"getAdmissionApplicationCriteriaSubmissionPaginated",
     )]
     #[OA\Parameter(
         name: "search",
@@ -57,7 +57,7 @@ class AdmissionApplicationScoreController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAdmissionApplicationScoreResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/PaginatedAdmissionApplicationCriteriaSubmissionResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -81,11 +81,11 @@ class AdmissionApplicationScoreController extends Controller
      * Display the specified resource.
      */
     #[OA\Get(
-        path: "/api/AdmissionApplicationScore/{id}",
-        summary: "Get a specific AdmissionApplicationScore",
-        tags: ["AdmissionApplicationScore"],
-        description: "Retrieve a AdmissionApplicationScore by its ID",
-        operationId: "getAdmissionApplicationScoreById",
+        path: "/api/AdmissionApplicationCriteriaSubmission/{id}",
+        summary: "Get a specific AdmissionApplicationCriteriaSubmission",
+        tags: ["AdmissionApplicationCriteriaSubmission"],
+        description: "Retrieve a AdmissionApplicationCriteriaSubmission by its ID",
+        operationId: "getAdmissionApplicationCriteriaSubmissionById",
     )]
     #[OA\Parameter(
         name: "id",
@@ -96,7 +96,7 @@ class AdmissionApplicationScoreController extends Controller
     #[OA\Response(
         response: 200,
         description: "Successful operation",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetAdmissionApplicationScoreResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetAdmissionApplicationCriteriaSubmissionResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -110,14 +110,14 @@ class AdmissionApplicationScoreController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "AdmissionApplicationScore not found"
+        description: "AdmissionApplicationCriteriaSubmission not found"
     )]
     public function show($id)
     {
         try {
             return $this->ok($this->service->getById($id));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('AdmissionApplicationScore not found');
+            return $this->notFound('AdmissionApplicationCriteriaSubmission not found');
         }
     }
 
@@ -125,20 +125,20 @@ class AdmissionApplicationScoreController extends Controller
      * Store a newly created resource in storage.
      */
     #[OA\Post(
-        path: "/api/AdmissionApplicationScore",
-        summary: "Create a new AdmissionApplicationScore",
-        tags: ["AdmissionApplicationScore"],
-        description:" Create a new AdmissionApplicationScore with the provided details",
-        operationId: "createAdmissionApplicationScore",
+        path: "/api/AdmissionApplicationCriteriaSubmission",
+        summary: "Create a new AdmissionApplicationCriteriaSubmission",
+        tags: ["AdmissionApplicationCriteriaSubmission"],
+        description:" Create a new AdmissionApplicationCriteriaSubmission with the provided details",
+        operationId: "createAdmissionApplicationCriteriaSubmission",
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionApplicationScore")
+        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionApplicationCriteriaSubmission")
     )]
     #[OA\Response(
         response: 200,
-        description: "AdmissionApplicationScore created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/CreateAdmissionApplicationScoreResponse200")
+        description: "AdmissionApplicationCriteriaSubmission created successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/CreateAdmissionApplicationCriteriaSubmissionResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -166,7 +166,6 @@ class AdmissionApplicationScoreController extends Controller
             $validator = Validator::make($request->all(), [
                 'admission_application_id' => 'required|integer|exists:admission_application,id',
                 'admission_criteria_id' => 'required|integer|exists:admission_criteria,id',
-                'user_id' => 'required|integer|exists:user,id',
                 'score' => 'required|numeric',
                 'comments' => 'nullable|string',
                 'is_posted' => 'required|boolean',
@@ -185,26 +184,26 @@ class AdmissionApplicationScoreController extends Controller
     }
 
     /**
-     * Create or update multiple AdmissionApplicationScores.
+     * Create or update multiple AdmissionApplicationCriteriaSubmissions.
      */
     #[OA\Post(
-        path: "/api/AdmissionApplicationScore/createOrUpdateMultiple",
-        summary: "Create or update multiple AdmissionApplicationScores",
-        tags: ["AdmissionApplicationScore"],
-        description: "Create or update multiple AdmissionApplicationScores with the provided details",
-        operationId: "createOrUpdateMultipleAdmissionApplicationScores",
+        path: "/api/AdmissionApplicationCriteriaSubmission/createOrUpdateMultiple",
+        summary: "Create or update multiple AdmissionApplicationCriteriaSubmissions",
+        tags: ["AdmissionApplicationCriteriaSubmission"],
+        description: "Create or update multiple AdmissionApplicationCriteriaSubmissions with the provided details",
+        operationId: "createOrUpdateMultipleAdmissionApplicationCriteriaSubmissions",
     )]
     #[OA\RequestBody(
         required: true,
         content: new OA\JsonContent(
             type: "array",
-            items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationScore")
+            items: new OA\Items(ref: "#/components/schemas/AdmissionApplicationCriteriaSubmission")
         )
     )]
     #[OA\Response(
         response: 200,
         description: "CurriculumDetail created successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/GetAdmissionApplicationScoresResponse200")
+        content: new OA\JsonContent(ref: "#/components/schemas/GetAdmissionApplicationCriteriaSubmissionsResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -232,7 +231,6 @@ class AdmissionApplicationScoreController extends Controller
             $validator = Validator::make($request->all(), [
                 '*.admission_application_id' => 'required|integer|exists:admission_application,id',
                 '*.admission_criteria_id' => 'required|integer|exists:admission_criteria,id',
-                '*.user_id' => 'required|integer|exists:user,id',
                 '*.score' => 'required|numeric',
                 '*.comments' => 'nullable|string',
                 '*.is_posted' => 'required|boolean',
@@ -254,11 +252,11 @@ class AdmissionApplicationScoreController extends Controller
      * Update the specified resource in storage.
      */
     #[OA\Put(
-        path: "/api/AdmissionApplicationScore/{id}",
-        summary: "Update a AdmissionApplicationScore",
-        tags: ["AdmissionApplicationScore"],
-        description: "Update an existing AdmissionApplicationScore with the provided details",
-        operationId: "updateAdmissionApplicationScore",
+        path: "/api/AdmissionApplicationCriteriaSubmission/{id}",
+        summary: "Update a AdmissionApplicationCriteriaSubmission",
+        tags: ["AdmissionApplicationCriteriaSubmission"],
+        description: "Update an existing AdmissionApplicationCriteriaSubmission with the provided details",
+        operationId: "updateAdmissionApplicationCriteriaSubmission",
     )]
     #[OA\Parameter(
         name: "id",
@@ -268,12 +266,12 @@ class AdmissionApplicationScoreController extends Controller
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionApplicationScore")
+        content: new OA\JsonContent(ref: "#/components/schemas/AdmissionApplicationCriteriaSubmission")
     )]
     #[OA\Response(
         response: 200,
-        description: "AdmissionApplicationScore updated successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAdmissionApplicationScoreResponse200")
+        description: "AdmissionApplicationCriteriaSubmission updated successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/UpdateAdmissionApplicationCriteriaSubmissionResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -287,7 +285,7 @@ class AdmissionApplicationScoreController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "AdmissionApplicationScore not found"
+        description: "AdmissionApplicationCriteriaSubmission not found"
     )]
     #[OA\Response(
         response: 422,
@@ -305,7 +303,6 @@ class AdmissionApplicationScoreController extends Controller
             $validator = Validator::make($request->all(), [
                 'admission_application_id' => 'required|integer|exists:admission_application,id',
                 'admission_criteria_id' => 'required|integer|exists:admission_criteria,id',
-                'user_id' => 'required|integer|exists:user,id',
                 'score' => 'required|numeric',
                 'comments' => 'nullable|string',
                 'is_posted' => 'required|boolean',
@@ -319,7 +316,7 @@ class AdmissionApplicationScoreController extends Controller
 
             return $this->ok($this->service->update($id, $validated));
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('AdmissionApplicationScore not found');
+            return $this->notFound('AdmissionApplicationCriteriaSubmission not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }
@@ -329,11 +326,11 @@ class AdmissionApplicationScoreController extends Controller
      * Remove the specified resource from storage.
      */
     #[OA\Delete(
-        path: "/api/AdmissionApplicationScore/{id}",
-        summary: "Delete a AdmissionApplicationScore",
-        tags: ["AdmissionApplicationScore"],
-        description: "Delete a AdmissionApplicationScore by its ID",
-        operationId: "deleteAdmissionApplicationScore",
+        path: "/api/AdmissionApplicationCriteriaSubmission/{id}",
+        summary: "Delete a AdmissionApplicationCriteriaSubmission",
+        tags: ["AdmissionApplicationCriteriaSubmission"],
+        description: "Delete a AdmissionApplicationCriteriaSubmission by its ID",
+        operationId: "deleteAdmissionApplicationCriteriaSubmission",
     )]
     #[OA\Parameter(
         name: "id",
@@ -343,8 +340,8 @@ class AdmissionApplicationScoreController extends Controller
     )]
     #[OA\Response(
         response: 204,
-        description: "AdmissionApplicationScore deleted successfully",
-        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAdmissionApplicationScoreResponse200")
+        description: "AdmissionApplicationCriteriaSubmission deleted successfully",
+        content: new OA\JsonContent(ref: "#/components/schemas/DeleteAdmissionApplicationCriteriaSubmissionResponse200")
     )]
     #[OA\Response(
         response: 401,
@@ -358,7 +355,7 @@ class AdmissionApplicationScoreController extends Controller
     )]
     #[OA\Response(
         response: 404,
-        description: "AdmissionApplicationScore not found"
+        description: "AdmissionApplicationCriteriaSubmission not found"
     )]
     #[OA\Response(
         response: 500,
@@ -371,7 +368,7 @@ class AdmissionApplicationScoreController extends Controller
             $this->service->delete($id);
             return $this->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->notFound('AdmissionApplicationScore not found');
+            return $this->notFound('AdmissionApplicationCriteriaSubmission not found');
         } catch (\Exception $e) {
             return $this->internalServerError($e->getMessage());
         }

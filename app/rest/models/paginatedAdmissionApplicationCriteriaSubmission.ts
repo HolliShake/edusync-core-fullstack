@@ -5,10 +5,10 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { AdmissionApplicationScore } from './admissionApplicationScore';
+import type { AdmissionApplicationCriteriaSubmission } from './admissionApplicationCriteriaSubmission';
 
-export interface PaginatedAdmissionApplicationScore {
-  data?: AdmissionApplicationScore[];
+export interface PaginatedAdmissionApplicationCriteriaSubmission {
+  data?: AdmissionApplicationCriteriaSubmission[];
   current_page?: number;
   last_page?: number;
   per_page?: number;

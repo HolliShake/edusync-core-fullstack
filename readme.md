@@ -567,7 +567,7 @@ DELETE /api/{resource}/delete/{id}  # Delete by ID
 - `User` - User management
 - `AdmissionApplication` - Admission applications
 - `AdmissionApplicationLog` - Application status logs
-- `AdmissionApplicationScore` - Application evaluation scores
+- `AdmissionApplicationCriteriaSubmission` - Application evaluation scores
 - `AdmissionSchedule` - Admission schedules
 - `Enrollment` - Student enrollments
 - `EnrollmentLog` - Enrollment status logs
@@ -606,7 +606,7 @@ Some resources have additional specialized endpoints:
 - **Section Generation**: `POST /api/Section/generate` - Bulk generate sections
 - **Section by Code**: `DELETE /api/Section/code/{section_code}` - Delete by section code
 - **Curriculum Multiple**: `POST /api/CurriculumDetail/multiple` - Create multiple curriculum details
-- **Admission Score Batch**: `POST /api/AdmissionApplicationScore/createOrUpdateMultiple` - Batch create/update scores
+- **Admission Score Batch**: `POST /api/AdmissionApplicationCriteriaSubmission/createOrUpdateMultiple` - Batch create/update scores
 - **Enrollment Filters**:
   - `GET /api/Enrollment/campus/scholastic-filter/{campus_id}` - Filter by campus
   - `GET /api/Enrollment/academic-program/scholastic-filter/{academic_program_id}` - Filter by program
@@ -802,12 +802,10 @@ The API is fully documented using OpenAPI 3.0 specification.
 1. **OpenAPI JSON**: Available at `http://localhost:8000/openapi.json`
 
 2. **Import to Swagger UI**:
-
    - Visit https://editor.swagger.io/
    - Import the OpenAPI JSON file
 
 3. **Postman**:
-
    - Import the OpenAPI JSON file into Postman for interactive API testing
 
 4. **Insomnia**:

@@ -2,15 +2,15 @@
 
 namespace App\Service;
 
-use App\Interface\IService\IAdmissionApplicationScoreService;
-use App\Interface\IRepo\IAdmissionApplicationScoreRepo;
+use App\Interface\IService\IAdmissionApplicationCriteriaSubmissionService;
+use App\Interface\IRepo\IAdmissionApplicationCriteriaSubmissionRepo;
 use Illuminate\Support\Facades\DB;
 
-class AdmissionApplicationScoreService extends GenericService implements IAdmissionApplicationScoreService
+class AdmissionApplicationCriteriaSubmissionService extends GenericService implements IAdmissionApplicationCriteriaSubmissionService
 {
-    public function __construct(IAdmissionApplicationScoreRepo $AdmissionApplicationScoreRepository)
+    public function __construct(IAdmissionApplicationCriteriaSubmissionRepo $admissionApplicationCriteriaSubmissionRepository)
     {
-        parent::__construct($AdmissionApplicationScoreRepository);
+        parent::__construct($admissionApplicationCriteriaSubmissionRepository);
     }
     
     public function createOrUpdateMultiple(array $data): array
@@ -18,7 +18,7 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
         try {
             DB::beginTransaction();
             
-            // $data is an array of AdmissionApplicationScore objects
+            // $data is an array of AdmissionApplicationCriteriaSubmission objects
             // Extract all admission_application_ids and criteria IDs for batch query
             $applicationIds = array_unique(array_column($data, 'admission_application_id'));
             $criteriaIds = array_unique(array_column($data, 'admission_criteria_id'));
@@ -60,13 +60,12 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
                         'comments' => $scoreData['comments'] ?? null,
                         'created_at' => $now,
                         'updated_at' => $now,
-                        'user_id' => $scoreData['user_id'],
                         'is_posted' => $scoreData['is_posted'],
                     ];
                 }
             }
 
-            $admissionApplicationScores = [];
+            $admissionApplicationCriteriaSubmissions = [];
 
             // Batch create new scores
             if (!empty($toCreate)) {
@@ -79,18 +78,18 @@ class AdmissionApplicationScoreService extends GenericService implements IAdmiss
                     ->where('created_at', '>=', $now)
                     ->get();
                 
-                $admissionApplicationScores = array_merge($admissionApplicationScores, $createdScores->toArray());
+                $admissionApplicationCriteriaSubmissions = array_merge($admissionApplicationCriteriaSubmissions, $createdScores->toArray());
             }
 
             // Batch update existing scores
             foreach ($toUpdate as $updateData) {
                 $updated = $this->update($updateData['id'], $updateData['data']);
-                $admissionApplicationScores[] = $updated;
+                $admissionApplicationCriteriaSubmissions[] = $updated;
             }
 
             DB::commit();
             
-            return $admissionApplicationScores;
+            return $admissionApplicationCriteriaSubmissions;
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;

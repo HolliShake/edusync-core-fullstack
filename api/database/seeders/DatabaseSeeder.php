@@ -23,7 +23,7 @@ use Database\Seeders\SectionSeeder;
 use Database\Seeders\EnrollmentSeeder;
 use Database\Seeders\EnrollmentLogSeeder;
 use Database\Seeders\AdmissionApplicationLogSeeder;
-use Database\Seeders\AdmissionApplicationScoreSeeder;
+use Database\Seeders\AdmissionApplicationCriteriaSubmissionSeeder;
 use Database\Seeders\UniversityAdmissionSeeder;
 use Database\Seeders\UniversityAdmissionCriteriaSeeder;
 use Database\Seeders\DesignitionSeeder;
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
             AdmissionCriteriaSeeder::class,
             AdmissionApplicationSeeder::class,
             AdmissionApplicationLogSeeder::class,
-            AdmissionApplicationScoreSeeder::class,
+            AdmissionApplicationCriteriaSubmissionSeeder::class,
 
             // Enrollments (needs Sections, Users)
             EnrollmentSeeder::class,

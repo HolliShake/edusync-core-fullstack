@@ -2,15 +2,15 @@
 
 namespace App\Repo;
 
-use App\Interface\IRepo\IAdmissionApplicationScoreRepo;
-use App\Models\AdmissionApplicationScore;
+use App\Interface\IRepo\IAdmissionApplicationCriteriaSubmissionRepo;
+use App\Models\AdmissionApplicationCriteriaSubmission;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class AdmissionApplicationScoreRepo extends GenericRepo implements IAdmissionApplicationScoreRepo
+class AdmissionApplicationCriteriaSubmissionRepo extends GenericRepo implements IAdmissionApplicationCriteriaSubmissionRepo
 {
     public function __construct()
     {
-        parent::__construct(AdmissionApplicationScore::class);
+        parent::__construct(AdmissionApplicationCriteriaSubmission::class);
     }
 
     /**

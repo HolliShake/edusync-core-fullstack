@@ -31,7 +31,7 @@ class EnrollmentSeeder extends Seeder
         $acceptedStudents = $this->getStudentsWithAcceptedApplications($students);
 
         if ($acceptedStudents->isEmpty()) {
-            $this->command->warn('No students with accepted admission applications found. Make sure AdmissionApplicationSeeder and AdmissionApplicationScoreSeeder have been run.');
+            $this->command->warn('No students with accepted admission applications found. Make sure AdmissionApplicationSeeder and AdmissionApplicationCriteriaSubmissionSeeder have been run.');
             return;
         }
 

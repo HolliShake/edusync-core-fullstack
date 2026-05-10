@@ -28,7 +28,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdmissionApplicationController;
 use App\Http\Controllers\AdmissionApplicationLogController;
-use App\Http\Controllers\AdmissionApplicationScoreController;
+use App\Http\Controllers\AdmissionApplicationCriteriaSubmissionController;
 use App\Http\Controllers\AdmissionScheduleController;
 use App\Http\Controllers\CourseRequisiteController;
 use App\Http\Controllers\CurriculumTaggingController;
@@ -244,13 +244,13 @@ Route::controller(AdmissionCriteriaController::class)->group(function() {
     Route::delete('/AdmissionCriteria/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
-Route::controller(AdmissionApplicationScoreController::class)->group(function() {
-    Route::get('/AdmissionApplicationScore', 'index');
-    Route::get('/AdmissionApplicationScore/{id}', 'show')->where('id', '[0-9]+');
-    Route::post('/AdmissionApplicationScore', 'store');
-    Route::post('/AdmissionApplicationScore/createOrUpdateMultiple', 'createOrUpdateMultiple');
-    Route::put('/AdmissionApplicationScore/{id}', 'update')->where('id', '[0-9]+');
-    Route::delete('/AdmissionApplicationScore/{id}', 'destroy')->where('id', '[0-9]+');
+Route::controller(AdmissionApplicationCriteriaSubmissionController::class)->group(function() {
+    Route::get('/AdmissionApplicationCriteriaSubmission', 'index');
+    Route::get('/AdmissionApplicationCriteriaSubmission/{id}', 'show')->where('id', '[0-9]+');
+    Route::post('/AdmissionApplicationCriteriaSubmission', 'store');
+    Route::post('/AdmissionApplicationCriteriaSubmission/createOrUpdateMultiple', 'createOrUpdateMultiple');
+    Route::put('/AdmissionApplicationCriteriaSubmission/{id}', 'update')->where('id', '[0-9]+');
+    Route::delete('/AdmissionApplicationCriteriaSubmission/{id}', 'destroy')->where('id', '[0-9]+');
 });
 
 Route::controller(EnrollmentController::class)->group(function() {

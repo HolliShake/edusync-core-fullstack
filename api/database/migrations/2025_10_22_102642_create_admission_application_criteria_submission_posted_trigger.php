@@ -12,8 +12,8 @@ return new class extends Migration
     {
         // Create trigger for INSERT
         DB::unprepared('
-            CREATE TRIGGER admission_application_score_posted_insert_trigger
-            AFTER INSERT ON admission_application_score
+            CREATE TRIGGER admission_application_criteria_submission_posted_insert_trigger
+            AFTER INSERT ON admission_application_criteria_submission
             FOR EACH ROW
             BEGIN
                 DECLARE total_score DECIMAL(10, 2);
@@ -25,12 +25,13 @@ return new class extends Migration
                 DECLARE passing_threshold DECIMAL(10, 2);
                 DECLARE is_passing BOOLEAN;
                 DECLARE log_exists INT;
+                DECLARE log_user_id BIGINT;
 
                 -- Only proceed if the new score is posted
                 IF NEW.is_posted = 1 THEN
                     -- Get the academic program from the admission application via admission schedule
-                    SELECT asch.academic_program_id
-                    INTO @program_id
+                    SELECT asch.academic_program_id, aa.user_id
+                    INTO @program_id, log_user_id
                     FROM admission_application aa
                     INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
                     WHERE aa.id = NEW.admission_application_id;
@@ -50,14 +51,14 @@ return new class extends Migration
                     -- Count distinct criteria that have posted scores
                     SELECT COUNT(DISTINCT admission_criteria_id)
                     INTO posted_scores_count
-                    FROM admission_application_score
+                    FROM admission_application_criteria_submission
                     WHERE admission_application_id = NEW.admission_application_id
                     AND is_posted = 1;
 
                     SET all_scores_posted = (posted_scores_count >= criteria_count);
 
                     IF all_scores_posted = 1 THEN
-                        -- Calculate weighted score using the latest posted score for each criteria-user combination
+                        -- Calculate weighted score using the latest posted score for each criterion
                         SELECT
                             SUM((aas.score / ac.max_score) * ac.weight),
                             SUM(ac.weight)
@@ -66,9 +67,8 @@ return new class extends Migration
                             SELECT
                                 admission_application_id,
                                 admission_criteria_id,
-                                user_id,
                                 score
-                            FROM admission_application_score
+                            FROM admission_application_criteria_submission
                             WHERE admission_application_id = NEW.admission_application_id
                             AND is_posted = 1
                         ) aas
@@ -111,7 +111,7 @@ return new class extends Migration
                                     updated_at
                                 ) VALUES (
                                     NEW.admission_application_id,
-                                    NEW.user_id,
+                                    log_user_id,
                                     "accepted",
                                     CONCAT("Automatically accepted with score: ", ROUND(total_score, 2), "%"),
                                     NOW(),
@@ -142,7 +142,7 @@ return new class extends Migration
                                     updated_at
                                 ) VALUES (
                                     NEW.admission_application_id,
-                                    NEW.user_id,
+                                    log_user_id,
                                     "rejected",
                                     CONCAT("Automatically rejected with score: ", ROUND(total_score, 2), "%"),
                                     NOW(),
@@ -167,8 +167,8 @@ return new class extends Migration
 
         // Create trigger for UPDATE
         DB::unprepared('
-            CREATE TRIGGER admission_application_score_posted_update_trigger
-            AFTER UPDATE ON admission_application_score
+            CREATE TRIGGER admission_application_criteria_submission_posted_update_trigger
+            AFTER UPDATE ON admission_application_criteria_submission
             FOR EACH ROW
             BEGIN
                 DECLARE total_score DECIMAL(10, 2);
@@ -180,12 +180,13 @@ return new class extends Migration
                 DECLARE passing_threshold DECIMAL(10, 2);
                 DECLARE is_passing BOOLEAN;
                 DECLARE log_exists INT;
+                DECLARE log_user_id BIGINT;
 
                 -- Only proceed if the new score is posted
                 IF NEW.is_posted = 1 THEN
                     -- Get the academic program from the admission application via admission schedule
-                    SELECT asch.academic_program_id
-                    INTO @program_id
+                    SELECT asch.academic_program_id, aa.user_id
+                    INTO @program_id, log_user_id
                     FROM admission_application aa
                     INNER JOIN admission_schedule asch ON aa.admission_schedule_id = asch.id
                     WHERE aa.id = NEW.admission_application_id;
@@ -205,14 +206,14 @@ return new class extends Migration
                     -- Count distinct criteria that have posted scores
                     SELECT COUNT(DISTINCT admission_criteria_id)
                     INTO posted_scores_count
-                    FROM admission_application_score
+                    FROM admission_application_criteria_submission
                     WHERE admission_application_id = NEW.admission_application_id
                     AND is_posted = 1;
 
                     SET all_scores_posted = (posted_scores_count >= criteria_count);
 
                     IF all_scores_posted = 1 THEN
-                        -- Calculate weighted score using the latest posted score for each criteria-user combination
+                        -- Calculate weighted score using the latest posted score for each criterion
                         SELECT
                             SUM((aas.score / ac.max_score) * ac.weight),
                             SUM(ac.weight)
@@ -221,9 +222,8 @@ return new class extends Migration
                             SELECT
                                 admission_application_id,
                                 admission_criteria_id,
-                                user_id,
                                 score
-                            FROM admission_application_score
+                            FROM admission_application_criteria_submission
                             WHERE admission_application_id = NEW.admission_application_id
                             AND is_posted = 1
                         ) aas
@@ -266,7 +266,7 @@ return new class extends Migration
                                     updated_at
                                 ) VALUES (
                                     NEW.admission_application_id,
-                                    NEW.user_id,
+                                    log_user_id,
                                     "accepted",
                                     CONCAT("Automatically accepted with score: ", ROUND(total_score, 2), "%"),
                                     NOW(),
@@ -297,7 +297,7 @@ return new class extends Migration
                                     updated_at
                                 ) VALUES (
                                     NEW.admission_application_id,
-                                    NEW.user_id,
+                                    log_user_id,
                                     "rejected",
                                     CONCAT("Automatically rejected with score: ", ROUND(total_score, 2), "%"),
                                     NOW(),
@@ -326,7 +326,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::unprepared('DROP TRIGGER IF EXISTS admission_application_score_posted_insert_trigger');
-        DB::unprepared('DROP TRIGGER IF EXISTS admission_application_score_posted_update_trigger');
+        DB::unprepared('DROP TRIGGER IF EXISTS admission_application_criteria_submission_posted_insert_trigger');
+        DB::unprepared('DROP TRIGGER IF EXISTS admission_application_criteria_submission_posted_update_trigger');
     }
 };

@@ -95,7 +95,7 @@ class AdmissionApplicationLogSeeder extends Seeder
             ],
             // Scenario 3: No additional logs (keep as submitted + approved)
             // Note: "accepted" logs are automatically created by the database trigger
-            // when AdmissionApplicationScore is posted with passing scores
+            // when AdmissionApplicationCriteriaSubmission is posted with passing scores
             []
         ];
 

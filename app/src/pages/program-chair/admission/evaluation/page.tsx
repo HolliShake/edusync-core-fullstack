@@ -12,15 +12,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/auth.context';
 import { cn } from '@/lib/utils';
 import {
-  useCreateOrUpdateMultipleAdmissionApplicationScores,
+  useCreateOrUpdateMultipleAdmissionApplicationCriteriaSubmissions,
+  useGetAdmissionApplicationCriteriaSubmissionPaginated,
   useGetAdmissionApplicationPaginated,
-  useGetAdmissionApplicationScorePaginated,
   useGetAdmissionCriteriaPaginated,
 } from '@rest/api';
 import {
   AdmissionApplicationLogTypeEnum,
   type AdmissionApplication,
-  type AdmissionApplicationScore,
+  type AdmissionApplicationCriteriaSubmission,
 } from '@rest/models';
 import type { AdmissionCriteria } from '@rest/models/admissionCriteria';
 import {
@@ -40,7 +40,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
   const [selectedApplication, setSelectedApplication] = useState<AdmissionApplication | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
-  const [field, setField] = useState<AdmissionApplicationScore[]>([]);
+  const [field, setField] = useState<AdmissionApplicationCriteriaSubmission[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<number, string>>({});
   const [selectedStatus, setSelectedStatus] = useState<AdmissionApplicationLogTypeEnum>(
     AdmissionApplicationLogTypeEnum.approved
@@ -55,7 +55,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
   }, [searchQuery]);
 
   const { mutateAsync: submitScores, isPending: isSubmittingScores } =
-    useCreateOrUpdateMultipleAdmissionApplicationScores();
+    useCreateOrUpdateMultipleAdmissionApplicationCriteriaSubmissions();
 
   const {
     data: applicationsResponse,
@@ -83,11 +83,12 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
       { query: { enabled: !!selectedApplication } }
     );
 
-  const { data: admissionApplicationScoreResponse } = useGetAdmissionApplicationScorePaginated({
-    'filter[admission_application_id]': selectedApplication?.id,
-    page: 1,
-    rows: Number.MAX_SAFE_INTEGER,
-  });
+  const { data: admissionApplicationCriteriaSubmissionResponse } =
+    useGetAdmissionApplicationCriteriaSubmissionPaginated({
+      'filter[admission_application_id]': selectedApplication?.id,
+      page: 1,
+      rows: Number.MAX_SAFE_INTEGER,
+    });
 
   const applicationsList = useMemo(
     () => applicationsResponse?.data?.data ?? [],
@@ -104,7 +105,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
   );
 
   const isPostedAll = useMemo(() => {
-    return field.every((score: AdmissionApplicationScore) => score.is_posted);
+    return field.every((score: AdmissionApplicationCriteriaSubmission) => score.is_posted);
   }, [field]);
 
   const selectOptions = useMemo(() => {
@@ -126,13 +127,13 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
 
   // Build form
   useEffect(() => {
-    const scores = admissionApplicationScoreResponse?.data?.data;
+    const scores = admissionApplicationCriteriaSubmissionResponse?.data?.data;
 
-    let fieldScores: AdmissionApplicationScore[] = [];
+    let fieldScores: AdmissionApplicationCriteriaSubmission[] = [];
 
     for (let i = 0; i < admissionProgramCriteriaList.length; i++) {
       const criteria: AdmissionCriteria = admissionProgramCriteriaList[i];
-      const score: AdmissionApplicationScore | undefined = scores?.find(
+      const score: AdmissionApplicationCriteriaSubmission | undefined = scores?.find(
         (score) => score.admission_criteria_id === criteria.id
       );
 
@@ -151,7 +152,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
     setValidationErrors({});
   }, [
     session,
-    admissionApplicationScoreResponse,
+    admissionApplicationCriteriaSubmissionResponse,
     admissionProgramCriteriaList,
     selectedApplication,
   ]);
@@ -188,7 +189,11 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
     return null;
   };
 
-  const onChange = (index: number, key: keyof AdmissionApplicationScore, value: any) => {
+  const onChange = (
+    index: number,
+    key: keyof AdmissionApplicationCriteriaSubmission,
+    value: unknown
+  ): void => {
     setField((prev) => {
       const newField = [...prev];
       newField[index] = {
@@ -200,7 +205,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
 
     // Validate score if the changed field is 'score'
     if (key === 'score') {
-      const numValue = parseFloat(value);
+      const numValue = parseFloat(String(value));
       const error = validateScore(index, numValue);
 
       setValidationErrors((prev) => {
@@ -349,7 +354,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                       <div key={index} className="w-full rounded-lg border border-transparent p-3">
                         <div className="space-y-2">
                           <div className="flex items-start gap-3">
-                            <Skeleton className="h-10 w-10 flex-shrink-0 rounded-full" />
+                            <Skeleton className="h-10 w-10 shrink-0 rounded-full" />
                             <div className="min-w-0 flex-1 space-y-1">
                               <Skeleton className="h-4 w-3/4" />
                               <Skeleton className="h-3 w-1/2" />
@@ -380,7 +385,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                             <div className="flex items-start gap-3">
                               <div
                                 className={cn(
-                                  'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors',
+                                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors',
                                   isSelected
                                     ? 'bg-primary text-primary-foreground'
                                     : 'bg-muted text-muted-foreground'
@@ -500,7 +505,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                                 <Skeleton className="h-4 w-48" />
                                 <Skeleton className="h-3 w-full" />
                               </div>
-                              <Skeleton className="h-6 w-20 flex-shrink-0" />
+                              <Skeleton className="h-6 w-20 shrink-0" />
                             </div>
                           </CardHeader>
                           <CardContent>
@@ -606,7 +611,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                                   <Skeleton className="h-4 w-48" />
                                   <Skeleton className="h-3 w-full" />
                                 </div>
-                                <Skeleton className="h-6 w-20 flex-shrink-0" />
+                                <Skeleton className="h-6 w-20 shrink-0" />
                               </div>
                             </CardHeader>
                             <CardContent>
@@ -640,7 +645,7 @@ export default function ProgramChairAdmissionEvaluation(): React.ReactNode {
                                     </CardDescription>
                                   )}
                                 </div>
-                                <Badge variant="secondary" className="h-6 flex-shrink-0">
+                                <Badge variant="secondary" className="h-6 shrink-0">
                                   Weight: {criteria.weight}%
                                 </Badge>
                               </div>

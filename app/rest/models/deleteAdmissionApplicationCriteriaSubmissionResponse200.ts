@@ -5,9 +5,7 @@
  * API documentation for the OpenEdusy application
  * OpenAPI spec version: 1.0.0
  */
-import type { AdmissionApplicationScore } from './admissionApplicationScore';
 
-export interface GetAdmissionApplicationScoreResponse200 {
+export interface DeleteAdmissionApplicationCriteriaSubmissionResponse200 {
   success?: boolean;
-  data?: AdmissionApplicationScore;
 }
